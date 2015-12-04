@@ -1,8 +1,11 @@
 package view;
 
 import controller.ControllerOrganizacao;
+import java.util.HashMap;
+import java.util.Map;
 import javax.swing.JOptionPane;
 import model.Organizacao;
+import util.Request;
 
 /**
  *
@@ -10,7 +13,6 @@ import model.Organizacao;
  */
 public class ViewNovaOrganizacao extends javax.swing.JDialog {
 
-    private Organizacao organizacao;
     private final ControllerOrganizacao controllerOrganizacao = new ControllerOrganizacao();
 
     public ViewNovaOrganizacao(java.awt.Frame parent, boolean modal) {
@@ -39,12 +41,13 @@ public class ViewNovaOrganizacao extends javax.swing.JDialog {
      * Método responsavel pelo cadastro de uma nova Organização.
      */
     private void save() {
+        Map<String, String> data = new HashMap<String, String>();
+        data.put("Organizacao.nome", jTextFieldNomeOrganizacao.getText());
+        data.put("Organizacao.descricao", jTextAreaDescricao.getText());
+        
+        Request request = new Request(data);
         if (fieldValidation()) {
-            organizacao = new Organizacao();
-            organizacao.setNome(jTextFieldNomeOrganizacao.getText());
-            organizacao.setDescricao(jTextAreaDescricao.getText());
-
-            if (controllerOrganizacao.createdNewOrganização(organizacao)) {
+            if (controllerOrganizacao.createdNewOrganização(request)) {
                 JOptionPane.showMessageDialog(null, "Salvo com Sucesso.");
                 this.setVisible(false);
             } else {
