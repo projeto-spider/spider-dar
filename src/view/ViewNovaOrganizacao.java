@@ -4,7 +4,6 @@ import controller.ControllerOrganizacao;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.JOptionPane;
-import model.Organizacao;
 import util.Request;
 
 /**
@@ -24,7 +23,7 @@ public class ViewNovaOrganizacao extends javax.swing.JDialog {
 
     /**
      * Método de validação dos campos que devem ser preenchidos na tela.
-     * @return 
+     * @return
      */
     private boolean fieldValidation() {
         if (jTextFieldNomeOrganizacao.getText().isEmpty()) {
@@ -41,10 +40,10 @@ public class ViewNovaOrganizacao extends javax.swing.JDialog {
      * Método responsavel pelo cadastro de uma nova Organização.
      */
     private void save() {
-        Map<String, String> data = new HashMap<String, String>();
+        Map<String, String> data = new HashMap<>();
         data.put("Organizacao.nome", jTextFieldNomeOrganizacao.getText());
         data.put("Organizacao.descricao", jTextAreaDescricao.getText());
-        
+
         Request request = new Request(data);
         if (fieldValidation()) {
             if (controllerOrganizacao.createdNewOrganização(request)) {

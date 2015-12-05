@@ -1,6 +1,10 @@
 package view.Gerenciar;
 
+import controller.ControllerOrganizacao;
+import java.util.List;
 import util.Internal;
+import util.MyDefaultTableModel;
+import util.Request;
 import view.ViewNovaOrganizacao;
 
 /**
@@ -9,10 +13,28 @@ import view.ViewNovaOrganizacao;
  */
 public class ViewOrganizacoes extends javax.swing.JInternalFrame {
 
+    MyDefaultTableModel myDefaultTableModel;
+    private final ControllerOrganizacao controllerOrganizacao = new ControllerOrganizacao();
+
     public ViewOrganizacoes() {
         initComponents();
-        
-        Internal.retiraBorda(this); 
+
+        Internal.retiraBorda(this);
+    }
+
+    public void fillTable() {
+        String columns[] = {"Organização", "Criada em"};
+        myDefaultTableModel = new MyDefaultTableModel(columns, 0, false);
+
+        List<Request> requestList = controllerOrganizacao.findOrganizacoes();
+        for (Request request : requestList) {
+            String line[] = {
+                request.getData("Organizacao.nome"),
+                request.getData("Organizacao.created")
+            };
+            myDefaultTableModel.addRow(line); 
+        }
+        jTableOrganizacoes.setModel(myDefaultTableModel); 
     }
 
     @SuppressWarnings("unchecked")
@@ -21,7 +43,7 @@ public class ViewOrganizacoes extends javax.swing.JInternalFrame {
 
         jTextField1 = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jTableOrganizacoes = new javax.swing.JTable();
         jTextField2 = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
@@ -33,7 +55,7 @@ public class ViewOrganizacoes extends javax.swing.JInternalFrame {
         jTextField1.setText(" Organizações Cadastradas");
         jTextField1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jTableOrganizacoes.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {"Desenvolvedores", "24/10/2015"},
                 {"Alta ADM", "24/10/2015"}
@@ -42,7 +64,7 @@ public class ViewOrganizacoes extends javax.swing.JInternalFrame {
                 "Organização", "Criada em"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(jTableOrganizacoes);
 
         jLabel1.setText("Pesquisar:");
 
@@ -97,7 +119,7 @@ public class ViewOrganizacoes extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        new ViewNovaOrganizacao(null, true).setVisible(true); 
+        new ViewNovaOrganizacao(null, true).setVisible(true);
     }//GEN-LAST:event_jButton2ActionPerformed
 
 
@@ -106,7 +128,7 @@ public class ViewOrganizacoes extends javax.swing.JInternalFrame {
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable jTableOrganizacoes;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     // End of variables declaration//GEN-END:variables
