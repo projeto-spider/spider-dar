@@ -2,6 +2,7 @@ package view.Gerenciar;
 
 import controller.ControllerOrganizacao;
 import java.util.List;
+import javax.swing.JOptionPane;
 import util.Internal;
 import util.MyDefaultTableModel;
 import util.Request;
@@ -13,7 +14,7 @@ import view.ViewNovaOrganizacao;
  */
 public class ViewOrganizacoes extends javax.swing.JInternalFrame {
 
-    MyDefaultTableModel myDefaultTableModel;
+    private MyDefaultTableModel myDefaultTableModel;
     private final ControllerOrganizacao controllerOrganizacao = new ControllerOrganizacao();
 
     public ViewOrganizacoes() {
@@ -22,6 +23,9 @@ public class ViewOrganizacoes extends javax.swing.JInternalFrame {
         Internal.retiraBorda(this);
     }
 
+    /**
+     * Preenche a tabela com as Organizações cadastradas anteriormente.
+     */
     public void fillTable() {
         String columns[] = {"Organização", "Criada em"};
         myDefaultTableModel = new MyDefaultTableModel(columns, 0, false);
@@ -32,9 +36,18 @@ public class ViewOrganizacoes extends javax.swing.JInternalFrame {
                 request.getData("Organizacao.nome"),
                 request.getData("Organizacao.created")
             };
-            myDefaultTableModel.addRow(line); 
+            myDefaultTableModel.addRow(line);
         }
-        jTableOrganizacoes.setModel(myDefaultTableModel); 
+        jTableOrganizacoes.setModel(myDefaultTableModel);
+    }
+
+    private void editarButtonIsPressed() {
+        int index = jTableOrganizacoes.getSelectedRow();
+        if (index > -1) {
+            new ViewNovaOrganizacao(null, true, jTableOrganizacoes.getValueAt(index, 0).toString()).setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Selecione uma linha na tabela.");
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -69,6 +82,11 @@ public class ViewOrganizacoes extends javax.swing.JInternalFrame {
         jLabel1.setText("Pesquisar:");
 
         jButton1.setText("Editar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("Novo");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -120,7 +138,12 @@ public class ViewOrganizacoes extends javax.swing.JInternalFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         new ViewNovaOrganizacao(null, true).setVisible(true);
+        fillTable();
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        editarButtonIsPressed();
+    }//GEN-LAST:event_jButton1ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

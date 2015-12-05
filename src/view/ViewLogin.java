@@ -1,4 +1,3 @@
-
 package view;
 
 import java.awt.CardLayout;
@@ -11,27 +10,26 @@ public class ViewLogin extends javax.swing.JFrame {
 
     public ViewLogin() {
         initComponents();
-        
+
         cardInicial();
         this.setLocationRelativeTo(null);
     }
-    
-    private void cardInicial(){
+
+    private void cardInicial() {
         CardLayout card = (CardLayout) jPanel.getLayout();
         card.show(jPanel, "Inicial");
     }
-    
-    private void cardPrimeiroAcesso(){
+
+    private void cardPrimeiroAcesso() {
         CardLayout card = (CardLayout) jPanel.getLayout();
         card.show(jPanel, "PrimeiroAcesso");
     }
-    
-    private void cardRecuperaSenha(){
+
+    private void cardRecuperaSenha() {
         CardLayout card = (CardLayout) jPanel.getLayout();
         card.show(jPanel, "RecuperaSenha");
     }
-    
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -409,7 +407,7 @@ public class ViewLogin extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         this.dispose();
-        new ViewSelecionarOrganizacao(null, true).setVisible(true); 
+        new ViewSelecionarOrganizacao(null, true).setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed

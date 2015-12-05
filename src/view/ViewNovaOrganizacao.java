@@ -4,6 +4,7 @@ import controller.ControllerOrganizacao;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.JOptionPane;
+import settings.Constant;
 import util.Request;
 
 /**
@@ -13,16 +14,36 @@ import util.Request;
 public class ViewNovaOrganizacao extends javax.swing.JDialog {
 
     private final ControllerOrganizacao controllerOrganizacao = new ControllerOrganizacao();
+    private int type;
 
+    /**
+     * Contrutor usado no cadastro de uma nova Organização.
+     */
     public ViewNovaOrganizacao(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
 
+        type = Constant.SAVE;
+        this.setLocationRelativeTo(null);
+    }
+
+    /**
+     * Construtor usado para edição dasinformações de uma Organização.
+     *
+     * @param name nome da organização a ser editada.
+     */
+    public ViewNovaOrganizacao(java.awt.Frame parent, boolean modal, String name) {
+        super(parent, modal);
+        initComponents();
+
+        type = Constant.UPDATE;
+        fillFields(name);
         this.setLocationRelativeTo(null);
     }
 
     /**
      * Método de validação dos campos que devem ser preenchidos na tela.
+     *
      * @return
      */
     private boolean fieldValidation() {
@@ -34,6 +55,12 @@ public class ViewNovaOrganizacao extends javax.swing.JDialog {
             return false;
         }
         return true;
+    }
+
+    public void fillFields(String name) {
+        Request request = controllerOrganizacao.findOrganizacaoSelected(name);
+        jTextFieldNomeOrganizacao.setText(request.getData("Organizacao.nome"));
+        jTextAreaDescricao.setText(request.getData("Organizacao.descricao"));
     }
 
     /**

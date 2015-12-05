@@ -364,6 +364,7 @@ public class ViewPrincipal extends javax.swing.JFrame {
 
     private void jMenuItemNovaOrganizacaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemNovaOrganizacaoActionPerformed
         new ViewNovaOrganizacao(null, true).setVisible(true);
+        viewOrganizacoes.fillTable();
     }//GEN-LAST:event_jMenuItemNovaOrganizacaoActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
