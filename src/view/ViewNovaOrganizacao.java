@@ -14,6 +14,7 @@ import util.Request;
 public class ViewNovaOrganizacao extends javax.swing.JDialog {
 
     private final ControllerOrganizacao controllerOrganizacao = new ControllerOrganizacao();
+    private Request request;
     private int type;
 
     /**
@@ -58,27 +59,38 @@ public class ViewNovaOrganizacao extends javax.swing.JDialog {
     }
 
     public void fillFields(String name) {
-        Request request = controllerOrganizacao.findOrganizacaoSelected(name);
+        request = controllerOrganizacao.findOrganizacaoSelected(name);
         jTextFieldNomeOrganizacao.setText(request.getData("Organizacao.nome"));
         jTextAreaDescricao.setText(request.getData("Organizacao.descricao"));
     }
 
     /**
-     * Método responsavel pelo cadastro de uma nova Organização.
+     * Método responsavel pelo cadastro ou edição de uma nova Organização.
      */
     private void save() {
+        if (!fieldValidation()) {
+            return;
+        }
+
         Map<String, String> data = new HashMap<>();
         data.put("Organizacao.nome", jTextFieldNomeOrganizacao.getText());
         data.put("Organizacao.descricao", jTextAreaDescricao.getText());
 
-        Request request = new Request(data);
-        if (fieldValidation()) {
-            if (controllerOrganizacao.createdNewOrganização(request)) {
-                JOptionPane.showMessageDialog(null, "Salvo com Sucesso.");
-                this.setVisible(false);
-            } else {
-                JOptionPane.showMessageDialog(null, "Erro ao Salvar.", "ERRO", JOptionPane.ERROR_MESSAGE);
-            }
+        boolean isDone = false;
+        if (type == Constant.SAVE) {
+            request = new Request(data);
+            isDone = controllerOrganizacao.createdNewOrganização(request);
+        } else {
+            data.put("Organizacao.id", request.getData("Organizacao.id"));
+            request = new Request(data);
+            isDone = controllerOrganizacao.updatedNewOrganização(request);
+        }
+
+        if (isDone) {
+            JOptionPane.showMessageDialog(null, "Salvo com Sucesso.");
+            this.setVisible(false);
+        } else {
+            JOptionPane.showMessageDialog(null, "Erro ao Salvar. Por favor, \nverifique se está Organizão já existe.", "ERRO", JOptionPane.ERROR_MESSAGE);
         }
     }
 

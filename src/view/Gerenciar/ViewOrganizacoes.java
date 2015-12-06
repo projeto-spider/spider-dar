@@ -27,20 +27,24 @@ public class ViewOrganizacoes extends javax.swing.JInternalFrame {
      * Preenche a tabela com as Organizações cadastradas anteriormente.
      */
     public void fillTable() {
-        String columns[] = {"Organização", "Criada em"};
+        String columns[] = {"Organização", "Criada em", "Última modificação"};
         myDefaultTableModel = new MyDefaultTableModel(columns, 0, false);
 
         List<Request> requestList = controllerOrganizacao.findOrganizacoes();
         for (Request request : requestList) {
             String line[] = {
                 request.getData("Organizacao.nome"),
-                request.getData("Organizacao.created")
+                request.getData("Organizacao.created"),
+                request.getData("Organizacao.modified")
             };
             myDefaultTableModel.addRow(line);
         }
         jTableOrganizacoes.setModel(myDefaultTableModel);
     }
 
+    /**
+     * Chamado quando o botão editar e pressionado.
+     */
     private void editarButtonIsPressed() {
         int index = jTableOrganizacoes.getSelectedRow();
         if (index > -1) {
@@ -143,6 +147,7 @@ public class ViewOrganizacoes extends javax.swing.JInternalFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         editarButtonIsPressed();
+        fillTable();
     }//GEN-LAST:event_jButton1ActionPerformed
 
 
