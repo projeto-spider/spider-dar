@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import jpa.exceptions.IllegalOrphanException;
+import jpa.exceptions.NonexistentEntityException;
 import model.Organizacao;
 import settings.Facade;
 import util.Request;
@@ -22,10 +24,10 @@ public class ControllerOrganizacao {
     /**
      * Método responsavel pelo cadastro de uma nova Organização.
      *
-     * @param request
+     * @param request dados requisistados da organização.
      * @return se cadastro foi sucedido ou não.
      */
-    public boolean createdNewOrganização(Request request) {
+    public boolean createNewOrganizacao(Request request) {
         try {
             organizacao = facade.initializeJpaOrganizacao().findOrganizacaoByName(request.getData("Organizacao.nome"));
             if (organizacao != null) {
@@ -48,10 +50,10 @@ public class ControllerOrganizacao {
     /**
      * Método responsavel pelo cadastro de uma nova Organização.
      *
-     * @param request
+     * @param request dados requisistados da organização.
      * @return se cadastro foi sucedido ou não.
      */
-    public boolean updatedNewOrganização(Request request) {
+    public boolean updateOrganizacao(Request request) {
         try {
             int id = Integer.parseInt(request.getData("Organizacao.id"));
 
@@ -70,6 +72,23 @@ public class ControllerOrganizacao {
             facade.initializeJpaOrganizacao().edit(organizacao);
             return true;
         } catch (Exception error) {
+            return false;
+        }
+    }
+
+    /**
+     * Método responsavel pela exclusão de uma Organização.
+     *
+     * @param name da organização.
+     * @return se a exclusão foi sucedido ou não.
+     */
+    public boolean deleteOrganizacao(String name) {
+        try {
+            organizacao = new Organizacao();
+            organizacao = facade.initializeJpaOrganizacao().findOrganizacaoByName(name);
+            facade.initializeJpaOrganizacao().destroy(organizacao.getId());
+            return true;
+        } catch (IllegalOrphanException | NonexistentEntityException error) {
             return false;
         }
     }
@@ -107,7 +126,7 @@ public class ControllerOrganizacao {
     /**
      * Busca a organização pelo seu nome.
      *
-     * @param name
+     * @param name da organização.
      * @return dados da organização.
      */
     public Request findOrganizacaoSelected(String name) {
@@ -120,6 +139,37 @@ public class ControllerOrganizacao {
             data.put("Organizacao.nome", organizacao.getNome());
             data.put("Organizacao.descricao", organizacao.getDescricao());
             return new Request(data);
+        } catch (Exception error) {
+            throw error;
+        }
+    }
+
+    /**
+     * Busca Organizações da pesquisa do usuário.
+     *
+     * @param name
+     * @return uma lista contendo os dados requisitados de cada Organização.
+     */
+    public List<Request> findOrganizacoesBySearch(String name) {
+        try {
+            List<Organizacao> list = facade.initializeJpaOrganizacao().findOrganizacoesByPartName(name);
+            List<Request> requestList = new ArrayList<>();
+
+            for (Organizacao org : list) {
+                Map<String, String> data = new HashMap<>();
+                data.put("Organizacao.nome", org.getNome());
+                data.put("Organizacao.created", Text.formatDateForTable(org.getCreated()));
+
+                if (org.getCreated().equals(org.getModified())) {
+                    data.put("Organizacao.modified", "--");
+                } else {
+                    data.put("Organizacao.modified", Text.formatDateForTable(org.getModified()));
+                }
+
+                requestList.add(new Request(data));
+            }
+
+            return requestList;
         } catch (Exception error) {
             throw error;
         }

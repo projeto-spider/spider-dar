@@ -29,7 +29,7 @@ public class ViewNovaOrganizacao extends javax.swing.JDialog {
     }
 
     /**
-     * Construtor usado para edição dasinformações de uma Organização.
+     * Construtor usado para edição das informações de uma Organização.
      *
      * @param name nome da organização a ser editada.
      */
@@ -79,18 +79,18 @@ public class ViewNovaOrganizacao extends javax.swing.JDialog {
         boolean isDone = false;
         if (type == Constant.SAVE) {
             request = new Request(data);
-            isDone = controllerOrganizacao.createdNewOrganização(request);
+            isDone = controllerOrganizacao.createNewOrganizacao(request);
         } else {
             data.put("Organizacao.id", request.getData("Organizacao.id"));
             request = new Request(data);
-            isDone = controllerOrganizacao.updatedNewOrganização(request);
+            isDone = controllerOrganizacao.updateOrganizacao(request);
         }
 
         if (isDone) {
             JOptionPane.showMessageDialog(null, "Salvo com Sucesso.");
             this.setVisible(false);
         } else {
-            JOptionPane.showMessageDialog(null, "Erro ao Salvar. Por favor, \nverifique se está Organizão já existe.", "ERRO", JOptionPane.ERROR_MESSAGE);
+            
         }
     }
 

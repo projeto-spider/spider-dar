@@ -1,5 +1,6 @@
 package view;
 
+import controller.ControllerOrganizacao;
 import java.beans.PropertyVetoException;
 import javax.swing.JInternalFrame;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -14,7 +15,6 @@ import view.TomadaDeDecisao.ViewCriteriosDeAvaliacao;
 import view.TomadaDeDecisao.ViewAvaliacao;
 import view.TomadaDeDecisao.ViewHistorico;
 import view.TomadaDeDecisao.ViewMotivacaoEObjetivos;
-import view.TomadaDeDecisao.ViewTomarDecisao;
 
 /**
  *
@@ -39,9 +39,9 @@ public class ViewPrincipal extends javax.swing.JFrame {
     private final ViewCalendario viewCalendario = new ViewCalendario();
     private final ViewAlternativaDeSolucao viewAlternativaDeSolucao = new ViewAlternativaDeSolucao();
     private final ViewCriteriosDeAvaliacao viewCriteriosDeAvaliacao = new ViewCriteriosDeAvaliacao();
-    private final ViewAvaliacao viewDecisao =  new ViewAvaliacao();
+    private final ViewAvaliacao viewDecisao = new ViewAvaliacao();
     private final ViewHistorico viewHistorico = new ViewHistorico();
-    
+
     public ViewPrincipal() {
         initComponents();
 
@@ -364,12 +364,12 @@ public class ViewPrincipal extends javax.swing.JFrame {
 
     private void jMenuItemNovaOrganizacaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemNovaOrganizacaoActionPerformed
         new ViewNovaOrganizacao(null, true).setVisible(true);
-        viewOrganizacoes.fillTable();
+        viewOrganizacoes.fillTable(new ControllerOrganizacao().findOrganizacoes());
     }//GEN-LAST:event_jMenuItemNovaOrganizacaoActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         trocaTela(viewOrganizacoes);
-        viewOrganizacoes.fillTable();
+        viewOrganizacoes.fillTable(new ControllerOrganizacao().findOrganizacoes());
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void jMenuItemDecisoesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemDecisoesActionPerformed
@@ -386,11 +386,11 @@ public class ViewPrincipal extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
 
-        new ViewSelecionarOrganizacao(null, true).setVisible(true); 
+        new ViewSelecionarOrganizacao(null, true).setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-        new ViewSelecionarOrganizacao(null, true).setVisible(true); 
+        new ViewSelecionarOrganizacao(null, true).setVisible(true);
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void iniciaTelas() {
@@ -416,11 +416,11 @@ public class ViewPrincipal extends javax.swing.JFrame {
         viewTomadaDeDecisoes.setVisible(false);
         viewUsuarios.setVisible(false);
         viewMotivacaoEObjetivos.setVisible(false);
-        viewCalendario.setVisible(false); 
-        viewAlternativaDeSolucao.setVisible(false); 
+        viewCalendario.setVisible(false);
+        viewAlternativaDeSolucao.setVisible(false);
         viewCriteriosDeAvaliacao.setVisible(false);
-        viewDecisao.setVisible(false); 
-        viewHistorico.setVisible(false); 
+        viewDecisao.setVisible(false);
+        viewHistorico.setVisible(false);
 
         if (tela != null) {
             tela.setVisible(true);
@@ -452,17 +452,17 @@ public class ViewPrincipal extends javax.swing.JFrame {
             }
         } else if (nodePai.endsWith("Tomada de Decisão")) {
             if (nodeFilho.equals("Motivação e Objetivos")) {
-                trocaTela(viewMotivacaoEObjetivos); 
-            } else if (nodeFilho.equals("Calendário")){
-                trocaTela(viewCalendario); 
-            } else if (nodeFilho.equals("Alternativas de Solução")){
-                trocaTela(viewAlternativaDeSolucao); 
-            } else if(nodeFilho.equals("Critérios de Avaliação")){
-                trocaTela(viewCriteriosDeAvaliacao); 
-            } else if (nodeFilho.equals("Avaliação")){
+                trocaTela(viewMotivacaoEObjetivos);
+            } else if (nodeFilho.equals("Calendário")) {
+                trocaTela(viewCalendario);
+            } else if (nodeFilho.equals("Alternativas de Solução")) {
+                trocaTela(viewAlternativaDeSolucao);
+            } else if (nodeFilho.equals("Critérios de Avaliação")) {
+                trocaTela(viewCriteriosDeAvaliacao);
+            } else if (nodeFilho.equals("Avaliação")) {
                 trocaTela(viewDecisao);
-            } else if (nodeFilho.equals("Histórico")){
-                trocaTela(viewHistorico); 
+            } else if (nodeFilho.equals("Histórico")) {
+                trocaTela(viewHistorico);
             }
         }
     }
