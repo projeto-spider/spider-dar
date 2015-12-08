@@ -4,6 +4,7 @@ import controller.ControllerOrganizacao;
 import java.util.List;
 import javax.swing.JOptionPane;
 import util.Internal;
+import util.MyCellRenderer;
 import util.MyDefaultTableModel;
 import util.Request;
 import view.ViewNovaOrganizacao;
@@ -41,6 +42,7 @@ public class ViewOrganizacoes extends javax.swing.JInternalFrame {
             myDefaultTableModel.addRow(line);
         }
         jTableOrganizacoes.setModel(myDefaultTableModel);
+        //jTableOrganizacoes.getColumnModel().getColumn(0).setCellRenderer(new MyCellRenderer());
     }
 
     /**

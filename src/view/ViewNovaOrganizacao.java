@@ -24,7 +24,7 @@ public class ViewNovaOrganizacao extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
 
-        type = Constant.SAVE;
+        type = Constant.CREATE;
         this.setLocationRelativeTo(null);
     }
 
@@ -49,10 +49,14 @@ public class ViewNovaOrganizacao extends javax.swing.JDialog {
      */
     private boolean fieldValidation() {
         if (jTextFieldNomeOrganizacao.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Campo nome da Organização é obrigatório.", "ERRO AO CADASTRAR", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null,
+                    "Campo nome da Organização é obrigatório.",
+                    "ERRO AO CADASTRAR", JOptionPane.ERROR_MESSAGE);
             return false;
         } else if (jTextAreaDescricao.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Campo Descrição é obrigatório.", "ERRO AO CADASTRAR", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null,
+                    "Campo Descrição é obrigatório.",
+                    "ERRO AO CADASTRAR", JOptionPane.ERROR_MESSAGE);
             return false;
         }
         return true;
@@ -77,7 +81,7 @@ public class ViewNovaOrganizacao extends javax.swing.JDialog {
         data.put("Organizacao.descricao", jTextAreaDescricao.getText());
 
         boolean isDone = false;
-        if (type == Constant.SAVE) {
+        if (type == Constant.CREATE) {
             request = new Request(data);
             isDone = controllerOrganizacao.createNewOrganizacao(request);
         } else {
@@ -90,7 +94,9 @@ public class ViewNovaOrganizacao extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(null, "Salvo com Sucesso.");
             this.setVisible(false);
         } else {
-            
+            JOptionPane.showMessageDialog(null,
+                    "Por favor, verifique se esta organização já não foi cadastrada.",
+                    "ERRO AO SALVAR", type);
         }
     }
 

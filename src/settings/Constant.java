@@ -6,6 +6,6 @@ package settings;
  */
 public class Constant {
     
-    public static int SAVE = 0;
+    public static int CREATE = 0;
     public static int UPDATE = 1;
 }
