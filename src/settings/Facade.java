@@ -1,6 +1,7 @@
 package settings;
 
 import jpa.extension.JpaOrganizacao;
+import jpa.extension.JpaPerfil;
 
 /**
  * Implementação do padrão de projeto Facade. padrão de projeto Facade fornecer
@@ -38,6 +39,10 @@ public class Facade {
     public JpaOrganizacao initializeJpaOrganizacao() {
         jpaOrganizacao = new JpaOrganizacao(Connection.connect());
         return jpaOrganizacao;
+    }
+    
+    public JpaPerfil initializeJpaPefil(){
+        return new JpaPerfil(Connection.connect());
     }
 
 }

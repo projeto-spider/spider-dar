@@ -7,7 +7,6 @@ import util.Internal;
 import util.MyCellRenderer;
 import util.MyDefaultTableModel;
 import util.Request;
-import view.ViewNovaOrganizacao;
 
 /**
  *

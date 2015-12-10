@@ -1,7 +1,6 @@
 package view.Gerenciar;
 
 import util.Internal;
-import view.ViewNovaTomadaDialog;
 
 /**
  *

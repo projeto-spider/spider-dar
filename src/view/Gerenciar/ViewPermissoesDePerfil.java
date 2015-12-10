@@ -1,7 +1,11 @@
 
-package view.Organizacional;
+package view.Gerenciar;
 
+import controller.ControllerPerfil;
+import java.util.List;
 import util.Internal;
+import util.MyDefaultTableModel;
+import util.Request;
 
 /**
  *
@@ -9,12 +13,37 @@ import util.Internal;
  */
 public class ViewPermissoesDePerfil extends javax.swing.JInternalFrame {
 
+    private MyDefaultTableModel myDefaultTableModel;
+    private final ControllerPerfil controllerPerfil =  new ControllerPerfil();
+    
     public ViewPermissoesDePerfil() {
         initComponents();
         
         Internal.retiraBorda(this);
     }
 
+    /**
+     * Preenche a tabela com os Perfis cadastradas anteriormente.
+     *
+     * @param requestList
+     */
+    public void fillTable(List<Request> requestList) {
+        String columns[] = {"Perfil", "Criada em", "Última modificação"};
+        myDefaultTableModel = new MyDefaultTableModel(columns, 0, false);
+
+        for (Request request : requestList) {
+            String line[] = {
+                request.getData("Perfil.nome"),
+                request.getData("Perfil.created"),
+                request.getData("Perfil.modified")
+            };
+            myDefaultTableModel.addRow(line);
+        }
+        jTablePerfis.setModel(myDefaultTableModel);
+        //jTableOrganizacoes.getColumnModel().getColumn(0).setCellRenderer(new MyCellRenderer());
+    }
+    
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -31,8 +60,10 @@ public class ViewPermissoesDePerfil extends javax.swing.JInternalFrame {
         jButton3 = new javax.swing.JButton();
         jTextField1 = new javax.swing.JTextField();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jTablePerfis = new javax.swing.JTable();
         jButton5 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
+        jButton6 = new javax.swing.JButton();
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
 
@@ -117,8 +148,8 @@ public class ViewPermissoesDePerfil extends javax.swing.JInternalFrame {
         jTextField1.setText(" Permissôes de Perfil");
         jTextField1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
-        jTable1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jTablePerfis.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jTablePerfis.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {"Participante ", "24/10/2015"},
                 {"Decisor", "24/10/2015"}
@@ -127,7 +158,7 @@ public class ViewPermissoesDePerfil extends javax.swing.JInternalFrame {
                 "Perfil", "Criado em"
             }
         ));
-        jScrollPane2.setViewportView(jTable1);
+        jScrollPane2.setViewportView(jTablePerfis);
 
         jButton5.setText("Novo Perfil");
         jButton5.addActionListener(new java.awt.event.ActionListener() {
@@ -135,6 +166,10 @@ public class ViewPermissoesDePerfil extends javax.swing.JInternalFrame {
                 jButton5ActionPerformed(evt);
             }
         });
+
+        jButton4.setText("Excluir");
+
+        jButton6.setText("Editar");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -149,21 +184,28 @@ public class ViewPermissoesDePerfil extends javax.swing.JInternalFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jScrollPane2)
                         .addContainerGap())))
+            .addComponent(jTextField1)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButton5)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
-            .addComponent(jTextField1)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(22, 22, 22)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 143, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton5)
-                .addGap(13, 13, 13)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 159, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton5)
+                    .addComponent(jButton4)
+                    .addComponent(jButton6))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -180,7 +222,9 @@ public class ViewPermissoesDePerfil extends javax.swing.JInternalFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JList jList1;
@@ -189,7 +233,7 @@ public class ViewPermissoesDePerfil extends javax.swing.JInternalFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable jTablePerfis;
     private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
 }

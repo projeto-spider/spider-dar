@@ -1,6 +1,6 @@
-package view;
+package view.Gerenciar;
 
-import controller.ControllerOrganizacao;
+import controller.ControllerPerfil;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.JOptionPane;
@@ -11,34 +11,20 @@ import util.Request;
  *
  * @author Bleno Vale
  */
-public class ViewNovaOrganizacao extends javax.swing.JDialog {
+public class ViewNovoPerfil extends javax.swing.JDialog {
 
-    private final ControllerOrganizacao controllerOrganizacao = new ControllerOrganizacao();
+    private final ControllerPerfil controllerPerfil = new ControllerPerfil();
     private Request request;
     private int type;
 
     /**
-     * Contrutor usado no cadastro de uma nova Organização.
+     * Contrutor usado no cadastro de um novo Perfil.
      */
-    public ViewNovaOrganizacao(java.awt.Frame parent, boolean modal) {
+    public ViewNovoPerfil(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
 
         type = Constant.CREATE;
-        this.setLocationRelativeTo(null);
-    }
-
-    /**
-     * Construtor usado para edição das informações de uma Organização.
-     *
-     * @param name nome da organização a ser editada.
-     */
-    public ViewNovaOrganizacao(java.awt.Frame parent, boolean modal, String name) {
-        super(parent, modal);
-        initComponents();
-
-        type = Constant.UPDATE;
-        fillFields(name);
         this.setLocationRelativeTo(null);
     }
 
@@ -48,28 +34,27 @@ public class ViewNovaOrganizacao extends javax.swing.JDialog {
      * @return
      */
     private boolean fieldValidation() {
-        if (jTextFieldNomeOrganizacao.getText().isEmpty()) {
+        if (jTextFieldNomePerfil.getText().isEmpty()) {
             JOptionPane.showMessageDialog(null,
-                    "Campo nome da Organização é obrigatório.",
+                    "Campo nome do Perfil é obrigatório.",
                     "ERRO AO CADASTRAR", JOptionPane.ERROR_MESSAGE);
             return false;
-        } else if (jTextAreaDescricao.getText().isEmpty()) {
+        } else if (jTextAreaHabilidades.getText().isEmpty()) {
             JOptionPane.showMessageDialog(null,
-                    "Campo Descrição é obrigatório.",
+                    "Campo Habilidades é obrigatório.",
+                    "ERRO AO CADASTRAR", JOptionPane.ERROR_MESSAGE);
+            return false;
+        } else if (jTextAreaCompetencias.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null,
+                    "Campo Competencias é obrigatório.",
                     "ERRO AO CADASTRAR", JOptionPane.ERROR_MESSAGE);
             return false;
         }
         return true;
     }
 
-    public void fillFields(String name) {
-        request = controllerOrganizacao.findOrganizacaoSelected(name);
-        jTextFieldNomeOrganizacao.setText(request.getData("Organizacao.nome"));
-        jTextAreaDescricao.setText(request.getData("Organizacao.descricao"));
-    }
-
     /**
-     * Método responsavel pelo cadastro ou edição de uma nova Organização.
+     * Método responsavel pelo cadastro ou edição de um novo Perfil.
      */
     private void save() {
         if (!fieldValidation()) {
@@ -77,55 +62,49 @@ public class ViewNovaOrganizacao extends javax.swing.JDialog {
         }
 
         Map<String, String> data = new HashMap<>();
-        data.put("Organizacao.nome", jTextFieldNomeOrganizacao.getText());
-        data.put("Organizacao.descricao", jTextAreaDescricao.getText());
+        data.put("Perfil.nome", jTextFieldNomePerfil.getText());
+        data.put("Perfil.habilidades", jTextAreaHabilidades.getText());
+        data.put("Perfil.competencias", jTextAreaCompetencias.getText());
 
         boolean isDone = false;
         if (type == Constant.CREATE) {
             request = new Request(data);
-            isDone = controllerOrganizacao.createNewOrganizacao(request);
-        } else {
-            data.put("Organizacao.id", request.getData("Organizacao.id"));
-            request = new Request(data);
-            isDone = controllerOrganizacao.updateOrganizacao(request);
+            isDone = controllerPerfil.createPerfil(request);
         }
-
+        
         if (isDone) {
             JOptionPane.showMessageDialog(null, "Salvo com Sucesso.");
-            this.setVisible(false);
+            this.dispose();
         } else {
             JOptionPane.showMessageDialog(null,
-                    "Por favor, verifique se esta organização já não foi cadastrada.",
+                    "Por favor, verifique se este Perfil já não foi cadastrada.",
                     "ERRO AO SALVAR", type);
         }
+
     }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jTextFieldNomeOrganizacao = new javax.swing.JTextField();
+        jTextFieldNomePerfil = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextAreaDescricao = new javax.swing.JTextArea();
-        jButtonCancelar = new javax.swing.JButton();
+        jTextAreaHabilidades = new javax.swing.JTextArea();
         jButtonSalvar = new javax.swing.JButton();
+        jButtonCancelar = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTextAreaCompetencias = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Nova Organização");
+        setTitle("Novo Perfil");
         setResizable(false);
 
-        jTextAreaDescricao.setColumns(20);
-        jTextAreaDescricao.setRows(5);
-        jScrollPane1.setViewportView(jTextAreaDescricao);
-
-        jButtonCancelar.setText("Cancelar");
-        jButtonCancelar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonCancelarActionPerformed(evt);
-            }
-        });
+        jTextAreaHabilidades.setColumns(20);
+        jTextAreaHabilidades.setRows(3);
+        jScrollPane1.setViewportView(jTextAreaHabilidades);
 
         jButtonSalvar.setText("Salvar");
         jButtonSalvar.addActionListener(new java.awt.event.ActionListener() {
@@ -134,9 +113,22 @@ public class ViewNovaOrganizacao extends javax.swing.JDialog {
             }
         });
 
-        jLabel1.setText("Nome da Organização:");
+        jButtonCancelar.setText("Cancelar");
+        jButtonCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonCancelarActionPerformed(evt);
+            }
+        });
 
-        jLabel2.setText("Descrição:");
+        jLabel1.setText("Nome do Perfil:");
+
+        jLabel2.setText("Habilidades:");
+
+        jLabel3.setText("Competencias:");
+
+        jTextAreaCompetencias.setColumns(20);
+        jTextAreaCompetencias.setRows(2);
+        jScrollPane2.setViewportView(jTextAreaCompetencias);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -145,17 +137,19 @@ public class ViewNovaOrganizacao extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2)
+                    .addComponent(jScrollPane1)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButtonSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButtonSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButtonCancelar))
-                    .addComponent(jTextFieldNomeOrganizacao, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 476, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jTextFieldNomePerfil, javax.swing.GroupLayout.PREFERRED_SIZE, 456, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel1)
-                            .addComponent(jLabel2))
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel3))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -165,15 +159,19 @@ public class ViewNovaOrganizacao extends javax.swing.JDialog {
                 .addContainerGap()
                 .addComponent(jLabel1)
                 .addGap(0, 0, 0)
-                .addComponent(jTextFieldNomeOrganizacao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(11, 11, 11)
+                .addComponent(jTextFieldNomePerfil, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel2)
                 .addGap(0, 0, 0)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel3)
+                .addGap(0, 0, 0)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButtonCancelar)
-                    .addComponent(jButtonSalvar))
+                    .addComponent(jButtonSalvar)
+                    .addComponent(jButtonCancelar))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -185,7 +183,7 @@ public class ViewNovaOrganizacao extends javax.swing.JDialog {
     }//GEN-LAST:event_jButtonSalvarActionPerformed
 
     private void jButtonCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelarActionPerformed
-        this.setVisible(false);
+        this.dispose();
     }//GEN-LAST:event_jButtonCancelarActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -193,8 +191,11 @@ public class ViewNovaOrganizacao extends javax.swing.JDialog {
     private javax.swing.JButton jButtonSalvar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextArea jTextAreaDescricao;
-    private javax.swing.JTextField jTextFieldNomeOrganizacao;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTextArea jTextAreaCompetencias;
+    private javax.swing.JTextArea jTextAreaHabilidades;
+    private javax.swing.JTextField jTextFieldNomePerfil;
     // End of variables declaration//GEN-END:variables
 }

@@ -1,14 +1,18 @@
 package view;
 
+import view.Gerenciar.ViewNovoUsuario;
+import view.Gerenciar.ViewNovaOrganizacao;
+import view.Gerenciar.ViewNovaTomadaDialog;
 import controller.ControllerOrganizacao;
 import java.beans.PropertyVetoException;
 import javax.swing.JInternalFrame;
 import javax.swing.tree.DefaultMutableTreeNode;
+import settings.KeepData;
 import view.Gerenciar.ViewOrganizacoes;
 import view.Gerenciar.ViewTomadaDeDecisoes;
 import view.Gerenciar.ViewUsuarios;
 import view.Organizacional.ViewGuiaGestaoDeDecisao;
-import view.Organizacional.ViewPermissoesDePerfil;
+import view.Gerenciar.ViewPermissoesDePerfil;
 import view.TomadaDeDecisao.ViewAlternativaDeSolucao;
 import view.TomadaDeDecisao.ViewCalendario;
 import view.TomadaDeDecisao.ViewCriteriosDeAvaliacao;
@@ -45,6 +49,8 @@ public class ViewPrincipal extends javax.swing.JFrame {
     public ViewPrincipal() {
         initComponents();
 
+        jLabelOrganizacao.setText("Organização: " + KeepData.getData("Organizacao.nome")); 
+        
         iniciaTelas();
         trocaTela(viewHome);
         this.setLocationRelativeTo(null);
@@ -61,7 +67,7 @@ public class ViewPrincipal extends javax.swing.JFrame {
         jDesktopPane = new javax.swing.JDesktopPane();
         jPanel2 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
-        jLabel3 = new javax.swing.JLabel();
+        jLabelOrganizacao = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
@@ -140,7 +146,7 @@ public class ViewPrincipal extends javax.swing.JFrame {
             }
         });
 
-        jLabel3.setText("Organização: Desenvolvimento");
+        jLabelOrganizacao.setText("Organização: Desenvolvimento");
 
         jLabel4.setText("Tomada de decisão: nome Tomada");
 
@@ -153,7 +159,7 @@ public class ViewPrincipal extends javax.swing.JFrame {
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 497, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabelOrganizacao, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addContainerGap())
         );
@@ -163,7 +169,7 @@ public class ViewPrincipal extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel3)
+                        .addComponent(jLabelOrganizacao)
                         .addGap(0, 0, 0)
                         .addComponent(jLabel4))
                     .addGroup(jPanel2Layout.createSequentialGroup()
@@ -499,8 +505,8 @@ public class ViewPrincipal extends javax.swing.JFrame {
     private javax.swing.JDesktopPane jDesktopPane;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabelOrganizacao;
     private javax.swing.JMenu jMenuArquivo;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenu jMenuGerenciar;

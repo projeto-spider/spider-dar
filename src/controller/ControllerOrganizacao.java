@@ -27,7 +27,7 @@ public class ControllerOrganizacao {
      * @param request dados requisistados da organização.
      * @return se cadastro foi sucedido ou não.
      */
-    public boolean createNewOrganizacao(Request request) {
+    public boolean createOrganizacao(Request request) {
         try {
             organizacao = facade.initializeJpaOrganizacao().findOrganizacaoByName(request.getData("Organizacao.nome"));
             if (organizacao != null) {
@@ -138,6 +138,8 @@ public class ControllerOrganizacao {
             data.put("Organizacao.id", String.valueOf(organizacao.getId()));
             data.put("Organizacao.nome", organizacao.getNome());
             data.put("Organizacao.descricao", organizacao.getDescricao());
+            data.put("Organizacao.created", String.valueOf(organizacao.getCreated()));
+            data.put("Organizacao.modified", String.valueOf(organizacao.getModified()));
             return new Request(data);
         } catch (Exception error) {
             throw error;
