@@ -20,7 +20,7 @@ import model.Funcionalidades;
 
 /**
  *
- * @author Spider
+ * @author Sandro Bezerra
  */
 public class FuncionalidadesJpaController implements Serializable {
 

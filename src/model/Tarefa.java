@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author Spider
+ * @author Sandro Bezerra
  */
 @Entity
 @Table(name = "tarefa")
@@ -153,8 +153,9 @@ public class Tarefa implements Serializable {
             return false;
         }
         Tarefa other = (Tarefa) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)))
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
+        }
         return true;
     }
 

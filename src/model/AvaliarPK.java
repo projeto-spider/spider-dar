@@ -12,7 +12,7 @@ import javax.persistence.Embeddable;
 
 /**
  *
- * @author Spider
+ * @author Sandro Bezerra
  */
 @Embeddable
 public class AvaliarPK implements Serializable {
@@ -75,12 +75,15 @@ public class AvaliarPK implements Serializable {
             return false;
         }
         AvaliarPK other = (AvaliarPK) object;
-        if (this.idAlternativa != other.idAlternativa)
+        if (this.idAlternativa != other.idAlternativa) {
             return false;
-        if (this.idAvaliacao != other.idAvaliacao)
+        }
+        if (this.idAvaliacao != other.idAvaliacao) {
             return false;
-        if (this.idCriterio != other.idCriterio)
+        }
+        if (this.idCriterio != other.idCriterio) {
             return false;
+        }
         return true;
     }
 

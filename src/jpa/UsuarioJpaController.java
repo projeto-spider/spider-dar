@@ -10,7 +10,7 @@ import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import model.Acessar;
+import model.Perfil;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -18,11 +18,12 @@ import javax.persistence.EntityManagerFactory;
 import jpa.exceptions.IllegalOrphanException;
 import jpa.exceptions.NonexistentEntityException;
 import jpa.exceptions.PreexistingEntityException;
+import model.Acessar;
 import model.Usuario;
 
 /**
  *
- * @author Spider
+ * @author Sandro Bezerra
  */
 public class UsuarioJpaController implements Serializable {
 
@@ -36,6 +37,9 @@ public class UsuarioJpaController implements Serializable {
     }
 
     public void create(Usuario usuario) throws PreexistingEntityException, Exception {
+        if (usuario.getPerfilList() == null) {
+            usuario.setPerfilList(new ArrayList<Perfil>());
+        }
         if (usuario.getAcessarList() == null) {
             usuario.setAcessarList(new ArrayList<Acessar>());
         }
@@ -43,6 +47,12 @@ public class UsuarioJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
+            List<Perfil> attachedPerfilList = new ArrayList<Perfil>();
+            for (Perfil perfilListPerfilToAttach : usuario.getPerfilList()) {
+                perfilListPerfilToAttach = em.getReference(perfilListPerfilToAttach.getClass(), perfilListPerfilToAttach.getId());
+                attachedPerfilList.add(perfilListPerfilToAttach);
+            }
+            usuario.setPerfilList(attachedPerfilList);
             List<Acessar> attachedAcessarList = new ArrayList<Acessar>();
             for (Acessar acessarListAcessarToAttach : usuario.getAcessarList()) {
                 acessarListAcessarToAttach = em.getReference(acessarListAcessarToAttach.getClass(), acessarListAcessarToAttach.getAcessarPK());
@@ -50,6 +60,10 @@ public class UsuarioJpaController implements Serializable {
             }
             usuario.setAcessarList(attachedAcessarList);
             em.persist(usuario);
+            for (Perfil perfilListPerfil : usuario.getPerfilList()) {
+                perfilListPerfil.getUsuarioList().add(usuario);
+                perfilListPerfil = em.merge(perfilListPerfil);
+            }
             for (Acessar acessarListAcessar : usuario.getAcessarList()) {
                 Usuario oldUsuarioOfAcessarListAcessar = acessarListAcessar.getUsuario();
                 acessarListAcessar.setUsuario(usuario);
@@ -78,6 +92,8 @@ public class UsuarioJpaController implements Serializable {
             em = getEntityManager();
             em.getTransaction().begin();
             Usuario persistentUsuario = em.find(Usuario.class, usuario.getId());
+            List<Perfil> perfilListOld = persistentUsuario.getPerfilList();
+            List<Perfil> perfilListNew = usuario.getPerfilList();
             List<Acessar> acessarListOld = persistentUsuario.getAcessarList();
             List<Acessar> acessarListNew = usuario.getAcessarList();
             List<String> illegalOrphanMessages = null;
@@ -92,6 +108,13 @@ public class UsuarioJpaController implements Serializable {
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
+            List<Perfil> attachedPerfilListNew = new ArrayList<Perfil>();
+            for (Perfil perfilListNewPerfilToAttach : perfilListNew) {
+                perfilListNewPerfilToAttach = em.getReference(perfilListNewPerfilToAttach.getClass(), perfilListNewPerfilToAttach.getId());
+                attachedPerfilListNew.add(perfilListNewPerfilToAttach);
+            }
+            perfilListNew = attachedPerfilListNew;
+            usuario.setPerfilList(perfilListNew);
             List<Acessar> attachedAcessarListNew = new ArrayList<Acessar>();
             for (Acessar acessarListNewAcessarToAttach : acessarListNew) {
                 acessarListNewAcessarToAttach = em.getReference(acessarListNewAcessarToAttach.getClass(), acessarListNewAcessarToAttach.getAcessarPK());
@@ -100,6 +123,18 @@ public class UsuarioJpaController implements Serializable {
             acessarListNew = attachedAcessarListNew;
             usuario.setAcessarList(acessarListNew);
             usuario = em.merge(usuario);
+            for (Perfil perfilListOldPerfil : perfilListOld) {
+                if (!perfilListNew.contains(perfilListOldPerfil)) {
+                    perfilListOldPerfil.getUsuarioList().remove(usuario);
+                    perfilListOldPerfil = em.merge(perfilListOldPerfil);
+                }
+            }
+            for (Perfil perfilListNewPerfil : perfilListNew) {
+                if (!perfilListOld.contains(perfilListNewPerfil)) {
+                    perfilListNewPerfil.getUsuarioList().add(usuario);
+                    perfilListNewPerfil = em.merge(perfilListNewPerfil);
+                }
+            }
             for (Acessar acessarListNewAcessar : acessarListNew) {
                 if (!acessarListOld.contains(acessarListNewAcessar)) {
                     Usuario oldUsuarioOfAcessarListNewAcessar = acessarListNewAcessar.getUsuario();
@@ -150,6 +185,11 @@ public class UsuarioJpaController implements Serializable {
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
+            }
+            List<Perfil> perfilList = usuario.getPerfilList();
+            for (Perfil perfilListPerfil : perfilList) {
+                perfilListPerfil.getUsuarioList().remove(usuario);
+                perfilListPerfil = em.merge(perfilListPerfil);
             }
             em.remove(usuario);
             em.getTransaction().commit();

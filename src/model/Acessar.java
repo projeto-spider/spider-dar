@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author Spider
+ * @author Sandro Bezerra
  */
 @Entity
 @Table(name = "acessar")
@@ -26,21 +26,11 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Acessar.findAll", query = "SELECT a FROM Acessar a"),
     @NamedQuery(name = "Acessar.findByIdOrganizacao", query = "SELECT a FROM Acessar a WHERE a.acessarPK.idOrganizacao = :idOrganizacao"),
     @NamedQuery(name = "Acessar.findByIdProblema", query = "SELECT a FROM Acessar a WHERE a.acessarPK.idProblema = :idProblema"),
-    @NamedQuery(name = "Acessar.findByIdUsuario", query = "SELECT a FROM Acessar a WHERE a.acessarPK.idUsuario = :idUsuario"),
-    @NamedQuery(name = "Acessar.findByIdPerfil", query = "SELECT a FROM Acessar a WHERE a.acessarPK.idPerfil = :idPerfil")})
+    @NamedQuery(name = "Acessar.findByIdUsuario", query = "SELECT a FROM Acessar a WHERE a.acessarPK.idUsuario = :idUsuario")})
 public class Acessar implements Serializable {
     private static final long serialVersionUID = 1L;
     @EmbeddedId
     protected AcessarPK acessarPK;
-    @JoinColumn(name = "idOrganizacao", referencedColumnName = "id", insertable = false, updatable = false)
-    @ManyToOne(optional = false)
-    private Organizacao organizacao;
-    @JoinColumn(name = "idPerfil", referencedColumnName = "id", insertable = false, updatable = false)
-    @ManyToOne(optional = false)
-    private Perfil perfil;
-    @JoinColumn(name = "idProblema", referencedColumnName = "id", insertable = false, updatable = false)
-    @ManyToOne(optional = false)
-    private Problema problema;
     @JoinColumn(name = "idUsuario", referencedColumnName = "id", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Usuario usuario;
@@ -52,8 +42,8 @@ public class Acessar implements Serializable {
         this.acessarPK = acessarPK;
     }
 
-    public Acessar(int idOrganizacao, int idProblema, int idUsuario, int idPerfil) {
-        this.acessarPK = new AcessarPK(idOrganizacao, idProblema, idUsuario, idPerfil);
+    public Acessar(int idOrganizacao, int idProblema, int idUsuario) {
+        this.acessarPK = new AcessarPK(idOrganizacao, idProblema, idUsuario);
     }
 
     public AcessarPK getAcessarPK() {
@@ -62,30 +52,6 @@ public class Acessar implements Serializable {
 
     public void setAcessarPK(AcessarPK acessarPK) {
         this.acessarPK = acessarPK;
-    }
-
-    public Organizacao getOrganizacao() {
-        return organizacao;
-    }
-
-    public void setOrganizacao(Organizacao organizacao) {
-        this.organizacao = organizacao;
-    }
-
-    public Perfil getPerfil() {
-        return perfil;
-    }
-
-    public void setPerfil(Perfil perfil) {
-        this.perfil = perfil;
-    }
-
-    public Problema getProblema() {
-        return problema;
-    }
-
-    public void setProblema(Problema problema) {
-        this.problema = problema;
     }
 
     public Usuario getUsuario() {
@@ -110,8 +76,9 @@ public class Acessar implements Serializable {
             return false;
         }
         Acessar other = (Acessar) object;
-        if ((this.acessarPK == null && other.acessarPK != null) || (this.acessarPK != null && !this.acessarPK.equals(other.acessarPK)))
+        if ((this.acessarPK == null && other.acessarPK != null) || (this.acessarPK != null && !this.acessarPK.equals(other.acessarPK))) {
             return false;
+        }
         return true;
     }
 

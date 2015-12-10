@@ -27,7 +27,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Spider
+ * @author Sandro Bezerra
  */
 @Entity
 @Table(name = "alternativa")
@@ -72,8 +72,6 @@ public class Alternativa implements Serializable {
     private Problema idProblema;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idAlternativa")
     private List<Decisao> decisaoList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "alternativa")
-    private List<Avaliar> avaliarList;
 
     public Alternativa() {
     }
@@ -165,15 +163,6 @@ public class Alternativa implements Serializable {
         this.decisaoList = decisaoList;
     }
 
-    @XmlTransient
-    public List<Avaliar> getAvaliarList() {
-        return avaliarList;
-    }
-
-    public void setAvaliarList(List<Avaliar> avaliarList) {
-        this.avaliarList = avaliarList;
-    }
-
     @Override
     public int hashCode() {
         int hash = 0;
@@ -188,8 +177,9 @@ public class Alternativa implements Serializable {
             return false;
         }
         Alternativa other = (Alternativa) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)))
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
+        }
         return true;
     }
 

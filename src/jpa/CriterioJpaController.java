@@ -18,13 +18,12 @@ import javax.persistence.EntityManagerFactory;
 import jpa.exceptions.IllegalOrphanException;
 import jpa.exceptions.NonexistentEntityException;
 import jpa.exceptions.PreexistingEntityException;
-import model.Avaliar;
 import model.Criterio;
 import model.Nota;
 
 /**
  *
- * @author Spider
+ * @author Sandro Bezerra
  */
 public class CriterioJpaController implements Serializable {
 
@@ -41,9 +40,6 @@ public class CriterioJpaController implements Serializable {
         if (criterio.getProblemaList() == null) {
             criterio.setProblemaList(new ArrayList<Problema>());
         }
-        if (criterio.getAvaliarList() == null) {
-            criterio.setAvaliarList(new ArrayList<Avaliar>());
-        }
         if (criterio.getNotaList() == null) {
             criterio.setNotaList(new ArrayList<Nota>());
         }
@@ -57,12 +53,6 @@ public class CriterioJpaController implements Serializable {
                 attachedProblemaList.add(problemaListProblemaToAttach);
             }
             criterio.setProblemaList(attachedProblemaList);
-            List<Avaliar> attachedAvaliarList = new ArrayList<Avaliar>();
-            for (Avaliar avaliarListAvaliarToAttach : criterio.getAvaliarList()) {
-                avaliarListAvaliarToAttach = em.getReference(avaliarListAvaliarToAttach.getClass(), avaliarListAvaliarToAttach.getAvaliarPK());
-                attachedAvaliarList.add(avaliarListAvaliarToAttach);
-            }
-            criterio.setAvaliarList(attachedAvaliarList);
             List<Nota> attachedNotaList = new ArrayList<Nota>();
             for (Nota notaListNotaToAttach : criterio.getNotaList()) {
                 notaListNotaToAttach = em.getReference(notaListNotaToAttach.getClass(), notaListNotaToAttach.getId());
@@ -77,15 +67,6 @@ public class CriterioJpaController implements Serializable {
                 if (oldIdCriterioOfProblemaListProblema != null) {
                     oldIdCriterioOfProblemaListProblema.getProblemaList().remove(problemaListProblema);
                     oldIdCriterioOfProblemaListProblema = em.merge(oldIdCriterioOfProblemaListProblema);
-                }
-            }
-            for (Avaliar avaliarListAvaliar : criterio.getAvaliarList()) {
-                Criterio oldCriterioOfAvaliarListAvaliar = avaliarListAvaliar.getCriterio();
-                avaliarListAvaliar.setCriterio(criterio);
-                avaliarListAvaliar = em.merge(avaliarListAvaliar);
-                if (oldCriterioOfAvaliarListAvaliar != null) {
-                    oldCriterioOfAvaliarListAvaliar.getAvaliarList().remove(avaliarListAvaliar);
-                    oldCriterioOfAvaliarListAvaliar = em.merge(oldCriterioOfAvaliarListAvaliar);
                 }
             }
             for (Nota notaListNota : criterio.getNotaList()) {
@@ -118,8 +99,6 @@ public class CriterioJpaController implements Serializable {
             Criterio persistentCriterio = em.find(Criterio.class, criterio.getId());
             List<Problema> problemaListOld = persistentCriterio.getProblemaList();
             List<Problema> problemaListNew = criterio.getProblemaList();
-            List<Avaliar> avaliarListOld = persistentCriterio.getAvaliarList();
-            List<Avaliar> avaliarListNew = criterio.getAvaliarList();
             List<Nota> notaListOld = persistentCriterio.getNotaList();
             List<Nota> notaListNew = criterio.getNotaList();
             List<String> illegalOrphanMessages = null;
@@ -129,14 +108,6 @@ public class CriterioJpaController implements Serializable {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
                     illegalOrphanMessages.add("You must retain Problema " + problemaListOldProblema + " since its idCriterio field is not nullable.");
-                }
-            }
-            for (Avaliar avaliarListOldAvaliar : avaliarListOld) {
-                if (!avaliarListNew.contains(avaliarListOldAvaliar)) {
-                    if (illegalOrphanMessages == null) {
-                        illegalOrphanMessages = new ArrayList<String>();
-                    }
-                    illegalOrphanMessages.add("You must retain Avaliar " + avaliarListOldAvaliar + " since its criterio field is not nullable.");
                 }
             }
             for (Nota notaListOldNota : notaListOld) {
@@ -157,13 +128,6 @@ public class CriterioJpaController implements Serializable {
             }
             problemaListNew = attachedProblemaListNew;
             criterio.setProblemaList(problemaListNew);
-            List<Avaliar> attachedAvaliarListNew = new ArrayList<Avaliar>();
-            for (Avaliar avaliarListNewAvaliarToAttach : avaliarListNew) {
-                avaliarListNewAvaliarToAttach = em.getReference(avaliarListNewAvaliarToAttach.getClass(), avaliarListNewAvaliarToAttach.getAvaliarPK());
-                attachedAvaliarListNew.add(avaliarListNewAvaliarToAttach);
-            }
-            avaliarListNew = attachedAvaliarListNew;
-            criterio.setAvaliarList(avaliarListNew);
             List<Nota> attachedNotaListNew = new ArrayList<Nota>();
             for (Nota notaListNewNotaToAttach : notaListNew) {
                 notaListNewNotaToAttach = em.getReference(notaListNewNotaToAttach.getClass(), notaListNewNotaToAttach.getId());
@@ -180,17 +144,6 @@ public class CriterioJpaController implements Serializable {
                     if (oldIdCriterioOfProblemaListNewProblema != null && !oldIdCriterioOfProblemaListNewProblema.equals(criterio)) {
                         oldIdCriterioOfProblemaListNewProblema.getProblemaList().remove(problemaListNewProblema);
                         oldIdCriterioOfProblemaListNewProblema = em.merge(oldIdCriterioOfProblemaListNewProblema);
-                    }
-                }
-            }
-            for (Avaliar avaliarListNewAvaliar : avaliarListNew) {
-                if (!avaliarListOld.contains(avaliarListNewAvaliar)) {
-                    Criterio oldCriterioOfAvaliarListNewAvaliar = avaliarListNewAvaliar.getCriterio();
-                    avaliarListNewAvaliar.setCriterio(criterio);
-                    avaliarListNewAvaliar = em.merge(avaliarListNewAvaliar);
-                    if (oldCriterioOfAvaliarListNewAvaliar != null && !oldCriterioOfAvaliarListNewAvaliar.equals(criterio)) {
-                        oldCriterioOfAvaliarListNewAvaliar.getAvaliarList().remove(avaliarListNewAvaliar);
-                        oldCriterioOfAvaliarListNewAvaliar = em.merge(oldCriterioOfAvaliarListNewAvaliar);
                     }
                 }
             }
@@ -241,13 +194,6 @@ public class CriterioJpaController implements Serializable {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
                 illegalOrphanMessages.add("This Criterio (" + criterio + ") cannot be destroyed since the Problema " + problemaListOrphanCheckProblema + " in its problemaList field has a non-nullable idCriterio field.");
-            }
-            List<Avaliar> avaliarListOrphanCheck = criterio.getAvaliarList();
-            for (Avaliar avaliarListOrphanCheckAvaliar : avaliarListOrphanCheck) {
-                if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
-                }
-                illegalOrphanMessages.add("This Criterio (" + criterio + ") cannot be destroyed since the Avaliar " + avaliarListOrphanCheckAvaliar + " in its avaliarList field has a non-nullable criterio field.");
             }
             List<Nota> notaListOrphanCheck = criterio.getNotaList();
             for (Nota notaListOrphanCheckNota : notaListOrphanCheck) {

@@ -6,22 +6,19 @@
 package jpa;
 
 import java.io.Serializable;
+import java.util.List;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import model.Avaliar;
-import java.util.ArrayList;
-import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import jpa.exceptions.IllegalOrphanException;
 import jpa.exceptions.NonexistentEntityException;
 import model.Avaliacao;
 
 /**
  *
- * @author Spider
+ * @author Sandro Bezerra
  */
 public class AvaliacaoJpaController implements Serializable {
 
@@ -35,29 +32,11 @@ public class AvaliacaoJpaController implements Serializable {
     }
 
     public void create(Avaliacao avaliacao) {
-        if (avaliacao.getAvaliarList() == null) {
-            avaliacao.setAvaliarList(new ArrayList<Avaliar>());
-        }
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            List<Avaliar> attachedAvaliarList = new ArrayList<Avaliar>();
-            for (Avaliar avaliarListAvaliarToAttach : avaliacao.getAvaliarList()) {
-                avaliarListAvaliarToAttach = em.getReference(avaliarListAvaliarToAttach.getClass(), avaliarListAvaliarToAttach.getAvaliarPK());
-                attachedAvaliarList.add(avaliarListAvaliarToAttach);
-            }
-            avaliacao.setAvaliarList(attachedAvaliarList);
             em.persist(avaliacao);
-            for (Avaliar avaliarListAvaliar : avaliacao.getAvaliarList()) {
-                Avaliacao oldAvaliacaoOfAvaliarListAvaliar = avaliarListAvaliar.getAvaliacao();
-                avaliarListAvaliar.setAvaliacao(avaliacao);
-                avaliarListAvaliar = em.merge(avaliarListAvaliar);
-                if (oldAvaliacaoOfAvaliarListAvaliar != null) {
-                    oldAvaliacaoOfAvaliarListAvaliar.getAvaliarList().remove(avaliarListAvaliar);
-                    oldAvaliacaoOfAvaliarListAvaliar = em.merge(oldAvaliacaoOfAvaliarListAvaliar);
-                }
-            }
             em.getTransaction().commit();
         } finally {
             if (em != null) {
@@ -66,45 +45,12 @@ public class AvaliacaoJpaController implements Serializable {
         }
     }
 
-    public void edit(Avaliacao avaliacao) throws IllegalOrphanException, NonexistentEntityException, Exception {
+    public void edit(Avaliacao avaliacao) throws NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Avaliacao persistentAvaliacao = em.find(Avaliacao.class, avaliacao.getId());
-            List<Avaliar> avaliarListOld = persistentAvaliacao.getAvaliarList();
-            List<Avaliar> avaliarListNew = avaliacao.getAvaliarList();
-            List<String> illegalOrphanMessages = null;
-            for (Avaliar avaliarListOldAvaliar : avaliarListOld) {
-                if (!avaliarListNew.contains(avaliarListOldAvaliar)) {
-                    if (illegalOrphanMessages == null) {
-                        illegalOrphanMessages = new ArrayList<String>();
-                    }
-                    illegalOrphanMessages.add("You must retain Avaliar " + avaliarListOldAvaliar + " since its avaliacao field is not nullable.");
-                }
-            }
-            if (illegalOrphanMessages != null) {
-                throw new IllegalOrphanException(illegalOrphanMessages);
-            }
-            List<Avaliar> attachedAvaliarListNew = new ArrayList<Avaliar>();
-            for (Avaliar avaliarListNewAvaliarToAttach : avaliarListNew) {
-                avaliarListNewAvaliarToAttach = em.getReference(avaliarListNewAvaliarToAttach.getClass(), avaliarListNewAvaliarToAttach.getAvaliarPK());
-                attachedAvaliarListNew.add(avaliarListNewAvaliarToAttach);
-            }
-            avaliarListNew = attachedAvaliarListNew;
-            avaliacao.setAvaliarList(avaliarListNew);
             avaliacao = em.merge(avaliacao);
-            for (Avaliar avaliarListNewAvaliar : avaliarListNew) {
-                if (!avaliarListOld.contains(avaliarListNewAvaliar)) {
-                    Avaliacao oldAvaliacaoOfAvaliarListNewAvaliar = avaliarListNewAvaliar.getAvaliacao();
-                    avaliarListNewAvaliar.setAvaliacao(avaliacao);
-                    avaliarListNewAvaliar = em.merge(avaliarListNewAvaliar);
-                    if (oldAvaliacaoOfAvaliarListNewAvaliar != null && !oldAvaliacaoOfAvaliarListNewAvaliar.equals(avaliacao)) {
-                        oldAvaliacaoOfAvaliarListNewAvaliar.getAvaliarList().remove(avaliarListNewAvaliar);
-                        oldAvaliacaoOfAvaliarListNewAvaliar = em.merge(oldAvaliacaoOfAvaliarListNewAvaliar);
-                    }
-                }
-            }
             em.getTransaction().commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
@@ -122,7 +68,7 @@ public class AvaliacaoJpaController implements Serializable {
         }
     }
 
-    public void destroy(Integer id) throws IllegalOrphanException, NonexistentEntityException {
+    public void destroy(Integer id) throws NonexistentEntityException {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -133,17 +79,6 @@ public class AvaliacaoJpaController implements Serializable {
                 avaliacao.getId();
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The avaliacao with id " + id + " no longer exists.", enfe);
-            }
-            List<String> illegalOrphanMessages = null;
-            List<Avaliar> avaliarListOrphanCheck = avaliacao.getAvaliarList();
-            for (Avaliar avaliarListOrphanCheckAvaliar : avaliarListOrphanCheck) {
-                if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
-                }
-                illegalOrphanMessages.add("This Avaliacao (" + avaliacao + ") cannot be destroyed since the Avaliar " + avaliarListOrphanCheckAvaliar + " in its avaliarList field has a non-nullable avaliacao field.");
-            }
-            if (illegalOrphanMessages != null) {
-                throw new IllegalOrphanException(illegalOrphanMessages);
             }
             em.remove(avaliacao);
             em.getTransaction().commit();

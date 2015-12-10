@@ -12,7 +12,7 @@ import javax.persistence.Embeddable;
 
 /**
  *
- * @author Spider
+ * @author Sandro Bezerra
  */
 @Embeddable
 public class AcessarPK implements Serializable {
@@ -25,18 +25,14 @@ public class AcessarPK implements Serializable {
     @Basic(optional = false)
     @Column(name = "idUsuario")
     private int idUsuario;
-    @Basic(optional = false)
-    @Column(name = "idPerfil")
-    private int idPerfil;
 
     public AcessarPK() {
     }
 
-    public AcessarPK(int idOrganizacao, int idProblema, int idUsuario, int idPerfil) {
+    public AcessarPK(int idOrganizacao, int idProblema, int idUsuario) {
         this.idOrganizacao = idOrganizacao;
         this.idProblema = idProblema;
         this.idUsuario = idUsuario;
-        this.idPerfil = idPerfil;
     }
 
     public int getIdOrganizacao() {
@@ -63,21 +59,12 @@ public class AcessarPK implements Serializable {
         this.idUsuario = idUsuario;
     }
 
-    public int getIdPerfil() {
-        return idPerfil;
-    }
-
-    public void setIdPerfil(int idPerfil) {
-        this.idPerfil = idPerfil;
-    }
-
     @Override
     public int hashCode() {
         int hash = 0;
         hash += (int) idOrganizacao;
         hash += (int) idProblema;
         hash += (int) idUsuario;
-        hash += (int) idPerfil;
         return hash;
     }
 
@@ -88,20 +75,21 @@ public class AcessarPK implements Serializable {
             return false;
         }
         AcessarPK other = (AcessarPK) object;
-        if (this.idOrganizacao != other.idOrganizacao)
+        if (this.idOrganizacao != other.idOrganizacao) {
             return false;
-        if (this.idProblema != other.idProblema)
+        }
+        if (this.idProblema != other.idProblema) {
             return false;
-        if (this.idUsuario != other.idUsuario)
+        }
+        if (this.idUsuario != other.idUsuario) {
             return false;
-        if (this.idPerfil != other.idPerfil)
-            return false;
+        }
         return true;
     }
 
     @Override
     public String toString() {
-        return "model.AcessarPK[ idOrganizacao=" + idOrganizacao + ", idProblema=" + idProblema + ", idUsuario=" + idUsuario + ", idPerfil=" + idPerfil + " ]";
+        return "model.AcessarPK[ idOrganizacao=" + idOrganizacao + ", idProblema=" + idProblema + ", idUsuario=" + idUsuario + " ]";
     }
     
 }

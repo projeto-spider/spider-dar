@@ -9,17 +9,17 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -28,7 +28,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Spider
+ * @author Sandro Bezerra
  */
 @Entity
 @Table(name = "perfil")
@@ -36,6 +36,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Perfil.findAll", query = "SELECT p FROM Perfil p"),
     @NamedQuery(name = "Perfil.findById", query = "SELECT p FROM Perfil p WHERE p.id = :id"),
+    @NamedQuery(name = "Perfil.findByIdOrganizacao", query = "SELECT p FROM Perfil p WHERE p.idOrganizacao = :idOrganizacao"),
     @NamedQuery(name = "Perfil.findByNome", query = "SELECT p FROM Perfil p WHERE p.nome = :nome"),
     @NamedQuery(name = "Perfil.findByCreated", query = "SELECT p FROM Perfil p WHERE p.created = :created"),
     @NamedQuery(name = "Perfil.findByModified", query = "SELECT p FROM Perfil p WHERE p.modified = :modified")})
@@ -46,6 +47,9 @@ public class Perfil implements Serializable {
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
+    @Basic(optional = false)
+    @Column(name = "idOrganizacao")
+    private int idOrganizacao;
     @Basic(optional = false)
     @Column(name = "nome")
     private String nome;
@@ -63,10 +67,13 @@ public class Perfil implements Serializable {
     @Column(name = "modified")
     @Temporal(TemporalType.TIMESTAMP)
     private Date modified;
+    @JoinTable(name = "conter", joinColumns = {
+        @JoinColumn(name = "idPerfil", referencedColumnName = "id")}, inverseJoinColumns = {
+        @JoinColumn(name = "idUsuarioid", referencedColumnName = "id")})
+    @ManyToMany
+    private List<Usuario> usuarioList;
     @ManyToMany(mappedBy = "perfilList")
     private List<Funcionalidades> funcionalidadesList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "perfil")
-    private List<Acessar> acessarList;
 
     public Perfil() {
     }
@@ -75,8 +82,9 @@ public class Perfil implements Serializable {
         this.id = id;
     }
 
-    public Perfil(Integer id, String nome, String habilidades, String competencias) {
+    public Perfil(Integer id, int idOrganizacao, String nome, String habilidades, String competencias) {
         this.id = id;
+        this.idOrganizacao = idOrganizacao;
         this.nome = nome;
         this.habilidades = habilidades;
         this.competencias = competencias;
@@ -88,6 +96,14 @@ public class Perfil implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public int getIdOrganizacao() {
+        return idOrganizacao;
+    }
+
+    public void setIdOrganizacao(int idOrganizacao) {
+        this.idOrganizacao = idOrganizacao;
     }
 
     public String getNome() {
@@ -131,21 +147,21 @@ public class Perfil implements Serializable {
     }
 
     @XmlTransient
+    public List<Usuario> getUsuarioList() {
+        return usuarioList;
+    }
+
+    public void setUsuarioList(List<Usuario> usuarioList) {
+        this.usuarioList = usuarioList;
+    }
+
+    @XmlTransient
     public List<Funcionalidades> getFuncionalidadesList() {
         return funcionalidadesList;
     }
 
     public void setFuncionalidadesList(List<Funcionalidades> funcionalidadesList) {
         this.funcionalidadesList = funcionalidadesList;
-    }
-
-    @XmlTransient
-    public List<Acessar> getAcessarList() {
-        return acessarList;
-    }
-
-    public void setAcessarList(List<Acessar> acessarList) {
-        this.acessarList = acessarList;
     }
 
     @Override
@@ -162,8 +178,9 @@ public class Perfil implements Serializable {
             return false;
         }
         Perfil other = (Perfil) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)))
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
+        }
         return true;
     }
 

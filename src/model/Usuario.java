@@ -13,6 +13,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -24,7 +25,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Spider
+ * @author Sandro Bezerra
  */
 @Entity
 @Table(name = "usuario")
@@ -64,6 +65,8 @@ public class Usuario implements Serializable {
     @Column(name = "modified")
     @Temporal(TemporalType.TIMESTAMP)
     private Date modified;
+    @ManyToMany(mappedBy = "usuarioList")
+    private List<Perfil> perfilList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario")
     private List<Acessar> acessarList;
 
@@ -141,6 +144,15 @@ public class Usuario implements Serializable {
     }
 
     @XmlTransient
+    public List<Perfil> getPerfilList() {
+        return perfilList;
+    }
+
+    public void setPerfilList(List<Perfil> perfilList) {
+        this.perfilList = perfilList;
+    }
+
+    @XmlTransient
     public List<Acessar> getAcessarList() {
         return acessarList;
     }
@@ -163,8 +175,9 @@ public class Usuario implements Serializable {
             return false;
         }
         Usuario other = (Usuario) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)))
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
+        }
         return true;
     }
 

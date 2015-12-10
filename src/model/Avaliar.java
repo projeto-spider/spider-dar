@@ -11,8 +11,6 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -22,7 +20,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author Spider
+ * @author Sandro Bezerra
  */
 @Entity
 @Table(name = "avaliar")
@@ -46,15 +44,6 @@ public class Avaliar implements Serializable {
     @Column(name = "modified")
     @Temporal(TemporalType.TIMESTAMP)
     private Date modified;
-    @JoinColumn(name = "idAlternativa", referencedColumnName = "id", insertable = false, updatable = false)
-    @ManyToOne(optional = false)
-    private Alternativa alternativa;
-    @JoinColumn(name = "idAvaliacao", referencedColumnName = "id", insertable = false, updatable = false)
-    @ManyToOne(optional = false)
-    private Avaliacao avaliacao;
-    @JoinColumn(name = "idCriterio", referencedColumnName = "id", insertable = false, updatable = false)
-    @ManyToOne(optional = false)
-    private Criterio criterio;
 
     public Avaliar() {
     }
@@ -97,30 +86,6 @@ public class Avaliar implements Serializable {
         this.modified = modified;
     }
 
-    public Alternativa getAlternativa() {
-        return alternativa;
-    }
-
-    public void setAlternativa(Alternativa alternativa) {
-        this.alternativa = alternativa;
-    }
-
-    public Avaliacao getAvaliacao() {
-        return avaliacao;
-    }
-
-    public void setAvaliacao(Avaliacao avaliacao) {
-        this.avaliacao = avaliacao;
-    }
-
-    public Criterio getCriterio() {
-        return criterio;
-    }
-
-    public void setCriterio(Criterio criterio) {
-        this.criterio = criterio;
-    }
-
     @Override
     public int hashCode() {
         int hash = 0;
@@ -135,8 +100,9 @@ public class Avaliar implements Serializable {
             return false;
         }
         Avaliar other = (Avaliar) object;
-        if ((this.avaliarPK == null && other.avaliarPK != null) || (this.avaliarPK != null && !this.avaliarPK.equals(other.avaliarPK)))
+        if ((this.avaliarPK == null && other.avaliarPK != null) || (this.avaliarPK != null && !this.avaliarPK.equals(other.avaliarPK))) {
             return false;
+        }
         return true;
     }
 

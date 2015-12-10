@@ -24,7 +24,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Spider
+ * @author Sandro Bezerra
  */
 @Entity
 @Table(name = "criterio")
@@ -62,8 +62,6 @@ public class Criterio implements Serializable {
     private Date modified;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idCriterio")
     private List<Problema> problemaList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "criterio")
-    private List<Avaliar> avaliarList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idCriterio")
     private List<Nota> notaList;
 
@@ -141,15 +139,6 @@ public class Criterio implements Serializable {
     }
 
     @XmlTransient
-    public List<Avaliar> getAvaliarList() {
-        return avaliarList;
-    }
-
-    public void setAvaliarList(List<Avaliar> avaliarList) {
-        this.avaliarList = avaliarList;
-    }
-
-    @XmlTransient
     public List<Nota> getNotaList() {
         return notaList;
     }
@@ -172,8 +161,9 @@ public class Criterio implements Serializable {
             return false;
         }
         Criterio other = (Criterio) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)))
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
+        }
         return true;
     }
 

@@ -7,9 +7,7 @@ package model;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -17,16 +15,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Spider
+ * @author Sandro Bezerra
  */
 @Entity
 @Table(name = "avaliacao")
@@ -54,8 +50,6 @@ public class Avaliacao implements Serializable {
     @Column(name = "modified")
     @Temporal(TemporalType.TIMESTAMP)
     private Date modified;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "avaliacao")
-    private List<Avaliar> avaliarList;
 
     public Avaliacao() {
     }
@@ -102,15 +96,6 @@ public class Avaliacao implements Serializable {
         this.modified = modified;
     }
 
-    @XmlTransient
-    public List<Avaliar> getAvaliarList() {
-        return avaliarList;
-    }
-
-    public void setAvaliarList(List<Avaliar> avaliarList) {
-        this.avaliarList = avaliarList;
-    }
-
     @Override
     public int hashCode() {
         int hash = 0;
@@ -125,8 +110,9 @@ public class Avaliacao implements Serializable {
             return false;
         }
         Avaliacao other = (Avaliacao) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)))
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
+        }
         return true;
     }
 

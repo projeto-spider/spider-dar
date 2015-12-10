@@ -10,19 +10,18 @@ import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import model.Acessar;
+import model.Guia;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import jpa.exceptions.IllegalOrphanException;
 import jpa.exceptions.NonexistentEntityException;
-import model.Guia;
 import model.Organizacao;
 
 /**
  *
- * @author Spider
+ * @author Sandro Bezerra
  */
 public class OrganizacaoJpaController implements Serializable {
 
@@ -36,9 +35,6 @@ public class OrganizacaoJpaController implements Serializable {
     }
 
     public void create(Organizacao organizacao) {
-        if (organizacao.getAcessarList() == null) {
-            organizacao.setAcessarList(new ArrayList<Acessar>());
-        }
         if (organizacao.getGuiaList() == null) {
             organizacao.setGuiaList(new ArrayList<Guia>());
         }
@@ -46,12 +42,6 @@ public class OrganizacaoJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            List<Acessar> attachedAcessarList = new ArrayList<Acessar>();
-            for (Acessar acessarListAcessarToAttach : organizacao.getAcessarList()) {
-                acessarListAcessarToAttach = em.getReference(acessarListAcessarToAttach.getClass(), acessarListAcessarToAttach.getAcessarPK());
-                attachedAcessarList.add(acessarListAcessarToAttach);
-            }
-            organizacao.setAcessarList(attachedAcessarList);
             List<Guia> attachedGuiaList = new ArrayList<Guia>();
             for (Guia guiaListGuiaToAttach : organizacao.getGuiaList()) {
                 guiaListGuiaToAttach = em.getReference(guiaListGuiaToAttach.getClass(), guiaListGuiaToAttach.getId());
@@ -59,15 +49,6 @@ public class OrganizacaoJpaController implements Serializable {
             }
             organizacao.setGuiaList(attachedGuiaList);
             em.persist(organizacao);
-            for (Acessar acessarListAcessar : organizacao.getAcessarList()) {
-                Organizacao oldOrganizacaoOfAcessarListAcessar = acessarListAcessar.getOrganizacao();
-                acessarListAcessar.setOrganizacao(organizacao);
-                acessarListAcessar = em.merge(acessarListAcessar);
-                if (oldOrganizacaoOfAcessarListAcessar != null) {
-                    oldOrganizacaoOfAcessarListAcessar.getAcessarList().remove(acessarListAcessar);
-                    oldOrganizacaoOfAcessarListAcessar = em.merge(oldOrganizacaoOfAcessarListAcessar);
-                }
-            }
             for (Guia guiaListGuia : organizacao.getGuiaList()) {
                 Organizacao oldIdOrganizacaoOfGuiaListGuia = guiaListGuia.getIdOrganizacao();
                 guiaListGuia.setIdOrganizacao(organizacao);
@@ -91,19 +72,9 @@ public class OrganizacaoJpaController implements Serializable {
             em = getEntityManager();
             em.getTransaction().begin();
             Organizacao persistentOrganizacao = em.find(Organizacao.class, organizacao.getId());
-            List<Acessar> acessarListOld = persistentOrganizacao.getAcessarList();
-            List<Acessar> acessarListNew = organizacao.getAcessarList();
             List<Guia> guiaListOld = persistentOrganizacao.getGuiaList();
             List<Guia> guiaListNew = organizacao.getGuiaList();
             List<String> illegalOrphanMessages = null;
-            for (Acessar acessarListOldAcessar : acessarListOld) {
-                if (!acessarListNew.contains(acessarListOldAcessar)) {
-                    if (illegalOrphanMessages == null) {
-                        illegalOrphanMessages = new ArrayList<String>();
-                    }
-                    illegalOrphanMessages.add("You must retain Acessar " + acessarListOldAcessar + " since its organizacao field is not nullable.");
-                }
-            }
             for (Guia guiaListOldGuia : guiaListOld) {
                 if (!guiaListNew.contains(guiaListOldGuia)) {
                     if (illegalOrphanMessages == null) {
@@ -115,13 +86,6 @@ public class OrganizacaoJpaController implements Serializable {
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
-            List<Acessar> attachedAcessarListNew = new ArrayList<Acessar>();
-            for (Acessar acessarListNewAcessarToAttach : acessarListNew) {
-                acessarListNewAcessarToAttach = em.getReference(acessarListNewAcessarToAttach.getClass(), acessarListNewAcessarToAttach.getAcessarPK());
-                attachedAcessarListNew.add(acessarListNewAcessarToAttach);
-            }
-            acessarListNew = attachedAcessarListNew;
-            organizacao.setAcessarList(acessarListNew);
             List<Guia> attachedGuiaListNew = new ArrayList<Guia>();
             for (Guia guiaListNewGuiaToAttach : guiaListNew) {
                 guiaListNewGuiaToAttach = em.getReference(guiaListNewGuiaToAttach.getClass(), guiaListNewGuiaToAttach.getId());
@@ -130,17 +94,6 @@ public class OrganizacaoJpaController implements Serializable {
             guiaListNew = attachedGuiaListNew;
             organizacao.setGuiaList(guiaListNew);
             organizacao = em.merge(organizacao);
-            for (Acessar acessarListNewAcessar : acessarListNew) {
-                if (!acessarListOld.contains(acessarListNewAcessar)) {
-                    Organizacao oldOrganizacaoOfAcessarListNewAcessar = acessarListNewAcessar.getOrganizacao();
-                    acessarListNewAcessar.setOrganizacao(organizacao);
-                    acessarListNewAcessar = em.merge(acessarListNewAcessar);
-                    if (oldOrganizacaoOfAcessarListNewAcessar != null && !oldOrganizacaoOfAcessarListNewAcessar.equals(organizacao)) {
-                        oldOrganizacaoOfAcessarListNewAcessar.getAcessarList().remove(acessarListNewAcessar);
-                        oldOrganizacaoOfAcessarListNewAcessar = em.merge(oldOrganizacaoOfAcessarListNewAcessar);
-                    }
-                }
-            }
             for (Guia guiaListNewGuia : guiaListNew) {
                 if (!guiaListOld.contains(guiaListNewGuia)) {
                     Organizacao oldIdOrganizacaoOfGuiaListNewGuia = guiaListNewGuia.getIdOrganizacao();
@@ -182,13 +135,6 @@ public class OrganizacaoJpaController implements Serializable {
                 throw new NonexistentEntityException("The organizacao with id " + id + " no longer exists.", enfe);
             }
             List<String> illegalOrphanMessages = null;
-            List<Acessar> acessarListOrphanCheck = organizacao.getAcessarList();
-            for (Acessar acessarListOrphanCheckAcessar : acessarListOrphanCheck) {
-                if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
-                }
-                illegalOrphanMessages.add("This Organizacao (" + organizacao + ") cannot be destroyed since the Acessar " + acessarListOrphanCheckAcessar + " in its acessarList field has a non-nullable organizacao field.");
-            }
             List<Guia> guiaListOrphanCheck = organizacao.getGuiaList();
             for (Guia guiaListOrphanCheckGuia : guiaListOrphanCheck) {
                 if (illegalOrphanMessages == null) {
