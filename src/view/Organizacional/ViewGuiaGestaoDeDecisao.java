@@ -1,7 +1,14 @@
 package view.Organizacional;
 
-
+import controller.ControllerGuia;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import javax.swing.JOptionPane;
+import settings.Constant;
 import util.Internal;
+import util.Request;
 
 /**
  *
@@ -9,11 +16,158 @@ import util.Internal;
  */
 public class ViewGuiaGestaoDeDecisao extends javax.swing.JInternalFrame {
 
+    private int type;
+    private Request request;
+    private ControllerGuia controllerGuia = new ControllerGuia();
+
     public ViewGuiaGestaoDeDecisao() {
         initComponents();
         
+        buttonGruop();
         Internal.retiraBorda(this);
     }
+
+    private void buttonGruop() {
+        buttonGroup.add(jRadioButtonImportacaoArquivo);
+        buttonGroup.add(jRadioButtonInsercaoManual);
+    }
+
+    private void disableInsercaoManual() {
+        jTextArea.setEnabled(false);
+        jButtonSalvar.setEnabled(false);
+
+        jButtonImportarArquivo.setEnabled(true);
+        jButtonAbrirArquivo.setEnabled(true);
+    }
+
+    private void disableImportacaoArquivo() {
+        jButtonImportarArquivo.setEnabled(false);
+        jButtonAbrirArquivo.setEnabled(false);
+
+        jTextArea.setEnabled(true);
+        jButtonSalvar.setEnabled(true);
+    }
+
+    private boolean fieldValidation() {
+        if (jTextAreaProposito.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Campo \"Propósito\" na aba \"Informações gerais\" é obrigatório.");
+            return false;
+        } else if (jTextAreaDiretizDefinicao.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Campo \"Definição\" na aba \"Diretrizes\" é obrigatório.");
+            return false;
+        } else if (jTextAreaDiretrizAplicacao.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Campo \"Aplicação\" na aba \"Diretrizes\" é obrigatório.");
+            return false;
+        } else if (jTextAreaProblemaDefinicao.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Campo \"Definição\" na aba \"Problema\" é obrigatório.");
+            return false;
+        } else if (jTextAreaProblemaAplicacao.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Campo \"Aplicação\" na aba \"Problema\" é obrigatório.");
+            return false;
+        } else if (jTextAreaCriteriosDefinicao.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Campo \"Definição\" na aba \"Critérios de avaliação\" é obrigatório.");
+            return false;
+        } else if (jTextAreaCriteriosAplicacao.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Campo \"Aplicação\" na aba \"Critérios de avaliação\" é obrigatório.");
+            return false;
+        } else if (jTextAreaSolucaoDefinicao.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Campo \"Definição\" na aba \"Soluções alternativas\" é obrigatório.");
+            return false;
+        } else if (jTextAreaSolucaoAplicacao.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Campo \"Aplicação\" na aba \"Soluções alternativas\" é obrigatório.");
+            return false;
+        } else if (jTextAreaMetodoDefinicao.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Campo \"Definição\" na aba \"Método de avaliação\" é obrigatório.");
+            return false;
+        } else if (jTextAreaMetodoAplicacao.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Campo \"Aplicação\" na aba \"Método de avaliação\" é obrigatório.");
+            return false;
+        } else if (jTextAreaAvaliarDefinicao.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Campo \"Definição\" na aba \"Avaliar alternativas\" é obrigatório.");
+            return false;
+        } else if (jTextAreaAvaliarAplicacao.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Campo \"Aplicação\" na aba \"Avaliar alternativas\" é obrigatório.");
+            return false;
+        } else if (jTextAreaSelecionarDeficao.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Campo \"Definição\" na aba \"Selecionar soluções\" é obrigatório.");
+            return false;
+        } else if (jTextAreaSelecionarAplicacao.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Campo \"Aplicação\" na aba \"Selecionar soluções\" é obrigatório.");
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    private void saveManual() {
+        if (!fieldValidation()) {
+            return;
+        }
+
+        Map<String, String> data = new HashMap<>();
+        data.put("Guia.caminhoguia", "Manual");
+        data.put("Guia.descricao", jTextAreaProposito.getText());
+
+        boolean isDone = false;
+        if (type == Constant.CREATE) {
+            request = new Request(data);
+            isDone = controllerGuia.createGuia(request);
+        }
+
+        if (isDone) {
+            JOptionPane.showMessageDialog(null, "Salvo com Sucesso.");
+            this.dispose();
+        } else {
+            JOptionPane.showMessageDialog(null,
+                    "Erro ao salvar.", "ERRO AO SALVAR", type);
+        }
+
+        List<Request> list = new ArrayList<>();
+        data = new HashMap<>();
+        data.put("Itemguia.tipo", "Diretriz");
+        data.put("Itemguia.definicao", jTextAreaDiretizDefinicao.getText());
+        data.put("Itemguia.aplicacao", jTextAreaDiretrizAplicacao.getText());
+        list.add(new Request(data));
+
+        //data = new HashMap<>();
+        data.put("Itemguia.tipo", "Problema");
+        data.put("Itemguia.definicao", jTextAreaProblemaDefinicao.getText());
+        data.put("Itemguia.aplicacao", jTextAreaProblemaAplicacao.getText());
+        list.add(new Request(data));
+
+        //data = new HashMap<>();
+        data.put("Itemguia.tipo", "Criterio");
+        data.put("Itemguia.definicao", jTextAreaCriteriosDefinicao.getText());
+        data.put("Itemguia.aplicacao", jTextAreaCriteriosAplicacao.getText());
+        list.add(new Request(data));
+
+        //data = new HashMap<>();
+        data.put("Itemguia.tipo", "Solucoes");
+        data.put("Itemguia.definicao", jTextAreaSolucaoDefinicao.getText());
+        data.put("Itemguia.aplicacao", jTextAreaSolucaoAplicacao.getText());
+        list.add(new Request(data));
+
+        //data = new HashMap<>();
+        data.put("Itemguia.tipo", "Metodos");
+        data.put("Itemguia.definicao", jTextAreaMetodoDefinicao.getText());
+        data.put("Itemguia.aplicacao", jTextAreaMetodoAplicacao.getText());
+        list.add(new Request(data));
+
+        //data = new HashMap<>();
+        data.put("Itemguia.tipo", "Avaliar");
+        data.put("Itemguia.definicao", jTextAreaAvaliarDefinicao.getText());
+        data.put("Itemguia.aplicacao", jTextAreaAvaliarAplicacao.getText());
+        list.add(new Request(data));
+
+        //data = new HashMap<>();
+        data.put("Itemguia.tipo", "Selecionar");
+        data.put("Itemguia.definicao", jTextAreaSelecionarDeficao.getText());
+        data.put("Itemguia.aplicacao", jTextAreaSelecionarAplicacao.getText());
+        list.add(new Request(data));
+
+        controllerGuia.createItemGuia(list);
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -22,82 +176,82 @@ public class ViewGuiaGestaoDeDecisao extends javax.swing.JInternalFrame {
         jPanel = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
-        jRadioButton1 = new javax.swing.JRadioButton();
-        jRadioButton2 = new javax.swing.JRadioButton();
-        jPanel1 = new javax.swing.JPanel();
+        jRadioButtonImportacaoArquivo = new javax.swing.JRadioButton();
+        jRadioButtonInsercaoManual = new javax.swing.JRadioButton();
+        jPanelImportarArquivo = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jPanel2 = new javax.swing.JPanel();
-        jButton3 = new javax.swing.JButton();
-        jTabbedPane1 = new javax.swing.JTabbedPane();
+        jButtonImportarArquivo = new javax.swing.JButton();
+        jButtonAbrirArquivo = new javax.swing.JButton();
+        jPanelInsecaoManual = new javax.swing.JPanel();
+        jButtonSalvar = new javax.swing.JButton();
+        jTextArea = new javax.swing.JTabbedPane();
         jPanel3 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea2 = new javax.swing.JTextArea();
+        jTextAreaProposito = new javax.swing.JTextArea();
         jPanel4 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
         jLabel6 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTextArea3 = new javax.swing.JTextArea();
+        jTextAreaDiretizDefinicao = new javax.swing.JTextArea();
         jLabel7 = new javax.swing.JLabel();
         jScrollPane4 = new javax.swing.JScrollPane();
-        jTextArea4 = new javax.swing.JTextArea();
+        jTextAreaDiretrizAplicacao = new javax.swing.JTextArea();
         jPanel5 = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
         jSeparator2 = new javax.swing.JSeparator();
         jLabel9 = new javax.swing.JLabel();
         jScrollPane5 = new javax.swing.JScrollPane();
-        jTextArea5 = new javax.swing.JTextArea();
+        jTextAreaProblemaDefinicao = new javax.swing.JTextArea();
         jLabel10 = new javax.swing.JLabel();
         jScrollPane6 = new javax.swing.JScrollPane();
-        jTextArea6 = new javax.swing.JTextArea();
+        jTextAreaProblemaAplicacao = new javax.swing.JTextArea();
         jPanel6 = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
         jSeparator3 = new javax.swing.JSeparator();
         jLabel12 = new javax.swing.JLabel();
         jScrollPane7 = new javax.swing.JScrollPane();
-        jTextArea7 = new javax.swing.JTextArea();
+        jTextAreaCriteriosDefinicao = new javax.swing.JTextArea();
         jLabel13 = new javax.swing.JLabel();
         jScrollPane8 = new javax.swing.JScrollPane();
-        jTextArea8 = new javax.swing.JTextArea();
+        jTextAreaCriteriosAplicacao = new javax.swing.JTextArea();
         jPanel7 = new javax.swing.JPanel();
         jLabel14 = new javax.swing.JLabel();
         jSeparator4 = new javax.swing.JSeparator();
         jLabel15 = new javax.swing.JLabel();
         jScrollPane9 = new javax.swing.JScrollPane();
-        jTextArea9 = new javax.swing.JTextArea();
+        jTextAreaSolucaoDefinicao = new javax.swing.JTextArea();
         jLabel16 = new javax.swing.JLabel();
         jScrollPane10 = new javax.swing.JScrollPane();
-        jTextArea10 = new javax.swing.JTextArea();
+        jTextAreaSolucaoAplicacao = new javax.swing.JTextArea();
         jPanel8 = new javax.swing.JPanel();
         jLabel17 = new javax.swing.JLabel();
         jSeparator5 = new javax.swing.JSeparator();
         jLabel18 = new javax.swing.JLabel();
         jScrollPane11 = new javax.swing.JScrollPane();
-        jTextArea11 = new javax.swing.JTextArea();
+        jTextAreaMetodoDefinicao = new javax.swing.JTextArea();
         jLabel19 = new javax.swing.JLabel();
         jScrollPane12 = new javax.swing.JScrollPane();
-        jTextArea12 = new javax.swing.JTextArea();
+        jTextAreaMetodoAplicacao = new javax.swing.JTextArea();
         jPanel9 = new javax.swing.JPanel();
         jLabel20 = new javax.swing.JLabel();
         jSeparator6 = new javax.swing.JSeparator();
         jLabel21 = new javax.swing.JLabel();
         jScrollPane13 = new javax.swing.JScrollPane();
-        jTextArea13 = new javax.swing.JTextArea();
+        jTextAreaAvaliarDefinicao = new javax.swing.JTextArea();
         jLabel22 = new javax.swing.JLabel();
-        jScrollPane14 = new javax.swing.JScrollPane();
-        jTextArea14 = new javax.swing.JTextArea();
+        jScrollPaneAvaliarAplicacao = new javax.swing.JScrollPane();
+        jTextAreaAvaliarAplicacao = new javax.swing.JTextArea();
         jPanel10 = new javax.swing.JPanel();
         jLabel23 = new javax.swing.JLabel();
         jSeparator7 = new javax.swing.JSeparator();
         jLabel24 = new javax.swing.JLabel();
         jScrollPane15 = new javax.swing.JScrollPane();
-        jTextArea15 = new javax.swing.JTextArea();
+        jTextAreaSelecionarDeficao = new javax.swing.JTextArea();
         jLabel25 = new javax.swing.JLabel();
         jScrollPane16 = new javax.swing.JScrollPane();
-        jTextArea16 = new javax.swing.JTextArea();
+        jTextAreaSelecionarAplicacao = new javax.swing.JTextArea();
         jTextField1 = new javax.swing.JTextField();
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -105,52 +259,67 @@ public class ViewGuiaGestaoDeDecisao extends javax.swing.JInternalFrame {
 
         jLabel1.setText("Opção para inserir Guia de Gestão de Decisão: ");
 
-        jRadioButton1.setText("Importação de Arquivo");
+        jRadioButtonImportacaoArquivo.setText("Importação de Arquivo");
+        jRadioButtonImportacaoArquivo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButtonImportacaoArquivoActionPerformed(evt);
+            }
+        });
 
-        jRadioButton2.setText("Inserção Manual na Ferramenta");
+        jRadioButtonInsercaoManual.setText("Inserção Manual na Ferramenta");
+        jRadioButtonInsercaoManual.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButtonInsercaoManualActionPerformed(evt);
+            }
+        });
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Importar Arquivo"));
+        jPanelImportarArquivo.setBorder(javax.swing.BorderFactory.createTitledBorder("Importar Arquivo"));
 
         jLabel3.setText("Não há arquivo importado.");
 
-        jButton1.setText("Importar Arquivo");
+        jButtonImportarArquivo.setText("Importar Arquivo");
 
-        jButton2.setText("Abrir arquivo");
+        jButtonAbrirArquivo.setText("Abrir arquivo");
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        javax.swing.GroupLayout jPanelImportarArquivoLayout = new javax.swing.GroupLayout(jPanelImportarArquivo);
+        jPanelImportarArquivo.setLayout(jPanelImportarArquivoLayout);
+        jPanelImportarArquivoLayout.setHorizontalGroup(
+            jPanelImportarArquivoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelImportarArquivoLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jButton1)
+                .addComponent(jButtonImportarArquivo)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton2)
+                .addComponent(jButtonAbrirArquivo)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel3)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        jPanelImportarArquivoLayout.setVerticalGroup(
+            jPanelImportarArquivoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelImportarArquivoLayout.createSequentialGroup()
                 .addGap(5, 5, 5)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jButton2)
+                .addGroup(jPanelImportarArquivoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanelImportarArquivoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jButtonAbrirArquivo)
                         .addComponent(jLabel3))
-                    .addComponent(jButton1))
+                    .addComponent(jButtonImportarArquivo))
                 .addGap(5, 5, 5))
         );
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Inserção Manual"));
+        jPanelInsecaoManual.setBorder(javax.swing.BorderFactory.createTitledBorder("Inserção Manual"));
 
-        jButton3.setText("Salvar");
+        jButtonSalvar.setText("Salvar");
+        jButtonSalvar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonSalvarActionPerformed(evt);
+            }
+        });
 
         jLabel4.setText(" propósito do processo Gerência de Decisões na Organização:");
 
-        jTextArea2.setColumns(20);
-        jTextArea2.setRows(5);
-        jScrollPane2.setViewportView(jTextArea2);
+        jTextAreaProposito.setColumns(20);
+        jTextAreaProposito.setRows(5);
+        jScrollPane2.setViewportView(jTextAreaProposito);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -175,21 +344,21 @@ public class ViewGuiaGestaoDeDecisao extends javax.swing.JInternalFrame {
                 .addContainerGap())
         );
 
-        jTabbedPane1.addTab("<html>Informações<br>Gerais</html>", jPanel3);
+        jTextArea.addTab("<html>Informações<br>Gerais</html>", jPanel3);
 
         jLabel5.setText(" Diretrizes para Análise e Decisão Informação ");
 
         jLabel6.setText("Definição:");
 
-        jTextArea3.setColumns(20);
-        jTextArea3.setRows(2);
-        jScrollPane3.setViewportView(jTextArea3);
+        jTextAreaDiretizDefinicao.setColumns(20);
+        jTextAreaDiretizDefinicao.setRows(2);
+        jScrollPane3.setViewportView(jTextAreaDiretizDefinicao);
 
         jLabel7.setText("Aplicação:");
 
-        jTextArea4.setColumns(20);
-        jTextArea4.setRows(2);
-        jScrollPane4.setViewportView(jTextArea4);
+        jTextAreaDiretrizAplicacao.setColumns(20);
+        jTextAreaDiretrizAplicacao.setRows(2);
+        jScrollPane4.setViewportView(jTextAreaDiretrizAplicacao);
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -227,21 +396,21 @@ public class ViewGuiaGestaoDeDecisao extends javax.swing.JInternalFrame {
                 .addContainerGap())
         );
 
-        jTabbedPane1.addTab("<html>Diretrizes</html>", jPanel4);
+        jTextArea.addTab("<html>Diretrizes</html>", jPanel4);
 
         jLabel8.setText("O problema ou questão a ser objeto de um processo formal de tomada de decisão é definido ");
 
         jLabel9.setText("Definição:");
 
-        jTextArea5.setColumns(20);
-        jTextArea5.setRows(2);
-        jScrollPane5.setViewportView(jTextArea5);
+        jTextAreaProblemaDefinicao.setColumns(20);
+        jTextAreaProblemaDefinicao.setRows(2);
+        jScrollPane5.setViewportView(jTextAreaProblemaDefinicao);
 
         jLabel10.setText("Aplicação:");
 
-        jTextArea6.setColumns(20);
-        jTextArea6.setRows(2);
-        jScrollPane6.setViewportView(jTextArea6);
+        jTextAreaProblemaAplicacao.setColumns(20);
+        jTextAreaProblemaAplicacao.setRows(2);
+        jScrollPane6.setViewportView(jTextAreaProblemaAplicacao);
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -279,21 +448,21 @@ public class ViewGuiaGestaoDeDecisao extends javax.swing.JInternalFrame {
                 .addContainerGap())
         );
 
-        jTabbedPane1.addTab("<html>Problema</html>", jPanel5);
+        jTextArea.addTab("<html>Problema</html>", jPanel5);
 
         jLabel11.setText("Estabelecer Critérios de Avaliação ");
 
         jLabel12.setText("Definição:");
 
-        jTextArea7.setColumns(20);
-        jTextArea7.setRows(2);
-        jScrollPane7.setViewportView(jTextArea7);
+        jTextAreaCriteriosDefinicao.setColumns(20);
+        jTextAreaCriteriosDefinicao.setRows(2);
+        jScrollPane7.setViewportView(jTextAreaCriteriosDefinicao);
 
         jLabel13.setText("Aplicação:");
 
-        jTextArea8.setColumns(20);
-        jTextArea8.setRows(2);
-        jScrollPane8.setViewportView(jTextArea8);
+        jTextAreaCriteriosAplicacao.setColumns(20);
+        jTextAreaCriteriosAplicacao.setRows(2);
+        jScrollPane8.setViewportView(jTextAreaCriteriosAplicacao);
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
@@ -331,21 +500,21 @@ public class ViewGuiaGestaoDeDecisao extends javax.swing.JInternalFrame {
                 .addContainerGap())
         );
 
-        jTabbedPane1.addTab("<html>Critérios de<br>Avaliação </html>", jPanel6);
+        jTextArea.addTab("<html>Critérios de<br>Avaliação </html>", jPanel6);
 
         jLabel14.setText("Identificar Soluções Alternativas");
 
         jLabel15.setText("Definição:");
 
-        jTextArea9.setColumns(20);
-        jTextArea9.setRows(2);
-        jScrollPane9.setViewportView(jTextArea9);
+        jTextAreaSolucaoDefinicao.setColumns(20);
+        jTextAreaSolucaoDefinicao.setRows(2);
+        jScrollPane9.setViewportView(jTextAreaSolucaoDefinicao);
 
         jLabel16.setText("Aplicação:");
 
-        jTextArea10.setColumns(20);
-        jTextArea10.setRows(2);
-        jScrollPane10.setViewportView(jTextArea10);
+        jTextAreaSolucaoAplicacao.setColumns(20);
+        jTextAreaSolucaoAplicacao.setRows(2);
+        jScrollPane10.setViewportView(jTextAreaSolucaoAplicacao);
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
@@ -383,21 +552,21 @@ public class ViewGuiaGestaoDeDecisao extends javax.swing.JInternalFrame {
                 .addContainerGap())
         );
 
-        jTabbedPane1.addTab("<html>Soluções<br>Alternativas</html>", jPanel7);
+        jTextArea.addTab("<html>Soluções<br>Alternativas</html>", jPanel7);
 
         jLabel17.setText("Selecionar Métodos de Avaliação");
 
         jLabel18.setText("Definição:");
 
-        jTextArea11.setColumns(20);
-        jTextArea11.setRows(2);
-        jScrollPane11.setViewportView(jTextArea11);
+        jTextAreaMetodoDefinicao.setColumns(20);
+        jTextAreaMetodoDefinicao.setRows(2);
+        jScrollPane11.setViewportView(jTextAreaMetodoDefinicao);
 
         jLabel19.setText("Aplicação:");
 
-        jTextArea12.setColumns(20);
-        jTextArea12.setRows(2);
-        jScrollPane12.setViewportView(jTextArea12);
+        jTextAreaMetodoAplicacao.setColumns(20);
+        jTextAreaMetodoAplicacao.setRows(2);
+        jScrollPane12.setViewportView(jTextAreaMetodoAplicacao);
 
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
@@ -435,21 +604,21 @@ public class ViewGuiaGestaoDeDecisao extends javax.swing.JInternalFrame {
                 .addContainerGap())
         );
 
-        jTabbedPane1.addTab("<html>Métodos de<br>Avaliação</html>", jPanel8);
+        jTextArea.addTab("<html>Métodos de<br>Avaliação</html>", jPanel8);
 
         jLabel20.setText("Avaliar Alternativas ");
 
         jLabel21.setText("Definição:");
 
-        jTextArea13.setColumns(20);
-        jTextArea13.setRows(2);
-        jScrollPane13.setViewportView(jTextArea13);
+        jTextAreaAvaliarDefinicao.setColumns(20);
+        jTextAreaAvaliarDefinicao.setRows(2);
+        jScrollPane13.setViewportView(jTextAreaAvaliarDefinicao);
 
         jLabel22.setText("Aplicação:");
 
-        jTextArea14.setColumns(20);
-        jTextArea14.setRows(2);
-        jScrollPane14.setViewportView(jTextArea14);
+        jTextAreaAvaliarAplicacao.setColumns(20);
+        jTextAreaAvaliarAplicacao.setRows(2);
+        jScrollPaneAvaliarAplicacao.setViewportView(jTextAreaAvaliarAplicacao);
 
         javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
         jPanel9.setLayout(jPanel9Layout);
@@ -466,7 +635,7 @@ public class ViewGuiaGestaoDeDecisao extends javax.swing.JInternalFrame {
                             .addComponent(jLabel21)
                             .addComponent(jLabel22))
                         .addGap(0, 607, Short.MAX_VALUE))
-                    .addComponent(jScrollPane14, javax.swing.GroupLayout.Alignment.TRAILING))
+                    .addComponent(jScrollPaneAvaliarAplicacao, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addContainerGap())
         );
         jPanel9Layout.setVerticalGroup(
@@ -483,25 +652,25 @@ public class ViewGuiaGestaoDeDecisao extends javax.swing.JInternalFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel22)
                 .addGap(0, 0, 0)
-                .addComponent(jScrollPane14, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPaneAvaliarAplicacao, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
-        jTabbedPane1.addTab("<html>Avaliar<br>Alternativas </html>", jPanel9);
+        jTextArea.addTab("<html>Avaliar<br>Alternativas </html>", jPanel9);
 
         jLabel23.setText("Selecionar Soluções");
 
         jLabel24.setText("Definição:");
 
-        jTextArea15.setColumns(20);
-        jTextArea15.setRows(2);
-        jScrollPane15.setViewportView(jTextArea15);
+        jTextAreaSelecionarDeficao.setColumns(20);
+        jTextAreaSelecionarDeficao.setRows(2);
+        jScrollPane15.setViewportView(jTextAreaSelecionarDeficao);
 
         jLabel25.setText("Aplicação:");
 
-        jTextArea16.setColumns(20);
-        jTextArea16.setRows(2);
-        jScrollPane16.setViewportView(jTextArea16);
+        jTextAreaSelecionarAplicacao.setColumns(20);
+        jTextAreaSelecionarAplicacao.setRows(2);
+        jScrollPane16.setViewportView(jTextAreaSelecionarAplicacao);
 
         javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
         jPanel10.setLayout(jPanel10Layout);
@@ -539,28 +708,28 @@ public class ViewGuiaGestaoDeDecisao extends javax.swing.JInternalFrame {
                 .addContainerGap())
         );
 
-        jTabbedPane1.addTab("<html>Selecionar<br>Soluções</html>", jPanel10);
+        jTextArea.addTab("<html>Selecionar<br>Soluções</html>", jPanel10);
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
+        javax.swing.GroupLayout jPanelInsecaoManualLayout = new javax.swing.GroupLayout(jPanelInsecaoManual);
+        jPanelInsecaoManual.setLayout(jPanelInsecaoManualLayout);
+        jPanelInsecaoManualLayout.setHorizontalGroup(
+            jPanelInsecaoManualLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelInsecaoManualLayout.createSequentialGroup()
+                .addGroup(jPanelInsecaoManualLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanelInsecaoManualLayout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jTabbedPane1))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jTextArea))
+                    .addGroup(jPanelInsecaoManualLayout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jButtonSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
+        jPanelInsecaoManualLayout.setVerticalGroup(
+            jPanelInsecaoManualLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelInsecaoManualLayout.createSequentialGroup()
+                .addComponent(jTextArea, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton3))
+                .addComponent(jButtonSalvar))
         );
 
         javax.swing.GroupLayout jPanelLayout = new javax.swing.GroupLayout(jPanel);
@@ -574,12 +743,12 @@ public class ViewGuiaGestaoDeDecisao extends javax.swing.JInternalFrame {
                     .addGroup(jPanelLayout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jRadioButton1)
+                        .addComponent(jRadioButtonImportacaoArquivo)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jRadioButton2)))
+                        .addComponent(jRadioButtonInsercaoManual)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanelInsecaoManual, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanelImportarArquivo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanelLayout.setVerticalGroup(
             jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -589,12 +758,12 @@ public class ViewGuiaGestaoDeDecisao extends javax.swing.JInternalFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(jRadioButton1)
-                    .addComponent(jRadioButton2))
+                    .addComponent(jRadioButtonImportacaoArquivo)
+                    .addComponent(jRadioButtonInsercaoManual))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanelImportarArquivo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanelInsecaoManual, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -626,12 +795,24 @@ public class ViewGuiaGestaoDeDecisao extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jRadioButtonImportacaoArquivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonImportacaoArquivoActionPerformed
+        disableInsercaoManual();
+    }//GEN-LAST:event_jRadioButtonImportacaoArquivoActionPerformed
+
+    private void jRadioButtonInsercaoManualActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonInsercaoManualActionPerformed
+        disableImportacaoArquivo();
+    }//GEN-LAST:event_jRadioButtonInsercaoManualActionPerformed
+
+    private void jButtonSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSalvarActionPerformed
+        saveManual();
+    }//GEN-LAST:event_jButtonSalvarActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButtonAbrirArquivo;
+    private javax.swing.JButton jButtonImportarArquivo;
+    private javax.swing.JButton jButtonSalvar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -658,9 +839,7 @@ public class ViewGuiaGestaoDeDecisao extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
@@ -668,13 +847,14 @@ public class ViewGuiaGestaoDeDecisao extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
-    private javax.swing.JRadioButton jRadioButton1;
-    private javax.swing.JRadioButton jRadioButton2;
+    private javax.swing.JPanel jPanelImportarArquivo;
+    private javax.swing.JPanel jPanelInsecaoManual;
+    private javax.swing.JRadioButton jRadioButtonImportacaoArquivo;
+    private javax.swing.JRadioButton jRadioButtonInsercaoManual;
     private javax.swing.JScrollPane jScrollPane10;
     private javax.swing.JScrollPane jScrollPane11;
     private javax.swing.JScrollPane jScrollPane12;
     private javax.swing.JScrollPane jScrollPane13;
-    private javax.swing.JScrollPane jScrollPane14;
     private javax.swing.JScrollPane jScrollPane15;
     private javax.swing.JScrollPane jScrollPane16;
     private javax.swing.JScrollPane jScrollPane2;
@@ -685,6 +865,7 @@ public class ViewGuiaGestaoDeDecisao extends javax.swing.JInternalFrame {
     private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JScrollPane jScrollPane8;
     private javax.swing.JScrollPane jScrollPane9;
+    private javax.swing.JScrollPane jScrollPaneAvaliarAplicacao;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
@@ -692,22 +873,22 @@ public class ViewGuiaGestaoDeDecisao extends javax.swing.JInternalFrame {
     private javax.swing.JSeparator jSeparator5;
     private javax.swing.JSeparator jSeparator6;
     private javax.swing.JSeparator jSeparator7;
-    private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTextArea jTextArea10;
-    private javax.swing.JTextArea jTextArea11;
-    private javax.swing.JTextArea jTextArea12;
-    private javax.swing.JTextArea jTextArea13;
-    private javax.swing.JTextArea jTextArea14;
-    private javax.swing.JTextArea jTextArea15;
-    private javax.swing.JTextArea jTextArea16;
-    private javax.swing.JTextArea jTextArea2;
-    private javax.swing.JTextArea jTextArea3;
-    private javax.swing.JTextArea jTextArea4;
-    private javax.swing.JTextArea jTextArea5;
-    private javax.swing.JTextArea jTextArea6;
-    private javax.swing.JTextArea jTextArea7;
-    private javax.swing.JTextArea jTextArea8;
-    private javax.swing.JTextArea jTextArea9;
+    private javax.swing.JTabbedPane jTextArea;
+    private javax.swing.JTextArea jTextAreaAvaliarAplicacao;
+    private javax.swing.JTextArea jTextAreaAvaliarDefinicao;
+    private javax.swing.JTextArea jTextAreaCriteriosAplicacao;
+    private javax.swing.JTextArea jTextAreaCriteriosDefinicao;
+    private javax.swing.JTextArea jTextAreaDiretizDefinicao;
+    private javax.swing.JTextArea jTextAreaDiretrizAplicacao;
+    private javax.swing.JTextArea jTextAreaMetodoAplicacao;
+    private javax.swing.JTextArea jTextAreaMetodoDefinicao;
+    private javax.swing.JTextArea jTextAreaProblemaAplicacao;
+    private javax.swing.JTextArea jTextAreaProblemaDefinicao;
+    private javax.swing.JTextArea jTextAreaProposito;
+    private javax.swing.JTextArea jTextAreaSelecionarAplicacao;
+    private javax.swing.JTextArea jTextAreaSelecionarDeficao;
+    private javax.swing.JTextArea jTextAreaSolucaoAplicacao;
+    private javax.swing.JTextArea jTextAreaSolucaoDefinicao;
     private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
 }

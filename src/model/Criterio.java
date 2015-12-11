@@ -24,7 +24,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Sandro Bezerra
+ * @author Bleno Vale
  */
 @Entity
 @Table(name = "criterio")

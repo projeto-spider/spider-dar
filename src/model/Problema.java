@@ -29,7 +29,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Sandro Bezerra
+ * @author Bleno Vale
  */
 @Entity
 @Table(name = "problema")
@@ -70,6 +70,8 @@ public class Problema implements Serializable {
     @Column(name = "modified")
     @Temporal(TemporalType.TIMESTAMP)
     private Date modified;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "problema")
+    private List<Acessar> acessarList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idProblema")
     private List<Tarefa> tarefaList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idProblema")
@@ -151,6 +153,15 @@ public class Problema implements Serializable {
 
     public void setModified(Date modified) {
         this.modified = modified;
+    }
+
+    @XmlTransient
+    public List<Acessar> getAcessarList() {
+        return acessarList;
+    }
+
+    public void setAcessarList(List<Acessar> acessarList) {
+        this.acessarList = acessarList;
     }
 
     @XmlTransient

@@ -1,5 +1,7 @@
 package settings;
 
+import jpa.ItemguiaJpaController;
+import jpa.extension.JpaGuia;
 import jpa.extension.JpaOrganizacao;
 import jpa.extension.JpaPerfil;
 
@@ -40,9 +42,17 @@ public class Facade {
         jpaOrganizacao = new JpaOrganizacao(Connection.connect());
         return jpaOrganizacao;
     }
-    
-    public JpaPerfil initializeJpaPefil(){
+
+    public JpaPerfil initializeJpaPefil() {
         return new JpaPerfil(Connection.connect());
+    }
+
+    public JpaGuia initializeJpaGuia() {
+        return new JpaGuia(Connection.connect());
+    }
+    
+    public ItemguiaJpaController initializeItemGuia(){
+        return new ItemguiaJpaController(Connection.connect());
     }
 
 }

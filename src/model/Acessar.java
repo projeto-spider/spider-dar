@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author Sandro Bezerra
+ * @author Bleno Vale
  */
 @Entity
 @Table(name = "acessar")
@@ -31,6 +31,12 @@ public class Acessar implements Serializable {
     private static final long serialVersionUID = 1L;
     @EmbeddedId
     protected AcessarPK acessarPK;
+    @JoinColumn(name = "idOrganizacao", referencedColumnName = "id", insertable = false, updatable = false)
+    @ManyToOne(optional = false)
+    private Organizacao organizacao;
+    @JoinColumn(name = "idProblema", referencedColumnName = "id", insertable = false, updatable = false)
+    @ManyToOne(optional = false)
+    private Problema problema;
     @JoinColumn(name = "idUsuario", referencedColumnName = "id", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Usuario usuario;
@@ -52,6 +58,22 @@ public class Acessar implements Serializable {
 
     public void setAcessarPK(AcessarPK acessarPK) {
         this.acessarPK = acessarPK;
+    }
+
+    public Organizacao getOrganizacao() {
+        return organizacao;
+    }
+
+    public void setOrganizacao(Organizacao organizacao) {
+        this.organizacao = organizacao;
+    }
+
+    public Problema getProblema() {
+        return problema;
+    }
+
+    public void setProblema(Problema problema) {
+        this.problema = problema;
     }
 
     public Usuario getUsuario() {

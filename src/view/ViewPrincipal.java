@@ -391,7 +391,6 @@ public class ViewPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jTreeMouseClicked
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-
         new ViewSelecionarOrganizacao(null, true).setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 
