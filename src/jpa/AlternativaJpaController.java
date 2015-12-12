@@ -23,7 +23,7 @@ import model.Alternativa;
 
 /**
  *
- * @author Sandro Bezerra
+ * @author Bleno Vale
  */
 public class AlternativaJpaController implements Serializable {
 

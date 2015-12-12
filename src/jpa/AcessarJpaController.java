@@ -21,7 +21,7 @@ import model.Usuario;
 
 /**
  *
- * @author Sandro Bezerra
+ * @author Bleno Vale
  */
 public class AcessarJpaController implements Serializable {
 

@@ -10,6 +10,7 @@ import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import model.Organizacao;
 import model.Usuario;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +22,7 @@ import model.Perfil;
 
 /**
  *
- * @author Sandro Bezerra
+ * @author Bleno Vale
  */
 public class PerfilJpaController implements Serializable {
 
@@ -45,6 +46,11 @@ public class PerfilJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
+            Organizacao idOrganizacao = perfil.getIdOrganizacao();
+            if (idOrganizacao != null) {
+                idOrganizacao = em.getReference(idOrganizacao.getClass(), idOrganizacao.getId());
+                perfil.setIdOrganizacao(idOrganizacao);
+            }
             List<Usuario> attachedUsuarioList = new ArrayList<Usuario>();
             for (Usuario usuarioListUsuarioToAttach : perfil.getUsuarioList()) {
                 usuarioListUsuarioToAttach = em.getReference(usuarioListUsuarioToAttach.getClass(), usuarioListUsuarioToAttach.getId());
@@ -58,6 +64,10 @@ public class PerfilJpaController implements Serializable {
             }
             perfil.setFuncionalidadesList(attachedFuncionalidadesList);
             em.persist(perfil);
+            if (idOrganizacao != null) {
+                idOrganizacao.getPerfilList().add(perfil);
+                idOrganizacao = em.merge(idOrganizacao);
+            }
             for (Usuario usuarioListUsuario : perfil.getUsuarioList()) {
                 usuarioListUsuario.getPerfilList().add(perfil);
                 usuarioListUsuario = em.merge(usuarioListUsuario);
@@ -80,10 +90,16 @@ public class PerfilJpaController implements Serializable {
             em = getEntityManager();
             em.getTransaction().begin();
             Perfil persistentPerfil = em.find(Perfil.class, perfil.getId());
+            Organizacao idOrganizacaoOld = persistentPerfil.getIdOrganizacao();
+            Organizacao idOrganizacaoNew = perfil.getIdOrganizacao();
             List<Usuario> usuarioListOld = persistentPerfil.getUsuarioList();
             List<Usuario> usuarioListNew = perfil.getUsuarioList();
             List<Funcionalidades> funcionalidadesListOld = persistentPerfil.getFuncionalidadesList();
             List<Funcionalidades> funcionalidadesListNew = perfil.getFuncionalidadesList();
+            if (idOrganizacaoNew != null) {
+                idOrganizacaoNew = em.getReference(idOrganizacaoNew.getClass(), idOrganizacaoNew.getId());
+                perfil.setIdOrganizacao(idOrganizacaoNew);
+            }
             List<Usuario> attachedUsuarioListNew = new ArrayList<Usuario>();
             for (Usuario usuarioListNewUsuarioToAttach : usuarioListNew) {
                 usuarioListNewUsuarioToAttach = em.getReference(usuarioListNewUsuarioToAttach.getClass(), usuarioListNewUsuarioToAttach.getId());
@@ -99,6 +115,14 @@ public class PerfilJpaController implements Serializable {
             funcionalidadesListNew = attachedFuncionalidadesListNew;
             perfil.setFuncionalidadesList(funcionalidadesListNew);
             perfil = em.merge(perfil);
+            if (idOrganizacaoOld != null && !idOrganizacaoOld.equals(idOrganizacaoNew)) {
+                idOrganizacaoOld.getPerfilList().remove(perfil);
+                idOrganizacaoOld = em.merge(idOrganizacaoOld);
+            }
+            if (idOrganizacaoNew != null && !idOrganizacaoNew.equals(idOrganizacaoOld)) {
+                idOrganizacaoNew.getPerfilList().add(perfil);
+                idOrganizacaoNew = em.merge(idOrganizacaoNew);
+            }
             for (Usuario usuarioListOldUsuario : usuarioListOld) {
                 if (!usuarioListNew.contains(usuarioListOldUsuario)) {
                     usuarioListOldUsuario.getPerfilList().remove(perfil);
@@ -151,6 +175,11 @@ public class PerfilJpaController implements Serializable {
                 perfil.getId();
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The perfil with id " + id + " no longer exists.", enfe);
+            }
+            Organizacao idOrganizacao = perfil.getIdOrganizacao();
+            if (idOrganizacao != null) {
+                idOrganizacao.getPerfilList().remove(perfil);
+                idOrganizacao = em.merge(idOrganizacao);
             }
             List<Usuario> usuarioList = perfil.getUsuarioList();
             for (Usuario usuarioListUsuario : usuarioList) {

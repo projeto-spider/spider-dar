@@ -20,7 +20,7 @@ import model.AvaliarPK;
 
 /**
  *
- * @author Sandro Bezerra
+ * @author Bleno Vale
  */
 public class AvaliarJpaController implements Serializable {
 

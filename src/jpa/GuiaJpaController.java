@@ -18,12 +18,11 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import jpa.exceptions.IllegalOrphanException;
 import jpa.exceptions.NonexistentEntityException;
-import jpa.exceptions.PreexistingEntityException;
 import model.Guia;
 
 /**
  *
- * @author Sandro Bezerra
+ * @author Bleno Vale
  */
 public class GuiaJpaController implements Serializable {
 
@@ -36,7 +35,7 @@ public class GuiaJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(Guia guia) throws PreexistingEntityException, Exception {
+    public void create(Guia guia) {
         if (guia.getItemguiaList() == null) {
             guia.setItemguiaList(new ArrayList<Itemguia>());
         }
@@ -70,11 +69,6 @@ public class GuiaJpaController implements Serializable {
                 }
             }
             em.getTransaction().commit();
-        } catch (Exception ex) {
-            if (findGuia(guia.getId()) != null) {
-                throw new PreexistingEntityException("Guia " + guia + " already exists.", ex);
-            }
-            throw ex;
         } finally {
             if (em != null) {
                 em.close();

@@ -10,18 +10,19 @@ import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import model.Guia;
+import model.Perfil;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import jpa.exceptions.IllegalOrphanException;
 import jpa.exceptions.NonexistentEntityException;
+import model.Guia;
 import model.Organizacao;
 
 /**
  *
- * @author Sandro Bezerra
+ * @author Bleno Vale
  */
 public class OrganizacaoJpaController implements Serializable {
 
@@ -35,6 +36,9 @@ public class OrganizacaoJpaController implements Serializable {
     }
 
     public void create(Organizacao organizacao) {
+        if (organizacao.getPerfilList() == null) {
+            organizacao.setPerfilList(new ArrayList<Perfil>());
+        }
         if (organizacao.getGuiaList() == null) {
             organizacao.setGuiaList(new ArrayList<Guia>());
         }
@@ -42,6 +46,12 @@ public class OrganizacaoJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
+            List<Perfil> attachedPerfilList = new ArrayList<Perfil>();
+            for (Perfil perfilListPerfilToAttach : organizacao.getPerfilList()) {
+                perfilListPerfilToAttach = em.getReference(perfilListPerfilToAttach.getClass(), perfilListPerfilToAttach.getId());
+                attachedPerfilList.add(perfilListPerfilToAttach);
+            }
+            organizacao.setPerfilList(attachedPerfilList);
             List<Guia> attachedGuiaList = new ArrayList<Guia>();
             for (Guia guiaListGuiaToAttach : organizacao.getGuiaList()) {
                 guiaListGuiaToAttach = em.getReference(guiaListGuiaToAttach.getClass(), guiaListGuiaToAttach.getId());
@@ -49,6 +59,15 @@ public class OrganizacaoJpaController implements Serializable {
             }
             organizacao.setGuiaList(attachedGuiaList);
             em.persist(organizacao);
+            for (Perfil perfilListPerfil : organizacao.getPerfilList()) {
+                Organizacao oldIdOrganizacaoOfPerfilListPerfil = perfilListPerfil.getIdOrganizacao();
+                perfilListPerfil.setIdOrganizacao(organizacao);
+                perfilListPerfil = em.merge(perfilListPerfil);
+                if (oldIdOrganizacaoOfPerfilListPerfil != null) {
+                    oldIdOrganizacaoOfPerfilListPerfil.getPerfilList().remove(perfilListPerfil);
+                    oldIdOrganizacaoOfPerfilListPerfil = em.merge(oldIdOrganizacaoOfPerfilListPerfil);
+                }
+            }
             for (Guia guiaListGuia : organizacao.getGuiaList()) {
                 Organizacao oldIdOrganizacaoOfGuiaListGuia = guiaListGuia.getIdOrganizacao();
                 guiaListGuia.setIdOrganizacao(organizacao);
@@ -72,9 +91,19 @@ public class OrganizacaoJpaController implements Serializable {
             em = getEntityManager();
             em.getTransaction().begin();
             Organizacao persistentOrganizacao = em.find(Organizacao.class, organizacao.getId());
+            List<Perfil> perfilListOld = persistentOrganizacao.getPerfilList();
+            List<Perfil> perfilListNew = organizacao.getPerfilList();
             List<Guia> guiaListOld = persistentOrganizacao.getGuiaList();
             List<Guia> guiaListNew = organizacao.getGuiaList();
             List<String> illegalOrphanMessages = null;
+            for (Perfil perfilListOldPerfil : perfilListOld) {
+                if (!perfilListNew.contains(perfilListOldPerfil)) {
+                    if (illegalOrphanMessages == null) {
+                        illegalOrphanMessages = new ArrayList<String>();
+                    }
+                    illegalOrphanMessages.add("You must retain Perfil " + perfilListOldPerfil + " since its idOrganizacao field is not nullable.");
+                }
+            }
             for (Guia guiaListOldGuia : guiaListOld) {
                 if (!guiaListNew.contains(guiaListOldGuia)) {
                     if (illegalOrphanMessages == null) {
@@ -86,6 +115,13 @@ public class OrganizacaoJpaController implements Serializable {
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
+            List<Perfil> attachedPerfilListNew = new ArrayList<Perfil>();
+            for (Perfil perfilListNewPerfilToAttach : perfilListNew) {
+                perfilListNewPerfilToAttach = em.getReference(perfilListNewPerfilToAttach.getClass(), perfilListNewPerfilToAttach.getId());
+                attachedPerfilListNew.add(perfilListNewPerfilToAttach);
+            }
+            perfilListNew = attachedPerfilListNew;
+            organizacao.setPerfilList(perfilListNew);
             List<Guia> attachedGuiaListNew = new ArrayList<Guia>();
             for (Guia guiaListNewGuiaToAttach : guiaListNew) {
                 guiaListNewGuiaToAttach = em.getReference(guiaListNewGuiaToAttach.getClass(), guiaListNewGuiaToAttach.getId());
@@ -94,6 +130,17 @@ public class OrganizacaoJpaController implements Serializable {
             guiaListNew = attachedGuiaListNew;
             organizacao.setGuiaList(guiaListNew);
             organizacao = em.merge(organizacao);
+            for (Perfil perfilListNewPerfil : perfilListNew) {
+                if (!perfilListOld.contains(perfilListNewPerfil)) {
+                    Organizacao oldIdOrganizacaoOfPerfilListNewPerfil = perfilListNewPerfil.getIdOrganizacao();
+                    perfilListNewPerfil.setIdOrganizacao(organizacao);
+                    perfilListNewPerfil = em.merge(perfilListNewPerfil);
+                    if (oldIdOrganizacaoOfPerfilListNewPerfil != null && !oldIdOrganizacaoOfPerfilListNewPerfil.equals(organizacao)) {
+                        oldIdOrganizacaoOfPerfilListNewPerfil.getPerfilList().remove(perfilListNewPerfil);
+                        oldIdOrganizacaoOfPerfilListNewPerfil = em.merge(oldIdOrganizacaoOfPerfilListNewPerfil);
+                    }
+                }
+            }
             for (Guia guiaListNewGuia : guiaListNew) {
                 if (!guiaListOld.contains(guiaListNewGuia)) {
                     Organizacao oldIdOrganizacaoOfGuiaListNewGuia = guiaListNewGuia.getIdOrganizacao();
@@ -135,6 +182,13 @@ public class OrganizacaoJpaController implements Serializable {
                 throw new NonexistentEntityException("The organizacao with id " + id + " no longer exists.", enfe);
             }
             List<String> illegalOrphanMessages = null;
+            List<Perfil> perfilListOrphanCheck = organizacao.getPerfilList();
+            for (Perfil perfilListOrphanCheckPerfil : perfilListOrphanCheck) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("This Organizacao (" + organizacao + ") cannot be destroyed since the Perfil " + perfilListOrphanCheckPerfil + " in its perfilList field has a non-nullable idOrganizacao field.");
+            }
             List<Guia> guiaListOrphanCheck = organizacao.getGuiaList();
             for (Guia guiaListOrphanCheckGuia : guiaListOrphanCheck) {
                 if (illegalOrphanMessages == null) {
