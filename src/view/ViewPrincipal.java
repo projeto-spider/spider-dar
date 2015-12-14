@@ -2,14 +2,14 @@ package view;
 
 import view.Gerenciar.ViewNovoUsuario;
 import view.Gerenciar.ViewNovaOrganizacao;
-import view.Gerenciar.ViewNovaTomadaDialog;
+import view.Gerenciar.ViewNovoProbemaDialog;
 import controller.ControllerOrganizacao;
 import java.beans.PropertyVetoException;
 import javax.swing.JInternalFrame;
 import javax.swing.tree.DefaultMutableTreeNode;
 import settings.KeepData;
 import view.Gerenciar.ViewOrganizacoes;
-import view.Gerenciar.ViewTomadaDeDecisoes;
+import view.Gerenciar.ViewProblema;
 import view.Gerenciar.ViewUsuarios;
 import view.Organizacional.ViewGuiaGestaoDeDecisao;
 import view.Gerenciar.ViewPermissoesDePerfil;
@@ -35,7 +35,7 @@ public class ViewPrincipal extends javax.swing.JFrame {
 
     //View.Gerenciar
     private final ViewOrganizacoes viewOrganizacoes = new ViewOrganizacoes();
-    private final ViewTomadaDeDecisoes viewTomadaDeDecisoes = new ViewTomadaDeDecisoes();
+    private final ViewProblema viewTomadaDeDecisoes = new ViewProblema();
     private final ViewUsuarios viewUsuarios = new ViewUsuarios();
 
     //View.TomadaDeDecisao
@@ -93,7 +93,7 @@ public class ViewPrincipal extends javax.swing.JFrame {
         jMenuItemAjuda = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("SPIDER-GDE");
+        setTitle("SPIDER-DAR");
 
         jPanel1.setBackground(new java.awt.Color(102, 102, 102));
 
@@ -106,7 +106,7 @@ public class ViewPrincipal extends javax.swing.JFrame {
         javax.swing.tree.DefaultMutableTreeNode treeNode3 = new javax.swing.tree.DefaultMutableTreeNode("Guia de Gestão de Decisão");
         treeNode2.add(treeNode3);
         treeNode1.add(treeNode2);
-        treeNode2 = new javax.swing.tree.DefaultMutableTreeNode("Tomada de Decisão");
+        treeNode2 = new javax.swing.tree.DefaultMutableTreeNode("Problema");
         treeNode3 = new javax.swing.tree.DefaultMutableTreeNode("Motivação e Objetivos");
         treeNode2.add(treeNode3);
         treeNode3 = new javax.swing.tree.DefaultMutableTreeNode("Calendário");
@@ -148,7 +148,7 @@ public class ViewPrincipal extends javax.swing.JFrame {
 
         jLabelOrganizacao.setText("Organização: Desenvolvimento");
 
-        jLabel4.setText("Tomada de decisão: nome Tomada");
+        jLabel4.setText("Problema: nome Problema");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -157,10 +157,10 @@ public class ViewPrincipal extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 497, Short.MAX_VALUE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabelOrganizacao, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 514, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabelOrganizacao, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -233,7 +233,7 @@ public class ViewPrincipal extends javax.swing.JFrame {
         });
         jMenuArquivo.add(jMenuItemNovaOrganizacao);
 
-        jMenuItemNovaDecisao.setText("Nova Tomada de Decisão");
+        jMenuItemNovaDecisao.setText("Novo Problema");
         jMenuItemNovaDecisao.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItemNovaDecisaoActionPerformed(evt);
@@ -278,7 +278,7 @@ public class ViewPrincipal extends javax.swing.JFrame {
         });
         jMenuGerenciar.add(jMenuItem1);
 
-        jMenuItemDecisoes.setText("Tomadas de Decisões");
+        jMenuItemDecisoes.setText("Problemas");
         jMenuItemDecisoes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItemDecisoesActionPerformed(evt);
@@ -348,7 +348,7 @@ public class ViewPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jMenuItemNovaDecisaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemNovaDecisaoActionPerformed
-        new ViewNovaTomadaDialog(null, true).setVisible(true);
+        new ViewNovoProbemaDialog(null, true).setVisible(true);
     }//GEN-LAST:event_jMenuItemNovaDecisaoActionPerformed
 
     private void jMenuItemNovoUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemNovoUsuarioActionPerformed
@@ -455,7 +455,7 @@ public class ViewPrincipal extends javax.swing.JFrame {
             if (nodeFilho.equals("Guia de Gestão de Decisão")) {
                 trocaTela(viewGuiaGestãoDeDecisao);
             }
-        } else if (nodePai.endsWith("Tomada de Decisão")) {
+        } else if (nodePai.endsWith("Problema")) {
             if (nodeFilho.equals("Motivação e Objetivos")) {
                 trocaTela(viewMotivacaoEObjetivos);
             } else if (nodeFilho.equals("Calendário")) {

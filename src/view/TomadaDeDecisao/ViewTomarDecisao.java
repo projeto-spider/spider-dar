@@ -32,7 +32,7 @@ public class ViewTomarDecisao extends javax.swing.JDialog {
 
         jLabel1.setText("Decisão:");
 
-        jLabel2.setText("Justivicativa:");
+        jLabel2.setText("Justificativa:");
 
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
