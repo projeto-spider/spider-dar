@@ -22,7 +22,7 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItemNovaDecisao">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Nova Tomada de Decis&#xe3;o"/>
+                <Property name="text" type="java.lang.String" value="Novo Problema"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemNovaDecisaoActionPerformed"/>
@@ -71,7 +71,7 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItemDecisoes">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Tomadas de Decis&#xf5;es"/>
+                <Property name="text" type="java.lang.String" value="Problemas"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemDecisoesActionPerformed"/>
@@ -141,7 +141,7 @@
   </NonVisualComponents>
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="3"/>
-    <Property name="title" type="java.lang.String" value="SPIDER-GDE"/>
+    <Property name="title" type="java.lang.String" value="SPIDER-DAR"/>
   </Properties>
   <SyntheticProperties>
     <SyntheticProperty name="menuBar" type="java.lang.String" value="jMenuBar1"/>
@@ -250,7 +250,7 @@
             <Component class="javax.swing.JTree" name="jTree">
               <Properties>
                 <Property name="model" type="javax.swing.tree.TreeModel" editor="org.netbeans.modules.form.editors2.TreeModelEditor">
-                  <TreeModel code="Funcionalidades&#xa; Organiza&#xe7;&#xe3;o&#xa;  Guia de Gest&#xe3;o de Decis&#xe3;o&#xa; Tomada de Decis&#xe3;o&#xa;  Motiva&#xe7;&#xe3;o e Objetivos&#xa;  Calend&#xe1;rio&#xa;  Alternativas de Solu&#xe7;&#xe3;o&#xa;  Crit&#xe9;rios de Avalia&#xe7;&#xe3;o&#xa;  Avalia&#xe7;&#xe3;o&#xa;  Hist&#xf3;rico"/>
+                  <TreeModel code="Funcionalidades&#xa; Organiza&#xe7;&#xe3;o&#xa;  Guia de Gest&#xe3;o de Decis&#xe3;o&#xa; Problema&#xa;  Motiva&#xe7;&#xe3;o e Objetivos&#xa;  Calend&#xe1;rio&#xa;  Alternativas de Solu&#xe7;&#xe3;o&#xa;  Crit&#xe9;rios de Avalia&#xe7;&#xe3;o&#xa;  Avalia&#xe7;&#xe3;o&#xa;  Hist&#xf3;rico"/>
                 </Property>
               </Properties>
               <Events>
@@ -282,10 +282,10 @@
                   <Group type="102" alignment="1" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jButton1" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="497" max="32767" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jLabelOrganizacao" alignment="1" min="-2" max="-2" attributes="0"/>
-                          <Component id="jLabel4" alignment="1" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace pref="514" max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Component id="jLabelOrganizacao" max="32767" attributes="0"/>
+                          <Component id="jLabel4" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
@@ -327,7 +327,7 @@
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel4">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Tomada de decis&#xe3;o: nome Tomada"/>
+                <Property name="text" type="java.lang.String" value="Problema: nome Problema"/>
               </Properties>
             </Component>
           </SubComponents>

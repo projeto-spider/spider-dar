@@ -40,12 +40,12 @@ public class ViewNovoUsuario extends javax.swing.JDialog {
 
             },
             new String [] {
-                "Tomada de Decisão", "Perfil"
+                "Problema", "Perfil"
             }
         ));
         jScrollPane1.setViewportView(jTableAlocacao);
 
-        jButtonAlocar.setText("Alocar este Usuário a uma Tomada de Decisão");
+        jButtonAlocar.setText("Alocar este Usuário a um Problema");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);

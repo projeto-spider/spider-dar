@@ -4,9 +4,9 @@ package view.Gerenciar;
  *
  * @author Bleno Vale
  */
-public class ViewNovaTomadaDialog extends javax.swing.JDialog {
+public class ViewNovoProbemaDialog extends javax.swing.JDialog {
 
-    public ViewNovaTomadaDialog(java.awt.Frame parent, boolean modal) {
+    public ViewNovoProbemaDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         
@@ -56,7 +56,7 @@ public class ViewNovaTomadaDialog extends javax.swing.JDialog {
 
         jButton1.setText("Salvar");
 
-        jLabel1.setText("Nome da Tomada de Decisão:");
+        jLabel1.setText("Nome do Problema:");
 
         jLabel2.setText("Propósito:");
 

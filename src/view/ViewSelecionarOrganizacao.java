@@ -60,7 +60,7 @@ public class ViewSelecionarOrganizacao extends javax.swing.JDialog {
 
         jComboBoxOrganizacao.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
-        jLabel2.setText("Problema:");
+        jLabel2.setText("Problemas:");
 
         jComboBoxProblema.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 

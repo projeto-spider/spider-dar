@@ -6,9 +6,9 @@ import util.Internal;
  *
  * @author Bleno Vale
  */
-public class ViewTomadaDeDecisoes extends javax.swing.JInternalFrame {
+public class ViewProblema extends javax.swing.JInternalFrame {
 
-    public ViewTomadaDeDecisoes() {
+    public ViewProblema() {
         initComponents();
 
         Internal.retiraBorda(this);
@@ -29,16 +29,16 @@ public class ViewTomadaDeDecisoes extends javax.swing.JInternalFrame {
         jTextField1.setEditable(false);
         jTextField1.setBackground(new java.awt.Color(246, 179, 111));
         jTextField1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jTextField1.setText(" Tomadas de Decisões Cadastradas");
+        jTextField1.setText(" Problemas Cadastrados");
         jTextField1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {"Tomada 1", "24/10/2015"},
-                {"Tomada 2", "24/10/2015"}
+                {"Problema 1", "24/10/2015"},
+                {"Problema 2", "24/10/2015"}
             },
             new String [] {
-                "Tomadas de Decisões", "Criada em"
+                "Problemas", "Criada em"
             }
         ));
         jScrollPane1.setViewportView(jTable1);
@@ -96,7 +96,7 @@ public class ViewTomadaDeDecisoes extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        new ViewNovaTomadaDialog(null, true).setVisible(true);
+        new ViewNovoProbemaDialog(null, true).setVisible(true);
     }//GEN-LAST:event_jButton2ActionPerformed
 
 
