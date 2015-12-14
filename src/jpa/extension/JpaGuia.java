@@ -1,17 +1,35 @@
 package jpa.extension;
 
+import java.util.List;
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import jpa.GuiaJpaController;
+import model.Itemguia;
 
 /**
  *
  * @author Bleno Vale
  */
-public class JpaGuia extends GuiaJpaController{
+public class JpaGuia extends GuiaJpaController {
 
     public JpaGuia(EntityManagerFactory emf) {
         super(emf);
     }
-    
-    
+
+    public List<Itemguia> findListItemGuiaByIdGuia(int idGuia) {
+        try {
+            EntityManager entityManager = super.getEntityManager();
+            entityManager.getTransaction().begin();
+
+            List<Itemguia> list = entityManager.createQuery("SELECT i FROM Itemguia i WHERE i.idGuia.id =:idGuia ORDER BY i.id ASC")
+                    .setParameter("idGuia", idGuia).getResultList();
+
+            entityManager.getTransaction().commit();
+            entityManager.close();
+
+            return list;
+        } catch (Exception error) {
+            throw error;
+        }
+    }
 }
