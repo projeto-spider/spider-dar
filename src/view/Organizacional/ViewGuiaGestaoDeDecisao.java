@@ -66,6 +66,7 @@ public class ViewGuiaGestaoDeDecisao extends javax.swing.JInternalFrame {
     private void isSelectedButtonCadastrar() {
         if (request == null) {
             new ViewGuiaDeGestaoDeDecisaoCadastro(null, true).setVisible(true);
+            guiaHasBeenRegisterd();
         } else {
             new ViewGuiaDeGestaoDeDecisaoCadastro(null, true, request).setVisible(true);
         }
