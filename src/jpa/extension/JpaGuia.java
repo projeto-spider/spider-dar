@@ -4,6 +4,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import jpa.GuiaJpaController;
+import model.Guia;
 import model.Itemguia;
 
 /**
@@ -22,12 +23,49 @@ public class JpaGuia extends GuiaJpaController {
             entityManager.getTransaction().begin();
 
             List<Itemguia> list = entityManager.createQuery("SELECT i FROM Itemguia i WHERE i.idGuia.id =:idGuia ORDER BY i.id ASC")
-                    .setParameter("idGuia", idGuia).getResultList();
+                    .setParameter("idGuia", idGuia)
+                    .getResultList();
 
             entityManager.getTransaction().commit();
             entityManager.close();
 
             return list;
+        } catch (Exception error) {
+            throw error;
+        }
+    }
+
+    public Guia findGuiaByIdOrganizacao(int idOrg) {
+        try {
+            EntityManager entityManager = super.getEntityManager();
+            entityManager.getTransaction().begin();
+
+            Guia guia = (Guia) entityManager.createQuery("SELECT g FROM Guia g WHERE g.idOrganizacao.id =:idOrg")
+                    .setParameter("idOrg", idOrg)
+                    .getSingleResult();
+
+            entityManager.getTransaction().commit();
+            entityManager.close();
+
+            return guia;
+        } catch (Exception error) {
+            throw error;
+        }
+    }
+
+    public Guia findGuiaByIdOrganizacaoAndTipo(int idOrg, String tipo) {
+        try {
+            EntityManager entityManager = super.getEntityManager();
+            entityManager.getTransaction().begin();
+
+            Guia guia = (Guia) entityManager.createQuery("SELECT g FROM Guia g WHERE g.idOrganizacao.id =:idOrg AND g.tipo =:tipo")
+                    .setParameter("idOrg", idOrg).setParameter("tipo", tipo)
+                    .getSingleResult();
+
+            entityManager.getTransaction().commit();
+            entityManager.close();
+
+            return guia;
         } catch (Exception error) {
             throw error;
         }
