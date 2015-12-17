@@ -1,6 +1,7 @@
 package settings;
 
 import jpa.ItemguiaJpaController;
+import jpa.extension.JpaFuncionalidades;
 import jpa.extension.JpaGuia;
 import jpa.extension.JpaOrganizacao;
 import jpa.extension.JpaPerfil;
@@ -51,8 +52,12 @@ public class Facade {
         return new JpaGuia(Connection.connect());
     }
     
-    public ItemguiaJpaController initializeItemGuia(){
+    public ItemguiaJpaController initializeJpaItemGuia(){
         return new ItemguiaJpaController(Connection.connect());
+    }
+    
+    public JpaFuncionalidades initializeJpaFuncionalidades(){
+        return new JpaFuncionalidades(Connection.connect()); 
     }
 
 }

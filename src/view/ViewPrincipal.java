@@ -4,6 +4,7 @@ import view.Gerenciar.ViewNovoUsuario;
 import view.Gerenciar.ViewNovaOrganizacao;
 import view.Gerenciar.ViewNovoProbemaDialog;
 import controller.ControllerOrganizacao;
+import controller.ControllerPerfil;
 import java.beans.PropertyVetoException;
 import javax.swing.JInternalFrame;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -49,8 +50,8 @@ public class ViewPrincipal extends javax.swing.JFrame {
     public ViewPrincipal() {
         initComponents();
 
-        jLabelOrganizacao.setText("Organização: " + KeepData.getData("Organizacao.nome")); 
-        
+        jLabelOrganizacao.setText("Organização: " + KeepData.getData("Organizacao.nome"));
+
         iniciaTelas();
         trocaTela(viewHome);
         this.setLocationRelativeTo(null);
@@ -356,6 +357,7 @@ public class ViewPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItemNovoUsuarioActionPerformed
 
     private void jMenuItemPermissoesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemPermissoesActionPerformed
+        viewPermissoesDePerfil.fillTable(new ControllerPerfil().findPerfis());
         trocaTela(viewPermissoesDePerfil);
     }//GEN-LAST:event_jMenuItemPermissoesActionPerformed
 
@@ -369,8 +371,8 @@ public class ViewPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItemGuiadaGestaoActionPerformed
 
     private void jMenuItemNovaOrganizacaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemNovaOrganizacaoActionPerformed
-        new ViewNovaOrganizacao(null, true).setVisible(true);
         viewOrganizacoes.fillTable(new ControllerOrganizacao().findOrganizacoes());
+        new ViewNovaOrganizacao(null, true).setVisible(true);
     }//GEN-LAST:event_jMenuItemNovaOrganizacaoActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed

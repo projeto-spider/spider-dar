@@ -1,8 +1,8 @@
-
 package view.Gerenciar;
 
 import controller.ControllerPerfil;
 import java.util.List;
+import javax.swing.DefaultListModel;
 import util.Internal;
 import util.MyDefaultTableModel;
 import util.Request;
@@ -14,11 +14,13 @@ import util.Request;
 public class ViewPermissoesDePerfil extends javax.swing.JInternalFrame {
 
     private MyDefaultTableModel myDefaultTableModel;
-    private final ControllerPerfil controllerPerfil =  new ControllerPerfil();
-    
+    private DefaultListModel listModelIn;
+    private DefaultListModel listModelOut;
+    private final ControllerPerfil controllerPerfil = new ControllerPerfil();
+
     public ViewPermissoesDePerfil() {
         initComponents();
-        
+
         Internal.retiraBorda(this);
     }
 
@@ -40,10 +42,32 @@ public class ViewPermissoesDePerfil extends javax.swing.JInternalFrame {
             myDefaultTableModel.addRow(line);
         }
         jTablePerfis.setModel(myDefaultTableModel);
-        //jTableOrganizacoes.getColumnModel().getColumn(0).setCellRenderer(new MyCellRenderer());
     }
-    
-    
+
+    public String getPerfilSelected() {
+        int row = jTablePerfis.getSelectedRow();
+        return jTablePerfis.getValueAt(row, 0).toString();
+    }
+
+    public void fillLists() {
+        listModelIn = new DefaultListModel();
+        listModelOut = new DefaultListModel();
+
+        List<Request> list = controllerPerfil.findFuncionalidadesByPerfil(getPerfilSelected());
+
+        for (Request request : list) {
+            if (request.getData("Funcionalidade.dentro.nome") != null) {
+                listModelIn.addElement(request.getData("Funcionalidade.dentro.nome"));
+            } else if (request.getData("Funcionalidade.fora.nome") != null) {
+                listModelOut.addElement(request.getData("Funcionalidade.fora.nome"));
+            }
+
+        }
+
+        jListFuncionalidades.setModel(listModelOut);
+        jListFuncionalidadesDoPerfil.setModel(listModelIn);
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -56,7 +80,7 @@ public class ViewPermissoesDePerfil extends javax.swing.JInternalFrame {
         jButton2 = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
         jScrollPane4 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList();
+        jListFuncionalidadesDoPerfil = new javax.swing.JList();
         jButton3 = new javax.swing.JButton();
         jTextField1 = new javax.swing.JTextField();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -82,12 +106,12 @@ public class ViewPermissoesDePerfil extends javax.swing.JInternalFrame {
 
         jLabel5.setText("Funcionalidades do Perfil:");
 
-        jList1.setModel(new javax.swing.AbstractListModel() {
+        jListFuncionalidadesDoPerfil.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
         });
-        jScrollPane4.setViewportView(jList1);
+        jScrollPane4.setViewportView(jListFuncionalidadesDoPerfil);
 
         jButton3.setText("Salvar");
 
@@ -158,6 +182,11 @@ public class ViewPermissoesDePerfil extends javax.swing.JInternalFrame {
                 "Perfil", "Criado em"
             }
         ));
+        jTablePerfis.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTablePerfisMouseClicked(evt);
+            }
+        });
         jScrollPane2.setViewportView(jTablePerfis);
 
         jButton5.setText("Novo Perfil");
@@ -214,8 +243,15 @@ public class ViewPermissoesDePerfil extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        new ViewNovoPerfil(null, true).setVisible(true); 
+        new ViewNovoPerfil(null, true).setVisible(true);
+        fillTable(controllerPerfil.findPerfis());
     }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jTablePerfisMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTablePerfisMouseClicked
+        if (jTablePerfis.getSelectedRow() != -1) {
+            fillLists();
+        }
+    }//GEN-LAST:event_jTablePerfisMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -227,8 +263,8 @@ public class ViewPermissoesDePerfil extends javax.swing.JInternalFrame {
     private javax.swing.JButton jButton6;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JList jList1;
     private javax.swing.JList jListFuncionalidades;
+    private javax.swing.JList jListFuncionalidadesDoPerfil;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;

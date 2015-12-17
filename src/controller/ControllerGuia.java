@@ -26,8 +26,8 @@ public class ControllerGuia {
         try {
             guia = new Guia();
 
-            int id = Integer.parseInt(KeepData.getData("Organizacao.id"));
-            guia.setIdOrganizacao(facade.initializeJpaOrganizacao().findOrganizacao(id));
+            int idOrg = Integer.parseInt(KeepData.getData("Organizacao.id")); 
+            guia.setIdOrganizacao(facade.initializeJpaOrganizacao().findOrganizacao(idOrg));
             guia.setTipo(request.getData("Guia.tipo"));
             
             if (request.getData("Guia.caminhoguia") != null) {
@@ -61,7 +61,7 @@ public class ControllerGuia {
                 item.setTipo(0);
                 item.setCreated(new Date());
                 item.setModified(new Date());
-                facade.initializeItemGuia().create(item);
+                facade.initializeJpaItemGuia().create(item);
             }
 
             return true;
@@ -106,7 +106,7 @@ public class ControllerGuia {
                 item.setDefinicao(list.get(i).getData("Itemguia.definicao"));
                 item.setTipo(i);
                 item.setModified(new Date());
-                facade.initializeItemGuia().edit(item);
+                facade.initializeJpaItemGuia().edit(item);
             }
 
             return true;

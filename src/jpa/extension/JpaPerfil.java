@@ -4,6 +4,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import jpa.PerfilJpaController;
+import model.Funcionalidades;
 import model.Perfil;
 
 /**
@@ -22,14 +23,14 @@ public class JpaPerfil extends PerfilJpaController {
      * @param name
      * @return
      */
-    public Perfil findPerfilByName(String name) {
+    public Perfil findPerfilByNameAndNome(String name, int idOrg) {
         try {
             EntityManager entityManager = super.getEntityManager();
             entityManager.getTransaction().begin();
 
             Perfil perfil = (Perfil) entityManager
-                    .createQuery("SELECT p FROM Perfil p WHERE p.nome =:name")
-                    .setParameter("name", name)
+                    .createQuery("SELECT p FROM Perfil p WHERE p.nome =:name AND p.idOrganizacao.id =:idOrg")
+                    .setParameter("name", name).setParameter("idOrg", idOrg)
                     .getSingleResult();
 
             entityManager.getTransaction().commit();
@@ -40,12 +41,23 @@ public class JpaPerfil extends PerfilJpaController {
             return null;
         }
     }
-    
-//    public List<Perfil> findPerfilByProblema(int idProblema){
-//        try {
-//            
-//        } catch (Exception error) {
-//        }
-//    }
 
+    public List<Perfil> findPerfisByIdOrganizacao(int idOrg) {
+        try {
+            EntityManager entityManager = super.getEntityManager();
+            entityManager.getTransaction().begin();
+
+            List<Perfil> list = entityManager
+                    .createQuery("SELECT p FROM Perfil p WHERE p.idOrganizacao.id =:idOrg")
+                    .setParameter("idOrg", idOrg)
+                    .getResultList();
+
+            entityManager.getTransaction().commit();
+            entityManager.close();
+
+            return list;
+        } catch (Exception error) {
+            throw error;
+        }
+    }
 }
