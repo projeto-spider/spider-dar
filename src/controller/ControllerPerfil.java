@@ -86,16 +86,16 @@ public class ControllerPerfil {
             List<Funcionalidades> listInPerfil = perfil.getFuncionalidadesList();
             List<Funcionalidades> listOutPerfil = facade.initializeJpaFuncionalidades().findFuncionalidadesEntities();
 
-            for (Funcionalidades inPerfil : listInPerfil) {
-                Map<String, String> data = new HashMap<>();
+            for (int i = 0; i < listInPerfil.size(); i++) {
 
-                for (Funcionalidades outPerfil : listOutPerfil) {
-                    if (Objects.equals(inPerfil, outPerfil)) {
-                        listOutPerfil.remove(outPerfil);
+                for (int j = 0; j < listOutPerfil.size(); j++) {
+                    if (Objects.equals(listInPerfil.get(i), listOutPerfil.get(j))) {
+                        listOutPerfil.remove(listOutPerfil.get(j));
                     }
                 }
 
-                data.put("Funcionalidade.dentro.nome", inPerfil.getNome());
+                Map<String, String> data = new HashMap<>();
+                data.put("Funcionalidade.dentro.nome", listInPerfil.get(i).getNome());
                 requestList.add(new Request(data));
             }
 
@@ -104,10 +104,37 @@ public class ControllerPerfil {
                 data.put("Funcionalidade.fora.nome", outPerfil.getNome());
                 requestList.add(new Request(data));
             }
-            
+
             return requestList;
         } catch (Exception error) {
             throw error;
+        }
+    }
+
+    public boolean saveFuncionalidades(String name, Request request) {
+        try {
+            int idOrg = Integer.parseInt(KeepData.getData("Organizacao.id"));
+            perfil = facade.initializeJpaPefil().findPerfilByNameAndNome(name, idOrg);
+
+            List<Funcionalidades> listOutPerfil = facade.initializeJpaFuncionalidades().findFuncionalidadesEntities();
+            List<Funcionalidades> listInPerfil = new ArrayList<>();
+            int size = Integer.parseInt(request.getData("Funcionalidade.quantidade"));
+
+            for (int i = 0; i < listOutPerfil.size(); i++) {
+                for (int j = 0; j < size; j++) {
+                    if (listOutPerfil.get(i).getNome().equals(request.getData("Funcionalidade.nome" + j))) {
+                        listInPerfil.add(listOutPerfil.get(i));
+                    }
+                }
+            }
+
+            perfil.setFuncionalidadesList(listInPerfil);
+            facade.initializeJpaPefil().edit(perfil);
+
+            return true;
+        } catch (Exception error) {
+            System.out.println("Error: " + error);
+            return false;
         }
     }
 }
