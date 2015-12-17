@@ -54,9 +54,11 @@ public class ViewGuiaGestaoDeDecisao extends javax.swing.JInternalFrame {
             jRadioButtonImportacaoArquivo.setSelected(true);
             jLabelImportacaoDeArquivo.setText("Não há arquivo importado.");
             type = Constant.CREATE;
+            fillFields();
 
         } else if (request.getData("Guia.tipo").equals("Manual")) {
             jRadioButtonInsercaoManual.setSelected(true);
+            jLabelImportacaoDeArquivo.setText("Não há arquivo importado.");
             type = Constant.UPDATE;
             fillFields();
 
@@ -126,6 +128,7 @@ public class ViewGuiaGestaoDeDecisao extends javax.swing.JInternalFrame {
         List<Request> list = controllerGuia.findListItemGuia(idGuia);
 
         if (list.isEmpty()) {
+            clearFields();
             return;
         }
 
@@ -151,6 +154,29 @@ public class ViewGuiaGestaoDeDecisao extends javax.swing.JInternalFrame {
         jTextAreaSelecionarAplicacao.setText(list.get(Constant.SOLUCOES).getData("Itemguia.aplicacao"));
     }
 
+    private void clearFields() {
+        jTextAreaDiretrizDefinicao.setText("");
+        jTextAreaDiretrizAplicacao.setText("");
+
+        jTextAreaProblemaDefinicao.setText("");
+        jTextAreaProblemaAplicacao.setText("");
+
+        jTextAreaCriteriosDefinicao.setText("");
+        jTextAreaCriteriosAplicacao.setText("");
+
+        jTextAreaSolucaoDefinicao.setText("");
+        jTextAreaSolucaoAplicacao.setText("");
+
+        jTextAreaMetodoDefinicao.setText("");
+        jTextAreaMetodoAplicacao.setText("");
+
+        jTextAreaAvaliarDefinicao.setText("");
+        jTextAreaAvaliarAplicacao.setText("");
+
+        jTextAreaSelecionarDeficao.setText("");
+        jTextAreaSelecionarAplicacao.setText("");
+    }
+
     private void saveManual() {
         if (!fieldValidation()) {
             return;
@@ -159,6 +185,7 @@ public class ViewGuiaGestaoDeDecisao extends javax.swing.JInternalFrame {
         Map<String, String> data = new HashMap<>();
         data.put("Guia.tipo", "Manual");
         data.put("Guia.descricao", jTextAreaProposito.getText());
+        data.put("Guia.caminhoguia", null);
 
         boolean isDone = false;
         if (type == Constant.CREATE) {
@@ -233,6 +260,7 @@ public class ViewGuiaGestaoDeDecisao extends javax.swing.JInternalFrame {
         Map<String, String> data = new HashMap<>();
         data.put("Guia.tipo", "Arquivo");
         data.put("Guia.caminhoguia", path);
+        data.put("Guia.descricao", null);
 
         boolean isDone = false;
         if (type == Constant.CREATE) {
@@ -243,6 +271,8 @@ public class ViewGuiaGestaoDeDecisao extends javax.swing.JInternalFrame {
             request = new Request(data);
             isDone = controllerGuia.updateGuia(request);
         }
+
+        controllerGuia.removeItemGuia();
 
         if (isDone) {
             JOptionPane.showMessageDialog(null, "Arquivo importado com Sucesso.");

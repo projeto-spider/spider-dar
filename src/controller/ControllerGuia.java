@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import jpa.exceptions.NonexistentEntityException;
 import model.Guia;
 import model.Itemguia;
 import settings.Facade;
@@ -26,16 +27,12 @@ public class ControllerGuia {
         try {
             guia = new Guia();
 
-            int idOrg = Integer.parseInt(KeepData.getData("Organizacao.id")); 
+            int idOrg = Integer.parseInt(KeepData.getData("Organizacao.id"));
             guia.setIdOrganizacao(facade.initializeJpaOrganizacao().findOrganizacao(idOrg));
             guia.setTipo(request.getData("Guia.tipo"));
-            
-            if (request.getData("Guia.caminhoguia") != null) {
-                guia.setCaminhoGuia(request.getData("Guia.caminhoguia"));
-            } else if (request.getData("Guia.descricao") != null) {
-                guia.setDescricao(request.getData("Guia.descricao"));
-            }
-            
+            guia.setCaminhoGuia(request.getData("Guia.caminhoguia"));
+            guia.setDescricao(request.getData("Guia.descricao"));
+
             guia.setCreated(new Date());
             guia.setModified(new Date());
 
@@ -77,13 +74,9 @@ public class ControllerGuia {
             int idGuia = Integer.parseInt(request.getData("Guia.id"));
             guia = facade.initializeJpaGuia().findGuia(idGuia);
             guia.setTipo(request.getData("Guia.tipo"));
-            
-            if (request.getData("Guia.caminhoguia") != null) {
-                guia.setCaminhoGuia(request.getData("Guia.caminhoguia"));
-            } else if (request.getData("Guia.descricao") != null) {
-                guia.setDescricao(request.getData("Guia.descricao"));
-            }
-            
+            guia.setCaminhoGuia(request.getData("Guia.caminhoguia"));
+            guia.setDescricao(request.getData("Guia.descricao"));
+
             guia.setModified(new Date());
 
             facade.initializeJpaGuia().edit(guia);
@@ -127,6 +120,25 @@ public class ControllerGuia {
         } else {
             return updateItemGuia(list);
         }
+    }
+
+    public boolean removeItemGuia() {
+        try {
+            guia = new Guia();
+            int id = Integer.parseInt(KeepData.getData("Organizacao.id"));
+            guia = facade.initializeJpaGuia().findGuiaByIdOrganizacaoAndTipo(id, "Arquivo");
+
+            if (!guia.getItemguiaList().isEmpty()) {
+                for (Itemguia itemguia : guia.getItemguiaList()) {
+                    facade.initializeJpaItemGuia().destroy(itemguia.getId());
+                }
+            }
+
+            return true;
+        } catch (NumberFormatException | NonexistentEntityException error) {
+            return false;
+        }
+
     }
 
     public Request findGuia() {

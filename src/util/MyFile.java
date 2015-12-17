@@ -36,13 +36,12 @@ public class MyFile {
     }
 
     public void openFile(String path) {
-        File file = new File(path);
-
         try {
+            File file = new File(path);
             Desktop.getDesktop().open(file);
         } catch (Exception error) {
-            JOptionPane.showMessageDialog(null, "Error", "Erro ao abrir o arquivo\n"
-                    + "Por favor, verifique se o arquivo não foi deletado ou mudou de tiretório.", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Erro ao abrir o arquivo.\n"
+                    + "Por favor, verifique se o arquivo não foi deletado ou mudou de diretório.","Error" , JOptionPane.ERROR_MESSAGE);
         }
     }
 }
