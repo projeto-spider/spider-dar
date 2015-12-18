@@ -37,7 +37,8 @@ public class ViewNovoPerfil extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
 
-        type = Constant.CREATE;
+        type = Constant.UPDATE;
+        fillFields(name);
         this.setLocationRelativeTo(null);
     }
 
@@ -66,6 +67,13 @@ public class ViewNovoPerfil extends javax.swing.JDialog {
         return true;
     }
 
+    public void fillFields(String name) {
+        request = controllerPerfil.findPerfilSelected(name);
+        jTextFieldNomePerfil.setText(request.getData("Perfil.nome"));
+        jTextAreaHabilidades.setText(request.getData("Perfil.habilidades"));
+        jTextAreaCompetencias.setText(request.getData("Perfil.competencias"));
+    }
+    
     /**
      * Método responsavel pelo cadastro ou edição de um novo Perfil.
      */

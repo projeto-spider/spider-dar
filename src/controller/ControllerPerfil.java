@@ -113,6 +113,24 @@ public class ControllerPerfil {
             throw error;
         }
     }
+    
+    public Request findPerfilSelected(String name) {
+        try {
+            perfil = new Perfil();
+            perfil = facade.initializeJpaPefil().findPerfilByName(name);
+
+            Map<String, String> data = new HashMap<>();
+            data.put("Perfil.id", String.valueOf(perfil.getId()));
+            data.put("Perfil.nome", perfil.getNome());
+            data.put("Perfil.habilidades", perfil.getHabilidades());
+            data.put("Perfil.competencias", String.valueOf(perfil.getCompetencias()));
+            data.put("Perfil.created", String.valueOf(perfil.getCreated()));
+            data.put("Perfil.modified", String.valueOf(perfil.getModified()));
+            return new Request(data);
+        } catch (Exception error) {
+            throw error;
+        }
+    }
 
     public List<Request> findFuncionalidadesByPerfil(String name) {
         try {
