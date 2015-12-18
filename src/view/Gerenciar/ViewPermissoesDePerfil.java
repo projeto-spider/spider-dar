@@ -77,6 +77,34 @@ public class ViewPermissoesDePerfil extends javax.swing.JInternalFrame {
         jListFuncionalidades.setModel(listModelOutPerfil);
         jListFuncionalidadesDoPerfil.setModel(listModelInPerfil);
     }
+    
+    /**
+     * Chamado quando o botão editar e pressionado.
+     */
+    private void editarButtonIsPressed() {
+        int index = jTablePerfis.getSelectedRow();
+        if (index > -1) {
+            new ViewNovoPerfil(null, true, jTablePerfis.getValueAt(index, 0).toString()).setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Selecione uma linha na tabela.");
+        }
+    }
+    
+    private void excluirButtonIsPressed() {
+        int index = jTablePerfis.getSelectedRow();
+        if (index > -1) {
+            boolean isDone = false;
+            isDone = controllerPerfil.deletePerfil(jTablePerfis.getValueAt(index, 0).toString());
+
+            if (isDone) {
+                JOptionPane.showMessageDialog(null, "Excluído com sucesso.");
+            } else {
+                JOptionPane.showMessageDialog(null, "Erro ao Excluir", "ERRO", JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Selecione uma linha na tabela.");
+        }
+    }
 
     private void includeFuncionalidade() {
         int index = jListFuncionalidades.getSelectedIndex();
@@ -133,7 +161,7 @@ public class ViewPermissoesDePerfil extends javax.swing.JInternalFrame {
         jTablePerfis = new javax.swing.JTable();
         jButton5 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
+        jButtonEditar = new javax.swing.JButton();
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
 
@@ -248,8 +276,18 @@ public class ViewPermissoesDePerfil extends javax.swing.JInternalFrame {
         });
 
         jButton4.setText("Excluir");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
 
-        jButton6.setText("Editar");
+        jButtonEditar.setText("Editar");
+        jButtonEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonEditarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -269,7 +307,7 @@ public class ViewPermissoesDePerfil extends javax.swing.JInternalFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButton5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jButtonEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -284,7 +322,7 @@ public class ViewPermissoesDePerfil extends javax.swing.JInternalFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton5)
                     .addComponent(jButton4)
-                    .addComponent(jButton6))
+                    .addComponent(jButtonEditar))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -317,6 +355,16 @@ public class ViewPermissoesDePerfil extends javax.swing.JInternalFrame {
         save();
     }//GEN-LAST:event_jButton3ActionPerformed
 
+    private void jButtonEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditarActionPerformed
+        editarButtonIsPressed();
+        fillTable(controllerPerfil.findPerfis());
+    }//GEN-LAST:event_jButtonEditarActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        excluirButtonIsPressed();
+        fillTable(controllerPerfil.findPerfis());
+    }//GEN-LAST:event_jButton4ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
@@ -324,7 +372,7 @@ public class ViewPermissoesDePerfil extends javax.swing.JInternalFrame {
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
+    private javax.swing.JButton jButtonEditar;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JList jListFuncionalidades;

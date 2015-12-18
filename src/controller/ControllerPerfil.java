@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import jpa.exceptions.IllegalOrphanException;
+import jpa.exceptions.NonexistentEntityException;
 import model.Funcionalidades;
 import model.Perfil;
 import settings.Facade;
@@ -47,6 +49,41 @@ public class ControllerPerfil {
             facade.initializeJpaPefil().create(perfil);
             return true;
         } catch (Exception error) {
+            return false;
+        }
+    }
+    
+    public boolean updatePerfil(Request request) {
+        try {
+            int id = Integer.parseInt(request.getData("Perfil.id"));
+
+            perfil = facade.initializeJpaPefil()
+                    .findAnotherPerfilWithSameName(request.getData("Perfil.nome"), id);
+            if (perfil != null) {
+                return false;
+            }
+
+            perfil = new Perfil();
+            perfil = facade.initializeJpaPefil().findPerfilByID(id);
+            perfil.setNome(request.getData("Perfil.nome"));
+            perfil.setHabilidades(request.getData("Perfil.habilidades"));
+            perfil.setCompetencias(request.getData("Perfil.competencias"));
+            perfil.setModified(new Date());
+
+            facade.initializeJpaPefil().edit(perfil);
+            return true;
+        } catch (Exception error) {
+            return false;
+        }
+    }
+    
+    public boolean deletePerfil(String name) {
+        try {
+            perfil = new Perfil();
+            perfil = facade.initializeJpaPefil().findPerfilByName(name);
+            facade.initializeJpaPefil().destroy(perfil.getId());
+            return true;
+        } catch (NonexistentEntityException error) {
             return false;
         }
     }
