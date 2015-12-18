@@ -370,6 +370,7 @@ public class ViewPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItemDesconectarActionPerformed
 
     private void jMenuItemGuiadaGestaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemGuiadaGestaoActionPerformed
+        viewGuiaGestãoDeDecisao.showViewGestaoDeDecisao();
         trocaTela(viewGuiaGestãoDeDecisao);
     }//GEN-LAST:event_jMenuItemGuiadaGestaoActionPerformed
 
@@ -396,7 +397,7 @@ public class ViewPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jTreeMouseClicked
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        new ViewSelecionarOrganizacao(null, true, this).setVisible(true); 
+        new ViewSelecionarOrganizacao(null, true, this).setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed

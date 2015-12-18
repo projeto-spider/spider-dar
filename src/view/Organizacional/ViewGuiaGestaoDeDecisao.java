@@ -25,8 +25,6 @@ public class ViewGuiaGestaoDeDecisao extends javax.swing.JInternalFrame {
         initComponents();
 
         buttonGruop();
-        guiaHasBeenRegisterd();
-        EnableRadiobuttoms();
         Internal.retiraBorda(this);
     }
 
