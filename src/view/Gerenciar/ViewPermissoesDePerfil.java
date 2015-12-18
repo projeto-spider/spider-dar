@@ -52,7 +52,7 @@ public class ViewPermissoesDePerfil extends javax.swing.JInternalFrame {
         return jTablePerfis.getValueAt(row, 0).toString();
     }
 
-    private void clearLists() {
+    public void clearLists() {
         listModelInPerfil = new DefaultListModel();
         listModelOutPerfil = new DefaultListModel();
         jListFuncionalidades.setModel(listModelOutPerfil);

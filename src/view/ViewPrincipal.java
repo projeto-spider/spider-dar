@@ -361,6 +361,7 @@ public class ViewPrincipal extends javax.swing.JFrame {
 
     private void jMenuItemPermissoesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemPermissoesActionPerformed
         viewPermissoesDePerfil.fillTable(new ControllerPerfil().findPerfis());
+        viewPermissoesDePerfil.clearLists();
         trocaTela(viewPermissoesDePerfil);
     }//GEN-LAST:event_jMenuItemPermissoesActionPerformed
 
