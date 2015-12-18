@@ -50,11 +50,14 @@ public class ViewPrincipal extends javax.swing.JFrame {
     public ViewPrincipal() {
         initComponents();
 
-        jLabelOrganizacao.setText("Organização: " + KeepData.getData("Organizacao.nome"));
-
         iniciaTelas();
-        trocaTela(viewHome);
+        showOrganizacaoAndProblema();
         this.setLocationRelativeTo(null);
+    }
+
+    public void showOrganizacaoAndProblema() {
+        jLabelOrganizacao.setText("Organização: " + KeepData.getData("Organizacao.nome"));
+        trocaTela(viewHome);
     }
 
     @SuppressWarnings("unchecked")
@@ -393,7 +396,7 @@ public class ViewPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jTreeMouseClicked
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        new ViewSelecionarOrganizacao(null, true).setVisible(true);
+        new ViewSelecionarOrganizacao(null, true, this).setVisible(true); 
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
@@ -455,6 +458,7 @@ public class ViewPrincipal extends javax.swing.JFrame {
 
         if (nodePai.endsWith("Organização")) {
             if (nodeFilho.equals("Guia de Gestão de Decisão")) {
+                viewGuiaGestãoDeDecisao.showViewGestaoDeDecisao();
                 trocaTela(viewGuiaGestãoDeDecisao);
             }
         } else if (nodePai.endsWith("Problema")) {

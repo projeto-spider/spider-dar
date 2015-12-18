@@ -3,6 +3,7 @@ package view;
 import controller.ControllerOrganizacao;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JFrame;
 import settings.KeepData;
 import util.Request;
 
@@ -13,12 +14,22 @@ import util.Request;
 public class ViewSelecionarOrganizacao extends javax.swing.JDialog {
 
     private DefaultComboBoxModel comboboxModel;
-    private ControllerOrganizacao controllerOrganizacao = new ControllerOrganizacao();
+    private final ControllerOrganizacao controllerOrganizacao = new ControllerOrganizacao();
+    private ViewPrincipal viewPrincipal;
 
     public ViewSelecionarOrganizacao(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
 
+        fillComboboxOrganizacao();
+        this.setLocationRelativeTo(null);
+    }
+
+    public ViewSelecionarOrganizacao(java.awt.Frame parent, boolean modal, ViewPrincipal viewPrincipal) {
+        super(parent, modal);
+        initComponents();
+
+        this.viewPrincipal = viewPrincipal;
         fillComboboxOrganizacao();
         this.setLocationRelativeTo(null);
     }
@@ -110,9 +121,16 @@ public class ViewSelecionarOrganizacao extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        this.dispose();
-        keepData();
-        new ViewPrincipal().setVisible(true);
+        if (viewPrincipal == null) {
+            this.dispose();
+            keepData();
+            new ViewPrincipal().setVisible(true);
+        } else {
+            this.dispose();
+            KeepData.clearKeepData();
+            keepData();
+            viewPrincipal.showOrganizacaoAndProblema();
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

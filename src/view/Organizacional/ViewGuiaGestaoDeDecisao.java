@@ -35,6 +35,11 @@ public class ViewGuiaGestaoDeDecisao extends javax.swing.JInternalFrame {
         buttonGroup.add(jRadioButtonInsercaoManual);
     }
 
+    public void showViewGestaoDeDecisao() {
+        guiaHasBeenRegisterd();
+        EnableRadiobuttoms();
+    }
+
     private void EnableRadiobuttoms() {
         if (jRadioButtonImportacaoArquivo.isSelected()) {
             jPanelInsecaoManual.setVisible(false);
@@ -54,7 +59,6 @@ public class ViewGuiaGestaoDeDecisao extends javax.swing.JInternalFrame {
             jRadioButtonImportacaoArquivo.setSelected(true);
             jLabelImportacaoDeArquivo.setText("Não há arquivo importado.");
             type = Constant.CREATE;
-            fillFields();
 
         } else if (request.getData("Guia.tipo").equals("Manual")) {
             jRadioButtonInsercaoManual.setSelected(true);
@@ -122,8 +126,6 @@ public class ViewGuiaGestaoDeDecisao extends javax.swing.JInternalFrame {
     }
 
     private void fillFields() {
-        jTextAreaProposito.setText(request.getData("Guia.descricao"));
-
         int idGuia = Integer.parseInt(request.getData("Guia.id"));
         List<Request> list = controllerGuia.findListItemGuia(idGuia);
 
@@ -131,6 +133,8 @@ public class ViewGuiaGestaoDeDecisao extends javax.swing.JInternalFrame {
             clearFields();
             return;
         }
+
+        jTextAreaProposito.setText(request.getData("Guia.descricao"));
 
         jTextAreaDiretrizDefinicao.setText(list.get(Constant.DIRETRIZES).getData("Itemguia.definicao"));
         jTextAreaDiretrizAplicacao.setText(list.get(Constant.DIRETRIZES).getData("Itemguia.aplicacao"));
