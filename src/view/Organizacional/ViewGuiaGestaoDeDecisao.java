@@ -47,6 +47,29 @@ public class ViewGuiaGestaoDeDecisao extends javax.swing.JInternalFrame {
             jPanelInsecaoManual.setVisible(true);
             jPanelImportarArquivo.setVisible(false);
             this.repaint();
+        } else {
+            jRadioButtonImportacaoArquivo.setSelected(true);
+            jPanelInsecaoManual.setVisible(false);
+            jPanelImportarArquivo.setVisible(true);
+            this.repaint();
+        }
+    }
+
+    private void GuiaHasBeenDeleted() {
+        request = controllerGuia.findGuia();
+
+        if (request != null) {
+            JOptionPane.showMessageDialog(null, "Já existe um guia organizacional registrado."
+                    + "\nÉ necessário excluí-lo antes tentar de registrar um novo.");
+
+            if (jRadioButtonImportacaoArquivo.isSelected()) {
+                jRadioButtonInsercaoManual.setSelected(true);
+            } else {
+                jRadioButtonImportacaoArquivo.setSelected(true);
+            }
+
+        } else {
+            EnableRadiobuttoms();
         }
     }
 
@@ -54,8 +77,11 @@ public class ViewGuiaGestaoDeDecisao extends javax.swing.JInternalFrame {
         request = controllerGuia.findGuia();
 
         if (request == null) {
-            jRadioButtonImportacaoArquivo.setSelected(true);
+            jButtonImportarArquivo.setVisible(true);
+            jButtonAbrirArquivo.setVisible(false);
+            jButtonExcluirArquivo.setVisible(false);
             jLabelImportacaoDeArquivo.setText("Não há arquivo importado.");
+            clearFields();
             type = Constant.CREATE;
 
         } else if (request.getData("Guia.tipo").equals("Manual")) {
@@ -66,6 +92,9 @@ public class ViewGuiaGestaoDeDecisao extends javax.swing.JInternalFrame {
 
         } else if (request.getData("Guia.tipo").equals("Arquivo")) {
             jRadioButtonImportacaoArquivo.setSelected(true);
+            jButtonImportarArquivo.setVisible(false);
+            jButtonAbrirArquivo.setVisible(true);
+            jButtonExcluirArquivo.setVisible(true);
             jLabelImportacaoDeArquivo.setText("Guia cadastrado em,  " + request.getData("Guia.created"));
             type = Constant.UPDATE;
             fillFields();
@@ -157,6 +186,8 @@ public class ViewGuiaGestaoDeDecisao extends javax.swing.JInternalFrame {
     }
 
     private void clearFields() {
+        jTextAreaProposito.setText("");
+
         jTextAreaDiretrizDefinicao.setText("");
         jTextAreaDiretrizAplicacao.setText("");
 
@@ -285,6 +316,15 @@ public class ViewGuiaGestaoDeDecisao extends javax.swing.JInternalFrame {
 
     }
 
+    private void deleteGuia() {
+        boolean isDone = controllerGuia.deleteGuia();
+
+        if (isDone) {
+            guiaHasBeenRegisterd();
+            JOptionPane.showMessageDialog(null, "Excluído com sucesso.");
+        }
+    }
+
     private void openArquivoImportado() {
         new MyFile().openFile(request.getData("Guia.caminhoguia"));
     }
@@ -294,6 +334,7 @@ public class ViewGuiaGestaoDeDecisao extends javax.swing.JInternalFrame {
     private void initComponents() {
 
         buttonGroup = new javax.swing.ButtonGroup();
+        jLabel3 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
         jPanelInsecaoManual = new javax.swing.JPanel();
         jTabbedPane1 = new javax.swing.JTabbedPane();
@@ -364,14 +405,20 @@ public class ViewGuiaGestaoDeDecisao extends javax.swing.JInternalFrame {
         jTextAreaSelecionarAplicacao = new javax.swing.JTextArea();
         jSeparator7 = new javax.swing.JSeparator();
         jLabel2 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        jButtonSalvar = new javax.swing.JButton();
+        jButtonExcluir = new javax.swing.JButton();
         jPanelImportarArquivo = new javax.swing.JPanel();
         jLabelImportacaoDeArquivo = new javax.swing.JLabel();
         jButtonImportarArquivo = new javax.swing.JButton();
         jButtonAbrirArquivo = new javax.swing.JButton();
+        jButtonExcluirArquivo = new javax.swing.JButton();
+        jLabel22 = new javax.swing.JLabel();
+        jLabel26 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jRadioButtonImportacaoArquivo = new javax.swing.JRadioButton();
         jRadioButtonInsercaoManual = new javax.swing.JRadioButton();
+
+        jLabel3.setText("jLabel3");
 
         jTextField1.setEditable(false);
         jTextField1.setBackground(new java.awt.Color(246, 179, 111));
@@ -407,7 +454,7 @@ public class ViewGuiaGestaoDeDecisao extends javax.swing.JInternalFrame {
                 .addGap(17, 17, 17)
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 198, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 174, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -457,11 +504,11 @@ public class ViewGuiaGestaoDeDecisao extends javax.swing.JInternalFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel6)
                 .addGap(0, 0, 0)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 82, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 70, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel7)
                 .addGap(0, 0, 0)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 82, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 70, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -511,11 +558,11 @@ public class ViewGuiaGestaoDeDecisao extends javax.swing.JInternalFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel9)
                 .addGap(0, 0, 0)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 79, Short.MAX_VALUE)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 68, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel10)
                 .addGap(0, 0, 0)
-                .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 85, Short.MAX_VALUE)
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 72, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -565,11 +612,11 @@ public class ViewGuiaGestaoDeDecisao extends javax.swing.JInternalFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel11)
                 .addGap(0, 0, 0)
-                .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 82, Short.MAX_VALUE)
+                .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 70, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel12)
                 .addGap(0, 0, 0)
-                .addComponent(jScrollPane7, javax.swing.GroupLayout.DEFAULT_SIZE, 82, Short.MAX_VALUE)
+                .addComponent(jScrollPane7, javax.swing.GroupLayout.DEFAULT_SIZE, 70, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -619,11 +666,11 @@ public class ViewGuiaGestaoDeDecisao extends javax.swing.JInternalFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel14)
                 .addGap(0, 0, 0)
-                .addComponent(jScrollPane8, javax.swing.GroupLayout.DEFAULT_SIZE, 82, Short.MAX_VALUE)
+                .addComponent(jScrollPane8, javax.swing.GroupLayout.DEFAULT_SIZE, 70, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel15)
                 .addGap(0, 0, 0)
-                .addComponent(jScrollPane9, javax.swing.GroupLayout.DEFAULT_SIZE, 82, Short.MAX_VALUE)
+                .addComponent(jScrollPane9, javax.swing.GroupLayout.DEFAULT_SIZE, 70, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -673,11 +720,11 @@ public class ViewGuiaGestaoDeDecisao extends javax.swing.JInternalFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel16)
                 .addGap(0, 0, 0)
-                .addComponent(jScrollPane10, javax.swing.GroupLayout.DEFAULT_SIZE, 82, Short.MAX_VALUE)
+                .addComponent(jScrollPane10, javax.swing.GroupLayout.DEFAULT_SIZE, 70, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel18)
                 .addGap(0, 0, 0)
-                .addComponent(jScrollPane11, javax.swing.GroupLayout.DEFAULT_SIZE, 82, Short.MAX_VALUE)
+                .addComponent(jScrollPane11, javax.swing.GroupLayout.DEFAULT_SIZE, 70, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -727,11 +774,11 @@ public class ViewGuiaGestaoDeDecisao extends javax.swing.JInternalFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel20)
                 .addGap(0, 0, 0)
-                .addComponent(jScrollPane12, javax.swing.GroupLayout.DEFAULT_SIZE, 82, Short.MAX_VALUE)
+                .addComponent(jScrollPane12, javax.swing.GroupLayout.DEFAULT_SIZE, 70, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel21)
                 .addGap(0, 0, 0)
-                .addComponent(jScrollPane13, javax.swing.GroupLayout.DEFAULT_SIZE, 82, Short.MAX_VALUE)
+                .addComponent(jScrollPane13, javax.swing.GroupLayout.DEFAULT_SIZE, 70, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -781,20 +828,27 @@ public class ViewGuiaGestaoDeDecisao extends javax.swing.JInternalFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel24)
                 .addGap(0, 0, 0)
-                .addComponent(jScrollPane14, javax.swing.GroupLayout.DEFAULT_SIZE, 82, Short.MAX_VALUE)
+                .addComponent(jScrollPane14, javax.swing.GroupLayout.DEFAULT_SIZE, 70, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel25)
                 .addGap(0, 0, 0)
-                .addComponent(jScrollPane15, javax.swing.GroupLayout.DEFAULT_SIZE, 82, Short.MAX_VALUE)
+                .addComponent(jScrollPane15, javax.swing.GroupLayout.DEFAULT_SIZE, 70, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
         jTabbedPane1.addTab("<html>Selecionar<br>Soluções</html>", jPanelSelecionar);
 
-        jButton1.setText("Salvar");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        jButtonSalvar.setText("Salvar");
+        jButtonSalvar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                jButtonSalvarActionPerformed(evt);
+            }
+        });
+
+        jButtonExcluir.setText("Excluir");
+        jButtonExcluir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonExcluirActionPerformed(evt);
             }
         });
 
@@ -806,9 +860,11 @@ public class ViewGuiaGestaoDeDecisao extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addGroup(jPanelInsecaoManualLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jTabbedPane1)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelInsecaoManualLayout.createSequentialGroup()
+                    .addGroup(jPanelInsecaoManualLayout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jButtonSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButtonExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         jPanelInsecaoManualLayout.setVerticalGroup(
@@ -817,8 +873,10 @@ public class ViewGuiaGestaoDeDecisao extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addComponent(jTabbedPane1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton1)
-                .addContainerGap())
+                .addGroup(jPanelInsecaoManualLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButtonSalvar)
+                    .addComponent(jButtonExcluir))
+                .addGap(8, 8, 8))
         );
 
         jPanelImportarArquivo.setBorder(javax.swing.BorderFactory.createTitledBorder("Importação Arquivo"));
@@ -839,28 +897,53 @@ public class ViewGuiaGestaoDeDecisao extends javax.swing.JInternalFrame {
             }
         });
 
+        jButtonExcluirArquivo.setText("Excluir arquivo");
+        jButtonExcluirArquivo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonExcluirArquivoActionPerformed(evt);
+            }
+        });
+
+        jLabel22.setText("Podem ser importados arquivos nos seguintes formatos: ");
+
+        jLabel26.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel26.setText("Pdf, doc, docx, xls, xlsx,txt, odt, jpeg e png.");
+
         javax.swing.GroupLayout jPanelImportarArquivoLayout = new javax.swing.GroupLayout(jPanelImportarArquivo);
         jPanelImportarArquivo.setLayout(jPanelImportarArquivoLayout);
         jPanelImportarArquivoLayout.setHorizontalGroup(
             jPanelImportarArquivoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelImportarArquivoLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jButtonImportarArquivo)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButtonAbrirArquivo)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabelImportacaoDeArquivo)
+                .addGroup(jPanelImportarArquivoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanelImportarArquivoLayout.createSequentialGroup()
+                        .addComponent(jButtonImportarArquivo)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButtonAbrirArquivo)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButtonExcluirArquivo)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabelImportacaoDeArquivo))
+                    .addGroup(jPanelImportarArquivoLayout.createSequentialGroup()
+                        .addComponent(jLabel22)
+                        .addGap(0, 0, 0)
+                        .addComponent(jLabel26)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanelImportarArquivoLayout.setVerticalGroup(
             jPanelImportarArquivoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelImportarArquivoLayout.createSequentialGroup()
-                .addContainerGap()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanelImportarArquivoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonImportarArquivo)
                     .addComponent(jButtonAbrirArquivo)
-                    .addComponent(jLabelImportacaoDeArquivo))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jLabelImportacaoDeArquivo)
+                    .addComponent(jButtonExcluirArquivo))
+                .addGap(18, 18, 18)
+                .addGroup(jPanelImportarArquivoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel22)
+                    .addComponent(jLabel26))
+                .addGap(7, 7, 7))
         );
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
@@ -919,17 +1002,17 @@ public class ViewGuiaGestaoDeDecisao extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jRadioButtonImportacaoArquivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonImportacaoArquivoActionPerformed
-        EnableRadiobuttoms();
+        GuiaHasBeenDeleted();
     }//GEN-LAST:event_jRadioButtonImportacaoArquivoActionPerformed
 
     private void jRadioButtonInsercaoManualActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonInsercaoManualActionPerformed
-        EnableRadiobuttoms();
+        GuiaHasBeenDeleted();
     }//GEN-LAST:event_jRadioButtonInsercaoManualActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void jButtonSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSalvarActionPerformed
         saveManual();
         guiaHasBeenRegisterd();
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_jButtonSalvarActionPerformed
 
     private void jButtonImportarArquivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonImportarArquivoActionPerformed
         saveImportarArquivo();
@@ -940,12 +1023,22 @@ public class ViewGuiaGestaoDeDecisao extends javax.swing.JInternalFrame {
         openArquivoImportado();
     }//GEN-LAST:event_jButtonAbrirArquivoActionPerformed
 
+    private void jButtonExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonExcluirActionPerformed
+        deleteGuia();
+    }//GEN-LAST:event_jButtonExcluirActionPerformed
+
+    private void jButtonExcluirArquivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonExcluirArquivoActionPerformed
+        deleteGuia();
+    }//GEN-LAST:event_jButtonExcluirArquivoActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup;
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButtonAbrirArquivo;
+    private javax.swing.JButton jButtonExcluir;
+    private javax.swing.JButton jButtonExcluirArquivo;
     private javax.swing.JButton jButtonImportarArquivo;
+    private javax.swing.JButton jButtonSalvar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -960,9 +1053,12 @@ public class ViewGuiaGestaoDeDecisao extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
+    private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel25;
+    private javax.swing.JLabel jLabel26;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;

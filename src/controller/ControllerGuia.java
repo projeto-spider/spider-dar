@@ -5,6 +5,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import jpa.exceptions.IllegalOrphanException;
 import jpa.exceptions.NonexistentEntityException;
 import model.Guia;
 import model.Itemguia;
@@ -120,6 +123,33 @@ public class ControllerGuia {
         } else {
             return updateItemGuia(list);
         }
+    }
+
+    public boolean deleteGuia() {
+        try {
+            guia = new Guia();
+            int id = Integer.parseInt(KeepData.getData("Organizacao.id"));
+            guia = facade.initializeJpaGuia().findGuiaByIdOrganizacao(id);
+
+            if (guia == null) {
+                return false;
+            }
+
+            if (!guia.getItemguiaList().isEmpty()) {
+                for (Itemguia itemguia : guia.getItemguiaList()) {
+                    facade.initializeJpaItemGuia().destroy(itemguia.getId());
+                }
+            }
+
+            facade.initializeJpaGuia().destroy(guia.getId());
+
+            return true;
+        } catch (NumberFormatException |
+                NonexistentEntityException |
+                IllegalOrphanException error) {
+            return false;
+        }
+
     }
 
     public boolean removeItemGuia() {

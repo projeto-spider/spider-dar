@@ -49,7 +49,7 @@ public class JpaGuia extends GuiaJpaController {
 
             return guia;
         } catch (Exception error) {
-            throw error;
+            return null;
         }
     }
 
