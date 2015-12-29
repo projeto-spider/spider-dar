@@ -60,7 +60,7 @@ public class ViewGuiaGestaoDeDecisao extends javax.swing.JInternalFrame {
 
         if (request != null) {
             JOptionPane.showMessageDialog(null, "Já existe um guia organizacional registrado."
-                    + "\nÉ necessário excluí-lo antes tentar de registrar um novo.");
+                    + "\nÉ necessário excluí-lo antes de tentar registrar um novo.");
 
             if (jRadioButtonImportacaoArquivo.isSelected()) {
                 jRadioButtonInsercaoManual.setSelected(true);

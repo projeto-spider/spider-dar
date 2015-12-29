@@ -3,7 +3,6 @@ package view;
 import controller.ControllerOrganizacao;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.JFrame;
 import settings.KeepData;
 import util.Request;
 

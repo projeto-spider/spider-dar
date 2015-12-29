@@ -59,6 +59,8 @@ public class Organizacao implements Serializable {
     @Column(name = "modified")
     @Temporal(TemporalType.TIMESTAMP)
     private Date modified;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "organizacao")
+    private List<Acessar> acessarList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idOrganizacao")
     private List<Perfil> perfilList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idOrganizacao")
@@ -117,6 +119,15 @@ public class Organizacao implements Serializable {
 
     public void setModified(Date modified) {
         this.modified = modified;
+    }
+
+    @XmlTransient
+    public List<Acessar> getAcessarList() {
+        return acessarList;
+    }
+
+    public void setAcessarList(List<Acessar> acessarList) {
+        this.acessarList = acessarList;
     }
 
     @XmlTransient

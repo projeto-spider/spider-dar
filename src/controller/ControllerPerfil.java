@@ -52,7 +52,7 @@ public class ControllerPerfil {
             return false;
         }
     }
-    
+
     public boolean updatePerfil(Request request) {
         try {
             int id = Integer.parseInt(request.getData("Perfil.id"));
@@ -76,14 +76,14 @@ public class ControllerPerfil {
             return false;
         }
     }
-    
+
     public boolean deletePerfil(String name) {
         try {
             perfil = new Perfil();
             perfil = facade.initializeJpaPefil().findPerfilByName(name);
             facade.initializeJpaPefil().destroy(perfil.getId());
             return true;
-        } catch (NonexistentEntityException error) {
+        } catch (NonexistentEntityException | IllegalOrphanException error) {
             return false;
         }
     }
@@ -113,7 +113,7 @@ public class ControllerPerfil {
             throw error;
         }
     }
-    
+
     public Request findPerfilSelected(String name) {
         try {
             perfil = new Perfil();

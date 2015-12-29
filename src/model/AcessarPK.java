@@ -25,14 +25,18 @@ public class AcessarPK implements Serializable {
     @Basic(optional = false)
     @Column(name = "idUsuario")
     private int idUsuario;
+    @Basic(optional = false)
+    @Column(name = "idPerfil")
+    private int idPerfil;
 
     public AcessarPK() {
     }
 
-    public AcessarPK(int idOrganizacao, int idProblema, int idUsuario) {
+    public AcessarPK(int idOrganizacao, int idProblema, int idUsuario, int idPerfil) {
         this.idOrganizacao = idOrganizacao;
         this.idProblema = idProblema;
         this.idUsuario = idUsuario;
+        this.idPerfil = idPerfil;
     }
 
     public int getIdOrganizacao() {
@@ -59,12 +63,21 @@ public class AcessarPK implements Serializable {
         this.idUsuario = idUsuario;
     }
 
+    public int getIdPerfil() {
+        return idPerfil;
+    }
+
+    public void setIdPerfil(int idPerfil) {
+        this.idPerfil = idPerfil;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
         hash += (int) idOrganizacao;
         hash += (int) idProblema;
         hash += (int) idUsuario;
+        hash += (int) idPerfil;
         return hash;
     }
 
@@ -84,12 +97,15 @@ public class AcessarPK implements Serializable {
         if (this.idUsuario != other.idUsuario) {
             return false;
         }
+        if (this.idPerfil != other.idPerfil) {
+            return false;
+        }
         return true;
     }
 
     @Override
     public String toString() {
-        return "model.AcessarPK[ idOrganizacao=" + idOrganizacao + ", idProblema=" + idProblema + ", idUsuario=" + idUsuario + " ]";
+        return "model.AcessarPK[ idOrganizacao=" + idOrganizacao + ", idProblema=" + idProblema + ", idUsuario=" + idUsuario + ", idPerfil=" + idPerfil + " ]";
     }
     
 }

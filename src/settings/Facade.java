@@ -5,6 +5,7 @@ import jpa.extension.JpaFuncionalidades;
 import jpa.extension.JpaGuia;
 import jpa.extension.JpaOrganizacao;
 import jpa.extension.JpaPerfil;
+import jpa.extension.JpaUsuario;
 
 /**
  * Implementação do padrão de projeto Facade. padrão de projeto Facade fornecer
@@ -58,6 +59,10 @@ public class Facade {
     
     public JpaFuncionalidades initializeJpaFuncionalidades(){
         return new JpaFuncionalidades(Connection.connect()); 
+    }
+    
+    public JpaUsuario initializeJpaUsuario(){
+        return new JpaUsuario(Connection.connect()); 
     }
 
 }
