@@ -5,6 +5,7 @@ import view.Gerenciar.ViewNovaOrganizacao;
 import view.Gerenciar.ViewNovoProbemaDialog;
 import controller.ControllerOrganizacao;
 import controller.ControllerPerfil;
+import controller.ControllerUsuario;
 import java.beans.PropertyVetoException;
 import javax.swing.JInternalFrame;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -391,6 +392,7 @@ public class ViewPrincipal extends javax.swing.JFrame {
 
     private void jMenuItemUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemUsuariosActionPerformed
         trocaTela(viewUsuarios);
+        viewUsuarios.fillTable(new ControllerUsuario().findUsuarios()); 
     }//GEN-LAST:event_jMenuItemUsuariosActionPerformed
 
     private void jTreeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTreeMouseClicked

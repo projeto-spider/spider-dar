@@ -1,11 +1,13 @@
 package view.Gerenciar;
 
 import controller.ControllerUsuario;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 import settings.Constant;
 import util.MyDefaultTableModel;
 import util.Request;
@@ -30,6 +32,26 @@ public class ViewNovoUsuario extends javax.swing.JDialog {
         this.setLocationRelativeTo(null);
     }
 
+    private boolean fieldValidate() {
+        if (jTextFieldNome.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null,
+                    "Campo \"Nome Completo\" é obrigatório.",
+                    "ERRO AO CADASTRAR", JOptionPane.ERROR_MESSAGE);
+            return false;
+        } else if (jTextFieldLogin.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null,
+                    "Campo \"Login de Acesso\" é obrigatório.",
+                    "ERRO AO CADASTRAR", JOptionPane.ERROR_MESSAGE);
+            return false;
+        } else if (getTableData().isEmpty()) {
+            JOptionPane.showMessageDialog(null,
+                    "O Usuário precisa estar alocado em pelo menos um problema.",
+                    "ERRO AO CADASTRAR", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        return true;
+    }
+
     private void initialiazeTable() {
         String columns[] = {"Problema", "Perfil"};
         myDefaultTableModel = new MyDefaultTableModel(columns, 0, false);
@@ -40,16 +62,21 @@ public class ViewNovoUsuario extends javax.swing.JDialog {
             return;
         }
 
+        if (controllerUsuario.hasAcessoDuplicate(getTableData(), requestAllocate)) {
+            JOptionPane.showMessageDialog(null, "Usuário já foi alocado para este Problema.");
+            return;
+        }
+
         String line[] = {
             requestAllocate.getData("Problema.nome"),
             requestAllocate.getData("Perfil.nome")
         };
+
         myDefaultTableModel.addRow(line);
         jTableAlocacao.setModel(myDefaultTableModel);
-
     }
 
-    private List<Request> takeTableData() {
+    private List<Request> getTableData() {
         List<Request> requestList = new ArrayList<>();
         for (int i = 0; i < jTableAlocacao.getRowCount(); i++) {
             Map<String, String> data = new HashMap<>();
@@ -60,7 +87,25 @@ public class ViewNovoUsuario extends javax.swing.JDialog {
         return requestList;
     }
 
+    private void openPopupMenuTable(MouseEvent evt) { 
+        jMenuItem.setText("remover linha");
+        jPopupMenu.add(jMenuItem);
+        if (SwingUtilities.isRightMouseButton(evt)) {
+            if (jTableAlocacao.getSelectedRow() != -1) {
+                jPopupMenu.show(evt.getComponent(), evt.getX(), evt.getY());
+            }
+        }
+    }
+    
+    private void removeRowTable(int row){
+        myDefaultTableModel.removeRow(row); 
+        jTableAlocacao.setModel(myDefaultTableModel); 
+    }
+
     private void save() {
+        if (!fieldValidate()) {
+            return;
+        }
 
         Map<String, String> data = new HashMap<>();
         data.put("Usuario.nome", jTextFieldNome.getText());
@@ -69,8 +114,7 @@ public class ViewNovoUsuario extends javax.swing.JDialog {
         boolean isDone = false;
         if (type == Constant.CREATE) {
             request = new Request(data);
-            isDone = controllerUsuario.createUsuario(request);
-            isDone = controllerUsuario.createAcessarOfUsuario(takeTableData(), jTextFieldNome.getText());
+            isDone = controllerUsuario.createUsuario(request, getTableData(), jTextFieldNome.getText());
         } else {
 
         }
@@ -89,6 +133,8 @@ public class ViewNovoUsuario extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPopupMenu = new javax.swing.JPopupMenu();
+        jMenuItem = new javax.swing.JMenuItem();
         jTextFieldNome = new javax.swing.JTextField();
         jTextFieldLogin = new javax.swing.JTextField();
         jPanel1 = new javax.swing.JPanel();
@@ -99,6 +145,14 @@ public class ViewNovoUsuario extends javax.swing.JDialog {
         jButtonSalvar = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
+
+        jMenuItem.setText("jMenuItem1");
+        jMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemActionPerformed(evt);
+            }
+        });
+        jPopupMenu.add(jMenuItem);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Novo Usuário");
@@ -114,6 +168,11 @@ public class ViewNovoUsuario extends javax.swing.JDialog {
                 "Problema", "Perfil"
             }
         ));
+        jTableAlocacao.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jTableAlocacaoMousePressed(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTableAlocacao);
 
         jButtonAlocar.setText("Alocar este Usuário a um Problema");
@@ -224,13 +283,23 @@ public class ViewNovoUsuario extends javax.swing.JDialog {
         save();
     }//GEN-LAST:event_jButtonSalvarActionPerformed
 
+    private void jTableAlocacaoMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableAlocacaoMousePressed
+        openPopupMenuTable(evt); 
+    }//GEN-LAST:event_jTableAlocacaoMousePressed
+
+    private void jMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemActionPerformed
+        removeRowTable(jTableAlocacao.getSelectedRow()); 
+    }//GEN-LAST:event_jMenuItemActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonAlocar;
     private javax.swing.JButton jButtonCancelar;
     private javax.swing.JButton jButtonSalvar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JMenuItem jMenuItem;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPopupMenu jPopupMenu;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTableAlocacao;
     private javax.swing.JTextField jTextFieldLogin;

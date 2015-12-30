@@ -1,7 +1,10 @@
 package controller;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import model.Acessar;
 import model.Organizacao;
 import model.Perfil;
@@ -10,6 +13,7 @@ import model.Usuario;
 import settings.Facade;
 import settings.KeepData;
 import util.Request;
+import util.Text;
 
 /**
  *
@@ -20,8 +24,21 @@ public class ControllerUsuario {
     private Usuario usuario;
     private final Facade facade = Facade.getInstance();
 
-    public boolean createUsuario(Request request) {
+    /**
+     * 
+     * @param request
+     * @param listAcesso
+     * @param usuarioNome
+     * @return 
+     */
+    public boolean createUsuario(Request request, List<Request> listAcesso, String usuarioNome) { 
         try {
+
+            usuario = facade.initializeJpaUsuario().findUsuarioByNome(request.getData("Usuario.nome"));
+            if (usuario != null) {
+                return false;
+            }
+
             usuario = new Usuario();
             usuario.setNome(request.getData("Usuario.nome"));
             usuario.setLogin(request.getData("Usuario.login"));
@@ -31,6 +48,8 @@ public class ControllerUsuario {
             usuario.setModified(new Date());
 
             facade.initializeJpaUsuario().create(usuario);
+            
+            createAcessarOfUsuario(listAcesso, usuarioNome);
             return true;
         } catch (Exception error) {
             return false;
@@ -44,10 +63,10 @@ public class ControllerUsuario {
                 Organizacao organizacao = facade.initializeJpaOrganizacao().findOrganizacaoByID(idOrg);
                 Perfil perfil = facade.initializeJpaPefil().findPerfilByNameAndIdOrg(request.getData("Perfil.nome"), idOrg);
                 usuario = facade.initializeJpaUsuario().findUsuarioByNome(usuarioNome);
-                
+
                 //Alterar isto quando problema for implementado.
-                Problema problema = facade.initializeJpaProblema().findProblema(1);               
-                
+                Problema problema = facade.initializeJpaProblema().findProblema(1);
+
                 Acessar acessar = new Acessar();
                 acessar.setOrganizacao(organizacao);
                 acessar.setPerfil(perfil);
@@ -59,6 +78,35 @@ public class ControllerUsuario {
             return true;
         } catch (Exception error) {
             return false;
+        }
+    }
+
+    public boolean hasAcessoDuplicate(List<Request> list, Request request2) {
+        for (Request request1 : list) {
+            if (request1.getData("Problema.nome").equals(request2.getData("Problema.nome"))) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public List<Request> findUsuarios(){
+        try {
+            List<Usuario> usuarioList = facade.initializeJpaUsuario().findUsuarioEntities();
+            List<Request> list = new ArrayList<>();
+            
+            for(Usuario user : usuarioList){
+                Map<String, String> data = new HashMap<>();
+                data.put("Usuario.nome", user.getNome());
+                data.put("Usuario.login", user.getLogin());
+                data.put("Usuario.quantidadeProblemas", String.valueOf(user.getAcessarList().size()));
+                data.put("Usuario.created", Text.formatDateForTable(user.getCreated())); 
+                
+                list.add(new Request(data));
+            }
+            return list;
+        } catch (Exception error) {
+            throw error;
         }
     }
 

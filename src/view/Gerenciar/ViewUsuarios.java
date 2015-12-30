@@ -1,6 +1,10 @@
 package view.Gerenciar;
 
+import controller.ControllerUsuario;
+import java.util.List;
 import util.Internal;
+import util.MyDefaultTableModel;
+import util.Request;
 
 /**
  *
@@ -8,19 +12,37 @@ import util.Internal;
  */
 public class ViewUsuarios extends javax.swing.JInternalFrame {
 
+    private MyDefaultTableModel myDefaultTableModel;
+    private ControllerUsuario controllerUsuario = new ControllerUsuario();
+    
     public ViewUsuarios() {
         initComponents();
 
         Internal.retiraBorda(this);
     }
 
+    public void fillTable(List<Request> requestList) {
+        String columns[] = {"Nome", "Login", "Qauntidades de problemas", "Criado em"};
+        myDefaultTableModel = new MyDefaultTableModel(columns, 0, false);
+
+        for (Request request : requestList) {
+            String line[] = {
+                request.getData("Usuario.nome"),
+                request.getData("Usuario.login"),
+                request.getData("Usuario.quantidadeProblemas"),
+                request.getData("Usuario.created")
+            };
+            myDefaultTableModel.addRow(line);
+        }
+        jTableUsuarios.setModel(myDefaultTableModel);
+    }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         jTextField1 = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jTableUsuarios = new javax.swing.JTable();
         jTextField2 = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
@@ -32,16 +54,16 @@ public class ViewUsuarios extends javax.swing.JInternalFrame {
         jTextField1.setText(" Usuários Cadastrados");
         jTextField1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jTableUsuarios.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {"ADM", "ADM", "0", "0"},
                 {"Bleno", "bleno", "1", null}
             },
             new String [] {
-                "Nome", "Login", "Quantidade  de projetos", "Qauntidade de Perfis"
+                "Nome", "Login", "Quantidade  de projetos", "Criado em"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(jTableUsuarios);
 
         jLabel1.setText("Pesquisar:");
 
@@ -97,6 +119,7 @@ public class ViewUsuarios extends javax.swing.JInternalFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         new ViewNovoUsuario(null, true).setVisible(true);
+        fillTable(controllerUsuario.findUsuarios()); 
     }//GEN-LAST:event_jButton2ActionPerformed
 
 
@@ -105,7 +128,7 @@ public class ViewUsuarios extends javax.swing.JInternalFrame {
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable jTableUsuarios;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     // End of variables declaration//GEN-END:variables
