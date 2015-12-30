@@ -1,10 +1,12 @@
 package settings;
 
+import jpa.AcessarJpaController;
 import jpa.ItemguiaJpaController;
 import jpa.extension.JpaFuncionalidades;
 import jpa.extension.JpaGuia;
 import jpa.extension.JpaOrganizacao;
 import jpa.extension.JpaPerfil;
+import jpa.extension.JpaProblema;
 import jpa.extension.JpaUsuario;
 
 /**
@@ -63,6 +65,14 @@ public class Facade {
     
     public JpaUsuario initializeJpaUsuario(){
         return new JpaUsuario(Connection.connect()); 
+    }
+    
+    public AcessarJpaController initializeJpaAcessa(){
+        return new AcessarJpaController(Connection.connect());
+    }
+    
+    public JpaProblema initializeJpaProblema(){
+        return new JpaProblema(Connection.connect());
     }
 
 }

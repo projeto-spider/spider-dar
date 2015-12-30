@@ -33,7 +33,7 @@ public class ControllerPerfil {
     public boolean createPerfil(Request request) {
         try {
             int idOrg = Integer.parseInt(KeepData.getData("Organizacao.id"));
-            perfil = facade.initializeJpaPefil().findPerfilByNameAndNome(request.getData("Perfil.nome"), idOrg);
+            perfil = facade.initializeJpaPefil().findPerfilByNameAndIdOrg(request.getData("Perfil.nome"), idOrg);
             if (perfil != null) {
                 return false;
             }
@@ -135,7 +135,7 @@ public class ControllerPerfil {
     public List<Request> findFuncionalidadesByPerfil(String name) {
         try {
             int idOrg = Integer.parseInt(KeepData.getData("Organizacao.id"));
-            perfil = facade.initializeJpaPefil().findPerfilByNameAndNome(name, idOrg);
+            perfil = facade.initializeJpaPefil().findPerfilByNameAndIdOrg(name, idOrg);
 
             List<Request> requestList = new ArrayList<>();
             List<Funcionalidades> listInPerfil = perfil.getFuncionalidadesList();
@@ -169,7 +169,7 @@ public class ControllerPerfil {
     public boolean saveFuncionalidades(String name, Request request) {
         try {
             int idOrg = Integer.parseInt(KeepData.getData("Organizacao.id"));
-            perfil = facade.initializeJpaPefil().findPerfilByNameAndNome(name, idOrg);
+            perfil = facade.initializeJpaPefil().findPerfilByNameAndIdOrg(name, idOrg);
 
             List<Funcionalidades> listOutPerfil = facade.initializeJpaFuncionalidades().findFuncionalidadesEntities();
             List<Funcionalidades> listInPerfil = new ArrayList<>();

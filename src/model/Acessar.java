@@ -38,6 +38,9 @@ public class Acessar implements Serializable {
     @JoinColumn(name = "idPerfil", referencedColumnName = "id", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Perfil perfil;
+    @JoinColumn(name = "idProblema", referencedColumnName = "id", insertable = false, updatable = false)
+    @ManyToOne(optional = false)
+    private Problema problema;
     @JoinColumn(name = "idUsuario", referencedColumnName = "id", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Usuario usuario;
@@ -75,6 +78,14 @@ public class Acessar implements Serializable {
 
     public void setPerfil(Perfil perfil) {
         this.perfil = perfil;
+    }
+
+    public Problema getProblema() {
+        return problema;
+    }
+
+    public void setProblema(Problema problema) {
+        this.problema = problema;
     }
 
     public Usuario getUsuario() {

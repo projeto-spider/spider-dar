@@ -1,7 +1,9 @@
 package view.Gerenciar;
 
 import controller.ControllerUsuario;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.swing.JOptionPane;
 import settings.Constant;
@@ -37,7 +39,7 @@ public class ViewNovoUsuario extends javax.swing.JDialog {
         if (requestAllocate == null) {
             return;
         }
-        
+
         String line[] = {
             requestAllocate.getData("Problema.nome"),
             requestAllocate.getData("Perfil.nome")
@@ -45,6 +47,17 @@ public class ViewNovoUsuario extends javax.swing.JDialog {
         myDefaultTableModel.addRow(line);
         jTableAlocacao.setModel(myDefaultTableModel);
 
+    }
+
+    private List<Request> takeTableData() {
+        List<Request> requestList = new ArrayList<>();
+        for (int i = 0; i < jTableAlocacao.getRowCount(); i++) {
+            Map<String, String> data = new HashMap<>();
+            data.put("Problema.nome", jTableAlocacao.getValueAt(i, 0).toString());
+            data.put("Perfil.nome", jTableAlocacao.getValueAt(i, 1).toString());
+            requestList.add(new Request(data));
+        }
+        return requestList;
     }
 
     private void save() {
@@ -57,7 +70,7 @@ public class ViewNovoUsuario extends javax.swing.JDialog {
         if (type == Constant.CREATE) {
             request = new Request(data);
             isDone = controllerUsuario.createUsuario(request);
-
+            isDone = controllerUsuario.createAcessarOfUsuario(takeTableData(), jTextFieldNome.getText());
         } else {
 
         }

@@ -23,7 +23,7 @@ public class JpaPerfil extends PerfilJpaController {
      * @param name
      * @return
      */
-    public Perfil findPerfilByNameAndNome(String name, int idOrg) {
+    public Perfil findPerfilByNameAndIdOrg(String name, int idOrg) {
         try {
             EntityManager entityManager = super.getEntityManager();
             entityManager.getTransaction().begin();

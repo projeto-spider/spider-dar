@@ -72,6 +72,8 @@ public class Alternativa implements Serializable {
     private Problema idProblema;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idAlternativa")
     private List<Decisao> decisaoList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "alternativa")
+    private List<Avaliar> avaliarList;
 
     public Alternativa() {
     }
@@ -161,6 +163,15 @@ public class Alternativa implements Serializable {
 
     public void setDecisaoList(List<Decisao> decisaoList) {
         this.decisaoList = decisaoList;
+    }
+
+    @XmlTransient
+    public List<Avaliar> getAvaliarList() {
+        return avaliarList;
+    }
+
+    public void setAvaliarList(List<Avaliar> avaliarList) {
+        this.avaliarList = avaliarList;
     }
 
     @Override
