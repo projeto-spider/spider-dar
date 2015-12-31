@@ -9,6 +9,7 @@ import controller.ControllerUsuario;
 import java.beans.PropertyVetoException;
 import javax.swing.JInternalFrame;
 import javax.swing.tree.DefaultMutableTreeNode;
+import model.Usuario;
 import settings.KeepData;
 import view.Gerenciar.ViewOrganizacoes;
 import view.Gerenciar.ViewProblema;
@@ -54,6 +55,10 @@ public class ViewPrincipal extends javax.swing.JFrame {
         iniciaTelas();
         showOrganizacaoAndProblema();
         this.setLocationRelativeTo(null);
+    }
+
+    ViewPrincipal(Usuario usuario_acessando) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     public void showOrganizacaoAndProblema() {

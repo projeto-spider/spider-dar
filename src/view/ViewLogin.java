@@ -1,12 +1,21 @@
 package view;
 
+import controller.ControllerUsuario;
 import java.awt.CardLayout;
+import java.util.Arrays;
+import javax.swing.JOptionPane;
+import model.Usuario;
+import view.Gerenciar.ViewCadastroDeInformacoes;
 
 /**
  *
- * @author Bleno Vale
+ * @author Bleno Vale, Géssica
  */
 public class ViewLogin extends javax.swing.JFrame {
+    
+    private ControllerUsuario controllerUsuario = new ControllerUsuario();
+    private Usuario usuario = new Usuario();
+    private boolean esqueceuSenha = false;
 
     public ViewLogin() {
         initComponents();
@@ -30,6 +39,11 @@ public class ViewLogin extends javax.swing.JFrame {
         card.show(jPanel, "RecuperaSenha");
     }
 
+    private void getSenhaLogin() {
+        this.usuario.setLogin(jTextFieldLogin.getText());
+        this.usuario.setSenha(Arrays.toString(jPasswordFieldSenha.getPassword()));
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -393,6 +407,28 @@ public class ViewLogin extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void getIn() {
+        Usuario usuario_accessing = new Usuario();
+
+        getSenhaLogin();
+        usuario_accessing = controllerUsuario.findUsuarioByLogin(usuario.getLogin());
+
+        if (usuario_accessing == null) {
+            JOptionPane.showMessageDialog(this, "Login ou Senha incorretos.");
+        } else if (usuario_accessing.getSenha() == null) {
+
+            JOptionPane.showMessageDialog(this, "Esse é o seu primeiro acesso. \n Você deverá cadastrar uma senha e um e-mail de recuperação.");
+            
+        } else {
+            boolean senhaOk = controllerUsuario.CompareSenhaTypedWithBD(usuario_accessing.getSenha(), new String(jPasswordFieldSenha.getPassword()));
+            if (senhaOk) {
+                  ViewPrincipal viewPrincipal = new ViewPrincipal(usuario_accessing);
+                viewPrincipal.setVisible(true);
+                this.dispose();
+            }
+        }
+    }
+    
     private void jToggleButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton1ActionPerformed
         cardPrimeiroAcesso();
     }//GEN-LAST:event_jToggleButton1ActionPerformed

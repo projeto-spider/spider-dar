@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.swing.JOptionPane;
 import model.Acessar;
 import model.Organizacao;
 import model.Perfil;
@@ -12,6 +13,7 @@ import model.Problema;
 import model.Usuario;
 import settings.Facade;
 import settings.KeepData;
+import util.Criptografia;
 import util.Request;
 import util.Text;
 
@@ -23,6 +25,7 @@ public class ControllerUsuario {
 
     private Usuario usuario;
     private final Facade facade = Facade.getInstance();
+    private final Criptografia criptografia = new Criptografia();
 
     /**
      * 
@@ -122,5 +125,45 @@ public class ControllerUsuario {
             }
         }
         return requestList;
+    }
+    
+    public Usuario findUsuarioByLogin(String login_usuario) {
+        try {
+            return facade.initializeJpaUsuario().findUsuarioByLogin(login_usuario);
+        } catch (Exception error) {
+            throw error;
+        }
+    }
+    
+     public boolean CompareSenhaTypedWithBD(String senha_usuario, String senha_digitada) {
+        try {
+            if (senha_usuario.equals(criptografia.criptografaMensagem(senha_digitada))) {
+                return true;
+            } else {
+                JOptionPane.showMessageDialog(null, "Senha incorreta.");
+                return false;
+            }
+        } catch (Exception error) {
+            throw error;
+        }
+    }
+     
+     public boolean validateEmail(String email) {
+        try {
+            String regular_expression = "[A-Za-z0-9\\._-]+@[A-Za-z0-9]+(\\.[A-Za-z]+)+(\\.[A-Za-z]+)*";
+            return email.matches(regular_expression);
+        } catch (Exception error) {
+            throw error;
+        }
+    }
+     
+     public void editUsuario(Usuario usuario) {
+        try {
+            facade.initializeJpaUsuario().edit(usuario);
+            JOptionPane.showMessageDialog(null, "Dados Salvos com sucesso.");
+        } catch (Exception error) {
+            JOptionPane.showMessageDialog(null, "Erro ao editar Usuário.");
+            error.printStackTrace();
+        }
     }
 }
