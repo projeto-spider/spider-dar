@@ -1,8 +1,8 @@
 package jpa.extension;
 
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.Query;
 import jpa.UsuarioJpaController;
 import model.Usuario;
 
@@ -16,13 +16,13 @@ public class JpaUsuario extends UsuarioJpaController {
         super(emf);
     }
 
-    public Usuario findUsuarioByNome(String nome) {
+    public Usuario findUsuarioByNome(String name) {
         try {
             EntityManager entityManager = super.getEntityManager();
             entityManager.getTransaction().begin();
 
             Usuario usuario = (Usuario) entityManager.createQuery("SELECT u FROM Usuario u WHERE u.nome =:nome")
-                    .setParameter("nome", nome).getSingleResult();
+                    .setParameter("nome", name).getSingleResult();
 
             entityManager.getTransaction().commit();
             entityManager.close();
@@ -32,7 +32,7 @@ public class JpaUsuario extends UsuarioJpaController {
             return null;
         }
     }
-    
+
     public Usuario findUsuarioByLogin(String login) {
         try {
             EntityManager entityManager = super.getEntityManager();
@@ -50,4 +50,22 @@ public class JpaUsuario extends UsuarioJpaController {
         }
     }
 
+    public List<Usuario> findUsuarioByPartName(String name) {
+        try {
+            EntityManager entityManager = super.getEntityManager();
+            entityManager.getTransaction().begin();
+
+            List<Usuario> list = entityManager
+                    .createQuery("SELECT u FROM Usuario u WHERE u.nome LIKE :name ORDER BY u.nome ASC")
+                    .setParameter("name", name + "%")
+                    .getResultList();
+
+            entityManager.getTransaction().commit();
+            entityManager.close();
+
+            return list;
+        } catch (Exception error) {
+            throw error;
+        }
+    }
 }

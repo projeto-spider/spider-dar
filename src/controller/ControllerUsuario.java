@@ -28,13 +28,13 @@ public class ControllerUsuario {
     private final Criptografia criptografia = new Criptografia();
 
     /**
-     * 
+     *
      * @param request
      * @param listAcesso
      * @param usuarioNome
-     * @return 
+     * @return
      */
-    public boolean createUsuario(Request request, List<Request> listAcesso, String usuarioNome) { 
+    public boolean createUsuario(Request request, List<Request> listAcesso, String usuarioNome) {
         try {
 
             usuario = facade.initializeJpaUsuario().findUsuarioByNome(request.getData("Usuario.nome"));
@@ -51,7 +51,7 @@ public class ControllerUsuario {
             usuario.setModified(new Date());
 
             facade.initializeJpaUsuario().create(usuario);
-            
+
             createAcessarOfUsuario(listAcesso, usuarioNome);
             return true;
         } catch (Exception error) {
@@ -92,19 +92,19 @@ public class ControllerUsuario {
         }
         return false;
     }
-    
-    public List<Request> findUsuarios(){
+
+    public List<Request> findUsuarios() {
         try {
             List<Usuario> usuarioList = facade.initializeJpaUsuario().findUsuarioEntities();
             List<Request> list = new ArrayList<>();
-            
-            for(Usuario user : usuarioList){
+
+            for (Usuario user : usuarioList) {
                 Map<String, String> data = new HashMap<>();
                 data.put("Usuario.nome", user.getNome());
                 data.put("Usuario.login", user.getLogin());
                 data.put("Usuario.quantidadeProblemas", String.valueOf(user.getAcessarList().size()));
-                data.put("Usuario.created", Text.formatDateForTable(user.getCreated())); 
-                
+                data.put("Usuario.created", Text.formatDateForTable(user.getCreated()));
+
                 list.add(new Request(data));
             }
             return list;
@@ -126,7 +126,68 @@ public class ControllerUsuario {
         }
         return requestList;
     }
+
+    public List<Request> findUsuarioBySearch(String name) {
+        try {
+            List<Usuario> list = facade.initializeJpaUsuario().findUsuarioByPartName(name);
+            List<Request> requestList = new ArrayList<>();
+
+            for (Usuario user : list) {
+                Map<String, String> data = new HashMap<>();
+                data.put("Usuario.nome", user.getNome());
+                data.put("Usuario.login", user.getLogin());
+                data.put("Usuario.quantidadeProblemas", String.valueOf(user.getAcessarList().size()));
+                data.put("Usuario.created", Text.formatDateForTable(user.getCreated()));
+
+                requestList.add(new Request(data));
+            }
+
+            return requestList;
+        } catch (Exception error) {
+            throw error;
+        }
+    }
+
+    public Request findUsuarioSelected(String name) {
+        try {
+            usuario = facade.initializeJpaUsuario().findUsuarioByNome(name);
+
+            Map<String, String> data = new HashMap<>();
+            data.put("Usuario.nome", usuario.getNome());
+            data.put("Usuario.login", usuario.getLogin());
+            data.put("Usuario.email", usuario.getEmail());
+            data.put("Usuario.senha", usuario.getSenha());
+            data.put("Usuario.created", Text.formatDateForTable(usuario.getCreated()));
+            data.put("Usuario.modified", Text.formatDateForTable(usuario.getModified()));
+
+            return new Request(data);
+        } catch (Exception error) {
+            Map<String, String> data = new HashMap<>();
+            data.put("Error.mensagem", "Erro inesperado.");
+            return new Request(data);
+        }
+    }
     
+    public List<Request> findUsuarioAcesso(String name){
+        try {
+            List<Acessar> list = facade.initializeJpaUsuario().findUsuarioByNome(name).getAcessarList();
+            List<Request> requestList = new ArrayList<>();
+                    
+            for(Acessar acessar : list){
+                Map<String, String> data = new HashMap<>();
+                data.put("Organizacao.nome", acessar.getPerfil().getNome());
+                data.put("Problema.nome", acessar.getProblema().getNome());
+                data.put("Perfil.nome", acessar.getPerfil().getNome());
+                
+                requestList.add(new Request(data)); 
+            }
+            
+            return requestList;
+        } catch (Exception error) { 
+            return null;
+        }
+    }
+
     public Usuario findUsuarioByLogin(String login_usuario) {
         try {
             return facade.initializeJpaUsuario().findUsuarioByLogin(login_usuario);
@@ -134,8 +195,8 @@ public class ControllerUsuario {
             throw error;
         }
     }
-    
-     public boolean CompareSenhaTypedWithBD(String senha_usuario, String senha_digitada) {
+
+    public boolean CompareSenhaTypedWithBD(String senha_usuario, String senha_digitada) {
         try {
             if (senha_usuario.equals(criptografia.criptografaMensagem(senha_digitada))) {
                 return true;
@@ -147,8 +208,8 @@ public class ControllerUsuario {
             throw error;
         }
     }
-     
-     public boolean validateEmail(String email) {
+
+    public boolean validateEmail(String email) {
         try {
             String regular_expression = "[A-Za-z0-9\\._-]+@[A-Za-z0-9]+(\\.[A-Za-z]+)+(\\.[A-Za-z]+)*";
             return email.matches(regular_expression);
@@ -156,8 +217,8 @@ public class ControllerUsuario {
             throw error;
         }
     }
-     
-     public void editUsuario(Usuario usuario) {
+
+    public void editUsuario(Usuario usuario) {
         try {
             facade.initializeJpaUsuario().edit(usuario);
             JOptionPane.showMessageDialog(null, "Dados Salvos com sucesso.");

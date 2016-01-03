@@ -32,6 +32,15 @@ public class ViewNovoUsuario extends javax.swing.JDialog {
         this.setLocationRelativeTo(null);
     }
 
+    public ViewNovoUsuario(java.awt.Frame parent, boolean modal, String name) {
+        super(parent, modal);
+        initComponents();
+
+        type = Constant.UPDATE;
+        fillFields(name); 
+        this.setLocationRelativeTo(null);
+    }
+
     private boolean fieldValidate() {
         if (jTextFieldNome.getText().isEmpty()) {
             JOptionPane.showMessageDialog(null,
@@ -57,7 +66,7 @@ public class ViewNovoUsuario extends javax.swing.JDialog {
         myDefaultTableModel = new MyDefaultTableModel(columns, 0, false);
     }
 
-    private void fillTable(Request requestAllocate) {
+    private void putNewRowOnTheTable(Request requestAllocate) {
         if (requestAllocate == null) {
             return;
         }
@@ -76,6 +85,30 @@ public class ViewNovoUsuario extends javax.swing.JDialog {
         jTableAlocacao.setModel(myDefaultTableModel);
     }
 
+    private void fillFields(String name) {
+        request = controllerUsuario.findUsuarioSelected(name);
+        jTextFieldNome.setText(request.getData("Usuario.nome"));
+        jTextFieldLogin.setText(request.getData("Usuario.login"));
+
+        fillTable(name);
+    }
+
+    private void fillTable(String name) {
+        initialiazeTable();
+
+        List<Request> list = controllerUsuario.findUsuarioAcesso(name);
+
+        for (Request request : list) {
+            String line[] = {
+                request.getData("Problema.nome"),
+                request.getData("Perfil.nome")
+            };
+
+            myDefaultTableModel.addRow(line);
+        }
+        jTableAlocacao.setModel(myDefaultTableModel);
+    }
+
     private List<Request> getTableData() {
         List<Request> requestList = new ArrayList<>();
         for (int i = 0; i < jTableAlocacao.getRowCount(); i++) {
@@ -87,7 +120,7 @@ public class ViewNovoUsuario extends javax.swing.JDialog {
         return requestList;
     }
 
-    private void openPopupMenuTable(MouseEvent evt) { 
+    private void openPopupMenuTable(MouseEvent evt) {
         jMenuItem.setText("remover linha");
         jPopupMenu.add(jMenuItem);
         if (SwingUtilities.isRightMouseButton(evt)) {
@@ -96,10 +129,10 @@ public class ViewNovoUsuario extends javax.swing.JDialog {
             }
         }
     }
-    
-    private void removeRowTable(int row){
-        myDefaultTableModel.removeRow(row); 
-        jTableAlocacao.setModel(myDefaultTableModel); 
+
+    private void removeRowTable(int row) {
+        myDefaultTableModel.removeRow(row);
+        jTableAlocacao.setModel(myDefaultTableModel);
     }
 
     private void save() {
@@ -272,7 +305,7 @@ public class ViewNovoUsuario extends javax.swing.JDialog {
     private void jButtonAlocarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAlocarActionPerformed
         ViewAlocarUsuario viewAlocarUsuario = new ViewAlocarUsuario(null, true);
         viewAlocarUsuario.setVisible(true);
-        fillTable(viewAlocarUsuario.getRequest());
+        putNewRowOnTheTable(viewAlocarUsuario.getRequest());
     }//GEN-LAST:event_jButtonAlocarActionPerformed
 
     private void jButtonCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelarActionPerformed
@@ -284,11 +317,11 @@ public class ViewNovoUsuario extends javax.swing.JDialog {
     }//GEN-LAST:event_jButtonSalvarActionPerformed
 
     private void jTableAlocacaoMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableAlocacaoMousePressed
-        openPopupMenuTable(evt); 
+        openPopupMenuTable(evt);
     }//GEN-LAST:event_jTableAlocacaoMousePressed
 
     private void jMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemActionPerformed
-        removeRowTable(jTableAlocacao.getSelectedRow()); 
+        removeRowTable(jTableAlocacao.getSelectedRow());
     }//GEN-LAST:event_jMenuItemActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
