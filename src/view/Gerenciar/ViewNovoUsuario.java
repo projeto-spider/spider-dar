@@ -151,7 +151,7 @@ public class ViewNovoUsuario extends javax.swing.JDialog {
         } else {
             data.put("Usuario.id", request.getData("Usuario.id"));
             request = new Request(data);
-            isDone = controllerUsuario.updateUsuario(request, getTableData());
+            isDone = controllerUsuario.updateUsuarioByADM(request, getTableData());
         }
 
         if (isDone) {

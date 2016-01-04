@@ -84,7 +84,7 @@ public class ControllerUsuario {
         }
     }
 
-    public boolean updateUsuario(Request request, List<Request> list) {
+    public boolean updateUsuarioByADM(Request request, List<Request> list) {
         try {
             int id = Integer.parseInt(request.getData("Usuario.id"));
             usuario = facade.initializeJpaUsuario().findAnotherPerfilWithSameName(request.getData("Usuario.nome"), id);
@@ -96,14 +96,6 @@ public class ControllerUsuario {
             usuario = facade.initializeJpaUsuario().findUsuario(id);
             usuario.setNome(request.getData("Usuario.nome"));
             usuario.setLogin(request.getData("Usuario.login"));
-
-            if (request.getData("Usuario.email") != null) {
-                usuario.setEmail(request.getData("Usuario.email"));
-            }
-            if (request.getData("Usuario.senha") != null) {
-                usuario.setSenha(request.getData("Usuario.senha"));
-            }
-
             usuario.setModified(new Date());
             facade.initializeJpaUsuario().edit(usuario);
 
