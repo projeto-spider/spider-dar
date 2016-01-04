@@ -39,7 +39,7 @@ public class ViewUsuarios extends javax.swing.JInternalFrame {
     }
 
     private void removeUsuario() {
-        int Result = JOptionPane.showConfirmDialog(null, "Deseja Excluir usuário?", "EXCLUIR", JOptionPane.YES_NO_OPTION);
+        int Result = JOptionPane.showConfirmDialog(null, "Deseja Excluir este usuário?", "EXCLUIR", JOptionPane.YES_NO_OPTION);
 
         if (Result == JOptionPane.YES_OPTION) {
             boolean isDone = false;
