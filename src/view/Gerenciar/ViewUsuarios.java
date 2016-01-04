@@ -15,7 +15,7 @@ public class ViewUsuarios extends javax.swing.JInternalFrame {
 
     private MyDefaultTableModel myDefaultTableModel;
     private final ControllerUsuario controllerUsuario = new ControllerUsuario();
-    
+
     public ViewUsuarios() {
         initComponents();
 
@@ -37,6 +37,21 @@ public class ViewUsuarios extends javax.swing.JInternalFrame {
         }
         jTableUsuarios.setModel(myDefaultTableModel);
     }
+
+    private void removeUsuario() {
+        int Result = JOptionPane.showConfirmDialog(null, "Deseja Excluir usuário?", "EXCLUIR", JOptionPane.YES_NO_OPTION);
+
+        if (Result == JOptionPane.YES_OPTION) {
+            boolean isDone = false;
+            isDone = controllerUsuario.removeUsuario(jTableUsuarios.getValueAt(jTableUsuarios.getSelectedRow(), 0).toString());
+            if (isDone) {
+                JOptionPane.showMessageDialog(null, "Excluído com sucesso.");
+            } else {
+                JOptionPane.showMessageDialog(null, "Erro inesperado, por favor tente novamente.", "ERRO AO EXCLUIR", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -90,6 +105,11 @@ public class ViewUsuarios extends javax.swing.JInternalFrame {
         });
 
         jButton3.setText("Excluir");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -137,23 +157,33 @@ public class ViewUsuarios extends javax.swing.JInternalFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         new ViewNovoUsuario(null, true).setVisible(true);
-        fillTable(controllerUsuario.findUsuarios()); 
+        fillTable(controllerUsuario.findUsuarios());
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jTextFieldPesquicaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldPesquicaActionPerformed
         String name = jTextFieldPesquica.getText();
-        fillTable(controllerUsuario.findUsuarioBySearch(name)); 
+        fillTable(controllerUsuario.findUsuarioBySearch(name));
     }//GEN-LAST:event_jTextFieldPesquicaActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        if (jTableUsuarios.getSelectedRow() == -1){
+        if (jTableUsuarios.getSelectedRow() == -1) {
             JOptionPane.showMessageDialog(null, "Selecione uma linha na tabela.");
             return;
         }
-        
+
         new ViewNovoUsuario(null, true, jTableUsuarios.getValueAt(jTableUsuarios.getSelectedRow(), 0).toString()).setVisible(true);
         fillTable(controllerUsuario.findUsuarios());
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        if (jTableUsuarios.getSelectedRow() == -1) {
+            JOptionPane.showMessageDialog(null, "Selecione uma linha na tabela.");
+            return;
+        }
+
+        removeUsuario();
+        fillTable(controllerUsuario.findUsuarios());
+    }//GEN-LAST:event_jButton3ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

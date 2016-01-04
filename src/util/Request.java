@@ -12,7 +12,7 @@ public class Request {
     public Map<String, String> data;
 
     public Request(Map<String, String> data) {
-        this.data = new HashMap<String, String>();
+        this.data = new HashMap<>();
         this.data = data;
     }
 

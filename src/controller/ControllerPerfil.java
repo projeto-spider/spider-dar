@@ -85,6 +85,8 @@ public class ControllerPerfil {
             return true;
         } catch (NonexistentEntityException | IllegalOrphanException error) {
             return false;
+        } catch(Exception error){
+            return false;
         }
     }
 

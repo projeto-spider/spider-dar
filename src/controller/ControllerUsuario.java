@@ -52,14 +52,14 @@ public class ControllerUsuario {
 
             facade.initializeJpaUsuario().create(usuario);
 
-            createAcessarOfUsuario(listAcesso, usuarioNome);
+            createAcessarUsuario(listAcesso, usuarioNome);
             return true;
         } catch (Exception error) {
             return false;
         }
     }
 
-    public boolean createAcessarOfUsuario(List<Request> list, String usuarioNome) {
+    public boolean createAcessarUsuario(List<Request> list, String usuarioNome) {
         try {
             int idOrg = Integer.parseInt(KeepData.getData("Organizacao.id"));
             for (Request request : list) {
@@ -78,6 +78,60 @@ public class ControllerUsuario {
 
                 facade.initializeJpaAcessa().create(acessar);
             }
+            return true;
+        } catch (Exception error) {
+            return false;
+        }
+    }
+
+    public boolean updateUsuario(Request request, List<Request> list) {
+        try {
+            int id = Integer.parseInt(request.getData("Usuario.id"));
+            usuario = facade.initializeJpaUsuario().findAnotherPerfilWithSameName(request.getData("Usuario.nome"), id);
+            if (usuario != null) {
+                return false;
+            }
+
+            usuario = new Usuario();
+            usuario = facade.initializeJpaUsuario().findUsuario(id);
+            usuario.setNome(request.getData("Usuario.nome"));
+            usuario.setLogin(request.getData("Usuario.login"));
+
+            if (request.getData("Usuario.email") != null) {
+                usuario.setEmail(request.getData("Usuario.email"));
+            }
+            if (request.getData("Usuario.senha") != null) {
+                usuario.setSenha(request.getData("Usuario.senha"));
+            }
+
+            usuario.setModified(new Date());
+            facade.initializeJpaUsuario().edit(usuario);
+
+            removeAcessoUsuario(usuario.getAcessarList());
+            createAcessarUsuario(list, usuario.getNome());
+            return true;
+        } catch (Exception error) {
+            error.printStackTrace();
+            return false;
+        }
+    }
+
+    private void removeAcessoUsuario(List<Acessar> listAcesso) {
+        try {
+            for (Acessar acessar : listAcesso) {
+                facade.initializeJpaAcessa().destroy(acessar.getAcessarPK());
+            }
+        } catch (Exception error) {
+            error.printStackTrace();
+        }
+    }
+
+    public boolean removeUsuario(String name) {
+        try {
+
+            usuario = facade.initializeJpaUsuario().findUsuarioByNome(name);
+            removeAcessoUsuario(usuario.getAcessarList());
+            facade.initializeJpaUsuario().destroy(usuario.getId());
             return true;
         } catch (Exception error) {
             return false;
@@ -153,6 +207,7 @@ public class ControllerUsuario {
             usuario = facade.initializeJpaUsuario().findUsuarioByNome(name);
 
             Map<String, String> data = new HashMap<>();
+            data.put("Usuario.id", String.valueOf(usuario.getId()));
             data.put("Usuario.nome", usuario.getNome());
             data.put("Usuario.login", usuario.getLogin());
             data.put("Usuario.email", usuario.getEmail());
@@ -167,23 +222,23 @@ public class ControllerUsuario {
             return new Request(data);
         }
     }
-    
-    public List<Request> findUsuarioAcesso(String name){
+
+    public List<Request> findUsuarioAcesso(String name) {
         try {
             List<Acessar> list = facade.initializeJpaUsuario().findUsuarioByNome(name).getAcessarList();
             List<Request> requestList = new ArrayList<>();
-                    
-            for(Acessar acessar : list){
+
+            for (Acessar acessar : list) {
                 Map<String, String> data = new HashMap<>();
                 data.put("Organizacao.nome", acessar.getPerfil().getNome());
                 data.put("Problema.nome", acessar.getProblema().getNome());
                 data.put("Perfil.nome", acessar.getPerfil().getNome());
-                
-                requestList.add(new Request(data)); 
+
+                requestList.add(new Request(data));
             }
-            
+
             return requestList;
-        } catch (Exception error) { 
+        } catch (Exception error) {
             return null;
         }
     }

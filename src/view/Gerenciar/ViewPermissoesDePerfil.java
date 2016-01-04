@@ -77,7 +77,7 @@ public class ViewPermissoesDePerfil extends javax.swing.JInternalFrame {
         jListFuncionalidades.setModel(listModelOutPerfil);
         jListFuncionalidadesDoPerfil.setModel(listModelInPerfil);
     }
-    
+
     /**
      * Chamado quando o botão editar e pressionado.
      */
@@ -89,7 +89,7 @@ public class ViewPermissoesDePerfil extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(null, "Selecione uma linha na tabela.");
         }
     }
-    
+
     private void excluirButtonIsPressed() {
         int index = jTablePerfis.getSelectedRow();
         if (index > -1) {
@@ -99,7 +99,10 @@ public class ViewPermissoesDePerfil extends javax.swing.JInternalFrame {
             if (isDone) {
                 JOptionPane.showMessageDialog(null, "Excluído com sucesso.");
             } else {
-                JOptionPane.showMessageDialog(null, "Erro ao Excluir", "ERRO", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null,
+                        "Há usuarios que possuem este perfil."
+                                + "\nRetire este perfil desses usuários antes de excluí-lo.",
+                        "ERRO AO EXCLUIR", JOptionPane.ERROR_MESSAGE);
             }
         } else {
             JOptionPane.showMessageDialog(null, "Selecione uma linha na tabela.");

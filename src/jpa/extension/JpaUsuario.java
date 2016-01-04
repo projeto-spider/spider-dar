@@ -68,4 +68,23 @@ public class JpaUsuario extends UsuarioJpaController {
             throw error;
         }
     }
+    
+    public Usuario findAnotherPerfilWithSameName(String name, int id) {
+        try {
+            EntityManager entityManager = super.getEntityManager();
+            entityManager.getTransaction().begin();
+
+            Usuario usuario = (Usuario) entityManager
+                    .createQuery("SELECT u FROM Usuario u WHERE u.nome =:name AND u.id <>:id")
+                    .setParameter("name", name).setParameter("id", id)
+                    .getSingleResult();
+
+            entityManager.getTransaction().commit();
+            entityManager.close();
+
+            return usuario;
+        } catch (Exception error) {
+            return null;
+        }
+    }
 }

@@ -37,7 +37,7 @@ public class ViewNovoUsuario extends javax.swing.JDialog {
         initComponents();
 
         type = Constant.UPDATE;
-        fillFields(name); 
+        fillFields(name);
         this.setLocationRelativeTo(null);
     }
 
@@ -149,7 +149,9 @@ public class ViewNovoUsuario extends javax.swing.JDialog {
             request = new Request(data);
             isDone = controllerUsuario.createUsuario(request, getTableData(), jTextFieldNome.getText());
         } else {
-
+            data.put("Usuario.id", request.getData("Usuario.id"));
+            request = new Request(data);
+            isDone = controllerUsuario.updateUsuario(request, getTableData());
         }
 
         if (isDone) {
