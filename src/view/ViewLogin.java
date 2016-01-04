@@ -12,7 +12,7 @@ import util.Criptografia;
  * @author Bleno Vale, Géssica
  */
 public class ViewLogin extends javax.swing.JFrame {
-    
+
     private ControllerUsuario controllerUsuario = new ControllerUsuario();
     private Usuario usuario = new Usuario();
     private boolean esqueceuSenha = false;
@@ -39,56 +39,33 @@ public class ViewLogin extends javax.swing.JFrame {
         card.show(jPanel, "RecuperaSenha");
     }
 
-    private void getSenhaLogin() {
-        this.usuario.setLogin(jTextFieldLogin.getText());
-        this.usuario.setSenha(Arrays.toString(jPasswordFieldSenha.getPassword()));
-    }
-    
+//    private void getSenhaLogin() {
+//        this.usuario.setLogin(jTextFieldLogin.getText());
+//        this.usuario.setSenha(Arrays.toString(jPasswordFieldSenha.getPassword()));
+//    }
+
     public void preencherCampos() {
         jTextFieldNomeCompletoPri.setText(this.usuario.getNome());
         jTextFieldLogin.setText(this.usuario.getLogin());
     }
 
-    private void registerUsuarioData() {  //chamar método no botão salvar do cadastro de primeiro acesso
-        int cont = 0;
-        String mensagem = null;
-        if (!jTextFieldLogin.getText().isEmpty()) {
-            this.usuario.setLogin(jTextFieldLogin.getText());
-        } else {
-            mensagem = "Campo Login não pode ser vazio.";
-            cont++;
+    private boolean usuarioValidate() {  //chamar método no botão salvar do cadastro de primeiro acesso
+        if (jTextFieldLoginPri.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "O campo Login não pode ser vazio.");
+            return false;
+        } else if (!controllerUsuario.validateEmail(jTextFieldEmailPri.getText())) {
+            JOptionPane.showMessageDialog(null, "Endereço de e-mail inválido.");
+            return false;
+        } else if (jPasswordFieldSenhaPri.getPassword().length < 6) {
+            JOptionPane.showMessageDialog(null, "Campo Senha deve ter pelo menos seis caracteres.");
+            return false;
+        } else if (!Arrays.equals(jPasswordFieldSenhaPri.getPassword(), jPasswordFieldConfirmSenhaPri.getPassword())) {
+            JOptionPane.showMessageDialog(null, "Campos Senha e Confirmar Senha não correspondem.");
+            return false;
         }
-
-        if (controllerUsuario.validateEmail(jTextFieldEmailPri.getText())) {
-            this.usuario.setEmail(jTextFieldEmailPri.getText());
-        } else {
-            mensagem = "Endereço de e-mail inválido.";
-            cont++;
-        }
-
-        if (jPasswordFieldSenha.getPassword().length < 6) {
-            mensagem = "Campo Senha deve ter pelo menos seis caracteres.";
-            cont++;
-        } else if (!Arrays.equals(jPasswordFieldSenha.getPassword(), jPasswordFieldConfirmSenhaPri.getPassword())) {
-            mensagem = "Campos Senha e Confirmar Senha não correspondem.";
-            cont++;
-        }
-
-        if (cont == 0) {
-            Criptografia criptografia = new Criptografia();
-            String senha_Cript = criptografia.encryptMessage(new String(jPasswordFieldSenha.getPassword()));
-            this.usuario.setSenha(senha_Cript);
-            this.controllerUsuario.editUsuario(this.usuario);
-            ViewPrincipal viewPrincipal = new ViewPrincipal(this.usuario);
-            viewPrincipal.setVisible(true);
-            this.dispose();
-        } else if (cont == 1) {
-            JOptionPane.showMessageDialog(this, mensagem);
-        } else {
-            JOptionPane.showMessageDialog(this, "Mais de um campo estão vazios.");
-        }
+        return true;
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -446,34 +423,27 @@ public class ViewLogin extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void getIn() {
-        Usuario usuario_accessing = new Usuario();
+        usuario = new Usuario();
 
-        getSenhaLogin();
-        usuario_accessing = controllerUsuario.findUsuarioByLogin(usuario.getLogin());
+        //buscar por login e senha.
+        usuario = controllerUsuario.findUsuarioByLogin(jTextFieldLogin.getText());
 
-        if (usuario_accessing == null) {
+        if (usuario == null) {
             JOptionPane.showMessageDialog(this, "Login ou Senha incorretos.");
-        } else if (usuario_accessing.getSenha() == null) {
+        } else if (usuario.getSenha() == null) {
 
             JOptionPane.showMessageDialog(this, "Esse é o seu primeiro acesso. \n Você deverá cadastrar uma senha e um e-mail de recuperação.");
             cardPrimeiroAcesso();
-   
-//            ViewCadastroDeInformacoes viewCadastroDeInformacoes = new ViewCadastroDeInformacoes(null, true);
-//            viewCadastroDeInformacoes.setUsuario(usuario_acessando);
-//            viewCadastroDeInformacoes.preencherCampos();
-//            viewCadastroDeInformacoes.setVisible(true);
-            
+
         } else {
-            boolean senhaOk = controllerUsuario.CompareSenhaTypedWithBD(usuario_accessing.getSenha(), new String(jPasswordFieldSenha.getPassword()));
+            boolean senhaOk = controllerUsuario.CompareSenhaTypedWithBD(usuario.getSenha(), new String(jPasswordFieldSenha.getPassword()));
             if (senhaOk) {
                 new ViewSelecionarOrganizacao(null, true).setVisible(true);
-                ViewPrincipal viewPrincipal = new ViewPrincipal(usuario_accessing);
-                viewPrincipal.setVisible(true);
                 this.dispose();
             }
         }
     }
-    
+
     private void recuperarSenha() {  //colocar método no botão de confirmar após digitar o email de recuperação
         if (controllerUsuario.validateEmail(jTextFieldLoginEmailRecupera.getText())) {
             if (controllerUsuario.existRegisteredEmail(jTextFieldLoginEmailRecupera.getText())) {
@@ -486,7 +456,7 @@ public class ViewLogin extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "E-mail inválido.");
         }
     }
-    
+
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         cardRecuperaSenha();
     }//GEN-LAST:event_jButton2ActionPerformed
@@ -502,7 +472,19 @@ public class ViewLogin extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonEntrarActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        cardInicial();
+        if (!usuarioValidate()) {
+            return;
+        }
+        
+        usuario.setLogin(jTextFieldLoginPri.getText());
+        usuario.setEmail(jTextFieldEmailPri.getText());
+        Criptografia criptografia = new Criptografia();
+        String senha_Cript = criptografia.encryptMessage(new String(jPasswordFieldSenhaPri.getPassword()));
+        usuario.setSenha(senha_Cript);
+        controllerUsuario.editUsuario(this.usuario);
+        ViewPrincipal viewPrincipal = new ViewPrincipal(this.usuario);
+        viewPrincipal.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jPasswordFieldSenhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jPasswordFieldSenhaActionPerformed
