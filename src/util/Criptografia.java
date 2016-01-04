@@ -20,7 +20,7 @@ public class Criptografia {
      * @param mensagem msg que será criptografada.
      * @return mensagem criptografada
      */
-    public String criptografaMensagem(String mensagem) {
+    public String encryptMessage(String mensagem) {
         
         try {
             System.out.println("Mensagem limpa: " + mensagem);

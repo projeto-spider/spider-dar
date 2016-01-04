@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import javax.swing.JOptionPane;
 import model.Acessar;
 import model.Organizacao;
@@ -14,6 +15,7 @@ import model.Usuario;
 import settings.Facade;
 import settings.KeepData;
 import util.Criptografia;
+import util.Post;
 import util.Request;
 import util.Text;
 
@@ -245,7 +247,7 @@ public class ControllerUsuario {
 
     public boolean CompareSenhaTypedWithBD(String senha_usuario, String senha_digitada) {
         try {
-            if (senha_usuario.equals(criptografia.criptografaMensagem(senha_digitada))) {
+            if (senha_usuario.equals(criptografia.encryptMessage(senha_digitada))) {
                 return true;
             } else {
                 JOptionPane.showMessageDialog(null, "Senha incorreta.");
@@ -272,6 +274,44 @@ public class ControllerUsuario {
         } catch (Exception error) {
             JOptionPane.showMessageDialog(null, "Erro ao editar Usuário.");
             error.printStackTrace();
+        }
+    }
+    
+    public boolean existRegisteredEmail(String email) {
+        try {
+            List<Usuario> listaUsuario = facade.initializeJpaUsuario().findUsuarioByEmail(email);
+            if (!listaUsuario.isEmpty()) {
+                createNewPassword(listaUsuario.get(0));
+                return true;
+            } else {
+                JOptionPane.showMessageDialog(null, "O e-mail não é Cadastrado.");
+                return false;
+            }
+        } catch (Exception error) {
+            throw error;
+        }
+
+    }
+    
+    public void createNewPassword(Usuario usuario) {
+        try {
+            //cria string aleatória de 6 digitos.
+            UUID uuid = UUID.randomUUID();
+            String newPassword = uuid.toString().substring(0, 6);
+
+            String newPasswordCrip = criptografia.encryptMessage(newPassword);
+            usuario.setSenha(newPasswordCrip);
+
+            Post post = new Post();
+            if (post.sendEmailPasswordRecovery(usuario.getEmail(), usuario.getLogin(), newPassword)){
+                facade.initializeJpaUsuario().edit(usuario);
+                JOptionPane.showMessageDialog(null, "Nova senha criada.\nPor favor cheque seu E-mail.");
+            } else {
+                JOptionPane.showMessageDialog(null, "Nova foi possível enviar a mensagem de recuperação.\n Por favor, verifique sua conexão.");
+            }     
+        } catch (Exception error) {
+            error.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Erro inesperado.");
         }
     }
 }

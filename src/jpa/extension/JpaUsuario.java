@@ -87,4 +87,14 @@ public class JpaUsuario extends UsuarioJpaController {
             return null;
         }
     }
+    
+    public List<Usuario> findUsuarioByEmail(String email) {
+        try {
+            EntityManager entityManager = super.getEntityManager();
+            return entityManager.createQuery("SELECT u FROM Usuario u WHERE u.email = :email").setParameter("email", email).getResultList();
+        } catch (Exception error) {
+            throw error;
+        }
+    }
+    
 }
