@@ -90,22 +90,21 @@ public class ViewPermissoesDePerfil extends javax.swing.JInternalFrame {
         }
     }
 
-    private void excluirButtonIsPressed() {
-        int index = jTablePerfis.getSelectedRow();
-        if (index > -1) {
+    private void removePerfil() {
+        int Result = JOptionPane.showConfirmDialog(null, "Deseja Excluir este perfil?", "EXCLUIR", JOptionPane.YES_NO_OPTION);
+
+        if (Result == JOptionPane.YES_OPTION) {
             boolean isDone = false;
+            int index = jTablePerfis.getSelectedRow();
             isDone = controllerPerfil.deletePerfil(jTablePerfis.getValueAt(index, 0).toString());
 
             if (isDone) {
                 JOptionPane.showMessageDialog(null, "Excluído com sucesso.");
             } else {
                 JOptionPane.showMessageDialog(null,
-                        "Há usuarios que possuem este perfil."
-                                + "\nRetire este perfil desses usuários antes de excluí-lo.",
-                        "ERRO AO EXCLUIR", JOptionPane.ERROR_MESSAGE);
+                        "Há usuários que possuem este perfil."
+                        + "\nRetire este perfil desses \"Usuários\" antes de excluí-lo.");
             }
-        } else {
-            JOptionPane.showMessageDialog(null, "Selecione uma linha na tabela.");
         }
     }
 
@@ -364,7 +363,11 @@ public class ViewPermissoesDePerfil extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jButtonEditarActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        excluirButtonIsPressed();
+        if (jTablePerfis.getSelectedRow() == -1) {
+            JOptionPane.showMessageDialog(null, "Selecione uma linha na tabela.");
+            return;
+        }
+        removePerfil();
         fillTable(controllerPerfil.findPerfis());
     }//GEN-LAST:event_jButton4ActionPerformed
 

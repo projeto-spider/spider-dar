@@ -316,12 +316,18 @@ public class ViewGuiaGestaoDeDecisao extends javax.swing.JInternalFrame {
 
     }
 
-    private void deleteGuia() {
-        boolean isDone = controllerGuia.deleteGuia();
-
-        if (isDone) {
-            guiaHasBeenRegisterd();
-            JOptionPane.showMessageDialog(null, "Excluído com sucesso.");
+    private void removeGuia() {
+        int Result = JOptionPane.showConfirmDialog(null, "Deseja Excluir Guia registrado?", "EXCLUIR", JOptionPane.YES_NO_OPTION);
+        if (Result == JOptionPane.YES_OPTION) {
+            
+            boolean isDone = false;
+            isDone = controllerGuia.deleteGuia();
+            if (isDone) {
+                guiaHasBeenRegisterd();
+                JOptionPane.showMessageDialog(null, "Excluído com sucesso.");
+            } else {
+                JOptionPane.showMessageDialog(null, "Erro inesperado, por favor tente novamente.", "ERRO AO EXCLUIR", JOptionPane.ERROR_MESSAGE);
+            }
         }
     }
 
@@ -1024,11 +1030,11 @@ public class ViewGuiaGestaoDeDecisao extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jButtonAbrirArquivoActionPerformed
 
     private void jButtonExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonExcluirActionPerformed
-        deleteGuia();
+        removeGuia();
     }//GEN-LAST:event_jButtonExcluirActionPerformed
 
     private void jButtonExcluirArquivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonExcluirArquivoActionPerformed
-        deleteGuia();
+        removeGuia();
     }//GEN-LAST:event_jButtonExcluirArquivoActionPerformed
 
 
