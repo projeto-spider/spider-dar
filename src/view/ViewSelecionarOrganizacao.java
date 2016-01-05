@@ -128,7 +128,7 @@ public class ViewSelecionarOrganizacao extends javax.swing.JDialog {
             this.dispose();
             KeepData.clearKeepData();
             keepData();
-            viewPrincipal.showOrganizacaoAndProblema();
+            viewPrincipal.showInformation();
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 

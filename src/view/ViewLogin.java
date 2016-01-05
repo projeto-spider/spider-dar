@@ -3,6 +3,7 @@ package view;
 import controller.ControllerUsuario;
 import java.awt.CardLayout;
 import java.util.Arrays;
+import java.util.Date;
 import javax.swing.JOptionPane;
 import model.Usuario;
 import util.Criptografia;
@@ -43,24 +44,23 @@ public class ViewLogin extends javax.swing.JFrame {
 //        this.usuario.setLogin(jTextFieldLogin.getText());
 //        this.usuario.setSenha(Arrays.toString(jPasswordFieldSenha.getPassword()));
 //    }
-
     public void preencherCampos() {
         jTextFieldNomeCompletoPri.setText(this.usuario.getNome());
-        jTextFieldLogin.setText(this.usuario.getLogin());
+        jTextFieldLoginPri.setText(this.usuario.getLogin());
     }
 
     private boolean usuarioValidate() {  //chamar método no botão salvar do cadastro de primeiro acesso
         if (jTextFieldLoginPri.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(null, "O campo Login não pode ser vazio.");
+            JOptionPane.showMessageDialog(null, "O campo \"Login\" não pode ser vazio.");
             return false;
         } else if (!controllerUsuario.validateEmail(jTextFieldEmailPri.getText())) {
-            JOptionPane.showMessageDialog(null, "Endereço de e-mail inválido.");
+            JOptionPane.showMessageDialog(null, "Endereço de \"E-mail\" inválido.");
             return false;
         } else if (jPasswordFieldSenhaPri.getPassword().length < 6) {
-            JOptionPane.showMessageDialog(null, "Campo Senha deve ter pelo menos seis caracteres.");
+            JOptionPane.showMessageDialog(null, "Campo \"Senha\" deve ter pelo menos seis caracteres.");
             return false;
         } else if (!Arrays.equals(jPasswordFieldSenhaPri.getPassword(), jPasswordFieldConfirmSenhaPri.getPassword())) {
-            JOptionPane.showMessageDialog(null, "Campos Senha e Confirmar Senha não correspondem.");
+            JOptionPane.showMessageDialog(null, "Campos \"Senha\" e \"Confirmar Senha\" não correspondem.");
             return false;
         }
         return true;
@@ -431,10 +431,9 @@ public class ViewLogin extends javax.swing.JFrame {
         if (usuario == null) {
             JOptionPane.showMessageDialog(this, "Login ou Senha incorretos.");
         } else if (usuario.getSenha() == null) {
-
             JOptionPane.showMessageDialog(this, "Esse é o seu primeiro acesso. \n Você deverá cadastrar uma senha e um e-mail de recuperação.");
+            preencherCampos();
             cardPrimeiroAcesso();
-
         } else {
             boolean senhaOk = controllerUsuario.CompareSenhaTypedWithBD(usuario.getSenha(), new String(jPasswordFieldSenha.getPassword()));
             if (senhaOk) {
@@ -475,15 +474,20 @@ public class ViewLogin extends javax.swing.JFrame {
         if (!usuarioValidate()) {
             return;
         }
-        
+
         usuario.setLogin(jTextFieldLoginPri.getText());
         usuario.setEmail(jTextFieldEmailPri.getText());
+
         Criptografia criptografia = new Criptografia();
         String senha_Cript = criptografia.encryptMessage(new String(jPasswordFieldSenhaPri.getPassword()));
         usuario.setSenha(senha_Cript);
+
+        usuario.setCreated(new Date());
+        usuario.setModified(new Date());
+
         controllerUsuario.editUsuario(this.usuario);
-        ViewPrincipal viewPrincipal = new ViewPrincipal(this.usuario);
-        viewPrincipal.setVisible(true);
+
+        new ViewSelecionarOrganizacao(null, true).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jButton3ActionPerformed
 

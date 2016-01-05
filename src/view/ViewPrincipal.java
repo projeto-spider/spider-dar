@@ -9,7 +9,6 @@ import controller.ControllerUsuario;
 import java.beans.PropertyVetoException;
 import javax.swing.JInternalFrame;
 import javax.swing.tree.DefaultMutableTreeNode;
-import model.Usuario;
 import settings.KeepData;
 import view.Gerenciar.ViewOrganizacoes;
 import view.Gerenciar.ViewProblema;
@@ -53,15 +52,11 @@ public class ViewPrincipal extends javax.swing.JFrame {
         initComponents();
 
         iniciaTelas();
-        showOrganizacaoAndProblema();
+        showInformation();
         this.setLocationRelativeTo(null);
     }
 
-    ViewPrincipal(Usuario usuario_acessando) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public void showOrganizacaoAndProblema() {
+    public void showInformation() {
         jLabelOrganizacao.setText("Organização: " + KeepData.getData("Organizacao.nome"));
         trocaTela(viewHome);
     }
@@ -71,7 +66,7 @@ public class ViewPrincipal extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
+        jLabelBemvindo = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTree = new javax.swing.JTree();
         jDesktopPane = new javax.swing.JDesktopPane();
@@ -107,9 +102,9 @@ public class ViewPrincipal extends javax.swing.JFrame {
 
         jPanel1.setBackground(new java.awt.Color(102, 102, 102));
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setText("Bem-vindo(a), ADM");
+        jLabelBemvindo.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabelBemvindo.setForeground(new java.awt.Color(255, 255, 255));
+        jLabelBemvindo.setText("Bem-vindo(a), ADM");
 
         javax.swing.tree.DefaultMutableTreeNode treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("Funcionalidades");
         javax.swing.tree.DefaultMutableTreeNode treeNode2 = new javax.swing.tree.DefaultMutableTreeNode("Organização");
@@ -203,7 +198,7 @@ public class ViewPrincipal extends javax.swing.JFrame {
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(10, 10, 10))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel1)
+                        .addComponent(jLabelBemvindo)
                         .addGap(56, 56, 56)))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jDesktopPane)
@@ -220,7 +215,7 @@ public class ViewPrincipal extends javax.swing.JFrame {
                     .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(9, 9, 9)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(jLabelBemvindo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jDesktopPane)
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -397,7 +392,7 @@ public class ViewPrincipal extends javax.swing.JFrame {
 
     private void jMenuItemUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemUsuariosActionPerformed
         trocaTela(viewUsuarios);
-        viewUsuarios.fillTable(new ControllerUsuario().findUsuarios()); 
+        viewUsuarios.fillTable(new ControllerUsuario().findUsuarios());
     }//GEN-LAST:event_jMenuItemUsuariosActionPerformed
 
     private void jTreeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTreeMouseClicked
@@ -517,9 +512,9 @@ public class ViewPrincipal extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JDesktopPane jDesktopPane;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabelBemvindo;
     private javax.swing.JLabel jLabelOrganizacao;
     private javax.swing.JMenu jMenuArquivo;
     private javax.swing.JMenuBar jMenuBar1;
