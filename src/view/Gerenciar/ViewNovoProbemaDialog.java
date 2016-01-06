@@ -1,5 +1,10 @@
 package view.Gerenciar;
 
+import java.util.HashMap;
+import java.util.Map;
+import javax.swing.JOptionPane;
+import util.Request;
+
 /**
  *
  * @author Bleno Vale
@@ -17,15 +22,15 @@ public class ViewNovoProbemaDialog extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jTextFieldNome = new javax.swing.JTextField();
+        jTextFieldProblemaNome = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextAreaDescricao = new javax.swing.JTextArea();
+        jTextAreaProblemaPoposito = new javax.swing.JTextArea();
         jButtonCancelar = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        jTextAreaProblemaPlanejamento = new javax.swing.JTextArea();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTextArea2 = new javax.swing.JTextArea();
-        jButton1 = new javax.swing.JButton();
+        jTextAreaProblemaContexto = new javax.swing.JTextArea();
+        jButtonSalvar = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -35,9 +40,9 @@ public class ViewNovoProbemaDialog extends javax.swing.JDialog {
         setTitle("Nova Tomada de Decisão");
         setResizable(false);
 
-        jTextAreaDescricao.setColumns(20);
-        jTextAreaDescricao.setRows(2);
-        jScrollPane1.setViewportView(jTextAreaDescricao);
+        jTextAreaProblemaPoposito.setColumns(20);
+        jTextAreaProblemaPoposito.setRows(2);
+        jScrollPane1.setViewportView(jTextAreaProblemaPoposito);
 
         jButtonCancelar.setText("Cancelar");
         jButtonCancelar.addActionListener(new java.awt.event.ActionListener() {
@@ -46,15 +51,20 @@ public class ViewNovoProbemaDialog extends javax.swing.JDialog {
             }
         });
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(2);
-        jScrollPane2.setViewportView(jTextArea1);
+        jTextAreaProblemaPlanejamento.setColumns(20);
+        jTextAreaProblemaPlanejamento.setRows(2);
+        jScrollPane2.setViewportView(jTextAreaProblemaPlanejamento);
 
-        jTextArea2.setColumns(20);
-        jTextArea2.setRows(2);
-        jScrollPane3.setViewportView(jTextArea2);
+        jTextAreaProblemaContexto.setColumns(20);
+        jTextAreaProblemaContexto.setRows(2);
+        jScrollPane3.setViewportView(jTextAreaProblemaContexto);
 
-        jButton1.setText("Salvar");
+        jButtonSalvar.setText("Salvar");
+        jButtonSalvar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonSalvarActionPerformed(evt);
+            }
+        });
 
         jLabel1.setText("Nome do Problema:");
 
@@ -72,12 +82,12 @@ public class ViewNovoProbemaDialog extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 536, Short.MAX_VALUE)
-                    .addComponent(jTextFieldNome)
+                    .addComponent(jTextFieldProblemaNome)
                     .addComponent(jScrollPane1)
                     .addComponent(jScrollPane2)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButtonSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButtonCancelar))
                     .addGroup(layout.createSequentialGroup()
@@ -95,7 +105,7 @@ public class ViewNovoProbemaDialog extends javax.swing.JDialog {
                 .addContainerGap()
                 .addComponent(jLabel1)
                 .addGap(0, 0, 0)
-                .addComponent(jTextFieldNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jTextFieldProblemaNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel2)
                 .addGap(0, 0, 0)
@@ -109,22 +119,59 @@ public class ViewNovoProbemaDialog extends javax.swing.JDialog {
                 .addGap(0, 0, 0)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButtonCancelar)
-                    .addComponent(jButton1))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButtonSalvar)
+                    .addComponent(jButtonCancelar))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private boolean isValidData(Request request)
+    {
+        HashMap<String,String> fields = request.getHashMapData();
+        
+        for (Map.Entry<String, String> entry: fields.entrySet())
+        {
+            if (entry.getValue().isEmpty())
+            {
+                String value = entry.getKey();
+                value = value.substring(value.lastIndexOf(".") + 1);
+                value = value.substring(0, 1).toUpperCase() + value.substring(1);
+                
+                JOptionPane.showMessageDialog(null, "Campo Obigatório: " + value,"ERRO AO CADASTRAR", JOptionPane.ERROR_MESSAGE);
+                
+            }
+        }
+        return false;
+        //return true;
+    }
+    
+    private void save()
+    {
+        Request request = new Request();
+        
+        request.setData("Problema.nome", jTextFieldProblemaNome.getText());
+        request.setData("Problema.proposito", jTextAreaProblemaPoposito.getText());
+        request.setData("Problema.planejamento", jTextAreaProblemaPlanejamento.getText());
+        request.setData("Problema.contexto", jTextAreaProblemaContexto.getText());
+        
+        if (!this.isValidData(request))
+            return;
+    }
+    
     private void jButtonCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelarActionPerformed
-        // TODO add your handling code here:
+        this.dispose();
     }//GEN-LAST:event_jButtonCancelarActionPerformed
 
+    private void jButtonSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSalvarActionPerformed
+        this.save();// TODO add your handling code here:
+    }//GEN-LAST:event_jButtonSalvarActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButtonCancelar;
+    private javax.swing.JButton jButtonSalvar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -132,9 +179,9 @@ public class ViewNovoProbemaDialog extends javax.swing.JDialog {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextArea jTextArea2;
-    private javax.swing.JTextArea jTextAreaDescricao;
-    private javax.swing.JTextField jTextFieldNome;
+    private javax.swing.JTextArea jTextAreaProblemaContexto;
+    private javax.swing.JTextArea jTextAreaProblemaPlanejamento;
+    private javax.swing.JTextArea jTextAreaProblemaPoposito;
+    private javax.swing.JTextField jTextFieldProblemaNome;
     // End of variables declaration//GEN-END:variables
 }
