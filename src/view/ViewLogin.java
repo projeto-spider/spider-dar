@@ -1,12 +1,23 @@
 package view;
 
+import controller.ControllerUsuario;
 import java.awt.CardLayout;
+import java.util.Arrays;
+import java.util.Date;
+import javax.swing.JOptionPane;
+import model.Usuario;
+import util.Criptografia;
+import util.Post;
 
 /**
  *
- * @author Bleno Vale
+ * @author Bleno Vale, Géssica
  */
 public class ViewLogin extends javax.swing.JFrame {
+
+    private ControllerUsuario controllerUsuario = new ControllerUsuario();
+    private Usuario usuario = new Usuario();
+    private boolean esqueceuSenha = false;
 
     public ViewLogin() {
         initComponents();
@@ -30,6 +41,28 @@ public class ViewLogin extends javax.swing.JFrame {
         card.show(jPanel, "RecuperaSenha");
     }
 
+    public void fillFields() {
+        jTextFieldNomeCompletoPri.setText(this.usuario.getNome());
+        jTextFieldLoginPri.setText(this.usuario.getLogin());
+    }
+
+    private boolean usuarioValidate() {  
+        if (jTextFieldLoginPri.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "O campo \"Login\" não pode ser vazio.");
+            return false;
+        } else if (!controllerUsuario.validateEmail(jTextFieldEmailPri.getText())) {
+            JOptionPane.showMessageDialog(null, "Endereço de \"E-mail\" inválido.");
+            return false;
+        } else if (jPasswordFieldSenhaPri.getPassword().length < 6) {
+            JOptionPane.showMessageDialog(null, "Campo \"Senha\" deve ter pelo menos seis caracteres.");
+            return false;
+        } else if (!Arrays.equals(jPasswordFieldSenhaPri.getPassword(), jPasswordFieldConfirmSenhaPri.getPassword())) {
+            JOptionPane.showMessageDialog(null, "Campos \"Senha\" e \"Confirmar Senha\" não correspondem.");
+            return false;
+        }
+        return true;
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -42,9 +75,8 @@ public class ViewLogin extends javax.swing.JFrame {
         jTextFieldLogin = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jPasswordFieldSenha = new javax.swing.JPasswordField();
-        jButton1 = new javax.swing.JButton();
+        jButtonEntrar = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
-        jToggleButton1 = new javax.swing.JToggleButton();
         PrimeiroAcesso = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
@@ -87,10 +119,16 @@ public class ViewLogin extends javax.swing.JFrame {
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel3.setText("Senha:");
 
-        jButton1.setText("Entrar");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        jPasswordFieldSenha.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                jPasswordFieldSenhaActionPerformed(evt);
+            }
+        });
+
+        jButtonEntrar.setText("Entrar");
+        jButtonEntrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonEntrarActionPerformed(evt);
             }
         });
 
@@ -98,13 +136,6 @@ public class ViewLogin extends javax.swing.JFrame {
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
-            }
-        });
-
-        jToggleButton1.setText("Testa 1 acesso");
-        jToggleButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jToggleButton1ActionPerformed(evt);
             }
         });
 
@@ -120,12 +151,9 @@ public class ViewLogin extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel2)
-                            .addComponent(jLabel3))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jToggleButton1)))
+                            .addComponent(jLabel3)
+                            .addComponent(jButtonEntrar, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGap(108, 108, 108)
@@ -144,9 +172,7 @@ public class ViewLogin extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jPasswordFieldSenha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jToggleButton1)
-                    .addComponent(jButton1))
+                .addComponent(jButtonEntrar)
                 .addGap(172, 172, 172)
                 .addComponent(jButton2)
                 .addContainerGap())
@@ -393,26 +419,76 @@ public class ViewLogin extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jToggleButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton1ActionPerformed
-        cardPrimeiroAcesso();
-    }//GEN-LAST:event_jToggleButton1ActionPerformed
+    private void getIn() {
+        usuario = new Usuario();
+
+        usuario = controllerUsuario.findUsuarioByLogin(jTextFieldLogin.getText());
+
+        if (usuario == null) {
+            JOptionPane.showMessageDialog(this, "Login ou Senha incorretos.");
+        } else if (usuario.getSenha() == null) {
+            JOptionPane.showMessageDialog(this, "Esse é o seu primeiro acesso. \n Você deverá cadastrar uma senha e um e-mail de recuperação.");
+            fillFields();
+            cardPrimeiroAcesso();
+        } else {
+            boolean senhaOk = controllerUsuario.CompareSenhaTypedWithBD(usuario.getSenha(), new String(jPasswordFieldSenha.getPassword()));
+            if (senhaOk) {
+                new ViewSelecionarOrganizacao(null, true).setVisible(true);
+                this.dispose();
+            }
+        }
+    }
+
+    private void recuperarSenha() {  
+        if (controllerUsuario.validateEmail(jTextFieldLoginEmailRecupera.getText())) {
+            if (controllerUsuario.existRegisteredEmail(jTextFieldLoginEmailRecupera.getText())) {
+                jPanel3.setVisible(false);
+                this.pack();
+//                Post post = new Post();
+//                post.sendEmailPasswordRecovery(destinatario, login, senha);
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "E-mail inválido.");
+        }
+    }
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         cardRecuperaSenha();
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        recuperarSenha();
         cardInicial();
     }//GEN-LAST:event_jButton6ActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        this.dispose();
-        new ViewSelecionarOrganizacao(null, true).setVisible(true);
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void jButtonEntrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEntrarActionPerformed
+        getIn();
+    }//GEN-LAST:event_jButtonEntrarActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        cardInicial();
+        if (!usuarioValidate()) {
+            return;
+        }
+
+        usuario.setLogin(jTextFieldLoginPri.getText());
+        usuario.setEmail(jTextFieldEmailPri.getText());
+
+        Criptografia criptografia = new Criptografia();
+        String senha_Cript = criptografia.encryptMessage(new String(jPasswordFieldSenhaPri.getPassword()));
+        usuario.setSenha(senha_Cript);
+
+        usuario.setCreated(new Date());
+        usuario.setModified(new Date());
+
+        controllerUsuario.editUsuario(this.usuario);
+
+        new ViewSelecionarOrganizacao(null, true).setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jPasswordFieldSenhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jPasswordFieldSenhaActionPerformed
+        getIn();
+    }//GEN-LAST:event_jPasswordFieldSenhaActionPerformed
 
     public static void main(String args[]) {
         try {
@@ -445,10 +521,10 @@ public class ViewLogin extends javax.swing.JFrame {
     private javax.swing.JPanel Inicial;
     private javax.swing.JPanel PrimeiroAcesso;
     private javax.swing.JPanel RecuperaSenha;
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton6;
+    private javax.swing.JButton jButtonEntrar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -474,6 +550,5 @@ public class ViewLogin extends javax.swing.JFrame {
     private javax.swing.JTextField jTextFieldLoginEmailRecupera;
     private javax.swing.JTextField jTextFieldLoginPri;
     private javax.swing.JTextField jTextFieldNomeCompletoPri;
-    private javax.swing.JToggleButton jToggleButton1;
     // End of variables declaration//GEN-END:variables
 }

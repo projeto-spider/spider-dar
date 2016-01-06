@@ -1,6 +1,11 @@
 package view.Gerenciar;
 
+import controller.ControllerUsuario;
+import java.util.List;
+import javax.swing.JOptionPane;
 import util.Internal;
+import util.MyDefaultTableModel;
+import util.Request;
 
 /**
  *
@@ -8,10 +13,43 @@ import util.Internal;
  */
 public class ViewUsuarios extends javax.swing.JInternalFrame {
 
+    private MyDefaultTableModel myDefaultTableModel;
+    private final ControllerUsuario controllerUsuario = new ControllerUsuario();
+
     public ViewUsuarios() {
         initComponents();
 
         Internal.retiraBorda(this);
+    }
+
+    public void fillTable(List<Request> requestList) {
+        String columns[] = {"Nome", "Login", "Qauntidades de problemas", "Criado em"};
+        myDefaultTableModel = new MyDefaultTableModel(columns, 0, false);
+
+        for (Request request : requestList) {
+            String line[] = {
+                request.getData("Usuario.nome"),
+                request.getData("Usuario.login"),
+                request.getData("Usuario.quantidadeProblemas"),
+                request.getData("Usuario.created")
+            };
+            myDefaultTableModel.addRow(line);
+        }
+        jTableUsuarios.setModel(myDefaultTableModel);
+    }
+
+    private void removeUsuario() {
+        int Result = JOptionPane.showConfirmDialog(null, "Deseja Excluir este usuário?", "EXCLUIR", JOptionPane.YES_NO_OPTION);
+
+        if (Result == JOptionPane.YES_OPTION) {
+            boolean isDone = false;
+            isDone = controllerUsuario.removeUsuario(jTableUsuarios.getValueAt(jTableUsuarios.getSelectedRow(), 0).toString());
+            if (isDone) {
+                JOptionPane.showMessageDialog(null, "Excluído com sucesso.");
+            } else {
+                JOptionPane.showMessageDialog(null, "Erro inesperado, por favor tente novamente.", "ERRO AO EXCLUIR", JOptionPane.ERROR_MESSAGE);
+            }
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -20,11 +58,12 @@ public class ViewUsuarios extends javax.swing.JInternalFrame {
 
         jTextField1 = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        jTextField2 = new javax.swing.JTextField();
+        jTableUsuarios = new javax.swing.JTable();
+        jTextFieldPesquica = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
 
         jTextField1.setEditable(false);
         jTextField1.setBackground(new java.awt.Color(246, 179, 111));
@@ -32,25 +71,43 @@ public class ViewUsuarios extends javax.swing.JInternalFrame {
         jTextField1.setText(" Usuários Cadastrados");
         jTextField1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jTableUsuarios.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {"ADM", "ADM", "0", "0"},
                 {"Bleno", "bleno", "1", null}
             },
             new String [] {
-                "Nome", "Login", "Quantidade  de projetos", "Qauntidade de Perfis"
+                "Nome", "Login", "Quantidade  de projetos", "Criado em"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(jTableUsuarios);
+
+        jTextFieldPesquica.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextFieldPesquicaActionPerformed(evt);
+            }
+        });
 
         jLabel1.setText("Pesquisar:");
 
         jButton1.setText("Editar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("Novo");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
+            }
+        });
+
+        jButton3.setText("Excluir");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
             }
         });
 
@@ -66,13 +123,15 @@ public class ViewUsuarios extends javax.swing.JInternalFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 263, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jTextFieldPesquica, javax.swing.GroupLayout.PREFERRED_SIZE, 263, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -82,13 +141,14 @@ public class ViewUsuarios extends javax.swing.JInternalFrame {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jTextFieldPesquica, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 361, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 365, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
-                    .addComponent(jButton2))
+                    .addComponent(jButton2)
+                    .addComponent(jButton3))
                 .addContainerGap())
         );
 
@@ -97,16 +157,43 @@ public class ViewUsuarios extends javax.swing.JInternalFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         new ViewNovoUsuario(null, true).setVisible(true);
+        fillTable(controllerUsuario.findUsuarios());
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jTextFieldPesquicaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldPesquicaActionPerformed
+        String name = jTextFieldPesquica.getText();
+        fillTable(controllerUsuario.findUsuarioBySearch(name));
+    }//GEN-LAST:event_jTextFieldPesquicaActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        if (jTableUsuarios.getSelectedRow() == -1) {
+            JOptionPane.showMessageDialog(null, "Selecione uma linha na tabela.");
+            return;
+        }
+
+        new ViewNovoUsuario(null, true, jTableUsuarios.getValueAt(jTableUsuarios.getSelectedRow(), 0).toString()).setVisible(true);
+        fillTable(controllerUsuario.findUsuarios());
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        if (jTableUsuarios.getSelectedRow() == -1) {
+            JOptionPane.showMessageDialog(null, "Selecione uma linha na tabela.");
+            return;
+        }
+
+        removeUsuario();
+        fillTable(controllerUsuario.findUsuarios());
+    }//GEN-LAST:event_jButton3ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable jTableUsuarios;
     private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
+    private javax.swing.JTextField jTextFieldPesquica;
     // End of variables declaration//GEN-END:variables
 }

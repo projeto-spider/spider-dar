@@ -13,6 +13,8 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -60,8 +62,11 @@ public class Criterio implements Serializable {
     @Column(name = "modified")
     @Temporal(TemporalType.TIMESTAMP)
     private Date modified;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idCriterio")
-    private List<Problema> problemaList;
+    @JoinColumn(name = "idProblema", referencedColumnName = "id")
+    @ManyToOne(optional = false)
+    private Problema idProblema;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "criterio")
+    private List<Avaliar> avaliarList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idCriterio")
     private List<Nota> notaList;
 
@@ -129,13 +134,21 @@ public class Criterio implements Serializable {
         this.modified = modified;
     }
 
-    @XmlTransient
-    public List<Problema> getProblemaList() {
-        return problemaList;
+    public Problema getIdProblema() {
+        return idProblema;
     }
 
-    public void setProblemaList(List<Problema> problemaList) {
-        this.problemaList = problemaList;
+    public void setIdProblema(Problema idProblema) {
+        this.idProblema = idProblema;
+    }
+
+    @XmlTransient
+    public List<Avaliar> getAvaliarList() {
+        return avaliarList;
+    }
+
+    public void setAvaliarList(List<Avaliar> avaliarList) {
+        this.avaliarList = avaliarList;
     }
 
     @XmlTransient

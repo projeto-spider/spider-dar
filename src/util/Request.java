@@ -16,7 +16,7 @@ public class Request{
     private HashMap<String,Input> dataInput;
 
     public Request(Map<String, String> data) {
-        this.data = new HashMap<String, String>();
+        this.data = new HashMap<>();
         this.data = data;
     }
     

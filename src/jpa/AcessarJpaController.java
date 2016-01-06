@@ -17,6 +17,9 @@ import jpa.exceptions.NonexistentEntityException;
 import jpa.exceptions.PreexistingEntityException;
 import model.Acessar;
 import model.AcessarPK;
+import model.Organizacao;
+import model.Perfil;
+import model.Problema;
 import model.Usuario;
 
 /**
@@ -38,17 +41,47 @@ public class AcessarJpaController implements Serializable {
         if (acessar.getAcessarPK() == null) {
             acessar.setAcessarPK(new AcessarPK());
         }
+        acessar.getAcessarPK().setIdOrganizacao(acessar.getOrganizacao().getId());
+        acessar.getAcessarPK().setIdPerfil(acessar.getPerfil().getId());
         acessar.getAcessarPK().setIdUsuario(acessar.getUsuario().getId());
+        acessar.getAcessarPK().setIdProblema(acessar.getProblema().getId());
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
+            Organizacao organizacao = acessar.getOrganizacao();
+            if (organizacao != null) {
+                organizacao = em.getReference(organizacao.getClass(), organizacao.getId());
+                acessar.setOrganizacao(organizacao);
+            }
+            Perfil perfil = acessar.getPerfil();
+            if (perfil != null) {
+                perfil = em.getReference(perfil.getClass(), perfil.getId());
+                acessar.setPerfil(perfil);
+            }
+            Problema problema = acessar.getProblema();
+            if (problema != null) {
+                problema = em.getReference(problema.getClass(), problema.getId());
+                acessar.setProblema(problema);
+            }
             Usuario usuario = acessar.getUsuario();
             if (usuario != null) {
                 usuario = em.getReference(usuario.getClass(), usuario.getId());
                 acessar.setUsuario(usuario);
             }
             em.persist(acessar);
+            if (organizacao != null) {
+                organizacao.getAcessarList().add(acessar);
+                organizacao = em.merge(organizacao);
+            }
+            if (perfil != null) {
+                perfil.getAcessarList().add(acessar);
+                perfil = em.merge(perfil);
+            }
+            if (problema != null) {
+                problema.getAcessarList().add(acessar);
+                problema = em.merge(problema);
+            }
             if (usuario != null) {
                 usuario.getAcessarList().add(acessar);
                 usuario = em.merge(usuario);
@@ -67,19 +100,64 @@ public class AcessarJpaController implements Serializable {
     }
 
     public void edit(Acessar acessar) throws NonexistentEntityException, Exception {
+        acessar.getAcessarPK().setIdOrganizacao(acessar.getOrganizacao().getId());
+        acessar.getAcessarPK().setIdPerfil(acessar.getPerfil().getId());
         acessar.getAcessarPK().setIdUsuario(acessar.getUsuario().getId());
+        acessar.getAcessarPK().setIdProblema(acessar.getProblema().getId());
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
             Acessar persistentAcessar = em.find(Acessar.class, acessar.getAcessarPK());
+            Organizacao organizacaoOld = persistentAcessar.getOrganizacao();
+            Organizacao organizacaoNew = acessar.getOrganizacao();
+            Perfil perfilOld = persistentAcessar.getPerfil();
+            Perfil perfilNew = acessar.getPerfil();
+            Problema problemaOld = persistentAcessar.getProblema();
+            Problema problemaNew = acessar.getProblema();
             Usuario usuarioOld = persistentAcessar.getUsuario();
             Usuario usuarioNew = acessar.getUsuario();
+            if (organizacaoNew != null) {
+                organizacaoNew = em.getReference(organizacaoNew.getClass(), organizacaoNew.getId());
+                acessar.setOrganizacao(organizacaoNew);
+            }
+            if (perfilNew != null) {
+                perfilNew = em.getReference(perfilNew.getClass(), perfilNew.getId());
+                acessar.setPerfil(perfilNew);
+            }
+            if (problemaNew != null) {
+                problemaNew = em.getReference(problemaNew.getClass(), problemaNew.getId());
+                acessar.setProblema(problemaNew);
+            }
             if (usuarioNew != null) {
                 usuarioNew = em.getReference(usuarioNew.getClass(), usuarioNew.getId());
                 acessar.setUsuario(usuarioNew);
             }
             acessar = em.merge(acessar);
+            if (organizacaoOld != null && !organizacaoOld.equals(organizacaoNew)) {
+                organizacaoOld.getAcessarList().remove(acessar);
+                organizacaoOld = em.merge(organizacaoOld);
+            }
+            if (organizacaoNew != null && !organizacaoNew.equals(organizacaoOld)) {
+                organizacaoNew.getAcessarList().add(acessar);
+                organizacaoNew = em.merge(organizacaoNew);
+            }
+            if (perfilOld != null && !perfilOld.equals(perfilNew)) {
+                perfilOld.getAcessarList().remove(acessar);
+                perfilOld = em.merge(perfilOld);
+            }
+            if (perfilNew != null && !perfilNew.equals(perfilOld)) {
+                perfilNew.getAcessarList().add(acessar);
+                perfilNew = em.merge(perfilNew);
+            }
+            if (problemaOld != null && !problemaOld.equals(problemaNew)) {
+                problemaOld.getAcessarList().remove(acessar);
+                problemaOld = em.merge(problemaOld);
+            }
+            if (problemaNew != null && !problemaNew.equals(problemaOld)) {
+                problemaNew.getAcessarList().add(acessar);
+                problemaNew = em.merge(problemaNew);
+            }
             if (usuarioOld != null && !usuarioOld.equals(usuarioNew)) {
                 usuarioOld.getAcessarList().remove(acessar);
                 usuarioOld = em.merge(usuarioOld);
@@ -116,6 +194,21 @@ public class AcessarJpaController implements Serializable {
                 acessar.getAcessarPK();
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The acessar with id " + id + " no longer exists.", enfe);
+            }
+            Organizacao organizacao = acessar.getOrganizacao();
+            if (organizacao != null) {
+                organizacao.getAcessarList().remove(acessar);
+                organizacao = em.merge(organizacao);
+            }
+            Perfil perfil = acessar.getPerfil();
+            if (perfil != null) {
+                perfil.getAcessarList().remove(acessar);
+                perfil = em.merge(perfil);
+            }
+            Problema problema = acessar.getProblema();
+            if (problema != null) {
+                problema.getAcessarList().remove(acessar);
+                problema = em.merge(problema);
             }
             Usuario usuario = acessar.getUsuario();
             if (usuario != null) {

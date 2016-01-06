@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -21,6 +22,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -71,6 +73,8 @@ public class Perfil implements Serializable {
     private List<Usuario> usuarioList;
     @ManyToMany(mappedBy = "perfilList")
     private List<Funcionalidades> funcionalidadesList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "perfil")
+    private List<Acessar> acessarList;
     @JoinColumn(name = "idOrganizacao", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Organizacao idOrganizacao;
@@ -153,6 +157,15 @@ public class Perfil implements Serializable {
 
     public void setFuncionalidadesList(List<Funcionalidades> funcionalidadesList) {
         this.funcionalidadesList = funcionalidadesList;
+    }
+
+    @XmlTransient
+    public List<Acessar> getAcessarList() {
+        return acessarList;
+    }
+
+    public void setAcessarList(List<Acessar> acessarList) {
+        this.acessarList = acessarList;
     }
 
     public Organizacao getIdOrganizacao() {

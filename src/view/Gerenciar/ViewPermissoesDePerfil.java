@@ -1,8 +1,11 @@
-
 package view.Gerenciar;
 
 import controller.ControllerPerfil;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
 import util.Internal;
 import util.MyDefaultTableModel;
 import util.Request;
@@ -14,11 +17,13 @@ import util.Request;
 public class ViewPermissoesDePerfil extends javax.swing.JInternalFrame {
 
     private MyDefaultTableModel myDefaultTableModel;
-    private final ControllerPerfil controllerPerfil =  new ControllerPerfil();
-    
+    private DefaultListModel listModelInPerfil;
+    private DefaultListModel listModelOutPerfil;
+    private final ControllerPerfil controllerPerfil = new ControllerPerfil();
+
     public ViewPermissoesDePerfil() {
         initComponents();
-        
+
         Internal.retiraBorda(this);
     }
 
@@ -40,10 +45,105 @@ public class ViewPermissoesDePerfil extends javax.swing.JInternalFrame {
             myDefaultTableModel.addRow(line);
         }
         jTablePerfis.setModel(myDefaultTableModel);
-        //jTableOrganizacoes.getColumnModel().getColumn(0).setCellRenderer(new MyCellRenderer());
     }
-    
-    
+
+    private String getPerfilSelected() {
+        int row = jTablePerfis.getSelectedRow();
+        return jTablePerfis.getValueAt(row, 0).toString();
+    }
+
+    public void clearLists() {
+        listModelInPerfil = new DefaultListModel();
+        listModelOutPerfil = new DefaultListModel();
+        jListFuncionalidades.setModel(listModelOutPerfil);
+        jListFuncionalidadesDoPerfil.setModel(listModelInPerfil);
+    }
+
+    private void fillLists() {
+        listModelInPerfil = new DefaultListModel();
+        listModelOutPerfil = new DefaultListModel();
+
+        List<Request> list = controllerPerfil.findFuncionalidadesByPerfil(getPerfilSelected());
+
+        for (Request request : list) {
+            if (request.getData("Funcionalidade.dentro.nome") != null) {
+                listModelInPerfil.addElement(request.getData("Funcionalidade.dentro.nome"));
+            } else if (request.getData("Funcionalidade.fora.nome") != null) {
+                listModelOutPerfil.addElement(request.getData("Funcionalidade.fora.nome"));
+            }
+
+        }
+
+        jListFuncionalidades.setModel(listModelOutPerfil);
+        jListFuncionalidadesDoPerfil.setModel(listModelInPerfil);
+    }
+
+    /**
+     * Chamado quando o botão editar e pressionado.
+     */
+    private void editarButtonIsPressed() {
+        int index = jTablePerfis.getSelectedRow();
+        if (index > -1) {
+            new ViewNovoPerfil(null, true, jTablePerfis.getValueAt(index, 0).toString()).setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Selecione uma linha na tabela.");
+        }
+    }
+
+    private void removePerfil() {
+        int Result = JOptionPane.showConfirmDialog(null, "Deseja Excluir este perfil?", "EXCLUIR", JOptionPane.YES_NO_OPTION);
+
+        if (Result == JOptionPane.YES_OPTION) {
+            boolean isDone = false;
+            int index = jTablePerfis.getSelectedRow();
+            isDone = controllerPerfil.deletePerfil(jTablePerfis.getValueAt(index, 0).toString());
+
+            if (isDone) {
+                JOptionPane.showMessageDialog(null, "Excluído com sucesso.");
+            } else {
+                JOptionPane.showMessageDialog(null,
+                        "Há usuários que possuem este perfil."
+                        + "\nRetire este perfil desses \"Usuários\" antes de excluí-lo.");
+            }
+        }
+    }
+
+    private void includeFuncionalidade() {
+        int index = jListFuncionalidades.getSelectedIndex();
+        if (index != -1) {
+            listModelInPerfil.addElement(listModelOutPerfil.getElementAt(index).toString());
+            listModelOutPerfil.remove(index);
+        } else {
+            JOptionPane.showMessageDialog(null, "Selecione uma Funcionalidade.");
+        }
+    }
+
+    private void removeFuncionalidade() {
+        int index = jListFuncionalidadesDoPerfil.getSelectedIndex();
+        if (index != -1) {
+            listModelOutPerfil.addElement(listModelInPerfil.getElementAt(index).toString());
+            listModelInPerfil.remove(index);
+        } else {
+            JOptionPane.showMessageDialog(null, "Selecione uma Funcionalidade do Perfil.");
+        }
+    }
+
+    private void save() {
+        Map<String, String> data = new HashMap<>();
+        data.put("Funcionalidade.quantidade", String.valueOf(listModelInPerfil.getSize()));
+        for (int i = 0; i < listModelInPerfil.getSize(); i++) {
+            data.put("Funcionalidade.nome" + i, listModelInPerfil.getElementAt(i).toString());
+        }
+
+        boolean isDone = controllerPerfil.saveFuncionalidades(getPerfilSelected(), new Request(data));
+
+        if (isDone) {
+            JOptionPane.showMessageDialog(null, "Salvo com sucesso.");
+        } else {
+            JOptionPane.showMessageDialog(null, "Erro ao Salvar", "ERRO", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -56,40 +156,45 @@ public class ViewPermissoesDePerfil extends javax.swing.JInternalFrame {
         jButton2 = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
         jScrollPane4 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList();
+        jListFuncionalidadesDoPerfil = new javax.swing.JList();
         jButton3 = new javax.swing.JButton();
         jTextField1 = new javax.swing.JTextField();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTablePerfis = new javax.swing.JTable();
         jButton5 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
+        jButtonEditar = new javax.swing.JButton();
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
 
-        jListFuncionalidades.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
-        });
         jScrollPane3.setViewportView(jListFuncionalidades);
 
         jLabel3.setText("Funcionalidades:");
 
         jButton1.setText("Incluir");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("Retirar");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jLabel5.setText("Funcionalidades do Perfil:");
 
-        jList1.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
-        });
-        jScrollPane4.setViewportView(jList1);
+        jScrollPane4.setViewportView(jListFuncionalidadesDoPerfil);
 
         jButton3.setText("Salvar");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -158,6 +263,11 @@ public class ViewPermissoesDePerfil extends javax.swing.JInternalFrame {
                 "Perfil", "Criado em"
             }
         ));
+        jTablePerfis.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTablePerfisMouseClicked(evt);
+            }
+        });
         jScrollPane2.setViewportView(jTablePerfis);
 
         jButton5.setText("Novo Perfil");
@@ -168,8 +278,18 @@ public class ViewPermissoesDePerfil extends javax.swing.JInternalFrame {
         });
 
         jButton4.setText("Excluir");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
 
-        jButton6.setText("Editar");
+        jButtonEditar.setText("Editar");
+        jButtonEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonEditarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -189,7 +309,7 @@ public class ViewPermissoesDePerfil extends javax.swing.JInternalFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButton5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jButtonEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -204,7 +324,7 @@ public class ViewPermissoesDePerfil extends javax.swing.JInternalFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton5)
                     .addComponent(jButton4)
-                    .addComponent(jButton6))
+                    .addComponent(jButtonEditar))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -214,8 +334,42 @@ public class ViewPermissoesDePerfil extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        new ViewNovoPerfil(null, true).setVisible(true); 
+        new ViewNovoPerfil(null, true).setVisible(true);
+        fillTable(controllerPerfil.findPerfis());
+        clearLists();
     }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jTablePerfisMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTablePerfisMouseClicked
+        if (jTablePerfis.getSelectedRow() != -1) {
+            fillLists();
+        }
+    }//GEN-LAST:event_jTablePerfisMouseClicked
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        includeFuncionalidade();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        removeFuncionalidade();
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        save();
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButtonEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditarActionPerformed
+        editarButtonIsPressed();
+        fillTable(controllerPerfil.findPerfis());
+    }//GEN-LAST:event_jButtonEditarActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        if (jTablePerfis.getSelectedRow() == -1) {
+            JOptionPane.showMessageDialog(null, "Selecione uma linha na tabela.");
+            return;
+        }
+        removePerfil();
+        fillTable(controllerPerfil.findPerfis());
+    }//GEN-LAST:event_jButton4ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -224,11 +378,11 @@ public class ViewPermissoesDePerfil extends javax.swing.JInternalFrame {
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
+    private javax.swing.JButton jButtonEditar;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JList jList1;
     private javax.swing.JList jListFuncionalidades;
+    private javax.swing.JList jListFuncionalidadesDoPerfil;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;

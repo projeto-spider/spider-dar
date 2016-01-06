@@ -18,4 +18,8 @@ public class KeepData {
     public static String getData(String key) {
         return data.get(key);
     }
+    
+    public static void clearKeepData(){
+        data.clear();
+    }
 }

@@ -4,7 +4,6 @@ import controller.ControllerOrganizacao;
 import java.util.List;
 import javax.swing.JOptionPane;
 import util.Internal;
-import util.MyCellRenderer;
 import util.MyDefaultTableModel;
 import util.Request;
 
@@ -56,19 +55,20 @@ public class ViewOrganizacoes extends javax.swing.JInternalFrame {
         }
     }
 
-    private void excluirButtonIsPressed() {
-        int index = jTableOrganizacoes.getSelectedRow();
-        if (index > -1) {
-            boolean isDone = false;
-            isDone = controllerOrganizacao.deleteOrganizacao(jTableOrganizacoes.getValueAt(index, 0).toString());
+    private void removeOrganizacao() {
+        int Result = JOptionPane.showConfirmDialog(null, "Deseja Excluir esta organização?", "EXCLUIR", JOptionPane.YES_NO_OPTION);
 
+        if (Result == JOptionPane.YES_OPTION) {
+            boolean isDone = false;
+            int index = jTableOrganizacoes.getSelectedRow();
+            isDone = controllerOrganizacao.deleteOrganizacao(jTableOrganizacoes.getValueAt(index, 0).toString());
             if (isDone) {
                 JOptionPane.showMessageDialog(null, "Excluído com sucesso.");
             } else {
-                JOptionPane.showMessageDialog(null, "Erro ao Excluir", "ERRO", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null,
+                        "Para deletar uma organização é necessário"
+                        + "\nque esta não esteja vinculada a \"Problemas\" e \"Perfis\".");
             }
-        } else {
-            JOptionPane.showMessageDialog(null, "Selecione uma linha na tabela.");
         }
     }
 
@@ -186,7 +186,11 @@ public class ViewOrganizacoes extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        excluirButtonIsPressed();
+        if (jTableOrganizacoes.getSelectedRow() == -1) {
+            JOptionPane.showMessageDialog(null, "Selecione uma linha na tabela.");
+            return;
+        }
+        removeOrganizacao();
         fillTable(controllerOrganizacao.findOrganizacoes());
     }//GEN-LAST:event_jButton3ActionPerformed
 

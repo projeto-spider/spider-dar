@@ -37,6 +37,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Guia.findAll", query = "SELECT g FROM Guia g"),
     @NamedQuery(name = "Guia.findById", query = "SELECT g FROM Guia g WHERE g.id = :id"),
+    @NamedQuery(name = "Guia.findByTipo", query = "SELECT g FROM Guia g WHERE g.tipo = :tipo"),
     @NamedQuery(name = "Guia.findByCaminhoGuia", query = "SELECT g FROM Guia g WHERE g.caminhoGuia = :caminhoGuia"),
     @NamedQuery(name = "Guia.findByCreated", query = "SELECT g FROM Guia g WHERE g.created = :created"),
     @NamedQuery(name = "Guia.findByModified", query = "SELECT g FROM Guia g WHERE g.modified = :modified")})
@@ -47,6 +48,9 @@ public class Guia implements Serializable {
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
+    @Basic(optional = false)
+    @Column(name = "tipo")
+    private String tipo;
     @Lob
     @Column(name = "descricao")
     private String descricao;
@@ -73,8 +77,9 @@ public class Guia implements Serializable {
         this.id = id;
     }
 
-    public Guia(Integer id, Date created, Date modified) {
+    public Guia(Integer id, String tipo, Date created, Date modified) {
         this.id = id;
+        this.tipo = tipo;
         this.created = created;
         this.modified = modified;
     }
@@ -85,6 +90,14 @@ public class Guia implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
     }
 
     public String getDescricao() {

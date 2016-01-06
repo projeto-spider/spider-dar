@@ -12,6 +12,8 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
@@ -42,6 +44,7 @@ import javax.xml.bind.annotation.XmlTransient;
 public class Usuario implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
@@ -51,10 +54,8 @@ public class Usuario implements Serializable {
     @Basic(optional = false)
     @Column(name = "login")
     private String login;
-    @Basic(optional = false)
     @Column(name = "email")
     private String email;
-    @Basic(optional = false)
     @Column(name = "senha")
     private String senha;
     @Basic(optional = false)
@@ -77,12 +78,10 @@ public class Usuario implements Serializable {
         this.id = id;
     }
 
-    public Usuario(Integer id, String nome, String login, String email, String senha, Date created, Date modified) {
+    public Usuario(Integer id, String nome, String login, Date created, Date modified) {
         this.id = id;
         this.nome = nome;
         this.login = login;
-        this.email = email;
-        this.senha = senha;
         this.created = created;
         this.modified = modified;
     }

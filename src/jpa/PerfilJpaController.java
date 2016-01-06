@@ -16,8 +16,10 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import jpa.exceptions.IllegalOrphanException;
 import jpa.exceptions.NonexistentEntityException;
 import model.Funcionalidades;
+import model.Acessar;
 import model.Perfil;
 
 /**
@@ -42,6 +44,9 @@ public class PerfilJpaController implements Serializable {
         if (perfil.getFuncionalidadesList() == null) {
             perfil.setFuncionalidadesList(new ArrayList<Funcionalidades>());
         }
+        if (perfil.getAcessarList() == null) {
+            perfil.setAcessarList(new ArrayList<Acessar>());
+        }
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -63,6 +68,12 @@ public class PerfilJpaController implements Serializable {
                 attachedFuncionalidadesList.add(funcionalidadesListFuncionalidadesToAttach);
             }
             perfil.setFuncionalidadesList(attachedFuncionalidadesList);
+            List<Acessar> attachedAcessarList = new ArrayList<Acessar>();
+            for (Acessar acessarListAcessarToAttach : perfil.getAcessarList()) {
+                acessarListAcessarToAttach = em.getReference(acessarListAcessarToAttach.getClass(), acessarListAcessarToAttach.getAcessarPK());
+                attachedAcessarList.add(acessarListAcessarToAttach);
+            }
+            perfil.setAcessarList(attachedAcessarList);
             em.persist(perfil);
             if (idOrganizacao != null) {
                 idOrganizacao.getPerfilList().add(perfil);
@@ -76,6 +87,15 @@ public class PerfilJpaController implements Serializable {
                 funcionalidadesListFuncionalidades.getPerfilList().add(perfil);
                 funcionalidadesListFuncionalidades = em.merge(funcionalidadesListFuncionalidades);
             }
+            for (Acessar acessarListAcessar : perfil.getAcessarList()) {
+                Perfil oldPerfilOfAcessarListAcessar = acessarListAcessar.getPerfil();
+                acessarListAcessar.setPerfil(perfil);
+                acessarListAcessar = em.merge(acessarListAcessar);
+                if (oldPerfilOfAcessarListAcessar != null) {
+                    oldPerfilOfAcessarListAcessar.getAcessarList().remove(acessarListAcessar);
+                    oldPerfilOfAcessarListAcessar = em.merge(oldPerfilOfAcessarListAcessar);
+                }
+            }
             em.getTransaction().commit();
         } finally {
             if (em != null) {
@@ -84,7 +104,7 @@ public class PerfilJpaController implements Serializable {
         }
     }
 
-    public void edit(Perfil perfil) throws NonexistentEntityException, Exception {
+    public void edit(Perfil perfil) throws IllegalOrphanException, NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -96,6 +116,20 @@ public class PerfilJpaController implements Serializable {
             List<Usuario> usuarioListNew = perfil.getUsuarioList();
             List<Funcionalidades> funcionalidadesListOld = persistentPerfil.getFuncionalidadesList();
             List<Funcionalidades> funcionalidadesListNew = perfil.getFuncionalidadesList();
+            List<Acessar> acessarListOld = persistentPerfil.getAcessarList();
+            List<Acessar> acessarListNew = perfil.getAcessarList();
+            List<String> illegalOrphanMessages = null;
+            for (Acessar acessarListOldAcessar : acessarListOld) {
+                if (!acessarListNew.contains(acessarListOldAcessar)) {
+                    if (illegalOrphanMessages == null) {
+                        illegalOrphanMessages = new ArrayList<String>();
+                    }
+                    illegalOrphanMessages.add("You must retain Acessar " + acessarListOldAcessar + " since its perfil field is not nullable.");
+                }
+            }
+            if (illegalOrphanMessages != null) {
+                throw new IllegalOrphanException(illegalOrphanMessages);
+            }
             if (idOrganizacaoNew != null) {
                 idOrganizacaoNew = em.getReference(idOrganizacaoNew.getClass(), idOrganizacaoNew.getId());
                 perfil.setIdOrganizacao(idOrganizacaoNew);
@@ -114,6 +148,13 @@ public class PerfilJpaController implements Serializable {
             }
             funcionalidadesListNew = attachedFuncionalidadesListNew;
             perfil.setFuncionalidadesList(funcionalidadesListNew);
+            List<Acessar> attachedAcessarListNew = new ArrayList<Acessar>();
+            for (Acessar acessarListNewAcessarToAttach : acessarListNew) {
+                acessarListNewAcessarToAttach = em.getReference(acessarListNewAcessarToAttach.getClass(), acessarListNewAcessarToAttach.getAcessarPK());
+                attachedAcessarListNew.add(acessarListNewAcessarToAttach);
+            }
+            acessarListNew = attachedAcessarListNew;
+            perfil.setAcessarList(acessarListNew);
             perfil = em.merge(perfil);
             if (idOrganizacaoOld != null && !idOrganizacaoOld.equals(idOrganizacaoNew)) {
                 idOrganizacaoOld.getPerfilList().remove(perfil);
@@ -147,6 +188,17 @@ public class PerfilJpaController implements Serializable {
                     funcionalidadesListNewFuncionalidades = em.merge(funcionalidadesListNewFuncionalidades);
                 }
             }
+            for (Acessar acessarListNewAcessar : acessarListNew) {
+                if (!acessarListOld.contains(acessarListNewAcessar)) {
+                    Perfil oldPerfilOfAcessarListNewAcessar = acessarListNewAcessar.getPerfil();
+                    acessarListNewAcessar.setPerfil(perfil);
+                    acessarListNewAcessar = em.merge(acessarListNewAcessar);
+                    if (oldPerfilOfAcessarListNewAcessar != null && !oldPerfilOfAcessarListNewAcessar.equals(perfil)) {
+                        oldPerfilOfAcessarListNewAcessar.getAcessarList().remove(acessarListNewAcessar);
+                        oldPerfilOfAcessarListNewAcessar = em.merge(oldPerfilOfAcessarListNewAcessar);
+                    }
+                }
+            }
             em.getTransaction().commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
@@ -164,7 +216,7 @@ public class PerfilJpaController implements Serializable {
         }
     }
 
-    public void destroy(Integer id) throws NonexistentEntityException {
+    public void destroy(Integer id) throws IllegalOrphanException, NonexistentEntityException {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -175,6 +227,17 @@ public class PerfilJpaController implements Serializable {
                 perfil.getId();
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The perfil with id " + id + " no longer exists.", enfe);
+            }
+            List<String> illegalOrphanMessages = null;
+            List<Acessar> acessarListOrphanCheck = perfil.getAcessarList();
+            for (Acessar acessarListOrphanCheckAcessar : acessarListOrphanCheck) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("This Perfil (" + perfil + ") cannot be destroyed since the Acessar " + acessarListOrphanCheckAcessar + " in its acessarList field has a non-nullable perfil field.");
+            }
+            if (illegalOrphanMessages != null) {
+                throw new IllegalOrphanException(illegalOrphanMessages);
             }
             Organizacao idOrganizacao = perfil.getIdOrganizacao();
             if (idOrganizacao != null) {

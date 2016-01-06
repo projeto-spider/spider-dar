@@ -15,9 +15,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -70,15 +68,16 @@ public class Problema implements Serializable {
     @Column(name = "modified")
     @Temporal(TemporalType.TIMESTAMP)
     private Date modified;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "problema")
+    private List<Acessar> acessarList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idProblema")
     private List<Tarefa> tarefaList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idProblema")
     private List<Historico> historicoList;
-    @JoinColumn(name = "idCriterio", referencedColumnName = "id")
-    @ManyToOne(optional = false)
-    private Criterio idCriterio;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idProblema")
     private List<Alternativa> alternativaList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idProblema")
+    private List<Criterio> criterioList;
 
     public Problema() {
     }
@@ -154,6 +153,15 @@ public class Problema implements Serializable {
     }
 
     @XmlTransient
+    public List<Acessar> getAcessarList() {
+        return acessarList;
+    }
+
+    public void setAcessarList(List<Acessar> acessarList) {
+        this.acessarList = acessarList;
+    }
+
+    @XmlTransient
     public List<Tarefa> getTarefaList() {
         return tarefaList;
     }
@@ -171,14 +179,6 @@ public class Problema implements Serializable {
         this.historicoList = historicoList;
     }
 
-    public Criterio getIdCriterio() {
-        return idCriterio;
-    }
-
-    public void setIdCriterio(Criterio idCriterio) {
-        this.idCriterio = idCriterio;
-    }
-
     @XmlTransient
     public List<Alternativa> getAlternativaList() {
         return alternativaList;
@@ -186,6 +186,15 @@ public class Problema implements Serializable {
 
     public void setAlternativaList(List<Alternativa> alternativaList) {
         this.alternativaList = alternativaList;
+    }
+
+    @XmlTransient
+    public List<Criterio> getCriterioList() {
+        return criterioList;
+    }
+
+    public void setCriterioList(List<Criterio> criterioList) {
+        this.criterioList = criterioList;
     }
 
     @Override
