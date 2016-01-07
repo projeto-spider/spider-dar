@@ -62,6 +62,8 @@ public class Organizacao implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "organizacao")
     private List<Acessar> acessarList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idOrganizacao")
+    private List<Problema> problemaList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idOrganizacao")
     private List<Perfil> perfilList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idOrganizacao")
     private List<Guia> guiaList;
@@ -128,6 +130,15 @@ public class Organizacao implements Serializable {
 
     public void setAcessarList(List<Acessar> acessarList) {
         this.acessarList = acessarList;
+    }
+
+    @XmlTransient
+    public List<Problema> getProblemaList() {
+        return problemaList;
+    }
+
+    public void setProblemaList(List<Problema> problemaList) {
+        this.problemaList = problemaList;
     }
 
     @XmlTransient

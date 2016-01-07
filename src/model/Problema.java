@@ -15,7 +15,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -36,8 +38,6 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Problema.findAll", query = "SELECT p FROM Problema p"),
     @NamedQuery(name = "Problema.findById", query = "SELECT p FROM Problema p WHERE p.id = :id"),
     @NamedQuery(name = "Problema.findByNome", query = "SELECT p FROM Problema p WHERE p.nome = :nome"),
-    @NamedQuery(name = "Problema.findByProposito", query = "SELECT p FROM Problema p WHERE p.proposito = :proposito"),
-    @NamedQuery(name = "Problema.findByPlanejamento", query = "SELECT p FROM Problema p WHERE p.planejamento = :planejamento"),
     @NamedQuery(name = "Problema.findByCreated", query = "SELECT p FROM Problema p WHERE p.created = :created"),
     @NamedQuery(name = "Problema.findByModified", query = "SELECT p FROM Problema p WHERE p.modified = :modified")})
 public class Problema implements Serializable {
@@ -51,9 +51,11 @@ public class Problema implements Serializable {
     @Column(name = "nome")
     private String nome;
     @Basic(optional = false)
+    @Lob
     @Column(name = "proposito")
     private String proposito;
     @Basic(optional = false)
+    @Lob
     @Column(name = "planejamento")
     private String planejamento;
     @Basic(optional = false)
@@ -74,6 +76,9 @@ public class Problema implements Serializable {
     private List<Tarefa> tarefaList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idProblema")
     private List<Historico> historicoList;
+    @JoinColumn(name = "idOrganizacao", referencedColumnName = "id")
+    @ManyToOne(optional = false)
+    private Organizacao idOrganizacao;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idProblema")
     private List<Alternativa> alternativaList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idProblema")
@@ -177,6 +182,14 @@ public class Problema implements Serializable {
 
     public void setHistoricoList(List<Historico> historicoList) {
         this.historicoList = historicoList;
+    }
+
+    public Organizacao getIdOrganizacao() {
+        return idOrganizacao;
+    }
+
+    public void setIdOrganizacao(Organizacao idOrganizacao) {
+        this.idOrganizacao = idOrganizacao;
     }
 
     @XmlTransient

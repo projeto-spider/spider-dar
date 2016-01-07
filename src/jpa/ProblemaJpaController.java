@@ -10,6 +10,7 @@ import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import model.Organizacao;
 import model.Acessar;
 import java.util.ArrayList;
 import java.util.List;
@@ -58,6 +59,11 @@ public class ProblemaJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
+            Organizacao idOrganizacao = problema.getIdOrganizacao();
+            if (idOrganizacao != null) {
+                idOrganizacao = em.getReference(idOrganizacao.getClass(), idOrganizacao.getId());
+                problema.setIdOrganizacao(idOrganizacao);
+            }
             List<Acessar> attachedAcessarList = new ArrayList<Acessar>();
             for (Acessar acessarListAcessarToAttach : problema.getAcessarList()) {
                 acessarListAcessarToAttach = em.getReference(acessarListAcessarToAttach.getClass(), acessarListAcessarToAttach.getAcessarPK());
@@ -89,6 +95,10 @@ public class ProblemaJpaController implements Serializable {
             }
             problema.setCriterioList(attachedCriterioList);
             em.persist(problema);
+            if (idOrganizacao != null) {
+                idOrganizacao.getProblemaList().add(problema);
+                idOrganizacao = em.merge(idOrganizacao);
+            }
             for (Acessar acessarListAcessar : problema.getAcessarList()) {
                 Problema oldProblemaOfAcessarListAcessar = acessarListAcessar.getProblema();
                 acessarListAcessar.setProblema(problema);
@@ -148,6 +158,8 @@ public class ProblemaJpaController implements Serializable {
             em = getEntityManager();
             em.getTransaction().begin();
             Problema persistentProblema = em.find(Problema.class, problema.getId());
+            Organizacao idOrganizacaoOld = persistentProblema.getIdOrganizacao();
+            Organizacao idOrganizacaoNew = problema.getIdOrganizacao();
             List<Acessar> acessarListOld = persistentProblema.getAcessarList();
             List<Acessar> acessarListNew = problema.getAcessarList();
             List<Tarefa> tarefaListOld = persistentProblema.getTarefaList();
@@ -202,6 +214,10 @@ public class ProblemaJpaController implements Serializable {
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
+            if (idOrganizacaoNew != null) {
+                idOrganizacaoNew = em.getReference(idOrganizacaoNew.getClass(), idOrganizacaoNew.getId());
+                problema.setIdOrganizacao(idOrganizacaoNew);
+            }
             List<Acessar> attachedAcessarListNew = new ArrayList<Acessar>();
             for (Acessar acessarListNewAcessarToAttach : acessarListNew) {
                 acessarListNewAcessarToAttach = em.getReference(acessarListNewAcessarToAttach.getClass(), acessarListNewAcessarToAttach.getAcessarPK());
@@ -238,6 +254,14 @@ public class ProblemaJpaController implements Serializable {
             criterioListNew = attachedCriterioListNew;
             problema.setCriterioList(criterioListNew);
             problema = em.merge(problema);
+            if (idOrganizacaoOld != null && !idOrganizacaoOld.equals(idOrganizacaoNew)) {
+                idOrganizacaoOld.getProblemaList().remove(problema);
+                idOrganizacaoOld = em.merge(idOrganizacaoOld);
+            }
+            if (idOrganizacaoNew != null && !idOrganizacaoNew.equals(idOrganizacaoOld)) {
+                idOrganizacaoNew.getProblemaList().add(problema);
+                idOrganizacaoNew = em.merge(idOrganizacaoNew);
+            }
             for (Acessar acessarListNewAcessar : acessarListNew) {
                 if (!acessarListOld.contains(acessarListNewAcessar)) {
                     Problema oldProblemaOfAcessarListNewAcessar = acessarListNewAcessar.getProblema();
@@ -360,6 +384,11 @@ public class ProblemaJpaController implements Serializable {
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
+            }
+            Organizacao idOrganizacao = problema.getIdOrganizacao();
+            if (idOrganizacao != null) {
+                idOrganizacao.getProblemaList().remove(problema);
+                idOrganizacao = em.merge(idOrganizacao);
             }
             em.remove(problema);
             em.getTransaction().commit();
