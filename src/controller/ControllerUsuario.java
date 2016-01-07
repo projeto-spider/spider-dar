@@ -70,8 +70,9 @@ public class ControllerUsuario {
                 usuario = facade.initializeJpaUsuario().findUsuarioByNome(usuarioNome);
 
                 //Alterar isto quando problema for implementado.
-                Problema problema = facade.initializeJpaProblema().findProblema(1);
-
+                //Problema problema = facade.initializeJpaProblema().findProblema(1);
+                Problema problema = facade.initializeJpaProblema().findProblemasByNameANDIdOrg(request.getData("Problema.nome"), idOrg);
+                
                 Acessar acessar = new Acessar();
                 acessar.setOrganizacao(organizacao);
                 acessar.setPerfil(perfil);
@@ -312,6 +313,47 @@ public class ControllerUsuario {
         } catch (Exception error) {
             error.printStackTrace();
             JOptionPane.showMessageDialog(null, "Erro inesperado.");
+        }
+    }
+    
+    public List<Request> findPerfis() {
+        try {
+            int idOrg = Integer.parseInt(KeepData.getData("Organizacao.id"));
+            List<Perfil> list = facade.initializeJpaPefil().findPerfisByIdOrganizacao(idOrg);
+            List<Request> requestList = new ArrayList<>();
+
+            for (Perfil anotherPerfil : list) {
+                Map<String, String> data = new HashMap<>();
+                data.put("Usuario.nome", anotherPerfil.getNome());
+                data.put("Usuario.created", Text.formatDateForTable(anotherPerfil.getCreated()));
+
+
+                requestList.add(new Request(data));
+            }
+
+            return requestList;
+        } catch (Exception error) {
+            throw error;
+        }
+    }
+    
+    public List<Request> findProblemas() {
+        try {
+            int idOrg = Integer.parseInt(KeepData.getData("Organizacao.id"));
+            List<Problema> list = facade.initializeJpaProblema().findProblemasByIdOrganizacao(idOrg);
+            List<Request> requestList = new ArrayList<>();
+
+            for (Problema problema : list) {
+                Map<String, String> data = new HashMap<>();
+                data.put("Problema.nome", problema.getNome());
+                data.put("Problema.created", Text.formatDateForTable(problema.getCreated())); 
+
+                requestList.add(new Request(data));
+            }
+
+            return requestList;
+        } catch (Exception error) {
+            throw error;
         }
     }
 }

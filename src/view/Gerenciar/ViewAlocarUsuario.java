@@ -1,7 +1,7 @@
 package view.Gerenciar;
 
 import controller.ControllerPerfil;
-import java.util.ArrayList;
+import controller.ControllerUsuario;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,7 +30,11 @@ public class ViewAlocarUsuario extends javax.swing.JDialog {
     private void fillComboboxProblema() {
         comboboxModel = new DefaultComboBoxModel();
         comboboxModel.addElement("--Selecione um Problema--");
-        comboboxModel.addElement("Default");
+
+        List<Request> requestList = new ControllerUsuario().findProblemas();
+        for (Request request : requestList) {
+            comboboxModel.addElement(request.getData("Problema.nome"));
+        }
 
         jComboBoxProblema.setModel(comboboxModel);
     }
