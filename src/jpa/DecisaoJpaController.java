@@ -19,7 +19,7 @@ import model.Decisao;
 
 /**
  *
- * @author Bleno Vale
+ * @author Sandro Bezerra
  */
 public class DecisaoJpaController implements Serializable {
 

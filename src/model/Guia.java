@@ -29,7 +29,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Bleno Vale
+ * @author Sandro Bezerra
  */
 @Entity
 @Table(name = "guia")

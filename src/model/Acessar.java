@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author Bleno Vale
+ * @author Sandro Bezerra
  */
 @Entity
 @Table(name = "acessar")

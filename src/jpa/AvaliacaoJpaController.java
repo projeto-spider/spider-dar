@@ -21,7 +21,7 @@ import model.Avaliacao;
 
 /**
  *
- * @author Bleno Vale
+ * @author Sandro Bezerra
  */
 public class AvaliacaoJpaController implements Serializable {
 

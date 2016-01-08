@@ -29,7 +29,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Bleno Vale
+ * @author Sandro Bezerra
  */
 @Entity
 @Table(name = "problema")
@@ -37,6 +37,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Problema.findAll", query = "SELECT p FROM Problema p"),
     @NamedQuery(name = "Problema.findById", query = "SELECT p FROM Problema p WHERE p.id = :id"),
+    @NamedQuery(name = "Problema.findByCodigo", query = "SELECT p FROM Problema p WHERE p.codigo = :codigo"),
     @NamedQuery(name = "Problema.findByNome", query = "SELECT p FROM Problema p WHERE p.nome = :nome"),
     @NamedQuery(name = "Problema.findByCreated", query = "SELECT p FROM Problema p WHERE p.created = :created"),
     @NamedQuery(name = "Problema.findByModified", query = "SELECT p FROM Problema p WHERE p.modified = :modified")})
@@ -47,6 +48,9 @@ public class Problema implements Serializable {
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
+    @Basic(optional = false)
+    @Column(name = "codigo")
+    private String codigo;
     @Basic(optional = false)
     @Column(name = "nome")
     private String nome;
@@ -91,8 +95,9 @@ public class Problema implements Serializable {
         this.id = id;
     }
 
-    public Problema(Integer id, String nome, String proposito, String planejamento, String contexto, Date created, Date modified) {
+    public Problema(Integer id, String codigo, String nome, String proposito, String planejamento, String contexto, Date created, Date modified) {
         this.id = id;
+        this.codigo = codigo;
         this.nome = nome;
         this.proposito = proposito;
         this.planejamento = planejamento;
@@ -107,6 +112,14 @@ public class Problema implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
     }
 
     public String getNome() {

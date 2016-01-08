@@ -23,7 +23,7 @@ import model.Criterio;
 
 /**
  *
- * @author Bleno Vale
+ * @author Sandro Bezerra
  */
 public class AvaliarJpaController implements Serializable {
 
@@ -41,8 +41,8 @@ public class AvaliarJpaController implements Serializable {
             avaliar.setAvaliarPK(new AvaliarPK());
         }
         avaliar.getAvaliarPK().setIdCriterio(avaliar.getCriterio().getId());
-        avaliar.getAvaliarPK().setIdAlternativa(avaliar.getAlternativa().getId());
         avaliar.getAvaliarPK().setIdAvaliacao(avaliar.getAvaliacao().getId());
+        avaliar.getAvaliarPK().setIdAlternativa(avaliar.getAlternativa().getId());
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -90,8 +90,8 @@ public class AvaliarJpaController implements Serializable {
 
     public void edit(Avaliar avaliar) throws NonexistentEntityException, Exception {
         avaliar.getAvaliarPK().setIdCriterio(avaliar.getCriterio().getId());
-        avaliar.getAvaliarPK().setIdAlternativa(avaliar.getAlternativa().getId());
         avaliar.getAvaliarPK().setIdAvaliacao(avaliar.getAvaliacao().getId());
+        avaliar.getAvaliarPK().setIdAlternativa(avaliar.getAlternativa().getId());
         EntityManager em = null;
         try {
             em = getEntityManager();
