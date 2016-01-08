@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.Date;
 import javax.swing.JOptionPane;
 import model.Usuario;
+import settings.KeepData;
 import util.Criptografia;
 import util.Post;
 
@@ -433,6 +434,8 @@ public class ViewLogin extends javax.swing.JFrame {
         } else {
             boolean senhaOk = controllerUsuario.CompareSenhaTypedWithBD(usuario.getSenha(), new String(jPasswordFieldSenha.getPassword()));
             if (senhaOk) {
+                KeepData.setData("Usuario.id", String.valueOf(usuario.getId()));  
+                KeepData.setData("Usuario.nome", usuario.getNome());  
                 new ViewSelecionarOrganizacao(null, true).setVisible(true);
                 this.dispose();
             }

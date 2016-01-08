@@ -181,6 +181,11 @@ public class ViewUsuarios extends javax.swing.JInternalFrame {
             return;
         }
 
+        if (controllerUsuario.isADM(jTableUsuarios.getValueAt(jTableUsuarios.getSelectedRow(), 0).toString())) {
+            JOptionPane.showMessageDialog(null, "O usuário Administrador não pode ser removido.");
+            return;
+        }
+
         removeUsuario();
         fillTable(controllerUsuario.findUsuarios());
     }//GEN-LAST:event_jButton3ActionPerformed

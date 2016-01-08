@@ -10,6 +10,7 @@ import java.beans.PropertyVetoException;
 import javax.swing.JInternalFrame;
 import javax.swing.tree.DefaultMutableTreeNode;
 import settings.KeepData;
+import view.Gerenciar.ViewConta;
 import view.Gerenciar.ViewOrganizacoes;
 import view.Gerenciar.ViewProblema;
 import view.Gerenciar.ViewUsuarios;
@@ -310,6 +311,11 @@ public class ViewPrincipal extends javax.swing.JFrame {
         jMenuGerenciar.add(jSeparator2);
 
         jMenuItemConta.setText("Conta");
+        jMenuItemConta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemContaActionPerformed(evt);
+            }
+        });
         jMenuGerenciar.add(jMenuItemConta);
 
         jMenuBar1.add(jMenuGerenciar);
@@ -406,6 +412,10 @@ public class ViewPrincipal extends javax.swing.JFrame {
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
         new ViewSelecionarOrganizacao(null, true).setVisible(true);
     }//GEN-LAST:event_jMenuItem2ActionPerformed
+
+    private void jMenuItemContaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemContaActionPerformed
+       new ViewConta(null, true).setVisible(true); 
+    }//GEN-LAST:event_jMenuItemContaActionPerformed
 
     private void iniciaTelas() {
         jDesktopPane.add(viewHome);

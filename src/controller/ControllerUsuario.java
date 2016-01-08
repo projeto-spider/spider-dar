@@ -72,7 +72,7 @@ public class ControllerUsuario {
                 //Alterar isto quando problema for implementado.
                 //Problema problema = facade.initializeJpaProblema().findProblema(1);
                 Problema problema = facade.initializeJpaProblema().findProblemasByNameANDIdOrg(request.getData("Problema.nome"), idOrg);
-                
+
                 Acessar acessar = new Acessar();
                 acessar.setOrganizacao(organizacao);
                 acessar.setPerfil(perfil);
@@ -83,6 +83,27 @@ public class ControllerUsuario {
             }
             return true;
         } catch (Exception error) {
+            return false;
+        }
+    }
+    
+    public boolean updateUsuario(Request request) {
+        try {
+            int id = Integer.parseInt(KeepData.getData("Usuario.id"));
+            usuario = new Usuario();
+            usuario = facade.initializeJpaUsuario().findUsuario(id); 
+            usuario.setNome(request.getData("Usuario.nome"));
+            usuario.setLogin(request.getData("Usuario.login"));
+            usuario.setEmail(request.getData("Usuario.email")); 
+            if (!request.getData("Usuario.senha").isEmpty()){
+                usuario.setSenha(request.getData("Usuario.senha")); 
+            }
+            usuario.setModified(new Date());
+            facade.initializeJpaUsuario().edit(usuario);
+
+            return true;
+        } catch (Exception error) {
+            error.printStackTrace();
             return false;
         }
     }
@@ -197,7 +218,7 @@ public class ControllerUsuario {
         }
     }
 
-    public Request findUsuarioSelected(String name) {
+    public Request findUsuarioByNome(String name) {
         try {
             usuario = facade.initializeJpaUsuario().findUsuarioByNome(name);
 
@@ -218,7 +239,28 @@ public class ControllerUsuario {
         }
     }
 
-    public List<Request> findUsuarioAcesso(String name) {
+    public Request findUsuarioById(int id) {
+        try {
+            usuario = facade.initializeJpaUsuario().findUsuario(id); 
+
+            Map<String, String> data = new HashMap<>();
+            data.put("Usuario.id", String.valueOf(usuario.getId()));
+            data.put("Usuario.nome", usuario.getNome());
+            data.put("Usuario.login", usuario.getLogin());
+            data.put("Usuario.email", usuario.getEmail());
+            data.put("Usuario.senha", usuario.getSenha());
+            data.put("Usuario.created", Text.formatDateForTable(usuario.getCreated()));
+            data.put("Usuario.modified", Text.formatDateForTable(usuario.getModified()));
+
+            return new Request(data);
+        } catch (Exception error) {
+            Map<String, String> data = new HashMap<>();
+            data.put("Error.mensagem", "Erro inesperado.");
+            return new Request(data);
+        }
+    }
+
+    public List<Request> findAcessoByUsuario(String name) {
         try {
             List<Acessar> list = facade.initializeJpaUsuario().findUsuarioByNome(name).getAcessarList();
             List<Request> requestList = new ArrayList<>();
@@ -236,6 +278,10 @@ public class ControllerUsuario {
         } catch (Exception error) {
             return null;
         }
+    }
+
+    public boolean isADM(String name) {
+        return findUsuarioByNome(name).getData("Usuario.id").equals("1");
     }
 
     public Usuario findUsuarioByLogin(String login_usuario) {
@@ -277,7 +323,7 @@ public class ControllerUsuario {
             error.printStackTrace();
         }
     }
-    
+
     public boolean existRegisteredEmail(String email) {
         try {
             List<Usuario> listaUsuario = facade.initializeJpaUsuario().findUsuarioByEmail(email);
@@ -293,7 +339,7 @@ public class ControllerUsuario {
         }
 
     }
-    
+
     public void createNewPassword(Usuario usuario) {
         try {
             //cria string aleatória de 6 digitos.
@@ -304,18 +350,18 @@ public class ControllerUsuario {
             usuario.setSenha(newPasswordCrip);
 
             Post post = new Post();
-            if (post.sendEmailPasswordRecovery(usuario.getEmail(), usuario.getLogin(), newPassword)){
+            if (post.sendEmailPasswordRecovery(usuario.getEmail(), usuario.getLogin(), newPassword)) {
                 facade.initializeJpaUsuario().edit(usuario);
                 JOptionPane.showMessageDialog(null, "Nova senha criada.\nPor favor cheque seu E-mail.");
             } else {
                 JOptionPane.showMessageDialog(null, "Nova foi possível enviar a mensagem de recuperação.\n Por favor, verifique sua conexão.");
-            }     
+            }
         } catch (Exception error) {
             error.printStackTrace();
             JOptionPane.showMessageDialog(null, "Erro inesperado.");
         }
     }
-    
+
     public List<Request> findPerfis() {
         try {
             int idOrg = Integer.parseInt(KeepData.getData("Organizacao.id"));
@@ -327,7 +373,6 @@ public class ControllerUsuario {
                 data.put("Usuario.nome", anotherPerfil.getNome());
                 data.put("Usuario.created", Text.formatDateForTable(anotherPerfil.getCreated()));
 
-
                 requestList.add(new Request(data));
             }
 
@@ -336,7 +381,7 @@ public class ControllerUsuario {
             throw error;
         }
     }
-    
+
     public List<Request> findProblemas() {
         try {
             int idOrg = Integer.parseInt(KeepData.getData("Organizacao.id"));
@@ -346,7 +391,7 @@ public class ControllerUsuario {
             for (Problema problema : list) {
                 Map<String, String> data = new HashMap<>();
                 data.put("Problema.nome", problema.getNome());
-                data.put("Problema.created", Text.formatDateForTable(problema.getCreated())); 
+                data.put("Problema.created", Text.formatDateForTable(problema.getCreated()));
 
                 requestList.add(new Request(data));
             }

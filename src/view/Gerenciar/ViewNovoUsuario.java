@@ -44,18 +44,15 @@ public class ViewNovoUsuario extends javax.swing.JDialog {
     private boolean fieldValidate() {
         if (jTextFieldNome.getText().isEmpty()) {
             JOptionPane.showMessageDialog(null,
-                    "Campo \"Nome Completo\" é obrigatório.",
-                    "ERRO AO CADASTRAR", JOptionPane.ERROR_MESSAGE);
+                    "Campo \"Nome Completo\" é obrigatório.");
             return false;
         } else if (jTextFieldLogin.getText().isEmpty()) {
             JOptionPane.showMessageDialog(null,
-                    "Campo \"Login de Acesso\" é obrigatório.",
-                    "ERRO AO CADASTRAR", JOptionPane.ERROR_MESSAGE);
+                    "Campo \"Login de Acesso\" é obrigatório.");
             return false;
         } else if (getTableData().isEmpty()) {
             JOptionPane.showMessageDialog(null,
-                    "O Usuário precisa estar alocado em pelo menos um problema.",
-                    "ERRO AO CADASTRAR", JOptionPane.ERROR_MESSAGE);
+                    "O Usuário precisa estar alocado em pelo menos um problema.");
             return false;
         }
         return true;
@@ -86,7 +83,7 @@ public class ViewNovoUsuario extends javax.swing.JDialog {
     }
 
     private void fillFields(String name) {
-        request = controllerUsuario.findUsuarioSelected(name);
+        request = controllerUsuario.findUsuarioByNome(name);
         jTextFieldNome.setText(request.getData("Usuario.nome"));
         jTextFieldLogin.setText(request.getData("Usuario.login"));
 
@@ -96,7 +93,7 @@ public class ViewNovoUsuario extends javax.swing.JDialog {
     private void fillTable(String name) {
         initialiazeTable();
 
-        List<Request> list = controllerUsuario.findUsuarioAcesso(name);
+        List<Request> list = controllerUsuario.findAcessoByUsuario(name);
 
         for (Request request : list) {
             String line[] = {
