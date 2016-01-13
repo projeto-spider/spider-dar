@@ -72,8 +72,6 @@ public class Request{
     
     public void setHashMapValueToInput()
     {
-        this.data = null;
-        
         this.dataInput = new HashMap<>();
     }
     
