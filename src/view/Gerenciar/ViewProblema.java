@@ -96,7 +96,7 @@ public class ViewProblema extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        new ViewNovoProbemaDialog(null, true).setVisible(true);
+        new ViewNovoProblemaDialog(null, true).setVisible(true);
     }//GEN-LAST:event_jButton2ActionPerformed
 
 

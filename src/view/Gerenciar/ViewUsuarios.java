@@ -2,6 +2,8 @@ package view.Gerenciar;
 
 import controller.ControllerUsuario;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 import javax.swing.JOptionPane;
 import util.Internal;
 import util.MyDefaultTableModel;
@@ -38,12 +40,12 @@ public class ViewUsuarios extends javax.swing.JInternalFrame {
         jTableUsuarios.setModel(myDefaultTableModel);
     }
 
-    private void removeUsuario() {
+    private void removeUsuario(String name) {
         int Result = JOptionPane.showConfirmDialog(null, "Deseja Excluir este usuário?", "EXCLUIR", JOptionPane.YES_NO_OPTION);
 
         if (Result == JOptionPane.YES_OPTION) {
             boolean isDone = false;
-            isDone = controllerUsuario.removeUsuario(jTableUsuarios.getValueAt(jTableUsuarios.getSelectedRow(), 0).toString());
+            isDone = controllerUsuario.removeUsuario(name);
             if (isDone) {
                 JOptionPane.showMessageDialog(null, "Excluído com sucesso.");
             } else {
@@ -185,8 +187,8 @@ public class ViewUsuarios extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(null, "O usuário Administrador não pode ser removido.");
             return;
         }
-
-        removeUsuario();
+        String name = jTableUsuarios.getValueAt(jTableUsuarios.getSelectedRow(), 0).toString();
+        removeUsuario(name);
         fillTable(controllerUsuario.findUsuarios());
     }//GEN-LAST:event_jButton3ActionPerformed
 
