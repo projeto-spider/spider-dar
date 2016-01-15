@@ -4,6 +4,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import jpa.UsuarioJpaController;
+import model.Acessar;
 import model.Usuario;
 
 /**
@@ -92,6 +93,25 @@ public class JpaUsuario extends UsuarioJpaController {
         try {
             EntityManager entityManager = super.getEntityManager();
             return entityManager.createQuery("SELECT u FROM Usuario u WHERE u.email = :email").setParameter("email", email).getResultList();
+        } catch (Exception error) {
+            throw error;
+        }
+    }
+    
+    public List<Acessar> findAcessoByUsuario(int id) {
+        try {
+            EntityManager entityManager = super.getEntityManager();
+            entityManager.getTransaction().begin();
+
+            List<Acessar> list = entityManager
+                    .createQuery("SELECT a FROM Acessar a WHERE a.usuario.id =:id")
+                    .setParameter("id", id)
+                    .getResultList();
+
+            entityManager.getTransaction().commit();
+            entityManager.close();
+
+            return list;
         } catch (Exception error) {
             throw error;
         }

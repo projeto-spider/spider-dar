@@ -8,9 +8,12 @@ import controller.ControllerPerfil;
 import controller.ControllerProblema;
 import controller.ControllerUsuario;
 import java.beans.PropertyVetoException;
+import java.util.Timer;
+import java.util.TimerTask;
 import javax.swing.JInternalFrame;
 import javax.swing.tree.DefaultMutableTreeNode;
 import settings.KeepData;
+import settings.Reminder;
 import view.Gerenciar.ViewConta;
 import view.Gerenciar.ViewOrganizacoes;
 import view.Gerenciar.ViewProblema;
@@ -55,6 +58,7 @@ public class ViewPrincipal extends javax.swing.JFrame {
 
         iniciaTelas();
         showInformation();
+        new Reminder(this).reload();
         this.setLocationRelativeTo(null);
     }
 
@@ -444,8 +448,24 @@ public class ViewPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void jMenuItemContaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemContaActionPerformed
-       new ViewConta(null, true).setVisible(true); 
+        new ViewConta(null, true).setVisible(true);
     }//GEN-LAST:event_jMenuItemContaActionPerformed
+
+    public void reload() {
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+
+            @Override
+            public void run() {
+                if (viewUsuarios.isVisible()) {
+                    viewUsuarios.fillTable(new ControllerUsuario().findUsuarios());
+                    System.out.println(">>>>Funfando!!");
+                } else {
+                    timer.cancel();
+                }
+            }
+        }, 0, 10 * 1000);
+    }
 
     private void iniciaTelas() {
         jDesktopPane.add(viewHome);
