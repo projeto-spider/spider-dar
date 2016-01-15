@@ -156,10 +156,30 @@ public class ControllerProblema
     {
         try
         {
-            List<Problema> problemas = this.facade.initializeJpaProblema().findProblemaEntities();
+            List<Problema> problemas;
+            
+            if (request.getData("Problema.busca").equals("")) 
+                problemas = this.facade.initializeJpaProblema().listAllProblemasByIdOrganizacao(request);
+            else
+                problemas = this.facade.initializeJpaProblema().listProblemasByNomeOuCodigo(request);
+            
             return this.getRequestListFromProblemaList(problemas);
         }
         catch(Exception e)
+        {
+            throw e;
+        }
+    }
+    
+    public List<Request> listProblemasByIdOrganizacao(String idOrganizacao)
+    {
+        try
+        {
+            List<Problema> problemas = this.facade.initializeJpaProblema().findProblemasByIdOrganizacao(Integer.parseInt(idOrganizacao));
+
+            return this.getRequestListFromProblemaList(problemas);
+        }
+        catch (Exception e)
         {
             throw e;
         }

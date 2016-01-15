@@ -228,8 +228,10 @@ public class ViewNovoProblemaDialog extends javax.swing.JDialog
             else
             {
                 String idProblema = request.getData("Problema.id");
+                
                 request.setDataInput("Problema.id", new Input(0,"hidden", "Id", idProblema));
                 request.setData("Problema.idOrganizacao",KeepData.getData("Organizacao.id"));
+                
                 controllerProblema.editProblema(request);
             }
             

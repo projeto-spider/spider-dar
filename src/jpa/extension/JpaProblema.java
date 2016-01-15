@@ -11,6 +11,8 @@ import javax.persistence.criteria.Root;
 import jpa.ProblemaJpaController;
 import model.Organizacao;
 import model.Problema;
+import org.eclipse.persistence.internal.jpa.JPAQuery;
+import util.Request;
 
 /**
  *
@@ -78,22 +80,43 @@ public class JpaProblema extends ProblemaJpaController {
         }
     }
     
-    public List<Problema> listProblemasByNomeOuCodigo(String busca)
+    public List<Problema> listAllProblemasByIdOrganizacao(Request request)
     {
         EntityManager em = getEntityManager();
         
         try
         {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            Root<Problema> problema = cq.from(Problema.class);
-            cq.select(problema);
+            String queryString = "FROM Problema p WHERE p.idOrganizacao.id = :idOrganizacao";
             
-            Predicate predicate = em.getCriteriaBuilder().equal(problema.get("codigo"), "%" + busca + "%");
-            cq.where(predicate);
+            TypedQuery<Problema> query = em.createQuery(queryString,Problema.class);
             
-            Query query = em.createQuery(cq);
+            TypedQuery<Problema> result = query.setParameter("idOrganizacao", Integer.parseInt(request.getData("Problema.idOrganizacao")));
             
-            return query.getResultList();
+            return result.getResultList();
+        }
+        finally
+        {
+            em.close();
+        }
+    }
+    
+    public List<Problema> listProblemasByNomeOuCodigo(Request request)
+    {
+        EntityManager em = getEntityManager();
+        
+        try
+        {
+            String busca = request.getData("Problema.busca");
+            
+            String queryString = "FROM Problema p WHERE p.idOrganizacao.id = :idOrganizacao AND (p.codigo LIKE :buscaCodigo OR p.nome LIKE :buscaNome)";
+            
+            TypedQuery<Problema> query = em.createQuery(queryString,Problema.class);
+            
+            TypedQuery<Problema> result = query.setParameter("idOrganizacao", Integer.parseInt(request.getData("Problema.idOrganizacao"))).
+                                                setParameter("buscaCodigo", "%" + busca + "%").
+                                                setParameter("buscaNome", "%" + busca + "%");
+            
+            return result.getResultList();
         }
         finally
         {
