@@ -2,9 +2,10 @@ package view;
 
 import view.Gerenciar.ViewNovoUsuario;
 import view.Gerenciar.ViewNovaOrganizacao;
-import view.Gerenciar.ViewNovoProbemaDialog;
+import view.Gerenciar.ViewNovoProblemaDialog;
 import controller.ControllerOrganizacao;
 import controller.ControllerPerfil;
+import controller.ControllerProblema;
 import controller.ControllerUsuario;
 import java.beans.PropertyVetoException;
 import javax.swing.JInternalFrame;
@@ -59,12 +60,14 @@ public class ViewPrincipal extends javax.swing.JFrame {
 
     public void showInformation() {
         jLabelOrganizacao.setText("Organização: " + KeepData.getData("Organizacao.nome"));
+        jLabelProblema.setText("Problema: " + KeepData.getData("Problema.codigo") + " - " + KeepData.getData("Problema.nome"));
         trocaTela(viewHome);
     }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents()
+    {
 
         jPanel1 = new javax.swing.JPanel();
         jLabelBemvindo = new javax.swing.JLabel();
@@ -74,7 +77,7 @@ public class ViewPrincipal extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jLabelOrganizacao = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
+        jLabelProblema = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenuArquivo = new javax.swing.JMenu();
@@ -127,8 +130,10 @@ public class ViewPrincipal extends javax.swing.JFrame {
         treeNode2.add(treeNode3);
         treeNode1.add(treeNode2);
         jTree.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
-        jTree.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+        jTree.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
                 jTreeMouseClicked(evt);
             }
         });
@@ -146,15 +151,17 @@ public class ViewPrincipal extends javax.swing.JFrame {
         );
 
         jButton1.setText("<html>Selecionar<br>Organização</html>");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jButton1.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 jButton1ActionPerformed(evt);
             }
         });
 
         jLabelOrganizacao.setText("Organização: Desenvolvimento");
 
-        jLabel4.setText("Problema: nome Problema");
+        jLabelProblema.setText("Problema: nome Problema");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -166,7 +173,7 @@ public class ViewPrincipal extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 514, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabelOrganizacao, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jLabelProblema, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -177,7 +184,7 @@ public class ViewPrincipal extends javax.swing.JFrame {
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabelOrganizacao)
                         .addGap(0, 0, 0)
-                        .addComponent(jLabel4))
+                        .addComponent(jLabelProblema))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(6, 6, 6)
                         .addComponent(jButton1)))
@@ -232,24 +239,30 @@ public class ViewPrincipal extends javax.swing.JFrame {
         jMenuArquivo.setText("Inicio");
 
         jMenuItemNovaOrganizacao.setText("Nova Organização");
-        jMenuItemNovaOrganizacao.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jMenuItemNovaOrganizacao.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 jMenuItemNovaOrganizacaoActionPerformed(evt);
             }
         });
         jMenuArquivo.add(jMenuItemNovaOrganizacao);
 
         jMenuItemNovaDecisao.setText("Novo Problema");
-        jMenuItemNovaDecisao.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jMenuItemNovaDecisao.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 jMenuItemNovaDecisaoActionPerformed(evt);
             }
         });
         jMenuArquivo.add(jMenuItemNovaDecisao);
 
         jMenuItemNovoUsuario.setText("Novo Usuário");
-        jMenuItemNovoUsuario.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jMenuItemNovoUsuario.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 jMenuItemNovoUsuarioActionPerformed(evt);
             }
         });
@@ -257,8 +270,10 @@ public class ViewPrincipal extends javax.swing.JFrame {
         jMenuArquivo.add(jSeparator1);
 
         jMenuItemDesconectar.setText("Desconectar");
-        jMenuItemDesconectar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jMenuItemDesconectar.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 jMenuItemDesconectarActionPerformed(evt);
             }
         });
@@ -269,24 +284,30 @@ public class ViewPrincipal extends javax.swing.JFrame {
         jMenuGerenciar.setText("Gerenciar");
 
         jMenuItem2.setText("Organização/Tomada");
-        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 jMenuItem2ActionPerformed(evt);
             }
         });
         jMenuGerenciar.add(jMenuItem2);
 
         jMenuItem1.setText("Organizações");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 jMenuItem1ActionPerformed(evt);
             }
         });
         jMenuGerenciar.add(jMenuItem1);
 
         jMenuItemDecisoes.setText("Problemas");
-        jMenuItemDecisoes.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jMenuItemDecisoes.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 jMenuItemDecisoesActionPerformed(evt);
             }
         });
@@ -294,16 +315,20 @@ public class ViewPrincipal extends javax.swing.JFrame {
         jMenuGerenciar.add(jSeparator3);
 
         jMenuItemUsuarios.setText("Usuários");
-        jMenuItemUsuarios.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jMenuItemUsuarios.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 jMenuItemUsuariosActionPerformed(evt);
             }
         });
         jMenuGerenciar.add(jMenuItemUsuarios);
 
         jMenuItemPermissoes.setText("Permissões de Perfil");
-        jMenuItemPermissoes.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jMenuItemPermissoes.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 jMenuItemPermissoesActionPerformed(evt);
             }
         });
@@ -311,8 +336,10 @@ public class ViewPrincipal extends javax.swing.JFrame {
         jMenuGerenciar.add(jSeparator2);
 
         jMenuItemConta.setText("Conta");
-        jMenuItemConta.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jMenuItemConta.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 jMenuItemContaActionPerformed(evt);
             }
         });
@@ -323,8 +350,10 @@ public class ViewPrincipal extends javax.swing.JFrame {
         jMenuOrganizacional.setText("Organizacional");
 
         jMenuItemGuiadaGestao.setText("Guia da Gestão de Decisão");
-        jMenuItemGuiadaGestao.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jMenuItemGuiadaGestao.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 jMenuItemGuiadaGestaoActionPerformed(evt);
             }
         });
@@ -359,7 +388,7 @@ public class ViewPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jMenuItemNovaDecisaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemNovaDecisaoActionPerformed
-        new ViewNovoProbemaDialog(null, true).setVisible(true);
+        new ViewNovoProblemaDialog(null, true).setVisible(true);
     }//GEN-LAST:event_jMenuItemNovaDecisaoActionPerformed
 
     private void jMenuItemNovoUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemNovoUsuarioActionPerformed
@@ -394,6 +423,7 @@ public class ViewPrincipal extends javax.swing.JFrame {
 
     private void jMenuItemDecisoesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemDecisoesActionPerformed
         trocaTela(viewTomadaDeDecisoes);
+        viewTomadaDeDecisoes.listProblemasInTable(new ControllerProblema().listProblemasByIdOrganizacao(KeepData.getData("Organizacao.id")));
     }//GEN-LAST:event_jMenuItemDecisoesActionPerformed
 
     private void jMenuItemUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemUsuariosActionPerformed
@@ -523,9 +553,9 @@ public class ViewPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JDesktopPane jDesktopPane;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabelBemvindo;
     private javax.swing.JLabel jLabelOrganizacao;
+    private javax.swing.JLabel jLabelProblema;
     private javax.swing.JMenu jMenuArquivo;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenu jMenuGerenciar;
