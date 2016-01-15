@@ -1,6 +1,12 @@
 package view.Gerenciar;
 
+import controller.ControllerProblema;
+import java.util.List;
+import javax.swing.JOptionPane;
+import settings.KeepData;
 import util.Internal;
+import util.MyDefaultTableModel;
+import util.Request;
 
 /**
  *
@@ -8,23 +14,47 @@ import util.Internal;
  */
 public class ViewProblema extends javax.swing.JInternalFrame {
 
+    private MyDefaultTableModel myDefaultTableModel;
+    private final ControllerProblema controllerProblema = new ControllerProblema();
+    
+    
     public ViewProblema() {
         initComponents();
 
         Internal.retiraBorda(this);
     }
+    
+    public void listProblemasInTable(List<Request> requestList)
+    {
+        String columns[] = {"Código", "Nome do Problema", "Criado em", "Modificado em"};
+        myDefaultTableModel = new MyDefaultTableModel(columns, 0, false);
+        
+        for (Request request: requestList)
+        {
+            String line[] = {request.getData("Problema.codigo"),
+                                request.getData("Problema.nome"),
+                                request.getData("Problema.created"),
+                                request.getData("Problema.modified")};
+            
+            myDefaultTableModel.addRow(line);
+        }
+        jTableProblemas.setModel(myDefaultTableModel);
+        jTableProblemas.setAutoCreateRowSorter(true);
+        jTableProblemas.getRowSorter().toggleSortOrder(0);
+    }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents()
+    {
 
         jTextField1 = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        jTextField2 = new javax.swing.JTextField();
+        jTableProblemas = new javax.swing.JTable();
+        jTextFieldProblemaPesquisa = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        jButtonEditarProblema = new javax.swing.JButton();
+        jButtonCadastrarProblema = new javax.swing.JButton();
 
         jTextField1.setEditable(false);
         jTextField1.setBackground(new java.awt.Color(246, 179, 111));
@@ -32,25 +62,46 @@ public class ViewProblema extends javax.swing.JInternalFrame {
         jTextField1.setText(" Problemas Cadastrados");
         jTextField1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {"Problema 1", "24/10/2015"},
-                {"Problema 2", "24/10/2015"}
+        jTableProblemas.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][]
+            {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
             },
-            new String [] {
-                "Problemas", "Criada em"
+            new String []
+            {
+                "Código", "Nome do Problema", "Criado em", "Modificado em"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(jTableProblemas);
+
+        jTextFieldProblemaPesquisa.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                jTextFieldProblemaPesquisaActionPerformed(evt);
+            }
+        });
 
         jLabel1.setText("Pesquisar:");
 
-        jButton1.setText("Editar");
+        jButtonEditarProblema.setText("Editar");
+        jButtonEditarProblema.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                jButtonEditarProblemaActionPerformed(evt);
+            }
+        });
 
-        jButton2.setText("Novo");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+        jButtonCadastrarProblema.setText("Novo");
+        jButtonCadastrarProblema.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                jButtonCadastrarProblemaActionPerformed(evt);
             }
         });
 
@@ -66,13 +117,13 @@ public class ViewProblema extends javax.swing.JInternalFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 263, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jTextFieldProblemaPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 263, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButtonCadastrarProblema, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jButtonEditarProblema, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -82,31 +133,59 @@ public class ViewProblema extends javax.swing.JInternalFrame {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jTextFieldProblemaPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 361, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2))
+                    .addComponent(jButtonEditarProblema)
+                    .addComponent(jButtonCadastrarProblema))
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        new ViewNovoProbemaDialog(null, true).setVisible(true);
-    }//GEN-LAST:event_jButton2ActionPerformed
+    private void editarButtonIsPressed()
+    {
+        int index = jTableProblemas.getSelectedRow();
+        if (index > -1) {
+            new ViewNovoProblemaDialog(null, true, jTableProblemas.getValueAt(index, 0).toString()).setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Selecione uma linha na tabela.");
+        }
+    }
+    
+    private void jButtonCadastrarProblemaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCadastrarProblemaActionPerformed
+        new ViewNovoProblemaDialog(null, true).setVisible(true);
+        listProblemasInTable(new ControllerProblema().listProblemasByIdOrganizacao(KeepData.getData("Organizacao.id")));
+    }//GEN-LAST:event_jButtonCadastrarProblemaActionPerformed
+
+    private void jButtonEditarProblemaActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonEditarProblemaActionPerformed
+    {//GEN-HEADEREND:event_jButtonEditarProblemaActionPerformed
+        editarButtonIsPressed();
+        listProblemasInTable(new ControllerProblema().listProblemasByIdOrganizacao(KeepData.getData("Organizacao.id")));
+    }//GEN-LAST:event_jButtonEditarProblemaActionPerformed
+
+    private void jTextFieldProblemaPesquisaActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jTextFieldProblemaPesquisaActionPerformed
+    {//GEN-HEADEREND:event_jTextFieldProblemaPesquisaActionPerformed
+        String busca = jTextFieldProblemaPesquisa.getText();
+        
+        Request request = new Request();
+        request.setData("Problema.busca", busca);
+        request.setData("Problema.idOrganizacao", KeepData.getData("Organizacao.id"));
+        
+        listProblemasInTable(new ControllerProblema().listProblemasByPesquisa(request));
+    }//GEN-LAST:event_jTextFieldProblemaPesquisaActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButtonCadastrarProblema;
+    private javax.swing.JButton jButtonEditarProblema;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable jTableProblemas;
     private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
+    private javax.swing.JTextField jTextFieldProblemaPesquisa;
     // End of variables declaration//GEN-END:variables
 }

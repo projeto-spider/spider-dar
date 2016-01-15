@@ -1,8 +1,14 @@
 package view;
 
 import controller.ControllerOrganizacao;
+import controller.ControllerProblema;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import settings.KeepData;
 import util.Request;
 
@@ -20,7 +26,7 @@ public class ViewSelecionarOrganizacao extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
 
-        fillComboboxOrganizacao();
+        fillComboboxOrganizacaoAndProblema();
         this.setLocationRelativeTo(null);
     }
 
@@ -29,33 +35,89 @@ public class ViewSelecionarOrganizacao extends javax.swing.JDialog {
         initComponents();
 
         this.viewPrincipal = viewPrincipal;
-        fillComboboxOrganizacao();
+        fillComboboxOrganizacaoAndProblema();
+        
         this.setLocationRelativeTo(null);
     }
 
-    private void fillComboboxOrganizacao() {
+    private void fillComboboxOrganizacaoAndProblema() {
         comboboxModel = new DefaultComboBoxModel();
         comboboxModel.addElement("--Selecione uma Organização--");
-
+        
         List<Request> requestList = controllerOrganizacao.findOrganizacoes();
         for (Request request : requestList) {
             comboboxModel.addElement(request.getData("Organizacao.nome"));
         }
 
         jComboBoxOrganizacao.setModel(comboboxModel);
-    }
+        
+        jComboBoxOrganizacao.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent e)
+            {
+                DefaultComboBoxModel comboBoxModelProblema = new DefaultComboBoxModel();
+                String comboboxProblemaTextDefault = "--Selecione um Problema--";
+                comboBoxModelProblema.addElement(comboboxProblemaTextDefault);
+                
+                ControllerProblema controllerProblema = new ControllerProblema();
+                
+                String nomeOrganizacao = (String) comboboxModel.getSelectedItem();
+                
+                if (!nomeOrganizacao.equals("--Selecione uma Organização--"))
+                {
+                    Request requestOrganizacao = controllerOrganizacao.findOrganizacaoSelected(nomeOrganizacao);
 
+                    String idOrganizacao = requestOrganizacao.getData("Organizacao.id");
+
+                    List<Request> requestList = controllerProblema.listProblemasByIdOrganizacao(idOrganizacao);
+
+                    for (Request request : requestList)
+                    {
+                        comboBoxModelProblema.addElement(request.getData("Problema.codigo") + " - " + request.getData("Problema.nome"));
+                    }
+                }
+                
+               jComboBoxProblema.setModel(comboBoxModelProblema);
+            }
+        });
+    }
+    
     private void keepData() {
-        if (!"--Selecione uma Organização--".equals(jComboBoxOrganizacao.getSelectedItem().toString())) {
+        
+        if (!"--Selecione uma Organização--".equals(jComboBoxOrganizacao.getSelectedItem().toString())) 
+        {
             Request request = controllerOrganizacao.findOrganizacaoSelected(jComboBoxOrganizacao.getSelectedItem().toString());
+            
             KeepData.setData("Organizacao.id", request.getData("Organizacao.id"));
             KeepData.setData("Organizacao.nome", request.getData("Organizacao.nome"));
+            
+            String comboBoxValue = jComboBoxProblema.getSelectedItem().toString();
+            
+            if (!("--Selecione um Problema--".equals(comboBoxValue)))
+            {
+                String arrayStringCodigoProblema[] = comboBoxValue.split(" - ");
+                
+                String codigoProblema = arrayStringCodigoProblema[0];
+                
+                ControllerProblema controllerProblema = new ControllerProblema();
+                Request requestProblemaBusca = new Request();
+                
+                requestProblemaBusca.setData("Problema.codigo", codigoProblema);
+                requestProblemaBusca.setData("Problema.idOrganizacao", request.getData("Organizacao.id"));
+                
+                Request requestProblema = controllerProblema.getProblemaByCodigo(requestProblemaBusca);
+                
+                KeepData.setData("Problema.id",requestProblema.getData("Problema.id"));
+                KeepData.setData("Problema.codigo",requestProblema.getData("Problema.codigo"));
+                KeepData.setData("Problema.nome",requestProblema.getData("Problema.nome"));
+            }
         }
     }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents()
+    {
 
         jLabel1 = new javax.swing.JLabel();
         jComboBoxOrganizacao = new javax.swing.JComboBox();
@@ -68,15 +130,17 @@ public class ViewSelecionarOrganizacao extends javax.swing.JDialog {
 
         jLabel1.setText("Organizações:");
 
-        jComboBoxOrganizacao.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBoxOrganizacao.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "--Selecione uma Organização--" }));
 
         jLabel2.setText("Problemas:");
 
-        jComboBoxProblema.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBoxProblema.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "--Selecione um Problema--" }));
 
         jButton1.setText("acessar");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jButton1.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 jButton1ActionPerformed(evt);
             }
         });
