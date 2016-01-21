@@ -19,10 +19,10 @@ public class Post {
      * Construtor padrao para o Spider-DAR
      */
     public Post() {
-        remetente = "projetospiderdar@gmail.com";
-        senha = "5p1d3rd4r";
-        host = "smtp.gmail.com";
-        porta = 465;
+        remetente = "iuri.raiol@icen.ufpa.br";
+        senha = "iuri23";
+        host = "smtp.ufpa.br";
+        porta = 587;
     }
 
     public Post(String remetente, String senha, String host, int porta) {
@@ -55,7 +55,7 @@ public class Post {
             email.setMsg(corpoMsg);
 
             //Autenticacao
-            email.setSSL(true);
+            email.setTLS(true);
             email.setAuthentication(remetente, senha);
 
             email.send();
@@ -63,6 +63,7 @@ public class Post {
             return true;
         } catch (Exception e) {
             System.out.println("Não foi possível enviar");
+            e.printStackTrace();
             return false;
         }
     }
