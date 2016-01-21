@@ -26,12 +26,13 @@ public class ViewProblema extends javax.swing.JInternalFrame {
     
     public void listProblemasInTable(List<Request> requestList)
     {
-        String columns[] = {"Código", "Nome do Problema", "Criado em", "Modificado em"};
+        String columns[] = {"id","Código", "Nome do Problema", "Criado em", "Modificado em"};
         myDefaultTableModel = new MyDefaultTableModel(columns, 0, false);
         
         for (Request request: requestList)
         {
-            String line[] = {request.getData("Problema.codigo"),
+            String line[] = {request.getData("Problema.id"),
+                                request.getData("Problema.codigo"),
                                 request.getData("Problema.nome"),
                                 request.getData("Problema.created"),
                                 request.getData("Problema.modified")};
@@ -39,8 +40,10 @@ public class ViewProblema extends javax.swing.JInternalFrame {
             myDefaultTableModel.addRow(line);
         }
         jTableProblemas.setModel(myDefaultTableModel);
+        jTableProblemas.setAutoResizeMode(jTableProblemas.AUTO_RESIZE_OFF);
+        jTableProblemas.getTableHeader().setReorderingAllowed(false);
         jTableProblemas.setAutoCreateRowSorter(true);
-        jTableProblemas.getRowSorter().toggleSortOrder(0);
+        jTableProblemas.getRowSorter().toggleSortOrder(2);
     }
 
     @SuppressWarnings("unchecked")
