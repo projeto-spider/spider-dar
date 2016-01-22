@@ -8,7 +8,7 @@ import javax.swing.JOptionPane;
 import model.Usuario;
 import settings.KeepData;
 import util.Criptografia;
-import util.Post;
+import util.MyEmail;
 
 /**
  *
@@ -448,9 +448,7 @@ public class ViewLogin extends javax.swing.JFrame {
                 jPanel3.setVisible(false);
                 this.pack();
 
-                Post post = new Post();
-                //post.sendEmailPasswordRecovery(jTextFieldEmailRecupera.getText(), "Teste", "teste");
-                post.enviarEmailSimples(jTextFieldEmailRecupera.getText(), "Teste", "Teste");
+                new MyEmail().sendEmail("blenofvale@gmail.com", "Teste", "<html>Teste!!!</html>");
             }
         } else {
             JOptionPane.showMessageDialog(this, "E-mail inválido.");

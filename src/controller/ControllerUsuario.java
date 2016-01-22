@@ -15,7 +15,6 @@ import model.Usuario;
 import settings.Facade;
 import settings.KeepData;
 import util.Criptografia;
-import util.Post;
 import util.Request;
 import util.Text;
 
@@ -348,14 +347,14 @@ public class ControllerUsuario {
 
             String newPasswordCrip = criptografia.encryptMessage(newPassword);
             usuario.setSenha(newPasswordCrip);
-
-            Post post = new Post();
-            if (post.sendEmailPasswordRecovery(usuario.getEmail(), usuario.getLogin(), newPassword)) {
-                facade.initializeJpaUsuario().edit(usuario);
-                JOptionPane.showMessageDialog(null, "Nova senha criada.\nPor favor cheque seu E-mail.");
-            } else {
-                JOptionPane.showMessageDialog(null, "Nova foi possível enviar a mensagem de recuperação.\n Por favor, verifique sua conexão.");
-            }
+//
+//            Post post = new Post();
+//            if (post.sendEmailPasswordRecovery(usuario.getEmail(), usuario.getLogin(), newPassword)) {
+//                facade.initializeJpaUsuario().edit(usuario);
+//                JOptionPane.showMessageDialog(null, "Nova senha criada.\nPor favor cheque seu E-mail.");
+//            } else {
+//                JOptionPane.showMessageDialog(null, "Nova foi possível enviar a mensagem de recuperação.\n Por favor, verifique sua conexão.");
+//            }
         } catch (Exception error) {
             error.printStackTrace();
             JOptionPane.showMessageDialog(null, "Erro inesperado.");
