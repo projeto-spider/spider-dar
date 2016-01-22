@@ -98,6 +98,23 @@ public class ControllerOrganizacao {
      *
      * @return uma lista contendo os dados requisitados de cada Organização.
      */
+    public List<Request> findOrganizacoesByUsuario() {
+        try {
+            List<Organizacao> list = facade.initializeJpaOrganizacao().findOrganizacoesByUsuario();
+            List<Request> requestList = new ArrayList<>();
+
+            for (Organizacao org : list) {
+                Map<String, String> data = new HashMap<>();
+                data.put("Organizacao.nome", org.getNome());
+                requestList.add(new Request(data));
+            }
+
+            return requestList;
+        } catch (Exception error) {
+            throw error;
+        }
+    }
+
     public List<Request> findOrganizacoes() {
         try {
             List<Organizacao> list = facade.initializeJpaOrganizacao().findOrganizacaoEntities();
@@ -176,4 +193,5 @@ public class ControllerOrganizacao {
             throw error;
         }
     }
+
 }

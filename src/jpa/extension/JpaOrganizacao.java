@@ -5,6 +5,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import jpa.OrganizacaoJpaController;
 import model.Organizacao;
+import settings.KeepData;
 
 /**
  *
@@ -107,6 +108,28 @@ public class JpaOrganizacao extends OrganizacaoJpaController {
             List<Organizacao> list = entityManager
                     .createQuery("SELECT o FROM Organizacao o WHERE o.nome LIKE :name ORDER BY o.nome ASC")
                     .setParameter("name", name + "%")
+                    .getResultList();
+
+            entityManager.getTransaction().commit();
+            entityManager.close();
+
+            return list;
+        } catch (Exception error) {
+            throw error;
+        }
+    }
+
+    public List<Organizacao> findOrganizacoesByUsuario() {
+        try {
+            EntityManager entityManager = super.getEntityManager();
+            entityManager.getTransaction().begin();
+
+            int idUser = Integer.parseInt(KeepData.getData("Usuario.id"));
+            //int idOrg = Integer.parseInt(KeepData.getData("Organizacao.id"));
+
+            List<Organizacao> list = entityManager
+                    .createQuery("SELECT a.organizacao FROM Acessar a WHERE a.usuario.id =:idUser")
+                    .setParameter("idUser", idUser)
                     .getResultList();
 
             entityManager.getTransaction().commit();

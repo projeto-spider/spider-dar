@@ -47,7 +47,7 @@ public class ViewLogin extends javax.swing.JFrame {
         jTextFieldLoginPri.setText(this.usuario.getLogin());
     }
 
-    private boolean usuarioValidate() {  
+    private boolean usuarioValidate() {
         if (jTextFieldLoginPri.getText().isEmpty()) {
             JOptionPane.showMessageDialog(null, "O campo \"Login\" não pode ser vazio.");
             return false;
@@ -97,7 +97,7 @@ public class ViewLogin extends javax.swing.JFrame {
         jLabel11 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jLabel12 = new javax.swing.JLabel();
-        jTextFieldLoginEmailRecupera = new javax.swing.JTextField();
+        jTextFieldEmailRecupera = new javax.swing.JTextField();
         jButton6 = new javax.swing.JButton();
         jLabel14 = new javax.swing.JLabel();
 
@@ -353,7 +353,7 @@ public class ViewLogin extends javax.swing.JFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextFieldLoginEmailRecupera)
+                    .addComponent(jTextFieldEmailRecupera)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -371,7 +371,7 @@ public class ViewLogin extends javax.swing.JFrame {
                 .addGap(64, 64, 64)
                 .addComponent(jLabel12)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextFieldLoginEmailRecupera, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jTextFieldEmailRecupera, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jButton6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 183, Short.MAX_VALUE)
@@ -434,21 +434,23 @@ public class ViewLogin extends javax.swing.JFrame {
         } else {
             boolean senhaOk = controllerUsuario.CompareSenhaTypedWithBD(usuario.getSenha(), new String(jPasswordFieldSenha.getPassword()));
             if (senhaOk) {
-                KeepData.setData("Usuario.id", String.valueOf(usuario.getId()));  
-                KeepData.setData("Usuario.nome", usuario.getNome());  
+                KeepData.setData("Usuario.id", String.valueOf(usuario.getId()));
+                KeepData.setData("Usuario.nome", usuario.getNome());
                 new ViewSelecionarOrganizacao(null, true).setVisible(true);
                 this.dispose();
             }
         }
     }
 
-    private void recuperarSenha() {  
-        if (controllerUsuario.validateEmail(jTextFieldLoginEmailRecupera.getText())) {
-            if (controllerUsuario.existRegisteredEmail(jTextFieldLoginEmailRecupera.getText())) {
+    private void recuperarSenha() {
+        if (controllerUsuario.validateEmail(jTextFieldEmailRecupera.getText())) {
+            if (controllerUsuario.existRegisteredEmail(jTextFieldEmailRecupera.getText())) {
                 jPanel3.setVisible(false);
                 this.pack();
-//                Post post = new Post();
-//                post.sendEmailPasswordRecovery(destinatario, login, senha);
+
+                Post post = new Post();
+                //post.sendEmailPasswordRecovery(jTextFieldEmailRecupera.getText(), "Teste", "teste");
+                post.enviarEmailSimples(jTextFieldEmailRecupera.getText(), "Teste", "Teste");
             }
         } else {
             JOptionPane.showMessageDialog(this, "E-mail inválido.");
@@ -483,7 +485,7 @@ public class ViewLogin extends javax.swing.JFrame {
         usuario.setCreated(new Date());
         usuario.setModified(new Date());
 
-        controllerUsuario.editUsuario(this.usuario);
+        controllerUsuario.editUsuario(usuario);
 
         new ViewSelecionarOrganizacao(null, true).setVisible(true);
         this.dispose();
@@ -549,8 +551,8 @@ public class ViewLogin extends javax.swing.JFrame {
     private javax.swing.JPasswordField jPasswordFieldSenha;
     private javax.swing.JPasswordField jPasswordFieldSenhaPri;
     private javax.swing.JTextField jTextFieldEmailPri;
+    private javax.swing.JTextField jTextFieldEmailRecupera;
     private javax.swing.JTextField jTextFieldLogin;
-    private javax.swing.JTextField jTextFieldLoginEmailRecupera;
     private javax.swing.JTextField jTextFieldLoginPri;
     private javax.swing.JTextField jTextFieldNomeCompletoPri;
     // End of variables declaration//GEN-END:variables

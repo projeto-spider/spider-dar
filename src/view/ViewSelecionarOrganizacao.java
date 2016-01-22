@@ -6,9 +6,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import settings.KeepData;
 import util.Request;
 
@@ -44,7 +41,7 @@ public class ViewSelecionarOrganizacao extends javax.swing.JDialog {
         comboboxModel = new DefaultComboBoxModel();
         comboboxModel.addElement("--Selecione uma Organização--");
         
-        List<Request> requestList = controllerOrganizacao.findOrganizacoes();
+        List<Request> requestList = controllerOrganizacao.findOrganizacoesByUsuario();
         for (Request request : requestList) {
             comboboxModel.addElement(request.getData("Organizacao.nome"));
         }
@@ -203,4 +200,20 @@ public class ViewSelecionarOrganizacao extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     // End of variables declaration//GEN-END:variables
+
+      public static void main(String args[]) {
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                ViewSelecionarOrganizacao viewSelecionarOrganizacao = new ViewSelecionarOrganizacao(new javax.swing.JFrame(), true);
+                viewSelecionarOrganizacao.addWindowListener(new java.awt.event.WindowAdapter() {
+                    @Override
+                    public void windowClosing(java.awt.event.WindowEvent e) {
+                        System.exit(0);
+                    }
+                });
+                viewSelecionarOrganizacao.setVisible(true);
+            }
+        });
+    }
 }

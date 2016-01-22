@@ -28,11 +28,12 @@ public class ViewOrganizacoes extends javax.swing.JInternalFrame {
      * @param requestList
      */
     public void fillTable(List<Request> requestList) {
-        String columns[] = {"Organização", "Criada em", "Última modificação"};
+        String columns[] = {"teste", "Organização", "Criada em", "Última modificação"};
         myDefaultTableModel = new MyDefaultTableModel(columns, 0, false);
 
         for (Request request : requestList) {
             String line[] = {
+                "teste",
                 request.getData("Organizacao.nome"),
                 request.getData("Organizacao.created"),
                 request.getData("Organizacao.modified")
@@ -40,7 +41,7 @@ public class ViewOrganizacoes extends javax.swing.JInternalFrame {
             myDefaultTableModel.addRow(line);
         }
         jTableOrganizacoes.setModel(myDefaultTableModel);
-        //jTableOrganizacoes.getColumnModel().getColumn(0).setCellRenderer(new MyCellRenderer());
+        jTableOrganizacoes.removeColumn(jTableOrganizacoes.getColumnModel().getColumn(0));
     }
 
     /**
@@ -100,6 +101,11 @@ public class ViewOrganizacoes extends javax.swing.JInternalFrame {
                 "Organização", "Criada em"
             }
         ));
+        jTableOrganizacoes.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jTableOrganizacoesMousePressed(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTableOrganizacoes);
 
         jTextFieldPesquisa.addActionListener(new java.awt.event.ActionListener() {
@@ -198,6 +204,11 @@ public class ViewOrganizacoes extends javax.swing.JInternalFrame {
         String name = jTextFieldPesquisa.getText();
         fillTable(controllerOrganizacao.findOrganizacoesBySearch(name));
     }//GEN-LAST:event_jTextFieldPesquisaActionPerformed
+
+    private void jTableOrganizacoesMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableOrganizacoesMousePressed
+        System.out.println(">>Valor da coluna escontida: "
+                + jTableOrganizacoes.getModel().getValueAt(jTableOrganizacoes.getSelectedRow(), 0).toString());
+    }//GEN-LAST:event_jTableOrganizacoesMousePressed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

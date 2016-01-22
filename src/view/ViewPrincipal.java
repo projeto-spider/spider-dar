@@ -52,26 +52,31 @@ public class ViewPrincipal extends javax.swing.JFrame {
     private final ViewCriteriosDeAvaliacao viewCriteriosDeAvaliacao = new ViewCriteriosDeAvaliacao();
     private final ViewAvaliacao viewDecisao = new ViewAvaliacao();
     private final ViewHistorico viewHistorico = new ViewHistorico();
+    
+    private Reminder reminder;
 
     public ViewPrincipal() {
         initComponents();
 
-        iniciaTelas();
+        startViews(); 
         showInformation();
-        new Reminder(this).reload();
+        
+        reminder = new Reminder(this);
+        reminder.reload();
+        
         this.setLocationRelativeTo(null);
     }
 
     public void showInformation() {
+        jLabelBemvindo.setText("Bem-Vindo, " + KeepData.getData("Usuario.nome")); 
         jLabelOrganizacao.setText("Organização: " + KeepData.getData("Organizacao.nome"));
         jLabelProblema.setText("Problema: " + KeepData.getData("Problema.codigo") + " - " + KeepData.getData("Problema.nome"));
-        trocaTela(viewHome);
+        changeViews(viewHome);
     }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents()
-    {
+    private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
         jLabelBemvindo = new javax.swing.JLabel();
@@ -134,10 +139,8 @@ public class ViewPrincipal extends javax.swing.JFrame {
         treeNode2.add(treeNode3);
         treeNode1.add(treeNode2);
         jTree.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
-        jTree.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        jTree.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jTreeMouseClicked(evt);
             }
         });
@@ -155,10 +158,8 @@ public class ViewPrincipal extends javax.swing.JFrame {
         );
 
         jButton1.setText("<html>Selecionar<br>Organização</html>");
-        jButton1.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
@@ -204,14 +205,14 @@ public class ViewPrincipal extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(10, 10, 10))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabelBemvindo)
-                        .addGap(56, 56, 56)))
+                        .addContainerGap()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(53, 53, 53)
+                        .addComponent(jLabelBemvindo)))
+                .addGap(10, 10, 10)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jDesktopPane)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
@@ -243,30 +244,24 @@ public class ViewPrincipal extends javax.swing.JFrame {
         jMenuArquivo.setText("Inicio");
 
         jMenuItemNovaOrganizacao.setText("Nova Organização");
-        jMenuItemNovaOrganizacao.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        jMenuItemNovaOrganizacao.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItemNovaOrganizacaoActionPerformed(evt);
             }
         });
         jMenuArquivo.add(jMenuItemNovaOrganizacao);
 
         jMenuItemNovaDecisao.setText("Novo Problema");
-        jMenuItemNovaDecisao.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        jMenuItemNovaDecisao.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItemNovaDecisaoActionPerformed(evt);
             }
         });
         jMenuArquivo.add(jMenuItemNovaDecisao);
 
         jMenuItemNovoUsuario.setText("Novo Usuário");
-        jMenuItemNovoUsuario.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        jMenuItemNovoUsuario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItemNovoUsuarioActionPerformed(evt);
             }
         });
@@ -274,10 +269,8 @@ public class ViewPrincipal extends javax.swing.JFrame {
         jMenuArquivo.add(jSeparator1);
 
         jMenuItemDesconectar.setText("Desconectar");
-        jMenuItemDesconectar.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        jMenuItemDesconectar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItemDesconectarActionPerformed(evt);
             }
         });
@@ -288,30 +281,24 @@ public class ViewPrincipal extends javax.swing.JFrame {
         jMenuGerenciar.setText("Gerenciar");
 
         jMenuItem2.setText("Organização/Tomada");
-        jMenuItem2.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem2ActionPerformed(evt);
             }
         });
         jMenuGerenciar.add(jMenuItem2);
 
         jMenuItem1.setText("Organizações");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem1ActionPerformed(evt);
             }
         });
         jMenuGerenciar.add(jMenuItem1);
 
         jMenuItemDecisoes.setText("Problemas");
-        jMenuItemDecisoes.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        jMenuItemDecisoes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItemDecisoesActionPerformed(evt);
             }
         });
@@ -319,20 +306,16 @@ public class ViewPrincipal extends javax.swing.JFrame {
         jMenuGerenciar.add(jSeparator3);
 
         jMenuItemUsuarios.setText("Usuários");
-        jMenuItemUsuarios.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        jMenuItemUsuarios.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItemUsuariosActionPerformed(evt);
             }
         });
         jMenuGerenciar.add(jMenuItemUsuarios);
 
         jMenuItemPermissoes.setText("Permissões de Perfil");
-        jMenuItemPermissoes.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        jMenuItemPermissoes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItemPermissoesActionPerformed(evt);
             }
         });
@@ -340,10 +323,8 @@ public class ViewPrincipal extends javax.swing.JFrame {
         jMenuGerenciar.add(jSeparator2);
 
         jMenuItemConta.setText("Conta");
-        jMenuItemConta.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        jMenuItemConta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItemContaActionPerformed(evt);
             }
         });
@@ -354,10 +335,8 @@ public class ViewPrincipal extends javax.swing.JFrame {
         jMenuOrganizacional.setText("Organizacional");
 
         jMenuItemGuiadaGestao.setText("Guia da Gestão de Decisão");
-        jMenuItemGuiadaGestao.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        jMenuItemGuiadaGestao.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItemGuiadaGestaoActionPerformed(evt);
             }
         });
@@ -402,41 +381,42 @@ public class ViewPrincipal extends javax.swing.JFrame {
     private void jMenuItemPermissoesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemPermissoesActionPerformed
         viewPermissoesDePerfil.fillTable(new ControllerPerfil().findPerfis());
         viewPermissoesDePerfil.clearLists();
-        trocaTela(viewPermissoesDePerfil);
+        changeViews(viewPermissoesDePerfil);
     }//GEN-LAST:event_jMenuItemPermissoesActionPerformed
 
     private void jMenuItemDesconectarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemDesconectarActionPerformed
+        reminder.killTimer();
         new ViewLogin().setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jMenuItemDesconectarActionPerformed
 
     private void jMenuItemGuiadaGestaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemGuiadaGestaoActionPerformed
         viewGuiaGestãoDeDecisao.showViewGestaoDeDecisao();
-        trocaTela(viewGuiaGestãoDeDecisao);
+        changeViews(viewGuiaGestãoDeDecisao);
     }//GEN-LAST:event_jMenuItemGuiadaGestaoActionPerformed
 
     private void jMenuItemNovaOrganizacaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemNovaOrganizacaoActionPerformed
-        viewOrganizacoes.fillTable(new ControllerOrganizacao().findOrganizacoes());
+        viewOrganizacoes.fillTable(new ControllerOrganizacao().findOrganizacoesByUsuario());
         new ViewNovaOrganizacao(null, true).setVisible(true);
     }//GEN-LAST:event_jMenuItemNovaOrganizacaoActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        trocaTela(viewOrganizacoes);
+        changeViews(viewOrganizacoes);
         viewOrganizacoes.fillTable(new ControllerOrganizacao().findOrganizacoes());
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void jMenuItemDecisoesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemDecisoesActionPerformed
-        trocaTela(viewTomadaDeDecisoes);
+        changeViews(viewTomadaDeDecisoes);
         viewTomadaDeDecisoes.listProblemasInTable(new ControllerProblema().listProblemasByIdOrganizacao(KeepData.getData("Organizacao.id")));
     }//GEN-LAST:event_jMenuItemDecisoesActionPerformed
 
     private void jMenuItemUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemUsuariosActionPerformed
-        trocaTela(viewUsuarios);
+        changeViews(viewUsuarios);
         viewUsuarios.fillTable(new ControllerUsuario().findUsuarios());
     }//GEN-LAST:event_jMenuItemUsuariosActionPerformed
 
     private void jTreeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTreeMouseClicked
-        eventosDaArvore();
+        treeEvent();
     }//GEN-LAST:event_jTreeMouseClicked
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -467,7 +447,7 @@ public class ViewPrincipal extends javax.swing.JFrame {
         }, 0, 10 * 1000);
     }
 
-    private void iniciaTelas() {
+    private void startViews() {
         jDesktopPane.add(viewHome);
         jDesktopPane.add(viewPermissoesDePerfil);
         jDesktopPane.add(viewGuiaGestãoDeDecisao);
@@ -482,7 +462,7 @@ public class ViewPrincipal extends javax.swing.JFrame {
         jDesktopPane.add(viewHistorico);
     }
 
-    private void trocaTela(JInternalFrame tela) {
+    private void changeViews(JInternalFrame tela) { 
         viewHome.setVisible(false);
         viewPermissoesDePerfil.setVisible(false);
         viewGuiaGestãoDeDecisao.setVisible(false);
@@ -506,7 +486,7 @@ public class ViewPrincipal extends javax.swing.JFrame {
         }
     }
 
-    private void eventosDaArvore() {
+    private void treeEvent() { 
         DefaultMutableTreeNode node = (DefaultMutableTreeNode) jTree.getLastSelectedPathComponent();
 
         if (node == null) {
@@ -523,21 +503,21 @@ public class ViewPrincipal extends javax.swing.JFrame {
         if (nodePai.endsWith("Organização")) {
             if (nodeFilho.equals("Guia de Gestão de Decisão")) {
                 viewGuiaGestãoDeDecisao.showViewGestaoDeDecisao();
-                trocaTela(viewGuiaGestãoDeDecisao);
+                changeViews(viewGuiaGestãoDeDecisao);
             }
         } else if (nodePai.endsWith("Problema")) {
             if (nodeFilho.equals("Motivação e Objetivos")) {
-                trocaTela(viewMotivacaoEObjetivos);
+                changeViews(viewMotivacaoEObjetivos);
             } else if (nodeFilho.equals("Calendário")) {
-                trocaTela(viewCalendario);
+                changeViews(viewCalendario);
             } else if (nodeFilho.equals("Alternativas de Solução")) {
-                trocaTela(viewAlternativaDeSolucao);
+                changeViews(viewAlternativaDeSolucao);
             } else if (nodeFilho.equals("Critérios de Avaliação")) {
-                trocaTela(viewCriteriosDeAvaliacao);
+                changeViews(viewCriteriosDeAvaliacao);
             } else if (nodeFilho.equals("Avaliação")) {
-                trocaTela(viewDecisao);
+                changeViews(viewDecisao);
             } else if (nodeFilho.equals("Histórico")) {
-                trocaTela(viewHistorico);
+                changeViews(viewHistorico);
             }
         }
     }
