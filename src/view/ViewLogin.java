@@ -448,7 +448,7 @@ public class ViewLogin extends javax.swing.JFrame {
                 jPanel3.setVisible(false);
                 this.pack();
 
-                new MyEmail().sendEmail("blenofvale@gmail.com", "Teste", "<html>Teste!!!</html>");
+                new MyEmail().SendNewPassword(jTextFieldEmailRecupera.getText(), "Teste", "Teste"); 
             }
         } else {
             JOptionPane.showMessageDialog(this, "E-mail inválido.");
