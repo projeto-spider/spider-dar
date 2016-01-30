@@ -4,6 +4,7 @@ import controller.ControllerOrganizacao;
 import java.util.List;
 import javax.swing.JOptionPane;
 import util.Internal;
+import util.MyCellRenderer;
 import util.MyDefaultTableModel;
 import util.Request;
 
@@ -42,6 +43,8 @@ public class ViewOrganizacoes extends javax.swing.JInternalFrame {
         }
         jTableOrganizacoes.setModel(myDefaultTableModel);
         jTableOrganizacoes.removeColumn(jTableOrganizacoes.getColumnModel().getColumn(0));
+        // transformar as celulas da tabela em textArea.
+        jTableOrganizacoes.setDefaultRenderer(Object.class, new MyCellRenderer());
     }
 
     /**
