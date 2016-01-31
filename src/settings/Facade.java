@@ -2,8 +2,10 @@ package settings;
 
 import jpa.AcessarJpaController;
 import jpa.ItemguiaJpaController;
+import jpa.extension.JpaAlternativa;
 import jpa.extension.JpaFuncionalidades;
 import jpa.extension.JpaGuia;
+import jpa.extension.JpaHistorico;
 import jpa.extension.JpaOrganizacao;
 import jpa.extension.JpaPerfil;
 import jpa.extension.JpaProblema;
@@ -73,6 +75,14 @@ public class Facade {
     
     public JpaProblema initializeJpaProblema(){
         return new JpaProblema(Connection.connect());
+    }
+    
+    public JpaAlternativa initializeAlternativa(){
+        return new JpaAlternativa(Connection.connect());
+    }
+    
+    public JpaHistorico initializeHistorico(){
+        return new JpaHistorico(Connection.connect()); 
     }
 
 }

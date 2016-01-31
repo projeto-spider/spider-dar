@@ -18,13 +18,12 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import jpa.exceptions.IllegalOrphanException;
 import jpa.exceptions.NonexistentEntityException;
-import jpa.exceptions.PreexistingEntityException;
 import model.Alternativa;
 import model.Avaliar;
 
 /**
  *
- * @author Sandro Bezerra
+ * @author Bleno Vale
  */
 public class AlternativaJpaController implements Serializable {
 
@@ -37,7 +36,7 @@ public class AlternativaJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(Alternativa alternativa) throws PreexistingEntityException, Exception {
+    public void create(Alternativa alternativa) {
         if (alternativa.getDecisaoList() == null) {
             alternativa.setDecisaoList(new ArrayList<Decisao>());
         }
@@ -89,11 +88,6 @@ public class AlternativaJpaController implements Serializable {
                 }
             }
             em.getTransaction().commit();
-        } catch (Exception ex) {
-            if (findAlternativa(alternativa.getId()) != null) {
-                throw new PreexistingEntityException("Alternativa " + alternativa + " already exists.", ex);
-            }
-            throw ex;
         } finally {
             if (em != null) {
                 em.close();

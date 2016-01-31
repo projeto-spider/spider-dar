@@ -2,8 +2,11 @@ package util;
 
 import java.awt.Color;
 import java.awt.Component;
+import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 
 /**
@@ -43,9 +46,9 @@ public class MyCellRenderer extends JTextArea implements TableCellRenderer {
         if (table.getRowHeight(row) < getPreferredSize().height) {
             table.setRowHeight(row, getPreferredSize().height);
         }
-        
+
         table.getTableHeader().setResizingAllowed(false);
-        
+
         return this;
     }
 }

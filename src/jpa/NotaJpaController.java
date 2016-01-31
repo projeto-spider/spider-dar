@@ -19,7 +19,7 @@ import model.Nota;
 
 /**
  *
- * @author Sandro Bezerra
+ * @author Bleno Vale
  */
 public class NotaJpaController implements Serializable {
 

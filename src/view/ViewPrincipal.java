@@ -7,13 +7,16 @@ import controller.ControllerOrganizacao;
 import controller.ControllerPerfil;
 import controller.ControllerProblema;
 import controller.ControllerUsuario;
+import java.awt.Color;
 import java.beans.PropertyVetoException;
 import java.util.Timer;
 import java.util.TimerTask;
+import javax.swing.JButton;
 import javax.swing.JInternalFrame;
 import javax.swing.tree.DefaultMutableTreeNode;
 import settings.KeepData;
 import settings.Reminder;
+import util.MyButton;
 import view.Gerenciar.ViewConta;
 import view.Gerenciar.ViewOrganizacoes;
 import view.Gerenciar.ViewProblema;
@@ -52,15 +55,15 @@ public class ViewPrincipal extends javax.swing.JFrame {
     private final ViewCriteriosDeAvaliacao viewCriteriosDeAvaliacao = new ViewCriteriosDeAvaliacao();
     private final ViewAvaliacao viewDecisao = new ViewAvaliacao();
     private final ViewHistorico viewHistorico = new ViewHistorico();
-    
+
     private Reminder reminder;
 
     public ViewPrincipal() {
         initComponents();
 
-        startViews(); 
+        startViews();
         showInformation();
-        
+
         reminder = new Reminder(this);
         reminder.reload();
         
@@ -68,12 +71,21 @@ public class ViewPrincipal extends javax.swing.JFrame {
     }
 
     public void showInformation() {
-        jLabelBemvindo.setText("Bem-Vindo, " + KeepData.getData("Usuario.nome")); 
+        jLabelBemvindo.setText("Bem-Vindo, " + KeepData.getData("Usuario.nome"));
         jLabelOrganizacao.setText("Organização: " + KeepData.getData("Organizacao.nome"));
         jLabelProblema.setText("Problema: " + KeepData.getData("Problema.codigo") + " - " + KeepData.getData("Problema.nome"));
         changeViews(viewHome);
     }
-
+    
+    private void changeButtonColor(JButton jButton){
+        MyButton myButton =  new MyButton(jButton);
+        myButton.setBackgroundColor(new Color(65,65,65));
+        myButton.setHoverBackgroundColor(new Color(50,49,49)); 
+        myButton.setPressedBackgroundColor(new Color(50,49,49)); 
+        
+        myButton.repaint();
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -88,6 +100,12 @@ public class ViewPrincipal extends javax.swing.JFrame {
         jLabelOrganizacao = new javax.swing.JLabel();
         jLabelProblema = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
+        jButtonMotivacaoEObj = new javax.swing.JButton();
+        jButtonCalendario = new javax.swing.JButton();
+        jButtonAlternativas = new javax.swing.JButton();
+        jButtonCriterios = new javax.swing.JButton();
+        jButtonAvaliacao = new javax.swing.JButton();
+        jButtonHistorico = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenuArquivo = new javax.swing.JMenu();
         jMenuItemNovaOrganizacao = new javax.swing.JMenuItem();
@@ -113,7 +131,7 @@ public class ViewPrincipal extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("SPIDER-DAR");
 
-        jPanel1.setBackground(new java.awt.Color(102, 102, 102));
+        jPanel1.setBackground(new java.awt.Color(65, 65, 65));
 
         jLabelBemvindo.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabelBemvindo.setForeground(new java.awt.Color(255, 255, 255));
@@ -175,7 +193,7 @@ public class ViewPrincipal extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 514, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 524, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabelOrganizacao, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabelProblema, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -200,6 +218,108 @@ public class ViewPrincipal extends javax.swing.JFrame {
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Projeto SPIDER");
 
+        jButtonMotivacaoEObj.setBackground(new java.awt.Color(65, 65, 65));
+        jButtonMotivacaoEObj.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jButtonMotivacaoEObj.setForeground(new java.awt.Color(255, 255, 255));
+        jButtonMotivacaoEObj.setText("MOTIVAÇÃO E OBJETIVOS");
+        jButtonMotivacaoEObj.setContentAreaFilled(false);
+        jButtonMotivacaoEObj.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jButtonMotivacaoEObj.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jButtonMotivacaoEObjStateChanged(evt);
+            }
+        });
+        jButtonMotivacaoEObj.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonMotivacaoEObjActionPerformed(evt);
+            }
+        });
+
+        jButtonCalendario.setBackground(new java.awt.Color(65, 65, 65));
+        jButtonCalendario.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jButtonCalendario.setForeground(new java.awt.Color(255, 255, 255));
+        jButtonCalendario.setText("CALENDÁRIO");
+        jButtonCalendario.setContentAreaFilled(false);
+        jButtonCalendario.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jButtonCalendario.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jButtonCalendarioStateChanged(evt);
+            }
+        });
+        jButtonCalendario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonCalendarioActionPerformed(evt);
+            }
+        });
+
+        jButtonAlternativas.setBackground(new java.awt.Color(65, 65, 65));
+        jButtonAlternativas.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jButtonAlternativas.setForeground(new java.awt.Color(255, 255, 255));
+        jButtonAlternativas.setText("ALTERNATIVAS DE SOLUÇÃO");
+        jButtonAlternativas.setContentAreaFilled(false);
+        jButtonAlternativas.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jButtonAlternativas.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jButtonAlternativasStateChanged(evt);
+            }
+        });
+        jButtonAlternativas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonAlternativasActionPerformed(evt);
+            }
+        });
+
+        jButtonCriterios.setBackground(new java.awt.Color(65, 65, 65));
+        jButtonCriterios.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jButtonCriterios.setForeground(new java.awt.Color(255, 255, 255));
+        jButtonCriterios.setText("CRITÉRIOS DE AVALIAÇÃO");
+        jButtonCriterios.setContentAreaFilled(false);
+        jButtonCriterios.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jButtonCriterios.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jButtonCriteriosStateChanged(evt);
+            }
+        });
+        jButtonCriterios.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonCriteriosActionPerformed(evt);
+            }
+        });
+
+        jButtonAvaliacao.setBackground(new java.awt.Color(65, 65, 65));
+        jButtonAvaliacao.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jButtonAvaliacao.setForeground(new java.awt.Color(255, 255, 255));
+        jButtonAvaliacao.setText("AVALIAÇÃO");
+        jButtonAvaliacao.setContentAreaFilled(false);
+        jButtonAvaliacao.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jButtonAvaliacao.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jButtonAvaliacaoStateChanged(evt);
+            }
+        });
+        jButtonAvaliacao.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonAvaliacaoActionPerformed(evt);
+            }
+        });
+
+        jButtonHistorico.setBackground(new java.awt.Color(65, 65, 65));
+        jButtonHistorico.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jButtonHistorico.setForeground(new java.awt.Color(255, 255, 255));
+        jButtonHistorico.setText("HISTÓRICO");
+        jButtonHistorico.setContentAreaFilled(false);
+        jButtonHistorico.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jButtonHistorico.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jButtonHistoricoStateChanged(evt);
+            }
+        });
+        jButtonHistorico.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonHistoricoActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -209,10 +329,17 @@ public class ViewPrincipal extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jButtonMotivacaoEObj, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(53, 53, 53)
-                        .addComponent(jLabelBemvindo)))
-                .addGap(10, 10, 10)
+                        .addComponent(jLabelBemvindo))
+                    .addComponent(jButtonCalendario, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(jButtonCriterios, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButtonAlternativas, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jButtonAvaliacao, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonHistorico, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 0, 0)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jDesktopPane)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
@@ -224,16 +351,29 @@ public class ViewPrincipal extends javax.swing.JFrame {
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(9, 9, 9)
-                        .addComponent(jLabelBemvindo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabelBemvindo, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jDesktopPane)
                     .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(33, 33, 33)
+                        .addComponent(jButtonMotivacaoEObj, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, 0)
+                        .addComponent(jButtonCalendario, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, 0)
+                        .addComponent(jButtonAlternativas, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, 0)
+                        .addComponent(jButtonCriterios, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, 0)
+                        .addComponent(jButtonAvaliacao, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, 0)
+                        .addComponent(jButtonHistorico, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 456, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -431,6 +571,55 @@ public class ViewPrincipal extends javax.swing.JFrame {
         new ViewConta(null, true).setVisible(true);
     }//GEN-LAST:event_jMenuItemContaActionPerformed
 
+    private void jButtonMotivacaoEObjStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jButtonMotivacaoEObjStateChanged
+        changeButtonColor(jButtonMotivacaoEObj);
+    }//GEN-LAST:event_jButtonMotivacaoEObjStateChanged
+
+    private void jButtonMotivacaoEObjActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonMotivacaoEObjActionPerformed
+        changeViews(viewMotivacaoEObjetivos); 
+    }//GEN-LAST:event_jButtonMotivacaoEObjActionPerformed
+
+    private void jButtonCalendarioStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jButtonCalendarioStateChanged
+        changeButtonColor(jButtonCalendario);
+    }//GEN-LAST:event_jButtonCalendarioStateChanged
+
+    private void jButtonCalendarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCalendarioActionPerformed
+        changeViews(viewCalendario); 
+    }//GEN-LAST:event_jButtonCalendarioActionPerformed
+
+    private void jButtonAlternativasStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jButtonAlternativasStateChanged
+        changeButtonColor(jButtonAlternativas);
+    }//GEN-LAST:event_jButtonAlternativasStateChanged
+
+    private void jButtonAlternativasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAlternativasActionPerformed
+        changeViews(viewAlternativaDeSolucao);
+        viewAlternativaDeSolucao.showViewAlternativaDeSolucao();
+    }//GEN-LAST:event_jButtonAlternativasActionPerformed
+
+    private void jButtonCriteriosStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jButtonCriteriosStateChanged
+        changeButtonColor(jButtonCriterios);
+    }//GEN-LAST:event_jButtonCriteriosStateChanged
+
+    private void jButtonCriteriosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCriteriosActionPerformed
+        changeViews(viewCriteriosDeAvaliacao);
+    }//GEN-LAST:event_jButtonCriteriosActionPerformed
+
+    private void jButtonAvaliacaoStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jButtonAvaliacaoStateChanged
+        changeButtonColor(jButtonAvaliacao);
+    }//GEN-LAST:event_jButtonAvaliacaoStateChanged
+
+    private void jButtonAvaliacaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAvaliacaoActionPerformed
+        changeViews(viewDecisao); 
+    }//GEN-LAST:event_jButtonAvaliacaoActionPerformed
+
+    private void jButtonHistoricoStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jButtonHistoricoStateChanged
+        changeButtonColor(jButtonHistorico);
+    }//GEN-LAST:event_jButtonHistoricoStateChanged
+
+    private void jButtonHistoricoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonHistoricoActionPerformed
+        changeViews(viewHistorico);
+    }//GEN-LAST:event_jButtonHistoricoActionPerformed
+
     public void reload() {
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
@@ -462,7 +651,7 @@ public class ViewPrincipal extends javax.swing.JFrame {
         jDesktopPane.add(viewHistorico);
     }
 
-    private void changeViews(JInternalFrame tela) { 
+    private void changeViews(JInternalFrame tela) {
         viewHome.setVisible(false);
         viewPermissoesDePerfil.setVisible(false);
         viewGuiaGestãoDeDecisao.setVisible(false);
@@ -486,7 +675,7 @@ public class ViewPrincipal extends javax.swing.JFrame {
         }
     }
 
-    private void treeEvent() { 
+    private void treeEvent() {
         DefaultMutableTreeNode node = (DefaultMutableTreeNode) jTree.getLastSelectedPathComponent();
 
         if (node == null) {
@@ -512,6 +701,7 @@ public class ViewPrincipal extends javax.swing.JFrame {
                 changeViews(viewCalendario);
             } else if (nodeFilho.equals("Alternativas de Solução")) {
                 changeViews(viewAlternativaDeSolucao);
+                viewAlternativaDeSolucao.showViewAlternativaDeSolucao();
             } else if (nodeFilho.equals("Critérios de Avaliação")) {
                 changeViews(viewCriteriosDeAvaliacao);
             } else if (nodeFilho.equals("Avaliação")) {
@@ -551,6 +741,12 @@ public class ViewPrincipal extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButtonAlternativas;
+    private javax.swing.JButton jButtonAvaliacao;
+    private javax.swing.JButton jButtonCalendario;
+    private javax.swing.JButton jButtonCriterios;
+    private javax.swing.JButton jButtonHistorico;
+    private javax.swing.JButton jButtonMotivacaoEObj;
     private javax.swing.JDesktopPane jDesktopPane;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabelBemvindo;

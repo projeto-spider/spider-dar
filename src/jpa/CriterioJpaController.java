@@ -24,7 +24,7 @@ import model.Nota;
 
 /**
  *
- * @author Sandro Bezerra
+ * @author Bleno Vale
  */
 public class CriterioJpaController implements Serializable {
 

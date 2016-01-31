@@ -1,6 +1,12 @@
 package view.TomadaDeDecisao;
 
+import controller.ControllerAlternativa;
+import java.util.List;
+import settings.Constant;
 import util.Internal;
+import util.MyCellRenderer;
+import util.MyDefaultTableModel;
+import util.Request;
 
 /**
  *
@@ -8,10 +14,40 @@ import util.Internal;
  */
 public class ViewAlternativaDeSolucao extends javax.swing.JInternalFrame {
 
+    private MyDefaultTableModel myDefaultTableModel;
+    private final ControllerAlternativa controllerAlternativa = new ControllerAlternativa();
+
     public ViewAlternativaDeSolucao() {
         initComponents();
+
+        Internal.retiraBorda(this);
+    }
+
+    public void showViewAlternativaDeSolucao() {
+        listAlternativasInTable(controllerAlternativa.listAlternativasByProblema());
+    }
+
+    private void listAlternativasInTable(List<Request> requestList) {
+        String columns[] = {"id", "Alternativa", "Estimativa de Custo", "Estimativa de Tempo", "Criada em"};
+        myDefaultTableModel = new MyDefaultTableModel(columns, 0, false);
+
+        for (Request request : requestList) {
+            String line[] = {
+                request.getData("Alternativa.id"),
+                request.getData("Alternativa.nome"),
+                request.getData("Alternativa.estimativaCusto"),
+                request.getData("Alternativa.estimativaTempo"),
+                request.getData("Alternativa.created")
+            };
+
+            myDefaultTableModel.addRow(line);
+        }
+
+        jTableAlternativas.setModel(myDefaultTableModel);
+        jTableAlternativas.removeColumn(jTableAlternativas.getColumnModel().getColumn(0));
+        // transformar as celulas da tabela em textArea.
+        jTableAlternativas.setDefaultRenderer(Object.class, new MyCellRenderer());
         
-        Internal.retiraBorda(this); 
     }
 
     @SuppressWarnings("unchecked")
@@ -20,7 +56,7 @@ public class ViewAlternativaDeSolucao extends javax.swing.JInternalFrame {
 
         jTextField1 = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jTableAlternativas = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
         jTextField2 = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
@@ -32,7 +68,7 @@ public class ViewAlternativaDeSolucao extends javax.swing.JInternalFrame {
         jTextField1.setText(" Alternativa de Solução");
         jTextField1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jTableAlternativas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -43,7 +79,8 @@ public class ViewAlternativaDeSolucao extends javax.swing.JInternalFrame {
                 "Alternativa", "Estimativa de Custo", "Estimativa de tempo", "Criada em"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jTableAlternativas.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jScrollPane1.setViewportView(jTableAlternativas);
 
         jLabel1.setText("Pesquisar:");
 
@@ -98,7 +135,8 @@ public class ViewAlternativaDeSolucao extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        new ViewAlternativaDeSolucaoNovo(null, true).setVisible(true); 
+        new ViewAlternativaDeSolucaoNovo(null, true, Constant.CREATE).setVisible(true);
+        listAlternativasInTable(controllerAlternativa.listAlternativasByProblema());
     }//GEN-LAST:event_jButton2ActionPerformed
 
 
@@ -107,7 +145,7 @@ public class ViewAlternativaDeSolucao extends javax.swing.JInternalFrame {
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable jTableAlternativas;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     // End of variables declaration//GEN-END:variables
