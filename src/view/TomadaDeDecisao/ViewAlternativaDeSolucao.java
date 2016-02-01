@@ -48,7 +48,7 @@ public class ViewAlternativaDeSolucao extends javax.swing.JInternalFrame {
         jTableAlternativas.removeColumn(jTableAlternativas.getColumnModel().getColumn(0));
         // transformar as celulas da tabela em textArea.
         jTableAlternativas.setDefaultRenderer(Object.class, new MyCellRenderer(jTableAlternativas));
-        
+
         jTableAlternativas.getColumnModel().getColumn(0).setPreferredWidth(230);
         jTableAlternativas.getColumnModel().getColumn(1).setPreferredWidth(430);
         jTableAlternativas.getColumnModel().getColumn(2).setPreferredWidth(50);
@@ -65,6 +65,24 @@ public class ViewAlternativaDeSolucao extends javax.swing.JInternalFrame {
         }
     }
 
+    private void removeAlternativa() {
+        int Result = JOptionPane.showConfirmDialog(null, "Deseja Excluir esta Alternativa?", "EXCLUIR", JOptionPane.YES_NO_OPTION);
+
+        if (Result == JOptionPane.YES_OPTION) {
+            try {
+                int idAltenativa = Integer.parseInt(jTableAlternativas.getModel()
+                        .getValueAt(jTableAlternativas.getSelectedRow(), 0).toString());
+
+                controllerAlternativa.deletAlternativa(idAltenativa);
+
+                JOptionPane.showMessageDialog(null, "\"Alternativa\" foi excluída com sucesso.");
+            } catch (Exception error) {
+                JOptionPane.showMessageDialog(null, error.getMessage(), "ERRO AO EXCLUIR", JOptionPane.ERROR_MESSAGE);
+            }
+
+        }
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -76,6 +94,7 @@ public class ViewAlternativaDeSolucao extends javax.swing.JInternalFrame {
         jTextField2 = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
 
         jTextField1.setEditable(false);
         jTextField1.setBackground(new java.awt.Color(246, 179, 111));
@@ -113,6 +132,13 @@ public class ViewAlternativaDeSolucao extends javax.swing.JInternalFrame {
             }
         });
 
+        jButton3.setText("Excluir");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -131,7 +157,9 @@ public class ViewAlternativaDeSolucao extends javax.swing.JInternalFrame {
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -143,11 +171,12 @@ public class ViewAlternativaDeSolucao extends javax.swing.JInternalFrame {
                     .addComponent(jLabel1)
                     .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 367, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 371, Short.MAX_VALUE)
                 .addGap(13, 13, 13)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
-                    .addComponent(jButton2))
+                    .addComponent(jButton2)
+                    .addComponent(jButton3))
                 .addContainerGap())
         );
 
@@ -171,10 +200,21 @@ public class ViewAlternativaDeSolucao extends javax.swing.JInternalFrame {
         listAlternativasInTable(controllerAlternativa.listAlternativasByProblema());
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        if (!rowIsSelected()) {
+            JOptionPane.showMessageDialog(null, "Selecione uma linha na tabela.");
+            return;
+        }
+
+        removeAlternativa();
+        listAlternativasInTable(controllerAlternativa.listAlternativasByProblema());
+    }//GEN-LAST:event_jButton3ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTableAlternativas;

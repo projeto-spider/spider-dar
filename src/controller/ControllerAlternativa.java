@@ -137,6 +137,14 @@ public class ControllerAlternativa {
         }
     }
 
+    public void deletAlternativa(int idAlternativa) throws Exception{
+        try {
+            facade.initializeAlternativa().destroy(idAlternativa); 
+        } catch (Exception error) {
+            throw new Exception(this.getExceptionMessage(error, "Excluir"), error);
+        }
+    }
+    
     private String getExceptionMessage(Exception e, String operacao) {
         String message;
 
