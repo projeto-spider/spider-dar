@@ -44,7 +44,7 @@ public class ViewOrganizacoes extends javax.swing.JInternalFrame {
         jTableOrganizacoes.setModel(myDefaultTableModel);
         jTableOrganizacoes.removeColumn(jTableOrganizacoes.getColumnModel().getColumn(0));
         // transformar as celulas da tabela em textArea.
-        jTableOrganizacoes.setDefaultRenderer(Object.class, new MyCellRenderer());
+        jTableOrganizacoes.setDefaultRenderer(Object.class, new MyCellRenderer(jTableOrganizacoes)); 
     }
 
     /**

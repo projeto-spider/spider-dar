@@ -47,17 +47,43 @@ public class ControllerAlternativa {
 
             facade.initializeHistorico().create(historico);
         } catch (Exception error) {
-            throw new Exception(this.getExceptionMessage(error, "cadastrar"), error);
+            throw new Exception(this.getExceptionMessage(error, "Cadastrar"), error);
         }
     }
 
+    public void upDatelternativa(Request request, int idAlternativa) throws Exception {
+        try {
+
+            alternativa = new Alternativa();
+            alternativa =  facade.initializeAlternativa().findAlternativa(idAlternativa);
+            alternativa.setNome(request.getDataInput("Alternativa.nome").getValor());
+            alternativa.setDescricao(request.getDataInput("Alternativa.descricao").getValor());
+            alternativa.setCusto(request.getDataInput("Alternativa.estimativaCusto").getValor());
+            alternativa.setTempo(request.getDataInput("Alternativa.estimativaTempo").getValor());
+            alternativa.setModified(new Date());
+
+            facade.initializeAlternativa().edit(alternativa);
+
+            historico = new Historico();
+            historico.setDescricao("Alternativa \"" + alternativa.getNome() + "\" Editada.");
+            historico.setUsuarioNome(KeepData.getData("Usuario.nome"));
+            historico.setCreated(new Date());
+            historico.setModified(new Date());
+            historico.setIdProblema(facade.initializeJpaProblema().findProblema(alternativa.getIdProblema().getId()));
+
+            facade.initializeHistorico().create(historico);
+        } catch (Exception error) {
+            throw new Exception(this.getExceptionMessage(error, "Editar"), error);
+        }
+    }
+    
     public List<Request> listAlternativasByProblema() {
         try {
             int idProblema = Integer.parseInt(KeepData.getData("Problema.id"));
 
-            List<Alternativa> list = facade.initializeAlternativa().findAlternativasByProblema(idProblema);
+            List<Alternativa> listAlternativa = facade.initializeAlternativa().findAlternativasByProblema(idProblema);
 
-            return getRequestListFromAlternativa(list);
+            return getRequestListFromAlternativa(listAlternativa);
         } catch (Exception error) {
             throw error;
         }
@@ -76,7 +102,7 @@ public class ControllerAlternativa {
                 data.put("Alternativa.estimativaCusto", another.getCusto());
                 data.put("Alternativa.estimativaTempo", another.getTempo());
                 data.put("Alternativa.created", Text.formatDateForTable(another.getCreated()));
-                data.put("Alternativa.created", Text.formatDateForTable(another.getModified()));
+                data.put("Alternativa.modified", Text.formatDateForTable(another.getModified()));
 
                 if (another.getCreated().equals(another.getModified())) {
                     data.put("Alternativa.modified", "--");
@@ -86,6 +112,26 @@ public class ControllerAlternativa {
             }
 
             return requestList;
+        } catch (Exception error) {
+            throw error;
+        }
+    }
+
+    public Request getAlternativaSelected(int idAlternativa) {
+        try {
+            alternativa = new Alternativa();
+            alternativa = facade.initializeAlternativa().findAlternativa(idAlternativa);
+
+            Map<String, String> data = new HashMap<>();
+            data.put("Alternativa.id", alternativa.getId().toString());
+            data.put("Alternativa.nome", alternativa.getNome());
+            data.put("Alternativa.descricao", alternativa.getDescricao());
+            data.put("Alternativa.estimativaCusto", alternativa.getCusto());
+            data.put("Alternativa.estimativaTempo", alternativa.getTempo());
+            data.put("Alternativa.created", Text.formatDateForTable(alternativa.getCreated()));
+            data.put("Alternativa.modified", Text.formatDateForTable(alternativa.getModified()));
+            
+            return new Request(data);
         } catch (Exception error) {
             throw error;
         }

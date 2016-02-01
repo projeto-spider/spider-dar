@@ -15,16 +15,39 @@ import util.Request;
 public class ViewAlternativaDeSolucaoNovo extends javax.swing.JDialog {
 
     private final int type;
-    private Request request = new Request();
+    private Request request;
+    private int idAlternativa;
     private final ControllerAlternativa controllerAlternativa = new ControllerAlternativa();
 
-    public ViewAlternativaDeSolucaoNovo(java.awt.Frame parent, boolean modal, int type) {
+    public ViewAlternativaDeSolucaoNovo(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
 
-        this.type = type;
+        this.type = Constant.CREATE;
 
         this.setLocationRelativeTo(null);
+    }
+
+    public ViewAlternativaDeSolucaoNovo(java.awt.Frame parent, boolean modal, int idAlternativa) {
+        super(parent, modal);
+        initComponents();
+
+        this.type = Constant.UPDATE;
+        this.idAlternativa = idAlternativa;
+        fillFields(this.idAlternativa);
+
+        this.setLocationRelativeTo(null);
+    }
+
+    private void fillFields(int IdAlternativa) {
+        request = new Request();
+        request = controllerAlternativa.getAlternativaSelected(IdAlternativa);
+
+        jTextFieldNome.setText(request.getData("Alternativa.nome"));
+        jTextAreaDescricao.setText(request.getData("Alternativa.descricao"));
+        jTextFieldEstimativaCusto.setText(request.getData("Alternativa.estimativaCusto"));
+        jTextFieldEstimativaTempo.setText(request.getData("Alternativa.estimativaTempo"));
+
     }
 
     private boolean isValidData(Request request) {
@@ -50,6 +73,7 @@ public class ViewAlternativaDeSolucaoNovo extends javax.swing.JDialog {
     }
 
     private void save() {
+        request =  new Request();
         request.setHashMapValueToInput();
 
         request.setDataInput("Alternativa.nome", new Input(1, "text", "Nome da Alternativa", jTextFieldNome.getText()));
@@ -64,6 +88,8 @@ public class ViewAlternativaDeSolucaoNovo extends javax.swing.JDialog {
         try {
             if (type == Constant.CREATE) {
                 controllerAlternativa.addAlternativa(request);
+            } else {
+                controllerAlternativa.upDatelternativa(request, idAlternativa); 
             }
 
             JOptionPane.showMessageDialog(null, "\"Alternativa\" foi salva com sucesso.");
@@ -99,6 +125,7 @@ public class ViewAlternativaDeSolucaoNovo extends javax.swing.JDialog {
         jLabel3.setText("Descrição:");
 
         jTextAreaDescricao.setColumns(20);
+        jTextAreaDescricao.setLineWrap(true);
         jTextAreaDescricao.setRows(5);
         jScrollPane1.setViewportView(jTextAreaDescricao);
 
@@ -107,6 +134,11 @@ public class ViewAlternativaDeSolucaoNovo extends javax.swing.JDialog {
         jLabel5.setText("Estimativa de Tempo:");
 
         jButtonCancelar.setText("Cancelar");
+        jButtonCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonCancelarActionPerformed(evt);
+            }
+        });
 
         jButtonSalvar.setText("Salvar");
         jButtonSalvar.addActionListener(new java.awt.event.ActionListener() {
@@ -172,6 +204,10 @@ public class ViewAlternativaDeSolucaoNovo extends javax.swing.JDialog {
     private void jButtonSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSalvarActionPerformed
         save();
     }//GEN-LAST:event_jButtonSalvarActionPerformed
+
+    private void jButtonCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelarActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_jButtonCancelarActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonCancelar;

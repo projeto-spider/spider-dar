@@ -2,7 +2,7 @@ package view.TomadaDeDecisao;
 
 import controller.ControllerAlternativa;
 import java.util.List;
-import settings.Constant;
+import javax.swing.JOptionPane;
 import util.Internal;
 import util.MyCellRenderer;
 import util.MyDefaultTableModel;
@@ -28,13 +28,14 @@ public class ViewAlternativaDeSolucao extends javax.swing.JInternalFrame {
     }
 
     private void listAlternativasInTable(List<Request> requestList) {
-        String columns[] = {"id", "Alternativa", "Estimativa de Custo", "Estimativa de Tempo", "Criada em"};
+        String columns[] = {"id", "Alternativa", "Descrição", "Custo", "Tempo", "Criada em"};
         myDefaultTableModel = new MyDefaultTableModel(columns, 0, false);
 
         for (Request request : requestList) {
             String line[] = {
                 request.getData("Alternativa.id"),
                 request.getData("Alternativa.nome"),
+                request.getData("Alternativa.descricao"),
                 request.getData("Alternativa.estimativaCusto"),
                 request.getData("Alternativa.estimativaTempo"),
                 request.getData("Alternativa.created")
@@ -46,8 +47,22 @@ public class ViewAlternativaDeSolucao extends javax.swing.JInternalFrame {
         jTableAlternativas.setModel(myDefaultTableModel);
         jTableAlternativas.removeColumn(jTableAlternativas.getColumnModel().getColumn(0));
         // transformar as celulas da tabela em textArea.
-        jTableAlternativas.setDefaultRenderer(Object.class, new MyCellRenderer());
+        jTableAlternativas.setDefaultRenderer(Object.class, new MyCellRenderer(jTableAlternativas));
         
+        jTableAlternativas.getColumnModel().getColumn(0).setPreferredWidth(230);
+        jTableAlternativas.getColumnModel().getColumn(1).setPreferredWidth(430);
+        jTableAlternativas.getColumnModel().getColumn(2).setPreferredWidth(50);
+        jTableAlternativas.getColumnModel().getColumn(3).setPreferredWidth(50);
+        jTableAlternativas.getColumnModel().getColumn(4).setPreferredWidth(140);
+
+    }
+
+    private boolean rowIsSelected() {
+        if (jTableAlternativas.getSelectedRow() > -1) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -85,6 +100,11 @@ public class ViewAlternativaDeSolucao extends javax.swing.JInternalFrame {
         jLabel1.setText("Pesquisar:");
 
         jButton1.setText("Editar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("Novo");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -135,9 +155,21 @@ public class ViewAlternativaDeSolucao extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        new ViewAlternativaDeSolucaoNovo(null, true, Constant.CREATE).setVisible(true);
+        new ViewAlternativaDeSolucaoNovo(null, true).setVisible(true);
         listAlternativasInTable(controllerAlternativa.listAlternativasByProblema());
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        if (!rowIsSelected()) {
+            JOptionPane.showMessageDialog(null, "Selecione uma linha na tabela.");
+            return;
+        }
+        int idAltenativa = Integer.parseInt(jTableAlternativas.getModel()
+                .getValueAt(jTableAlternativas.getSelectedRow(), 0).toString());
+
+        new ViewAlternativaDeSolucaoNovo(null, true, idAltenativa).setVisible(true);
+        listAlternativasInTable(controllerAlternativa.listAlternativasByProblema());
+    }//GEN-LAST:event_jButton1ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
