@@ -55,7 +55,7 @@ public class ControllerAlternativa {
         try {
 
             alternativa = new Alternativa();
-            alternativa =  facade.initializeAlternativa().findAlternativa(idAlternativa);
+            alternativa = facade.initializeAlternativa().findAlternativa(idAlternativa);
             alternativa.setNome(request.getDataInput("Alternativa.nome").getValor());
             alternativa.setDescricao(request.getDataInput("Alternativa.descricao").getValor());
             alternativa.setCusto(request.getDataInput("Alternativa.estimativaCusto").getValor());
@@ -76,7 +76,7 @@ public class ControllerAlternativa {
             throw new Exception(this.getExceptionMessage(error, "Editar"), error);
         }
     }
-    
+
     public List<Request> listAlternativasByProblema() {
         try {
             int idProblema = Integer.parseInt(KeepData.getData("Problema.id"));
@@ -130,21 +130,31 @@ public class ControllerAlternativa {
             data.put("Alternativa.estimativaTempo", alternativa.getTempo());
             data.put("Alternativa.created", Text.formatDateForTable(alternativa.getCreated()));
             data.put("Alternativa.modified", Text.formatDateForTable(alternativa.getModified()));
-            
+
             return new Request(data);
         } catch (Exception error) {
             throw error;
         }
     }
 
-    public void deletAlternativa(int idAlternativa) throws Exception{
+    public void deletAlternativa(int idAlternativa) throws Exception {
         try {
-            facade.initializeAlternativa().destroy(idAlternativa); 
+            alternativa = new Alternativa();
+            alternativa = facade.initializeAlternativa().findAlternativa(idAlternativa);
+            
+            facade.initializeAlternativa().destroy(alternativa.getId());
+
+            historico = new Historico();
+            historico.setDescricao("Alternativa \"" + alternativa.getNome() + "\" Excluída.");
+            historico.setUsuarioNome(KeepData.getData("Usuario.nome"));
+            historico.setCreated(new Date());
+            historico.setModified(new Date());
+            historico.setIdProblema(facade.initializeJpaProblema().findProblema(alternativa.getIdProblema().getId()));       
         } catch (Exception error) {
             throw new Exception(this.getExceptionMessage(error, "Excluir"), error);
         }
     }
-    
+
     private String getExceptionMessage(Exception e, String operacao) {
         String message;
 
