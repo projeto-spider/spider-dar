@@ -10,13 +10,13 @@ import model.Alternativa;
  *
  * @author Bleno Vale
  */
-public class JpaAlternativa extends AlternativaJpaController{
+public class JpaAlternativa extends AlternativaJpaController {
 
     public JpaAlternativa(EntityManagerFactory emf) {
         super(emf);
     }
-    
-    public List<Alternativa> findAlternativasByProblema(int idProblema){
+
+    public List<Alternativa> findAlternativasByProblema(int idProblema) {
         try {
             EntityManager entityManager = super.getEntityManager();
             entityManager.getTransaction().begin();
@@ -34,5 +34,25 @@ public class JpaAlternativa extends AlternativaJpaController{
             throw error;
         }
     }
-    
+
+    public List<Alternativa> findAlternativasByName(int idProblema, String name) {
+        try {
+            EntityManager entityManager = super.getEntityManager();
+            entityManager.getTransaction().begin();
+
+            List<Alternativa> list = entityManager
+                    .createQuery("SELECT a FROM Alternativa a WHERE a.idProblema.id =:idProblema AND a.nome LIKE :name ORDER BY a.id ASC")
+                    .setParameter("idProblema", idProblema)
+                    .setParameter("name", "%" + name + "%")
+                    .getResultList();
+
+            entityManager.getTransaction().commit();
+            entityManager.close();
+
+            return list;
+        } catch (Exception error) {
+            throw error;
+        }
+    }
+
 }

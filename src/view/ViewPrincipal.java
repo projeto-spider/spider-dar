@@ -618,6 +618,7 @@ public class ViewPrincipal extends javax.swing.JFrame {
 
     private void jButtonHistoricoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonHistoricoActionPerformed
         changeViews(viewHistorico);
+        viewHistorico.showViewHistorico();
     }//GEN-LAST:event_jButtonHistoricoActionPerformed
 
     public void reload() {
