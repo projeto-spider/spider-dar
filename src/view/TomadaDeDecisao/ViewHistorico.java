@@ -41,7 +41,10 @@ public class ViewHistorico extends javax.swing.JInternalFrame {
         }
 
         jTableHistorico.setModel(myDefaultTableModel);
-        jTableHistorico.setDefaultRenderer(Object.class, new MyCellRenderer(jTableHistorico));
+        jTableHistorico.setDefaultRenderer(Object.class, new MyCellRenderer());
+        jTableHistorico.getColumnModel().getColumn(0).setPreferredWidth(330);
+        jTableHistorico.getColumnModel().getColumn(1).setPreferredWidth(130);
+        jTableHistorico.getColumnModel().getColumn(2).setPreferredWidth(70);
     }
 
     @SuppressWarnings("unchecked")

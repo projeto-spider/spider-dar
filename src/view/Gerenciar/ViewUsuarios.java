@@ -6,6 +6,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import javax.swing.JOptionPane;
 import util.Internal;
+import util.MyCellRenderer;
 import util.MyDefaultTableModel;
 import util.Request;
 
@@ -38,6 +39,7 @@ public class ViewUsuarios extends javax.swing.JInternalFrame {
             myDefaultTableModel.addRow(line);
         }
         jTableUsuarios.setModel(myDefaultTableModel);
+        jTableUsuarios.setDefaultRenderer(Object.class, new MyCellRenderer());
     }
 
     private void removeUsuario(String name) {

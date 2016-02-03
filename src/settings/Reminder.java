@@ -34,7 +34,7 @@ public class Reminder {
             public void run() {
                 List<Acessar> accessList = facade.initializeJpaUsuario().findAcessoByUsuario(id);
 
-                System.out.println(">> Usuario: " + KeepData.getData("Usuario.nome") + " logado!!");
+//                System.out.println(">> Usuario: " + KeepData.getData("Usuario.nome") + " logado!!");
                 if (!useAcsess.equals(accessList)) {
                     JOptionPane.showMessageDialog(null, "Houveram modificações em sua conta."
                             + "\n\nO programa irá reiniciar.");

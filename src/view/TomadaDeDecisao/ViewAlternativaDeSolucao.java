@@ -1,6 +1,7 @@
 package view.TomadaDeDecisao;
 
 import controller.ControllerAlternativa;
+import java.awt.Color;
 import java.util.List;
 import javax.swing.JOptionPane;
 import util.Internal;
@@ -47,12 +48,12 @@ public class ViewAlternativaDeSolucao extends javax.swing.JInternalFrame {
         jTableAlternativas.setModel(myDefaultTableModel);
         jTableAlternativas.removeColumn(jTableAlternativas.getColumnModel().getColumn(0));
         // transformar as celulas da tabela em textArea.
-        jTableAlternativas.setDefaultRenderer(Object.class, new MyCellRenderer(jTableAlternativas));
+        jTableAlternativas.setDefaultRenderer(Object.class, new MyCellRenderer());
 
         jTableAlternativas.getColumnModel().getColumn(0).setPreferredWidth(230);
         jTableAlternativas.getColumnModel().getColumn(1).setPreferredWidth(430);
-        jTableAlternativas.getColumnModel().getColumn(2).setPreferredWidth(50);
-        jTableAlternativas.getColumnModel().getColumn(3).setPreferredWidth(50);
+        jTableAlternativas.getColumnModel().getColumn(2).setPreferredWidth(70);
+        jTableAlternativas.getColumnModel().getColumn(3).setPreferredWidth(70);
         jTableAlternativas.getColumnModel().getColumn(4).setPreferredWidth(140);
 
     }

@@ -1,5 +1,6 @@
 package util;
 
+import java.awt.Color;
 import java.awt.Component;
 import javax.swing.JLabel;
 import javax.swing.JTable;
@@ -16,8 +17,7 @@ import javax.swing.text.StyledDocument;
  */
 public class MyCellRenderer extends JTextPane implements TableCellRenderer {
 
-    public MyCellRenderer(JTable jtable) {
-        HeaderRenderer(jtable);
+    public MyCellRenderer() {
     }
 
     @Override
@@ -35,14 +35,21 @@ public class MyCellRenderer extends JTextPane implements TableCellRenderer {
             this.setForeground(table.getSelectionForeground());
             this.setBackground(table.getSelectionBackground());
         } else {
-            this.setForeground(table.getForeground());
-            this.setBackground(table.getBackground());
+
+            if (row % 2 == 0) {
+                this.setForeground(table.getForeground());
+                this.setBackground(Color.WHITE);
+
+            } else {
+                this.setForeground(table.getForeground());
+                this.setBackground(new Color(204,204,204));
+            }
         }
 
         // Centraliza verticalmente o Texto na celula da tabela.
         StyledDocument doc = this.getStyledDocument();
         SimpleAttributeSet center = new SimpleAttributeSet();
-        StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
+        StyleConstants.setAlignment(center, StyleConstants.ALIGN_JUSTIFIED);
         doc.setParagraphAttributes(0, doc.getLength(), center, false);
         this.setDocument(doc);
 
@@ -60,9 +67,11 @@ public class MyCellRenderer extends JTextPane implements TableCellRenderer {
         return this;
     }
 
-    public void HeaderRenderer(JTable table) {
+    public void ComponentsRenderer(JTable table) {
         // Centraliza o nome das colunas da tabela.
         DefaultTableCellRenderer renderer = (DefaultTableCellRenderer) table.getTableHeader().getDefaultRenderer();
         renderer.setHorizontalAlignment(JLabel.CENTER);
+
     }
+
 }

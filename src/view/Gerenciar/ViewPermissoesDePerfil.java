@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import util.Internal;
+import util.MyCellRenderer;
 import util.MyDefaultTableModel;
 import util.Request;
 
@@ -45,6 +46,7 @@ public class ViewPermissoesDePerfil extends javax.swing.JInternalFrame {
             myDefaultTableModel.addRow(line);
         }
         jTablePerfis.setModel(myDefaultTableModel);
+        jTablePerfis.setDefaultRenderer(Object.class, new MyCellRenderer());
     }
 
     private String getPerfilSelected() {

@@ -219,7 +219,7 @@ public class ViewPrincipal extends javax.swing.JFrame {
         jLabel2.setText("Projeto SPIDER");
 
         jButtonMotivacaoEObj.setBackground(new java.awt.Color(65, 65, 65));
-        jButtonMotivacaoEObj.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jButtonMotivacaoEObj.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
         jButtonMotivacaoEObj.setForeground(new java.awt.Color(255, 255, 255));
         jButtonMotivacaoEObj.setText("MOTIVAÇÃO E OBJETIVOS");
         jButtonMotivacaoEObj.setContentAreaFilled(false);
@@ -236,7 +236,7 @@ public class ViewPrincipal extends javax.swing.JFrame {
         });
 
         jButtonCalendario.setBackground(new java.awt.Color(65, 65, 65));
-        jButtonCalendario.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jButtonCalendario.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
         jButtonCalendario.setForeground(new java.awt.Color(255, 255, 255));
         jButtonCalendario.setText("CALENDÁRIO");
         jButtonCalendario.setContentAreaFilled(false);
@@ -253,7 +253,7 @@ public class ViewPrincipal extends javax.swing.JFrame {
         });
 
         jButtonAlternativas.setBackground(new java.awt.Color(65, 65, 65));
-        jButtonAlternativas.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jButtonAlternativas.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
         jButtonAlternativas.setForeground(new java.awt.Color(255, 255, 255));
         jButtonAlternativas.setText("ALTERNATIVAS DE SOLUÇÃO");
         jButtonAlternativas.setContentAreaFilled(false);
@@ -270,7 +270,7 @@ public class ViewPrincipal extends javax.swing.JFrame {
         });
 
         jButtonCriterios.setBackground(new java.awt.Color(65, 65, 65));
-        jButtonCriterios.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jButtonCriterios.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
         jButtonCriterios.setForeground(new java.awt.Color(255, 255, 255));
         jButtonCriterios.setText("CRITÉRIOS DE AVALIAÇÃO");
         jButtonCriterios.setContentAreaFilled(false);
@@ -287,7 +287,7 @@ public class ViewPrincipal extends javax.swing.JFrame {
         });
 
         jButtonAvaliacao.setBackground(new java.awt.Color(65, 65, 65));
-        jButtonAvaliacao.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jButtonAvaliacao.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
         jButtonAvaliacao.setForeground(new java.awt.Color(255, 255, 255));
         jButtonAvaliacao.setText("AVALIAÇÃO");
         jButtonAvaliacao.setContentAreaFilled(false);
@@ -304,7 +304,7 @@ public class ViewPrincipal extends javax.swing.JFrame {
         });
 
         jButtonHistorico.setBackground(new java.awt.Color(65, 65, 65));
-        jButtonHistorico.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jButtonHistorico.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
         jButtonHistorico.setForeground(new java.awt.Color(255, 255, 255));
         jButtonHistorico.setText("HISTÓRICO");
         jButtonHistorico.setContentAreaFilled(false);

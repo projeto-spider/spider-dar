@@ -7,9 +7,9 @@ import javax.swing.table.DefaultTableModel;
  * @author Bleno Vale
  */
 public class MyDefaultTableModel extends DefaultTableModel {
-    
+
     private boolean isEditable;
-    
+
     /**
      * Cria um modelo para a JTable
      *
@@ -21,7 +21,7 @@ public class MyDefaultTableModel extends DefaultTableModel {
         super(columnNames, rowCount);
         this.isEditable = isEditable;
     }
-    
+
     @Override
     public boolean isCellEditable(int row, int column) {
         return isEditable;
