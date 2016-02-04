@@ -100,6 +100,7 @@ public class ViewLogin extends javax.swing.JFrame {
         jTextFieldEmailRecupera = new javax.swing.JTextField();
         jButton6 = new javax.swing.JButton();
         jLabel14 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Login");
@@ -346,6 +347,13 @@ public class ViewLogin extends javax.swing.JFrame {
         jLabel14.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel14.setText("Uma Nova Senha será enviada para o seu E-mail.");
 
+        jButton1.setText("Cancelar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -357,7 +365,10 @@ public class ViewLogin extends javax.swing.JFrame {
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton6))
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addComponent(jButton6)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jButton1)))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
@@ -373,7 +384,9 @@ public class ViewLogin extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jTextFieldEmailRecupera, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jButton6)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton6)
+                    .addComponent(jButton1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 183, Short.MAX_VALUE)
                 .addComponent(jLabel14)
                 .addContainerGap())
@@ -436,8 +449,8 @@ public class ViewLogin extends javax.swing.JFrame {
             if (senhaOk) {
                 KeepData.setData("Usuario.id", String.valueOf(usuario.getId()));
                 KeepData.setData("Usuario.nome", usuario.getNome());
-                new ViewSelecionarOrganizacao(null, true).setVisible(true);
                 this.dispose();
+                new ViewSelecionarOrganizacao(null, true).setVisible(true);
             }
         }
     }
@@ -485,13 +498,18 @@ public class ViewLogin extends javax.swing.JFrame {
 
         controllerUsuario.editUsuario(usuario);
 
-        new ViewSelecionarOrganizacao(null, true).setVisible(true);
         this.dispose();
+        new ViewSelecionarOrganizacao(null, true).setVisible(true);
+       
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jPasswordFieldSenhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jPasswordFieldSenhaActionPerformed
         getIn();
     }//GEN-LAST:event_jPasswordFieldSenhaActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        cardInicial();
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     public static void main(String args[]) {
         try {
@@ -524,6 +542,7 @@ public class ViewLogin extends javax.swing.JFrame {
     private javax.swing.JPanel Inicial;
     private javax.swing.JPanel PrimeiroAcesso;
     private javax.swing.JPanel RecuperaSenha;
+    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton6;
