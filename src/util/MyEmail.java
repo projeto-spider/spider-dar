@@ -35,16 +35,16 @@ public class MyEmail {
 
     public void SendNewPassword(String address, String name, String newPassword) {
         String subject = "Nova senha Spider-DAR";
-//        String message = "<html>"
-//                + "Olá " + name + "<br><br>"
-//                + "Sua nova senha é: " + newPassword
-//                + "</html>";
-        sendEmail(address, subject, "Teste");
+        String message = "<html>"
+                + "Olá, " + name + "<br><br>"
+                + "Sua nova senha é: " + newPassword
+                + "</html>";
+        sendEmail(address, subject, message);
     }
 
     private void sendEmail(String address, String subject, String message) {
         try {
-            SimpleEmail email = new SimpleEmail();
+            HtmlEmail email = new HtmlEmail();
             
             email.setDebug(true); 
             email.setHostName(host);

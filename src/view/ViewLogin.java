@@ -3,12 +3,12 @@ package view;
 import controller.ControllerUsuario;
 import java.awt.CardLayout;
 import java.util.Arrays;
-import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import javax.swing.JOptionPane;
-import model.Usuario;
 import settings.KeepData;
 import util.Criptografia;
-import util.MyEmail;
+import util.Request;
 
 /**
  *
@@ -16,8 +16,8 @@ import util.MyEmail;
  */
 public class ViewLogin extends javax.swing.JFrame {
 
-    private ControllerUsuario controllerUsuario = new ControllerUsuario();
-    private Usuario usuario = new Usuario();
+    private final ControllerUsuario controllerUsuario = new ControllerUsuario();
+    private Request request;
     private boolean esqueceuSenha = false;
 
     public ViewLogin() {
@@ -43,8 +43,8 @@ public class ViewLogin extends javax.swing.JFrame {
     }
 
     public void fillFields() {
-        jTextFieldNomeCompletoPri.setText(this.usuario.getNome());
-        jTextFieldLoginPri.setText(this.usuario.getLogin());
+        jTextFieldNomeCompletoPri.setText(this.request.getData("Usuario.nome"));
+        jTextFieldLoginPri.setText(this.request.getData("Usuario.login"));
     }
 
     private boolean usuarioValidate() {
@@ -434,21 +434,18 @@ public class ViewLogin extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void getIn() {
-        usuario = new Usuario();
+        request = controllerUsuario.findUsuarioByLogin(jTextFieldLogin.getText());
 
-        usuario = controllerUsuario.findUsuarioByLogin(jTextFieldLogin.getText());
-
-        if (usuario == null) {
+        if (request.getData("Usuario.id") == null) {
             JOptionPane.showMessageDialog(this, "Login ou Senha incorretos.");
-        } else if (usuario.getSenha() == null) {
-            JOptionPane.showMessageDialog(this, "Esse é o seu primeiro acesso. \n Você deverá cadastrar uma senha e um e-mail de recuperação.");
+        } else if (request.getData("Usuario.senha") == null) {
             fillFields();
             cardPrimeiroAcesso();
         } else {
-            boolean senhaOk = controllerUsuario.CompareSenhaTypedWithBD(usuario.getSenha(), new String(jPasswordFieldSenha.getPassword()));
+            boolean senhaOk = controllerUsuario.CompareSenhaTypedWithBD(request.getData("Usuario.senha"), new String(jPasswordFieldSenha.getPassword()));
             if (senhaOk) {
-                KeepData.setData("Usuario.id", String.valueOf(usuario.getId()));
-                KeepData.setData("Usuario.nome", usuario.getNome());
+                KeepData.setData("Usuario.id", String.valueOf(request.getData("Usuario.id")));
+                KeepData.setData("Usuario.nome", request.getData("Usuario.nome"));
                 this.dispose();
                 new ViewSelecionarOrganizacao(null, true).setVisible(true);
             }
@@ -460,8 +457,6 @@ public class ViewLogin extends javax.swing.JFrame {
             if (controllerUsuario.existRegisteredEmail(jTextFieldEmailRecupera.getText())) {
                 jPanel3.setVisible(false);
                 this.pack();
-
-                new MyEmail().SendNewPassword(jTextFieldEmailRecupera.getText(), "Teste", "Teste"); 
             }
         } else {
             JOptionPane.showMessageDialog(this, "E-mail inválido.");
@@ -486,21 +481,20 @@ public class ViewLogin extends javax.swing.JFrame {
             return;
         }
 
-        usuario.setLogin(jTextFieldLoginPri.getText());
-        usuario.setEmail(jTextFieldEmailPri.getText());
+        Map<String, String> data = new HashMap<>();
+        data.put("Usuario.id", request.getData("Usuario.id"));
+        data.put("Usuario.login", jTextFieldLoginPri.getText());
+        data.put("Usuario.email", jTextFieldEmailPri.getText());
 
         Criptografia criptografia = new Criptografia();
         String senha_Cript = criptografia.encryptMessage(new String(jPasswordFieldSenhaPri.getPassword()));
-        usuario.setSenha(senha_Cript);
+        data.put("Usuario.senha", senha_Cript);
 
-        usuario.setCreated(new Date());
-        usuario.setModified(new Date());
-
-        controllerUsuario.editUsuario(usuario);
+        controllerUsuario.updateUsuario(request);
 
         this.dispose();
         new ViewSelecionarOrganizacao(null, true).setVisible(true);
-       
+
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jPasswordFieldSenhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jPasswordFieldSenhaActionPerformed
