@@ -15,6 +15,7 @@ import model.Usuario;
 import settings.Facade;
 import settings.KeepData;
 import util.Criptografia;
+import util.MyEmail;
 import util.Request;
 import util.Text;
 
@@ -97,6 +98,25 @@ public class ControllerUsuario {
             if (!request.getData("Usuario.senha").isEmpty()){
                 usuario.setSenha(request.getData("Usuario.senha")); 
             }
+            usuario.setModified(new Date());
+            facade.initializeJpaUsuario().edit(usuario);
+
+            return true;
+        } catch (Exception error) {
+            error.printStackTrace();
+            return false;
+        }
+    }
+    
+    public boolean updateFirstAccess(Request request) {
+        try {
+            int id = Integer.parseInt(request.getData("Usuario.id")); 
+            usuario = new Usuario();
+            usuario = facade.initializeJpaUsuario().findUsuario(id); 
+            usuario.setLogin(request.getData("Usuario.login"));
+            usuario.setEmail(request.getData("Usuario.email")); 
+            usuario.setSenha(request.getData("Usuario.senha")); 
+
             usuario.setModified(new Date());
             facade.initializeJpaUsuario().edit(usuario);
 
@@ -283,9 +303,21 @@ public class ControllerUsuario {
         return findUsuarioByNome(name).getData("Usuario.id").equals("1");
     }
 
-    public Usuario findUsuarioByLogin(String login_usuario) {
+    public Request findUsuarioByLogin(String loginUsuario) {
         try {
-            return facade.initializeJpaUsuario().findUsuarioByLogin(login_usuario);
+            usuario = new Usuario();
+            usuario = facade.initializeJpaUsuario().findUsuarioByLogin(loginUsuario);
+            
+            Map<String, String> data = new HashMap<>();
+            data.put("Usuario.id", String.valueOf(usuario.getId()));
+            data.put("Usuario.nome", usuario.getNome());
+            data.put("Usuario.login", usuario.getLogin());
+            data.put("Usuario.email", usuario.getEmail());
+            data.put("Usuario.senha", usuario.getSenha());
+            data.put("Usuario.created", Text.formatDateForTable(usuario.getCreated()));
+            data.put("Usuario.modified", Text.formatDateForTable(usuario.getModified()));
+            
+            return new Request(data);
         } catch (Exception error) {
             throw error;
         }
@@ -344,17 +376,14 @@ public class ControllerUsuario {
             //cria string aleatória de 6 digitos.
             UUID uuid = UUID.randomUUID();
             String newPassword = uuid.toString().substring(0, 6);
+            
+            new MyEmail().SendNewPassword(usuario.getEmail(), usuario.getNome(), newPassword);
 
             String newPasswordCrip = criptografia.encryptMessage(newPassword);
             usuario.setSenha(newPasswordCrip);
-//
-//            Post post = new Post();
-//            if (post.sendEmailPasswordRecovery(usuario.getEmail(), usuario.getLogin(), newPassword)) {
-//                facade.initializeJpaUsuario().edit(usuario);
-//                JOptionPane.showMessageDialog(null, "Nova senha criada.\nPor favor cheque seu E-mail.");
-//            } else {
-//                JOptionPane.showMessageDialog(null, "Nova foi possível enviar a mensagem de recuperação.\n Por favor, verifique sua conexão.");
-//            }
+            
+            facade.initializeJpaUsuario().edit(usuario); 
+
         } catch (Exception error) {
             error.printStackTrace();
             JOptionPane.showMessageDialog(null, "Erro inesperado.");
