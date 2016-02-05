@@ -39,9 +39,9 @@ public class ViewNovoProblemaDialog extends javax.swing.JDialog
         this.setLocationRelativeTo(null);
     }
     
-    private void fillFieldsProblemaByCodigoProblema(String codigoProblema)
+    private void fillFieldsProblemaByCodigoProblema(String idProblema)
     {
-        request.setData("Problema.codigo", codigoProblema);
+        request.setData("Problema.id", idProblema);
         request.setData("Problema.idOrganizacao", KeepData.getData("Organizacao.id"));
         
         Request problema = controllerProblema.getProblemaByCodigo(request);

@@ -16,6 +16,7 @@ public class Constant {
     public static int ALTERNATIVAS = 3;
     public static int METODOS = 4;
     public static int AVALIAR = 5;
-    public static int SOLUCOES = 6;
-
+    public static int SOLUCOES = 6; 
+    
+    public static int ID_ADMIN = 1;
 }

@@ -53,7 +53,8 @@ public class ViewOrganizacoes extends javax.swing.JInternalFrame {
     private void editarButtonIsPressed() {
         int index = jTableOrganizacoes.getSelectedRow();
         if (index > -1) {
-            new ViewNovaOrganizacao(null, true, jTableOrganizacoes.getValueAt(index, 0).toString()).setVisible(true);
+            String idOrganizacao = jTableOrganizacoes.getValueAt(index, 0).toString();
+            new ViewNovaOrganizacao(null, true, idOrganizacao).setVisible(true);
         } else {
             JOptionPane.showMessageDialog(null, "Selecione uma linha na tabela.");
         }

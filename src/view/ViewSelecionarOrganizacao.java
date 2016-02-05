@@ -8,6 +8,7 @@ import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import settings.KeepData;
 import util.Request;
+import util.swing.ComboItem;
 
 /**
  *
@@ -37,75 +38,71 @@ public class ViewSelecionarOrganizacao extends javax.swing.JDialog {
         this.setLocationRelativeTo(null);
     }
 
-    private void fillComboboxOrganizacaoAndProblema() {
-        comboboxModel = new DefaultComboBoxModel();
-        comboboxModel.addElement("--Selecione uma Organização--");
-        
+    private void fillComboboxOrganizacaoAndProblema()
+    {
+        jComboBoxOrganizacao.removeAllItems();
+        jComboBoxOrganizacao.addItem(new ComboItem("", "--Selecione uma Organização--"));
         List<Request> requestList = controllerOrganizacao.findOrganizacoesByUsuario();
-        for (Request request : requestList) {
-            comboboxModel.addElement(request.getData("Organizacao.nome"));
+        
+        for (Request request : requestList)
+        {
+            String idOrganizacao = request.getData("Organizacao.id");
+            String nomeOrganizacao = request.getData("Organizacao.nome");
+            jComboBoxOrganizacao.addItem(new ComboItem(idOrganizacao, nomeOrganizacao));
         }
 
-        jComboBoxOrganizacao.setModel(comboboxModel);
-        
         jComboBoxOrganizacao.addActionListener(new ActionListener()
         {
+            @Override
             public void actionPerformed(ActionEvent e)
             {
-                DefaultComboBoxModel comboBoxModelProblema = new DefaultComboBoxModel();
-                String comboboxProblemaTextDefault = "--Selecione um Problema--";
-                comboBoxModelProblema.addElement(comboboxProblemaTextDefault);
-                
+                jComboBoxProblema.removeAllItems();
+                jComboBoxProblema.addItem(new ComboItem("", "--Selecione um Problema--"));
+      
                 ControllerProblema controllerProblema = new ControllerProblema();
                 
-                String nomeOrganizacao = (String) comboboxModel.getSelectedItem();
-                
-                if (!nomeOrganizacao.equals("--Selecione uma Organização--"))
+                String idOrganizacao = ((ComboItem)jComboBoxOrganizacao.getSelectedItem()).getValue();
+               
+                if (!idOrganizacao.isEmpty())
                 {
-                    Request requestOrganizacao = controllerOrganizacao.findOrganizacaoSelected(nomeOrganizacao);
-
-                    String idOrganizacao = requestOrganizacao.getData("Organizacao.id");
-
                     List<Request> requestList = controllerProblema.listProblemasByIdOrganizacao(idOrganizacao);
 
                     for (Request request : requestList)
                     {
-                        comboBoxModelProblema.addElement(request.getData("Problema.codigo") + " - " + request.getData("Problema.nome"));
+                        String idProblema = request.getData("Problema.id");
+                        String nomeProblema = request.getData("Problema.nome");
+                        jComboBoxProblema.addItem(new ComboItem(idProblema, nomeProblema));
                     }
                 }
-                
-               jComboBoxProblema.setModel(comboBoxModelProblema);
             }
         });
     }
     
-    private void keepData() {
+    private void keepData() 
+    {
+        ComboItem selectedOrganizacao = (ComboItem)jComboBoxOrganizacao.getSelectedItem();
         
-        if (!"--Selecione uma Organização--".equals(jComboBoxOrganizacao.getSelectedItem().toString())) 
+        String idOrganizacao = selectedOrganizacao.getValue();
+        
+        if (!idOrganizacao.isEmpty()) 
         {
-            Request request = controllerOrganizacao.findOrganizacaoSelected(jComboBoxOrganizacao.getSelectedItem().toString());
+            String nomeOrganizacao = selectedOrganizacao.getLabel();
+            
+            Request request = controllerOrganizacao.findOrganizacaoSelected(nomeOrganizacao);
             
             KeepData.setData("Organizacao.id", request.getData("Organizacao.id"));
             KeepData.setData("Organizacao.nome", request.getData("Organizacao.nome"));
             
-            String comboBoxValue = jComboBoxProblema.getSelectedItem().toString();
+            ComboItem selectedProblema = (ComboItem)jComboBoxProblema.getSelectedItem();
+            String idProblema = selectedProblema.getValue();
             
-            if (!("--Selecione um Problema--".equals(comboBoxValue)))
+            if (!idProblema.isEmpty())
             {
-                String arrayStringCodigoProblema[] = comboBoxValue.split(" - ");
-                
-                String codigoProblema = arrayStringCodigoProblema[0];
-                
                 ControllerProblema controllerProblema = new ControllerProblema();
-                Request requestProblemaBusca = new Request();
                 
-                requestProblemaBusca.setData("Problema.codigo", codigoProblema);
-                requestProblemaBusca.setData("Problema.idOrganizacao", request.getData("Organizacao.id"));
-                
-                Request requestProblema = controllerProblema.getProblemaByCodigo(requestProblemaBusca);
+                Request requestProblema = controllerProblema.getProblemaById(idProblema);
                 
                 KeepData.setData("Problema.id",requestProblema.getData("Problema.id"));
-                KeepData.setData("Problema.codigo",requestProblema.getData("Problema.codigo"));
                 KeepData.setData("Problema.nome",requestProblema.getData("Problema.nome"));
             }
         }

@@ -112,6 +112,28 @@ public class ControllerProblema
         }
     }
     
+    public Request getProblemaById(String id)
+    {
+        try
+        {
+            int idProblema = Integer.parseInt(id);
+            Problema problema = this.facade.initializeJpaProblema().findProblema(idProblema);
+            
+            Request returnRequest = new Request();
+            
+            returnRequest.setData("Problema.id", String.valueOf(problema.getId()));
+            returnRequest.setData("Problema.nome", problema.getNome());
+            returnRequest.setData("Problema.created", Text.formatDateForTable(problema.getCreated()));
+            returnRequest.setData("Problema.modified", Text.formatDateForTable(problema.getModified()));
+            
+            return returnRequest;
+        }
+        catch (Exception e)
+        {
+            throw e;
+        }
+    }
+    
     public Request getProblemaByCodigo(Request request)
     {
         try

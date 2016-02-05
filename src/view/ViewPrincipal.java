@@ -70,10 +70,18 @@ public class ViewPrincipal extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
     }
 
-    public void showInformation() {
+    public void showInformation()
+    {
+        String nomeOrganizacao = KeepData.getData("Organizacao.nome");
+        String nomeProblema = KeepData.getData("Problema.nome");
+        
+//        String nomeOrganizacaoLabel = (nomeOrganizacao.isEmpty() || nomeOrganizacao == null) ? "-" : nomeOrganizacao;
+//        String nomeProblemaLabel = (nomeProblema.isEmpty() || nomeProblema == null) ? "-" : nomeProblema;
+        
         jLabelBemvindo.setText("Bem-Vindo, " + KeepData.getData("Usuario.nome"));
-        jLabelOrganizacao.setText("Organização: " + KeepData.getData("Organizacao.nome"));
-        jLabelProblema.setText("Problema: " + KeepData.getData("Problema.codigo") + " - " + KeepData.getData("Problema.nome"));
+        jLabelOrganizacao.setText("Organização: " + nomeOrganizacao);
+        jLabelProblema.setText("Problema: " + nomeProblema);
+
         changeViews(viewHome);
     }
     

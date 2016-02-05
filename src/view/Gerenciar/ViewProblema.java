@@ -5,6 +5,7 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import settings.KeepData;
 import util.Internal;
+import util.MyCellRenderer;
 import util.MyDefaultTableModel;
 import util.Request;
 
@@ -26,13 +27,12 @@ public class ViewProblema extends javax.swing.JInternalFrame {
     
     public void listProblemasInTable(List<Request> requestList)
     {
-        String columns[] = {"id","Código", "Nome do Problema", "Criado em", "Modificado em"};
+        String columns[] = {"id", "Nome do Problema", "Criado em", "Modificado em"};
         myDefaultTableModel = new MyDefaultTableModel(columns, 0, false);
         
         for (Request request: requestList)
         {
             String line[] = {request.getData("Problema.id"),
-                                request.getData("Problema.codigo"),
                                 request.getData("Problema.nome"),
                                 request.getData("Problema.created"),
                                 request.getData("Problema.modified")};
@@ -40,10 +40,11 @@ public class ViewProblema extends javax.swing.JInternalFrame {
             myDefaultTableModel.addRow(line);
         }
         jTableProblemas.setModel(myDefaultTableModel);
-        jTableProblemas.setAutoResizeMode(jTableProblemas.AUTO_RESIZE_OFF);
         jTableProblemas.getTableHeader().setReorderingAllowed(false);
         jTableProblemas.setAutoCreateRowSorter(true);
         jTableProblemas.getRowSorter().toggleSortOrder(2);
+        jTableProblemas.removeColumn(jTableProblemas.getColumnModel().getColumn(0));
+        jTableProblemas.setDefaultRenderer(Object.class, new MyCellRenderer());
     }
 
     @SuppressWarnings("unchecked")
@@ -152,11 +153,14 @@ public class ViewProblema extends javax.swing.JInternalFrame {
     private void editarButtonIsPressed()
     {
         int index = jTableProblemas.getSelectedRow();
-        if (index > -1) {
-            new ViewNovoProblemaDialog(null, true, jTableProblemas.getValueAt(index, 0).toString()).setVisible(true);
-        } else {
-            JOptionPane.showMessageDialog(null, "Selecione uma linha na tabela.");
+        
+        if (index > -1)
+        {
+            String idProblema = jTableProblemas.getModel().getValueAt(index, 0).toString();
+            new ViewNovoProblemaDialog(null, true, idProblema).setVisible(true);
         }
+        else
+            JOptionPane.showMessageDialog(null, "Selecione uma linha na tabela.");
     }
     
     private void jButtonCadastrarProblemaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCadastrarProblemaActionPerformed

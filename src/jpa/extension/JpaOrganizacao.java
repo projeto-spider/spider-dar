@@ -119,12 +119,12 @@ public class JpaOrganizacao extends OrganizacaoJpaController {
         }
     }
 
-    public List<Organizacao> findOrganizacoesByUsuario() {
+    public List<Organizacao> findOrganizacoesByUsuarioId(int idUser)
+    {
         try {
             EntityManager entityManager = super.getEntityManager();
             entityManager.getTransaction().begin();
 
-            int idUser = Integer.parseInt(KeepData.getData("Usuario.id"));
             //int idOrg = Integer.parseInt(KeepData.getData("Organizacao.id"));
 
             List<Organizacao> list = entityManager

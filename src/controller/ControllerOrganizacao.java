@@ -7,8 +7,13 @@ import java.util.List;
 import java.util.Map;
 import jpa.exceptions.IllegalOrphanException;
 import jpa.exceptions.NonexistentEntityException;
+import jpa.extension.JpaOrganizacao;
+import jpa.extension.JpaProblema;
 import model.Organizacao;
+import model.Usuario;
+import settings.Constant;
 import settings.Facade;
+import settings.KeepData;
 import util.Request;
 import util.Text;
 
@@ -98,13 +103,27 @@ public class ControllerOrganizacao {
      *
      * @return uma lista contendo os dados requisitados de cada Organização.
      */
-    public List<Request> findOrganizacoesByUsuario() {
+    public List<Request> findOrganizacoesByUsuario()
+    {
         try {
-            List<Organizacao> list = facade.initializeJpaOrganizacao().findOrganizacoesByUsuario();
+            int idUsuario = Integer.parseInt(KeepData.getData("Usuario.id"));
+            
+            Usuario usuario = facade.initializeJpaUsuario().findUsuario(idUsuario);
+            
+            List<Organizacao> list = new ArrayList<>();
+            JpaOrganizacao jpaOrganizacao = facade.initializeJpaOrganizacao(); 
+            
+            if (usuario.getId() == Constant.ID_ADMIN)
+                list = jpaOrganizacao.findOrganizacaoEntities();
+            else
+                list = jpaOrganizacao.findOrganizacoesByUsuarioId(idUsuario);
+                
             List<Request> requestList = new ArrayList<>();
 
-            for (Organizacao org : list) {
+            for (Organizacao org : list)
+            {
                 Map<String, String> data = new HashMap<>();
+                data.put("Organizacao.id", String.valueOf(org.getId()));
                 data.put("Organizacao.nome", org.getNome());
                 requestList.add(new Request(data));
             }
