@@ -4,13 +4,11 @@ import controller.ControllerOrganizacao;
 import controller.ControllerUsuario;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import settings.Constant;
@@ -65,7 +63,8 @@ public class ViewNovoUsuario extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(null,
                     "O Usuário precisa estar alocado em pelo menos um problema.");
             return false;
-        }
+        } 
+        
         return true;
     }
 
@@ -197,7 +196,7 @@ public class ViewNovoUsuario extends javax.swing.JDialog {
                     "ERRO AO SALVAR", type);
         }
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
