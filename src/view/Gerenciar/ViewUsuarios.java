@@ -1,6 +1,7 @@
 package view.Gerenciar;
 
 import controller.ControllerUsuario;
+import java.awt.Color;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -40,6 +41,8 @@ public class ViewUsuarios extends javax.swing.JInternalFrame {
         }
         jTableUsuarios.setModel(myDefaultTableModel);
         jTableUsuarios.setDefaultRenderer(Object.class, new MyCellRenderer());
+        
+        jTableUsuarios.setGridColor(new Color(229,229,229));
     }
 
     private void removeUsuario(String name) {
@@ -175,7 +178,9 @@ public class ViewUsuarios extends javax.swing.JInternalFrame {
             return;
         }
 
-        new ViewNovoUsuario(null, true, jTableUsuarios.getValueAt(jTableUsuarios.getSelectedRow(), 0).toString()).setVisible(true);
+        String userName = jTableUsuarios.getValueAt(jTableUsuarios.getSelectedRow(), 0).toString();
+        
+        new ViewNovoUsuario(null, true, userName).setVisible(true);
         fillTable(controllerUsuario.findUsuarios());
     }//GEN-LAST:event_jButton1ActionPerformed
 

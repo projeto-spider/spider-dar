@@ -1,6 +1,7 @@
 package view.Gerenciar;
 
 import controller.ControllerOrganizacao;
+import java.awt.Color;
 import java.util.List;
 import javax.swing.JOptionPane;
 import util.Internal;
@@ -45,6 +46,8 @@ public class ViewOrganizacoes extends javax.swing.JInternalFrame {
         jTableOrganizacoes.removeColumn(jTableOrganizacoes.getColumnModel().getColumn(0));
         // transformar as celulas da tabela em textArea.
         jTableOrganizacoes.setDefaultRenderer(Object.class, new MyCellRenderer()); 
+        
+        jTableOrganizacoes.setGridColor(new Color(229,229,229));
     }
 
     /**

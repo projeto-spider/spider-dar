@@ -14,6 +14,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -32,7 +33,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "Historico.findAll", query = "SELECT h FROM Historico h"),
     @NamedQuery(name = "Historico.findById", query = "SELECT h FROM Historico h WHERE h.id = :id"),
-    @NamedQuery(name = "Historico.findByDescricao", query = "SELECT h FROM Historico h WHERE h.descricao = :descricao"),
     @NamedQuery(name = "Historico.findByUsuarioNome", query = "SELECT h FROM Historico h WHERE h.usuarioNome = :usuarioNome"),
     @NamedQuery(name = "Historico.findByCreated", query = "SELECT h FROM Historico h WHERE h.created = :created"),
     @NamedQuery(name = "Historico.findByModified", query = "SELECT h FROM Historico h WHERE h.modified = :modified")})
@@ -44,6 +44,7 @@ public class Historico implements Serializable {
     @Column(name = "id")
     private Integer id;
     @Basic(optional = false)
+    @Lob
     @Column(name = "descricao")
     private String descricao;
     @Basic(optional = false)

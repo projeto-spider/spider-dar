@@ -1,16 +1,23 @@
 package view.Gerenciar;
 
+import controller.ControllerOrganizacao;
 import controller.ControllerUsuario;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import settings.Constant;
+import settings.KeepData;
 import util.MyDefaultTableModel;
 import util.Request;
+import util.swing.ComboItem;
 
 /**
  *
@@ -20,6 +27,7 @@ public class ViewNovoUsuario extends javax.swing.JDialog {
 
     private int type;
     private Request request;
+    private String userName;
     private final ControllerUsuario controllerUsuario = new ControllerUsuario();
     private MyDefaultTableModel myDefaultTableModel;
 
@@ -29,15 +37,18 @@ public class ViewNovoUsuario extends javax.swing.JDialog {
 
         type = Constant.CREATE;
         initialiazeTable();
+        fillComboboxOrganizacoes();
         this.setLocationRelativeTo(null);
     }
 
-    public ViewNovoUsuario(java.awt.Frame parent, boolean modal, String name) {
+    public ViewNovoUsuario(java.awt.Frame parent, boolean modal, String userName) {
         super(parent, modal);
         initComponents();
 
         type = Constant.UPDATE;
-        fillFields(name);
+        this.userName = userName;
+        fillComboboxOrganizacoes();
+        fillFields(this.userName);
         this.setLocationRelativeTo(null);
     }
 
@@ -86,14 +97,36 @@ public class ViewNovoUsuario extends javax.swing.JDialog {
         request = controllerUsuario.findUsuarioByNome(name);
         jTextFieldNome.setText(request.getData("Usuario.nome"));
         jTextFieldLogin.setText(request.getData("Usuario.login"));
-
-        fillTable(name);
     }
 
-    private void fillTable(String name) {
+    private void fillComboboxOrganizacoes() {
+        int userId = Integer.parseInt(KeepData.getData("Usuario.id"));
+        if (userId == Constant.ID_ADMIN) {
+            jComboBoxOrganizações.removeAllItems();
+            jComboBoxOrganizações.addItem(new ComboItem("", "--Selecione uma Organização--"));
+
+            List<Request> requestList = new ControllerOrganizacao().findOrganizacoesByUsuario();
+            for (Request request : requestList) {
+                String idOrganizacao = request.getData("Organizacao.id");
+                String nomeOrganizacao = request.getData("Organizacao.nome");
+                jComboBoxOrganizações.addItem(new ComboItem(idOrganizacao, nomeOrganizacao));
+            }
+
+            if (type == Constant.UPDATE) {
+                int idOrg = Integer.parseInt(KeepData.getData("Organizacao.id"));
+                jComboBoxOrganizações.setSelectedIndex(idOrg);
+            }
+        } else {
+            jComboBoxOrganizações.removeAllItems();
+            jComboBoxOrganizações.addItem(new ComboItem(KeepData.getData("Organizacao.id"), KeepData.getData("Organizacao.nome")));
+            jComboBoxOrganizações.setEnabled(false);
+        }
+    }
+
+    private void fillTable(String name, int idOrg) {
         initialiazeTable();
 
-        List<Request> list = controllerUsuario.findAcessoByUsuario(name);
+        List<Request> list = controllerUsuario.findAcessoByUsuario(name, idOrg);
 
         for (Request request : list) {
             String line[] = {
@@ -141,6 +174,10 @@ public class ViewNovoUsuario extends javax.swing.JDialog {
         data.put("Usuario.nome", jTextFieldNome.getText());
         data.put("Usuario.login", jTextFieldLogin.getText());
 
+        ComboItem selectedOrganizacao = (ComboItem) jComboBoxOrganizações.getSelectedItem();
+        String idOrganizacao = selectedOrganizacao.getValue();
+        data.put("Organizacao.id", idOrganizacao);
+
         boolean isDone = false;
         if (type == Constant.CREATE) {
             request = new Request(data);
@@ -160,7 +197,7 @@ public class ViewNovoUsuario extends javax.swing.JDialog {
                     "ERRO AO SALVAR", type);
         }
     }
-
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -177,6 +214,8 @@ public class ViewNovoUsuario extends javax.swing.JDialog {
         jButtonSalvar = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jComboBoxOrganizações = new javax.swing.JComboBox();
 
         jMenuItem.setText("jMenuItem1");
         jMenuItem.addActionListener(new java.awt.event.ActionListener() {
@@ -255,6 +294,15 @@ public class ViewNovoUsuario extends javax.swing.JDialog {
 
         jLabel2.setText("Login de Acesso:");
 
+        jLabel3.setText("Organização:");
+
+        jComboBoxOrganizações.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBoxOrganizações.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBoxOrganizaçõesActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -263,19 +311,21 @@ public class ViewNovoUsuario extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel2))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextFieldLogin)
-                            .addComponent(jTextFieldNome)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(320, 320, 320)
                         .addComponent(jButtonSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButtonCancelar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(jButtonCancelar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel3))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jTextFieldLogin)
+                            .addComponent(jTextFieldNome)
+                            .addComponent(jComboBoxOrganizações, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -290,19 +340,30 @@ public class ViewNovoUsuario extends javax.swing.JDialog {
                     .addComponent(jTextFieldLogin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(jComboBoxOrganizações, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonCancelar)
                     .addComponent(jButtonSalvar))
-                .addContainerGap(13, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonAlocarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAlocarActionPerformed
-        ViewAlocarUsuario viewAlocarUsuario = new ViewAlocarUsuario(null, true);
+        ComboItem selectedOrganizacao = (ComboItem) jComboBoxOrganizações.getSelectedItem();
+        if (selectedOrganizacao.getLabel().equals("--Selecione uma Organização--")) {
+            JOptionPane.showMessageDialog(null, "É necessário Escolher uma Organização no Combobox");
+            return;
+        }
+        int idOrganizacao = Integer.parseInt(selectedOrganizacao.getValue());
+
+        ViewAlocarUsuario viewAlocarUsuario = new ViewAlocarUsuario(null, true, idOrganizacao);
         viewAlocarUsuario.setVisible(true);
         putNewRowOnTheTable(viewAlocarUsuario.getRequest());
     }//GEN-LAST:event_jButtonAlocarActionPerformed
@@ -323,12 +384,27 @@ public class ViewNovoUsuario extends javax.swing.JDialog {
         removeRowTable(jTableAlocacao.getSelectedRow());
     }//GEN-LAST:event_jMenuItemActionPerformed
 
+    private void jComboBoxOrganizaçõesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxOrganizaçõesActionPerformed
+        jComboBoxOrganizações.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ComboItem selectedOrganizacao = (ComboItem) jComboBoxOrganizações.getSelectedItem();
+                if (!selectedOrganizacao.getLabel().equals("--Selecione uma Organização--")) {
+                    int idOrganizacao = Integer.parseInt(selectedOrganizacao.getValue());
+                    fillTable(userName, idOrganizacao);
+                }
+            }
+        });
+    }//GEN-LAST:event_jComboBoxOrganizaçõesActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonAlocar;
     private javax.swing.JButton jButtonCancelar;
     private javax.swing.JButton jButtonSalvar;
+    private javax.swing.JComboBox jComboBoxOrganizações;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JMenuItem jMenuItem;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPopupMenu jPopupMenu;

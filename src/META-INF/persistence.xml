@@ -2,27 +2,27 @@
 <persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
   <persistence-unit name="Spider-DARPU" transaction-type="RESOURCE_LOCAL">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
-    <class>model.Organizacao</class>
     <class>model.Avaliacao</class>
-    <class>model.Historico</class>
-    <class>model.Nota</class>
-    <class>model.Problema</class>
-    <class>model.Alternativa</class>
-    <class>model.Itemguia</class>
-    <class>model.Criterio</class>
     <class>model.Usuario</class>
     <class>model.Guia</class>
-    <class>model.Avaliar</class>
-    <class>model.Funcionalidades</class>
-    <class>model.Decisao</class>
-    <class>model.Acessar</class>
     <class>model.Tarefa</class>
+    <class>model.Criterio</class>
+    <class>model.Acessar</class>
+    <class>model.Funcionalidades</class>
+    <class>model.Organizacao</class>
+    <class>model.Avaliar</class>
+    <class>model.Nota</class>
+    <class>model.Decisao</class>
+    <class>model.Problema</class>
+    <class>model.Historico</class>
     <class>model.Perfil</class>
+    <class>model.Alternativa</class>
+    <class>model.Itemguia</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/spiderdar"/>
-      <property name="javax.persistence.jdbc.user" value="spiderdar"/>
+      <property name="javax.persistence.jdbc.user" value="root"/>
       <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
-      <property name="javax.persistence.jdbc.password" value="spiderdar"/>
+      <property name="javax.persistence.jdbc.password" value="spider"/>
     </properties>
   </persistence-unit>
 </persistence>

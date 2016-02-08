@@ -37,7 +37,6 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Alternativa.findAll", query = "SELECT a FROM Alternativa a"),
     @NamedQuery(name = "Alternativa.findById", query = "SELECT a FROM Alternativa a WHERE a.id = :id"),
-    @NamedQuery(name = "Alternativa.findByNome", query = "SELECT a FROM Alternativa a WHERE a.nome = :nome"),
     @NamedQuery(name = "Alternativa.findByCusto", query = "SELECT a FROM Alternativa a WHERE a.custo = :custo"),
     @NamedQuery(name = "Alternativa.findByTempo", query = "SELECT a FROM Alternativa a WHERE a.tempo = :tempo"),
     @NamedQuery(name = "Alternativa.findByCreated", query = "SELECT a FROM Alternativa a WHERE a.created = :created"),
@@ -50,6 +49,7 @@ public class Alternativa implements Serializable {
     @Column(name = "id")
     private Integer id;
     @Basic(optional = false)
+    @Lob
     @Column(name = "nome")
     private String nome;
     @Basic(optional = false)

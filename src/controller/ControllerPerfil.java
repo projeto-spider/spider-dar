@@ -90,9 +90,8 @@ public class ControllerPerfil {
         }
     }
 
-    public List<Request> findPerfis() {
+    public List<Request> getPerfisByIdOrganizacao(int idOrg) {
         try {
-            int idOrg = Integer.parseInt(KeepData.getData("Organizacao.id"));
             List<Perfil> list = facade.initializeJpaPefil().findPerfisByIdOrganizacao(idOrg);
             List<Request> requestList = new ArrayList<>();
 

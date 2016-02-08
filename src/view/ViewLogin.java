@@ -3,8 +3,6 @@ package view;
 import controller.ControllerUsuario;
 import java.awt.CardLayout;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 import javax.swing.JOptionPane;
 import settings.KeepData;
 import util.Criptografia;
@@ -434,22 +432,26 @@ public class ViewLogin extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void getIn() {
-        request = controllerUsuario.findUsuarioByLogin(jTextFieldLogin.getText());
+        try {
+            request = new Request();
+            request = controllerUsuario.findUsuarioByLogin(jTextFieldLogin.getText());
 
-        if (request.getData("Usuario.id") == null) {
-            JOptionPane.showMessageDialog(this, "Login ou Senha incorretos.");
-        } else if (request.getData("Usuario.senha") == null) {
-            fillFields();
-            cardPrimeiroAcesso();
-        } else {
-            boolean senhaOk = controllerUsuario.CompareSenhaTypedWithBD(request.getData("Usuario.senha"), new String(jPasswordFieldSenha.getPassword()));
-            if (senhaOk) {
-                KeepData.setData("Usuario.id", String.valueOf(request.getData("Usuario.id")));
-                KeepData.setData("Usuario.nome", request.getData("Usuario.nome"));
-                this.dispose();
-                new ViewSelecionarOrganizacao(null, true).setVisible(true);
+            if (request.getData("Usuario.senha") == null) {
+                fillFields();
+                cardPrimeiroAcesso();
+            } else {
+                boolean senhaOk = controllerUsuario.CompareSenhaTypedWithBD(request.getData("Usuario.senha"), new String(jPasswordFieldSenha.getPassword()));
+                if (senhaOk) {
+                    KeepData.setData("Usuario.id", String.valueOf(request.getData("Usuario.id")));
+                    KeepData.setData("Usuario.nome", request.getData("Usuario.nome"));
+                    this.dispose();
+                    new ViewSelecionarOrganizacao(null, true).setVisible(true);
+                }
             }
+        } catch (Exception error) {
+            JOptionPane.showMessageDialog(this, "Login ou Senha incorretos.");
         }
+
     }
 
     private void recuperarSenha() {
@@ -480,17 +482,18 @@ public class ViewLogin extends javax.swing.JFrame {
         if (!usuarioValidate()) {
             return;
         }
-
-        Map<String, String> data = new HashMap<>();
-        data.put("Usuario.id", request.getData("Usuario.id"));
-        data.put("Usuario.login", jTextFieldLoginPri.getText());
-        data.put("Usuario.email", jTextFieldEmailPri.getText());
+        request.setData("Usuario.id", request.getData("Usuario.id"));
+        request.setData("Usuario.id", request.getData("Usuario.id"));
+        request.setData("Usuario.login", jTextFieldLoginPri.getText());
+        request.setData("Usuario.email", jTextFieldEmailPri.getText());
 
         Criptografia criptografia = new Criptografia();
         String senha_Cript = criptografia.encryptMessage(new String(jPasswordFieldSenhaPri.getPassword()));
-        data.put("Usuario.senha", senha_Cript);
+        request.setData("Usuario.senha", senha_Cript);
 
         controllerUsuario.updateUsuario(request);
+        KeepData.setData("Usuario.id", String.valueOf(request.getData("Usuario.id")));
+        KeepData.setData("Usuario.nome", request.getData("Usuario.nome"));
 
         this.dispose();
         new ViewSelecionarOrganizacao(null, true).setVisible(true);

@@ -42,7 +42,7 @@ public class MyCellRenderer extends JTextPane implements TableCellRenderer {
 
             } else {
                 this.setForeground(table.getForeground());
-                this.setBackground(new Color(204,204,204));
+                this.setBackground(new Color(229,229,229));
             }
         }
 

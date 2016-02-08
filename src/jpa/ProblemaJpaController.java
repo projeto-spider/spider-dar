@@ -100,12 +100,12 @@ public class ProblemaJpaController implements Serializable {
                 idOrganizacao = em.merge(idOrganizacao);
             }
             for (Acessar acessarListAcessar : problema.getAcessarList()) {
-                Problema oldProblemaOfAcessarListAcessar = acessarListAcessar.getProblema();
-                acessarListAcessar.setProblema(problema);
+                Problema oldIdProblemaOfAcessarListAcessar = acessarListAcessar.getIdProblema();
+                acessarListAcessar.setIdProblema(problema);
                 acessarListAcessar = em.merge(acessarListAcessar);
-                if (oldProblemaOfAcessarListAcessar != null) {
-                    oldProblemaOfAcessarListAcessar.getAcessarList().remove(acessarListAcessar);
-                    oldProblemaOfAcessarListAcessar = em.merge(oldProblemaOfAcessarListAcessar);
+                if (oldIdProblemaOfAcessarListAcessar != null) {
+                    oldIdProblemaOfAcessarListAcessar.getAcessarList().remove(acessarListAcessar);
+                    oldIdProblemaOfAcessarListAcessar = em.merge(oldIdProblemaOfAcessarListAcessar);
                 }
             }
             for (Tarefa tarefaListTarefa : problema.getTarefaList()) {
@@ -171,14 +171,6 @@ public class ProblemaJpaController implements Serializable {
             List<Criterio> criterioListOld = persistentProblema.getCriterioList();
             List<Criterio> criterioListNew = problema.getCriterioList();
             List<String> illegalOrphanMessages = null;
-            for (Acessar acessarListOldAcessar : acessarListOld) {
-                if (!acessarListNew.contains(acessarListOldAcessar)) {
-                    if (illegalOrphanMessages == null) {
-                        illegalOrphanMessages = new ArrayList<String>();
-                    }
-                    illegalOrphanMessages.add("You must retain Acessar " + acessarListOldAcessar + " since its problema field is not nullable.");
-                }
-            }
             for (Tarefa tarefaListOldTarefa : tarefaListOld) {
                 if (!tarefaListNew.contains(tarefaListOldTarefa)) {
                     if (illegalOrphanMessages == null) {
@@ -262,14 +254,20 @@ public class ProblemaJpaController implements Serializable {
                 idOrganizacaoNew.getProblemaList().add(problema);
                 idOrganizacaoNew = em.merge(idOrganizacaoNew);
             }
+            for (Acessar acessarListOldAcessar : acessarListOld) {
+                if (!acessarListNew.contains(acessarListOldAcessar)) {
+                    acessarListOldAcessar.setIdProblema(null);
+                    acessarListOldAcessar = em.merge(acessarListOldAcessar);
+                }
+            }
             for (Acessar acessarListNewAcessar : acessarListNew) {
                 if (!acessarListOld.contains(acessarListNewAcessar)) {
-                    Problema oldProblemaOfAcessarListNewAcessar = acessarListNewAcessar.getProblema();
-                    acessarListNewAcessar.setProblema(problema);
+                    Problema oldIdProblemaOfAcessarListNewAcessar = acessarListNewAcessar.getIdProblema();
+                    acessarListNewAcessar.setIdProblema(problema);
                     acessarListNewAcessar = em.merge(acessarListNewAcessar);
-                    if (oldProblemaOfAcessarListNewAcessar != null && !oldProblemaOfAcessarListNewAcessar.equals(problema)) {
-                        oldProblemaOfAcessarListNewAcessar.getAcessarList().remove(acessarListNewAcessar);
-                        oldProblemaOfAcessarListNewAcessar = em.merge(oldProblemaOfAcessarListNewAcessar);
+                    if (oldIdProblemaOfAcessarListNewAcessar != null && !oldIdProblemaOfAcessarListNewAcessar.equals(problema)) {
+                        oldIdProblemaOfAcessarListNewAcessar.getAcessarList().remove(acessarListNewAcessar);
+                        oldIdProblemaOfAcessarListNewAcessar = em.merge(oldIdProblemaOfAcessarListNewAcessar);
                     }
                 }
             }
@@ -347,13 +345,6 @@ public class ProblemaJpaController implements Serializable {
                 throw new NonexistentEntityException("The problema with id " + id + " no longer exists.", enfe);
             }
             List<String> illegalOrphanMessages = null;
-            List<Acessar> acessarListOrphanCheck = problema.getAcessarList();
-            for (Acessar acessarListOrphanCheckAcessar : acessarListOrphanCheck) {
-                if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
-                }
-                illegalOrphanMessages.add("This Problema (" + problema + ") cannot be destroyed since the Acessar " + acessarListOrphanCheckAcessar + " in its acessarList field has a non-nullable problema field.");
-            }
             List<Tarefa> tarefaListOrphanCheck = problema.getTarefaList();
             for (Tarefa tarefaListOrphanCheckTarefa : tarefaListOrphanCheck) {
                 if (illegalOrphanMessages == null) {
@@ -389,6 +380,11 @@ public class ProblemaJpaController implements Serializable {
             if (idOrganizacao != null) {
                 idOrganizacao.getProblemaList().remove(problema);
                 idOrganizacao = em.merge(idOrganizacao);
+            }
+            List<Acessar> acessarList = problema.getAcessarList();
+            for (Acessar acessarListAcessar : acessarList) {
+                acessarListAcessar.setIdProblema(null);
+                acessarListAcessar = em.merge(acessarListAcessar);
             }
             em.remove(problema);
             em.getTransaction().commit();

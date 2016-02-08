@@ -44,7 +44,6 @@ public class AcessarJpaController implements Serializable {
         acessar.getAcessarPK().setIdOrganizacao(acessar.getOrganizacao().getId());
         acessar.getAcessarPK().setIdUsuario(acessar.getUsuario().getId());
         acessar.getAcessarPK().setIdPerfil(acessar.getPerfil().getId());
-        acessar.getAcessarPK().setIdProblema(acessar.getProblema().getId());
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -59,10 +58,10 @@ public class AcessarJpaController implements Serializable {
                 perfil = em.getReference(perfil.getClass(), perfil.getId());
                 acessar.setPerfil(perfil);
             }
-            Problema problema = acessar.getProblema();
-            if (problema != null) {
-                problema = em.getReference(problema.getClass(), problema.getId());
-                acessar.setProblema(problema);
+            Problema idProblema = acessar.getIdProblema();
+            if (idProblema != null) {
+                idProblema = em.getReference(idProblema.getClass(), idProblema.getId());
+                acessar.setIdProblema(idProblema);
             }
             Usuario usuario = acessar.getUsuario();
             if (usuario != null) {
@@ -78,9 +77,9 @@ public class AcessarJpaController implements Serializable {
                 perfil.getAcessarList().add(acessar);
                 perfil = em.merge(perfil);
             }
-            if (problema != null) {
-                problema.getAcessarList().add(acessar);
-                problema = em.merge(problema);
+            if (idProblema != null) {
+                idProblema.getAcessarList().add(acessar);
+                idProblema = em.merge(idProblema);
             }
             if (usuario != null) {
                 usuario.getAcessarList().add(acessar);
@@ -103,7 +102,6 @@ public class AcessarJpaController implements Serializable {
         acessar.getAcessarPK().setIdOrganizacao(acessar.getOrganizacao().getId());
         acessar.getAcessarPK().setIdUsuario(acessar.getUsuario().getId());
         acessar.getAcessarPK().setIdPerfil(acessar.getPerfil().getId());
-        acessar.getAcessarPK().setIdProblema(acessar.getProblema().getId());
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -113,8 +111,8 @@ public class AcessarJpaController implements Serializable {
             Organizacao organizacaoNew = acessar.getOrganizacao();
             Perfil perfilOld = persistentAcessar.getPerfil();
             Perfil perfilNew = acessar.getPerfil();
-            Problema problemaOld = persistentAcessar.getProblema();
-            Problema problemaNew = acessar.getProblema();
+            Problema idProblemaOld = persistentAcessar.getIdProblema();
+            Problema idProblemaNew = acessar.getIdProblema();
             Usuario usuarioOld = persistentAcessar.getUsuario();
             Usuario usuarioNew = acessar.getUsuario();
             if (organizacaoNew != null) {
@@ -125,9 +123,9 @@ public class AcessarJpaController implements Serializable {
                 perfilNew = em.getReference(perfilNew.getClass(), perfilNew.getId());
                 acessar.setPerfil(perfilNew);
             }
-            if (problemaNew != null) {
-                problemaNew = em.getReference(problemaNew.getClass(), problemaNew.getId());
-                acessar.setProblema(problemaNew);
+            if (idProblemaNew != null) {
+                idProblemaNew = em.getReference(idProblemaNew.getClass(), idProblemaNew.getId());
+                acessar.setIdProblema(idProblemaNew);
             }
             if (usuarioNew != null) {
                 usuarioNew = em.getReference(usuarioNew.getClass(), usuarioNew.getId());
@@ -150,13 +148,13 @@ public class AcessarJpaController implements Serializable {
                 perfilNew.getAcessarList().add(acessar);
                 perfilNew = em.merge(perfilNew);
             }
-            if (problemaOld != null && !problemaOld.equals(problemaNew)) {
-                problemaOld.getAcessarList().remove(acessar);
-                problemaOld = em.merge(problemaOld);
+            if (idProblemaOld != null && !idProblemaOld.equals(idProblemaNew)) {
+                idProblemaOld.getAcessarList().remove(acessar);
+                idProblemaOld = em.merge(idProblemaOld);
             }
-            if (problemaNew != null && !problemaNew.equals(problemaOld)) {
-                problemaNew.getAcessarList().add(acessar);
-                problemaNew = em.merge(problemaNew);
+            if (idProblemaNew != null && !idProblemaNew.equals(idProblemaOld)) {
+                idProblemaNew.getAcessarList().add(acessar);
+                idProblemaNew = em.merge(idProblemaNew);
             }
             if (usuarioOld != null && !usuarioOld.equals(usuarioNew)) {
                 usuarioOld.getAcessarList().remove(acessar);
@@ -205,10 +203,10 @@ public class AcessarJpaController implements Serializable {
                 perfil.getAcessarList().remove(acessar);
                 perfil = em.merge(perfil);
             }
-            Problema problema = acessar.getProblema();
-            if (problema != null) {
-                problema.getAcessarList().remove(acessar);
-                problema = em.merge(problema);
+            Problema idProblema = acessar.getIdProblema();
+            if (idProblema != null) {
+                idProblema.getAcessarList().remove(acessar);
+                idProblema = em.merge(idProblema);
             }
             Usuario usuario = acessar.getUsuario();
             if (usuario != null) {

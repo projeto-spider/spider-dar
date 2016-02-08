@@ -2,6 +2,7 @@ package settings;
 
 import jpa.AcessarJpaController;
 import jpa.ItemguiaJpaController;
+import jpa.extension.JpaAcessar;
 import jpa.extension.JpaAlternativa;
 import jpa.extension.JpaFuncionalidades;
 import jpa.extension.JpaGuia;
@@ -69,8 +70,8 @@ public class Facade {
         return new JpaUsuario(Connection.connect()); 
     }
     
-    public AcessarJpaController initializeJpaAcessa(){
-        return new AcessarJpaController(Connection.connect());
+    public JpaAcessar initializeJpaAcessa(){
+        return new JpaAcessar(Connection.connect());
     }
     
     public JpaProblema initializeJpaProblema(){

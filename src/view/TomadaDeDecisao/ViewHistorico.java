@@ -1,6 +1,7 @@
 package view.TomadaDeDecisao;
 
 import controller.ControllerHistorico;
+import java.awt.Color;
 import java.util.List;
 import util.Internal;
 import util.MyCellRenderer;
@@ -45,6 +46,8 @@ public class ViewHistorico extends javax.swing.JInternalFrame {
         jTableHistorico.getColumnModel().getColumn(0).setPreferredWidth(330);
         jTableHistorico.getColumnModel().getColumn(1).setPreferredWidth(130);
         jTableHistorico.getColumnModel().getColumn(2).setPreferredWidth(70);
+        
+        jTableHistorico.setGridColor(new Color(229,229,229));
     }
 
     @SuppressWarnings("unchecked")

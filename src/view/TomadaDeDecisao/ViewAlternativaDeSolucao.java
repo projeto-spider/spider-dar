@@ -55,6 +55,8 @@ public class ViewAlternativaDeSolucao extends javax.swing.JInternalFrame {
         jTableAlternativas.getColumnModel().getColumn(2).setPreferredWidth(70);
         jTableAlternativas.getColumnModel().getColumn(3).setPreferredWidth(70);
         jTableAlternativas.getColumnModel().getColumn(4).setPreferredWidth(140);
+        
+        jTableAlternativas.setGridColor(new Color(229,229,229)); 
 
     }
 

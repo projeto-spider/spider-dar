@@ -1,11 +1,13 @@
 package view.Gerenciar;
 
 import controller.ControllerPerfil;
+import java.awt.Color;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
+import settings.KeepData;
 import util.Internal;
 import util.MyCellRenderer;
 import util.MyDefaultTableModel;
@@ -47,6 +49,8 @@ public class ViewPermissoesDePerfil extends javax.swing.JInternalFrame {
         }
         jTablePerfis.setModel(myDefaultTableModel);
         jTablePerfis.setDefaultRenderer(Object.class, new MyCellRenderer());
+        
+        jTablePerfis.setGridColor(new Color(229,229,229));
     }
 
     private String getPerfilSelected() {
@@ -337,7 +341,8 @@ public class ViewPermissoesDePerfil extends javax.swing.JInternalFrame {
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         new ViewNovoPerfil(null, true).setVisible(true);
-        fillTable(controllerPerfil.findPerfis());
+        int idOrg = Integer.parseInt(KeepData.getData("Organizacao.id"));
+        fillTable(controllerPerfil.getPerfisByIdOrganizacao(idOrg));
         clearLists();
     }//GEN-LAST:event_jButton5ActionPerformed
 
@@ -361,7 +366,8 @@ public class ViewPermissoesDePerfil extends javax.swing.JInternalFrame {
 
     private void jButtonEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditarActionPerformed
         editarButtonIsPressed();
-        fillTable(controllerPerfil.findPerfis());
+        int idOrg = Integer.parseInt(KeepData.getData("Organizacao.id"));
+        fillTable(controllerPerfil.getPerfisByIdOrganizacao(idOrg));
     }//GEN-LAST:event_jButtonEditarActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
@@ -370,7 +376,8 @@ public class ViewPermissoesDePerfil extends javax.swing.JInternalFrame {
             return;
         }
         removePerfil();
-        fillTable(controllerPerfil.findPerfis());
+        int idOrg = Integer.parseInt(KeepData.getData("Organizacao.id"));
+        fillTable(controllerPerfil.getPerfisByIdOrganizacao(idOrg));
     }//GEN-LAST:event_jButton4ActionPerformed
 
 

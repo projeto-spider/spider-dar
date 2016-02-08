@@ -527,7 +527,8 @@ public class ViewPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItemNovoUsuarioActionPerformed
 
     private void jMenuItemPermissoesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemPermissoesActionPerformed
-        viewPermissoesDePerfil.fillTable(new ControllerPerfil().findPerfis());
+        int idOrg = Integer.parseInt(KeepData.getData("Organizacao.id"));
+        viewPermissoesDePerfil.fillTable(new ControllerPerfil().getPerfisByIdOrganizacao(idOrg));
         viewPermissoesDePerfil.clearLists();
         changeViews(viewPermissoesDePerfil);
     }//GEN-LAST:event_jMenuItemPermissoesActionPerformed

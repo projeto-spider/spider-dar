@@ -54,16 +54,16 @@ public class ControllerUsuario {
 
             facade.initializeJpaUsuario().create(usuario);
 
-            createAcessarUsuario(listAcesso, usuarioNome);
+            int idOrg = Integer.parseInt(request.getData("Organizacao.id"));
+            createAcessarUsuario(listAcesso, usuarioNome, idOrg);
             return true;
         } catch (Exception error) {
             return false;
         }
     }
 
-    public boolean createAcessarUsuario(List<Request> list, String usuarioNome) {
+    public boolean createAcessarUsuario(List<Request> list, String usuarioNome, int idOrg) {
         try {
-            int idOrg = Integer.parseInt(KeepData.getData("Organizacao.id"));
             for (Request request : list) {
                 Organizacao organizacao = facade.initializeJpaOrganizacao().findOrganizacaoByID(idOrg);
                 Perfil perfil = facade.initializeJpaPefil().findPerfilByNameAndIdOrg(request.getData("Perfil.nome"), idOrg);
@@ -77,7 +77,7 @@ public class ControllerUsuario {
                 acessar.setOrganizacao(organizacao);
                 acessar.setPerfil(perfil);
                 acessar.setUsuario(usuario);
-                acessar.setProblema(problema);
+                acessar.setIdProblema(problema);
 
                 facade.initializeJpaAcessa().create(acessar);
             }
@@ -86,17 +86,17 @@ public class ControllerUsuario {
             return false;
         }
     }
-    
+
     public boolean updateUsuario(Request request) {
         try {
-            int id = Integer.parseInt(KeepData.getData("Usuario.id"));
+            int id = Integer.parseInt(request.getData("Usuario.id"));
             usuario = new Usuario();
-            usuario = facade.initializeJpaUsuario().findUsuario(id); 
+            usuario = facade.initializeJpaUsuario().findUsuario(id);
             usuario.setNome(request.getData("Usuario.nome"));
             usuario.setLogin(request.getData("Usuario.login"));
-            usuario.setEmail(request.getData("Usuario.email")); 
-            if (!request.getData("Usuario.senha").isEmpty()){
-                usuario.setSenha(request.getData("Usuario.senha")); 
+            usuario.setEmail(request.getData("Usuario.email"));
+            if (!request.getData("Usuario.senha").isEmpty()) {
+                usuario.setSenha(request.getData("Usuario.senha"));
             }
             usuario.setModified(new Date());
             facade.initializeJpaUsuario().edit(usuario);
@@ -107,15 +107,15 @@ public class ControllerUsuario {
             return false;
         }
     }
-    
+
     public boolean updateFirstAccess(Request request) {
         try {
-            int id = Integer.parseInt(request.getData("Usuario.id")); 
+            int id = Integer.parseInt(request.getData("Usuario.id"));
             usuario = new Usuario();
-            usuario = facade.initializeJpaUsuario().findUsuario(id); 
+            usuario = facade.initializeJpaUsuario().findUsuario(id);
             usuario.setLogin(request.getData("Usuario.login"));
-            usuario.setEmail(request.getData("Usuario.email")); 
-            usuario.setSenha(request.getData("Usuario.senha")); 
+            usuario.setEmail(request.getData("Usuario.email"));
+            usuario.setSenha(request.getData("Usuario.senha"));
 
             usuario.setModified(new Date());
             facade.initializeJpaUsuario().edit(usuario);
@@ -129,21 +129,22 @@ public class ControllerUsuario {
 
     public boolean updateUsuarioByADM(Request request, List<Request> list) {
         try {
-            int id = Integer.parseInt(request.getData("Usuario.id"));
-            usuario = facade.initializeJpaUsuario().findAnotherPerfilWithSameName(request.getData("Usuario.nome"), id);
+            int idUser = Integer.parseInt(request.getData("Usuario.id"));
+            usuario = facade.initializeJpaUsuario().findAnotherPerfilWithSameName(request.getData("Usuario.nome"), idUser);
             if (usuario != null) {
                 return false;
             }
 
             usuario = new Usuario();
-            usuario = facade.initializeJpaUsuario().findUsuario(id);
+            usuario = facade.initializeJpaUsuario().findUsuario(idUser);
             usuario.setNome(request.getData("Usuario.nome"));
             usuario.setLogin(request.getData("Usuario.login"));
             usuario.setModified(new Date());
             facade.initializeJpaUsuario().edit(usuario);
 
-            removeAcessoUsuario(usuario.getAcessarList());
-            createAcessarUsuario(list, usuario.getNome());
+            int idOrg = Integer.parseInt(request.getData("Organizacao.id"));
+            removeAcessoUsuario(facade.initializeJpaAcessa().findAcessarUsuarioByOrganizacao(usuario.getNome(), idOrg));
+            createAcessarUsuario(list, usuario.getNome(), idOrg);
             return true;
         } catch (Exception error) {
             error.printStackTrace();
@@ -260,7 +261,7 @@ public class ControllerUsuario {
 
     public Request findUsuarioById(int id) {
         try {
-            usuario = facade.initializeJpaUsuario().findUsuario(id); 
+            usuario = facade.initializeJpaUsuario().findUsuario(id);
 
             Map<String, String> data = new HashMap<>();
             data.put("Usuario.id", String.valueOf(usuario.getId()));
@@ -279,15 +280,15 @@ public class ControllerUsuario {
         }
     }
 
-    public List<Request> findAcessoByUsuario(String name) {
+    public List<Request> findAcessoByUsuario(String name, int idOrg) {
         try {
-            List<Acessar> list = facade.initializeJpaUsuario().findUsuarioByNome(name).getAcessarList();
+            List<Acessar> list = facade.initializeJpaAcessa().findAcessarUsuarioByOrganizacao(name, idOrg);
             List<Request> requestList = new ArrayList<>();
 
             for (Acessar acessar : list) {
                 Map<String, String> data = new HashMap<>();
                 data.put("Organizacao.nome", acessar.getPerfil().getNome());
-                data.put("Problema.nome", acessar.getProblema().getNome());
+                data.put("Problema.nome", acessar.getIdProblema().getNome());
                 data.put("Perfil.nome", acessar.getPerfil().getNome());
 
                 requestList.add(new Request(data));
@@ -307,7 +308,7 @@ public class ControllerUsuario {
         try {
             usuario = new Usuario();
             usuario = facade.initializeJpaUsuario().findUsuarioByLogin(loginUsuario);
-            
+
             Map<String, String> data = new HashMap<>();
             data.put("Usuario.id", String.valueOf(usuario.getId()));
             data.put("Usuario.nome", usuario.getNome());
@@ -316,7 +317,7 @@ public class ControllerUsuario {
             data.put("Usuario.senha", usuario.getSenha());
             data.put("Usuario.created", Text.formatDateForTable(usuario.getCreated()));
             data.put("Usuario.modified", Text.formatDateForTable(usuario.getModified()));
-            
+
             return new Request(data);
         } catch (Exception error) {
             throw error;
@@ -376,13 +377,13 @@ public class ControllerUsuario {
             //cria string aleatória de 6 digitos.
             UUID uuid = UUID.randomUUID();
             String newPassword = uuid.toString().substring(0, 6);
-            
+
             new MyEmail().SendNewPassword(usuario.getEmail(), usuario.getNome(), newPassword);
 
             String newPasswordCrip = criptografia.encryptMessage(newPassword);
             usuario.setSenha(newPasswordCrip);
-            
-            facade.initializeJpaUsuario().edit(usuario); 
+
+            facade.initializeJpaUsuario().edit(usuario);
 
         } catch (Exception error) {
             error.printStackTrace();
@@ -390,9 +391,8 @@ public class ControllerUsuario {
         }
     }
 
-    public List<Request> findPerfis() {
+    public List<Request> getPerfisByIdOrganizacao(int idOrg) {
         try {
-            int idOrg = Integer.parseInt(KeepData.getData("Organizacao.id"));
             List<Perfil> list = facade.initializeJpaPefil().findPerfisByIdOrganizacao(idOrg);
             List<Request> requestList = new ArrayList<>();
 
@@ -410,9 +410,8 @@ public class ControllerUsuario {
         }
     }
 
-    public List<Request> findProblemas() {
+    public List<Request> getProblemasByIdOrganizacao(int idOrg) {
         try {
-            int idOrg = Integer.parseInt(KeepData.getData("Organizacao.id"));
             List<Problema> list = facade.initializeJpaProblema().findProblemasByIdOrganizacao(idOrg);
             List<Request> requestList = new ArrayList<>();
 

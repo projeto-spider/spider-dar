@@ -25,7 +25,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "Acessar.findAll", query = "SELECT a FROM Acessar a"),
     @NamedQuery(name = "Acessar.findByIdOrganizacao", query = "SELECT a FROM Acessar a WHERE a.acessarPK.idOrganizacao = :idOrganizacao"),
-    @NamedQuery(name = "Acessar.findByIdProblema", query = "SELECT a FROM Acessar a WHERE a.acessarPK.idProblema = :idProblema"),
     @NamedQuery(name = "Acessar.findByIdUsuario", query = "SELECT a FROM Acessar a WHERE a.acessarPK.idUsuario = :idUsuario"),
     @NamedQuery(name = "Acessar.findByIdPerfil", query = "SELECT a FROM Acessar a WHERE a.acessarPK.idPerfil = :idPerfil")})
 public class Acessar implements Serializable {
@@ -38,9 +37,9 @@ public class Acessar implements Serializable {
     @JoinColumn(name = "idPerfil", referencedColumnName = "id", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Perfil perfil;
-    @JoinColumn(name = "idProblema", referencedColumnName = "id", insertable = false, updatable = false)
-    @ManyToOne(optional = false)
-    private Problema problema;
+    @JoinColumn(name = "idProblema", referencedColumnName = "id")
+    @ManyToOne
+    private Problema idProblema;
     @JoinColumn(name = "idUsuario", referencedColumnName = "id", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Usuario usuario;
@@ -52,8 +51,8 @@ public class Acessar implements Serializable {
         this.acessarPK = acessarPK;
     }
 
-    public Acessar(int idOrganizacao, int idProblema, int idUsuario, int idPerfil) {
-        this.acessarPK = new AcessarPK(idOrganizacao, idProblema, idUsuario, idPerfil);
+    public Acessar(int idOrganizacao, int idUsuario, int idPerfil) {
+        this.acessarPK = new AcessarPK(idOrganizacao, idUsuario, idPerfil);
     }
 
     public AcessarPK getAcessarPK() {
@@ -80,12 +79,12 @@ public class Acessar implements Serializable {
         this.perfil = perfil;
     }
 
-    public Problema getProblema() {
-        return problema;
+    public Problema getIdProblema() {
+        return idProblema;
     }
 
-    public void setProblema(Problema problema) {
-        this.problema = problema;
+    public void setIdProblema(Problema idProblema) {
+        this.idProblema = idProblema;
     }
 
     public Usuario getUsuario() {

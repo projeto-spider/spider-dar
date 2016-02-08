@@ -17,11 +17,13 @@ public class ViewAlocarUsuario extends javax.swing.JDialog {
     private Request request = null;
     private final ControllerPerfil controllerPerfil = new ControllerPerfil();
     private DefaultComboBoxModel comboboxModel;
+    private final int idOrganizacao;
 
-    public ViewAlocarUsuario(java.awt.Frame parent, boolean modal) {
+    public ViewAlocarUsuario(java.awt.Frame parent, boolean modal, int idOrganizacao) {
         super(parent, modal);
         initComponents();
 
+        this.idOrganizacao =  idOrganizacao;
         fillComboboxProblema();
         fillComboboxPerfil();
         this.setLocationRelativeTo(null);
@@ -31,7 +33,7 @@ public class ViewAlocarUsuario extends javax.swing.JDialog {
         comboboxModel = new DefaultComboBoxModel();
         comboboxModel.addElement("--Selecione um Problema--");
 
-        List<Request> requestList = new ControllerUsuario().findProblemas();
+        List<Request> requestList = new ControllerUsuario().getProblemasByIdOrganizacao(idOrganizacao);
         for (Request request : requestList) {
             comboboxModel.addElement(request.getData("Problema.nome"));
         }
@@ -43,7 +45,7 @@ public class ViewAlocarUsuario extends javax.swing.JDialog {
         comboboxModel = new DefaultComboBoxModel();
         comboboxModel.addElement("--Selecione um Perfil--");
 
-        List<Request> requestList = controllerPerfil.findPerfis();
+        List<Request> requestList = controllerPerfil.getPerfisByIdOrganizacao(idOrganizacao);
         for (Request request : requestList) {
             comboboxModel.addElement(request.getData("Perfil.nome"));
         }

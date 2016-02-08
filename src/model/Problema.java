@@ -74,7 +74,7 @@ public class Problema implements Serializable {
     @Column(name = "modified")
     @Temporal(TemporalType.TIMESTAMP)
     private Date modified;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "problema")
+    @OneToMany(mappedBy = "idProblema")
     private List<Acessar> acessarList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idProblema")
     private List<Tarefa> tarefaList;

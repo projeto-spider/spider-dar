@@ -20,9 +20,6 @@ public class AcessarPK implements Serializable {
     @Column(name = "idOrganizacao")
     private int idOrganizacao;
     @Basic(optional = false)
-    @Column(name = "idProblema")
-    private int idProblema;
-    @Basic(optional = false)
     @Column(name = "idUsuario")
     private int idUsuario;
     @Basic(optional = false)
@@ -32,9 +29,8 @@ public class AcessarPK implements Serializable {
     public AcessarPK() {
     }
 
-    public AcessarPK(int idOrganizacao, int idProblema, int idUsuario, int idPerfil) {
+    public AcessarPK(int idOrganizacao, int idUsuario, int idPerfil) {
         this.idOrganizacao = idOrganizacao;
-        this.idProblema = idProblema;
         this.idUsuario = idUsuario;
         this.idPerfil = idPerfil;
     }
@@ -45,14 +41,6 @@ public class AcessarPK implements Serializable {
 
     public void setIdOrganizacao(int idOrganizacao) {
         this.idOrganizacao = idOrganizacao;
-    }
-
-    public int getIdProblema() {
-        return idProblema;
-    }
-
-    public void setIdProblema(int idProblema) {
-        this.idProblema = idProblema;
     }
 
     public int getIdUsuario() {
@@ -75,7 +63,6 @@ public class AcessarPK implements Serializable {
     public int hashCode() {
         int hash = 0;
         hash += (int) idOrganizacao;
-        hash += (int) idProblema;
         hash += (int) idUsuario;
         hash += (int) idPerfil;
         return hash;
@@ -91,9 +78,6 @@ public class AcessarPK implements Serializable {
         if (this.idOrganizacao != other.idOrganizacao) {
             return false;
         }
-        if (this.idProblema != other.idProblema) {
-            return false;
-        }
         if (this.idUsuario != other.idUsuario) {
             return false;
         }
@@ -105,7 +89,7 @@ public class AcessarPK implements Serializable {
 
     @Override
     public String toString() {
-        return "model.AcessarPK[ idOrganizacao=" + idOrganizacao + ", idProblema=" + idProblema + ", idUsuario=" + idUsuario + ", idPerfil=" + idPerfil + " ]";
+        return "model.AcessarPK[ idOrganizacao=" + idOrganizacao + ", idUsuario=" + idUsuario + ", idPerfil=" + idPerfil + " ]";
     }
     
 }
