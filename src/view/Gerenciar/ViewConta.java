@@ -86,6 +86,7 @@ public class ViewConta extends javax.swing.JDialog {
         data.put("Usuario.nome", jTextFieldNome.getText());
         data.put("Usuario.login", jTextFieldLogin.getText());
         data.put("Usuario.email", jTextFieldEmail.getText());
+        data.put("Usuario.id", KeepData.getData("Usuario.id")); 
         if (jCheckBoxAlterarSenha.isSelected()) {
             String newSenha = new String(jPasswordFieldNovaSenha.getPassword());
             data.put("Usuario.senha", new Criptografia().encryptMessage(newSenha));
