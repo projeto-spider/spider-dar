@@ -229,4 +229,26 @@ public class ControllerProblema
         return requestList;
     }
     
+     public Request findProblemaById(int id) {
+        try {
+            problema = facade.initializeJpaProblema().findProblema(id);
+
+            Map<String, String> data = new HashMap<>();
+            data.put("Problema.id", String.valueOf(problema.getId()));
+            data.put("Problema.nome", problema.getNome());
+            data.put("Problema.codigo", problema.getCodigo());
+            data.put("Problema.contexto", problema.getContexto());
+            data.put("Problema.planejamento", problema.getPlanejamento());
+            data.put("Problema.proposito", problema.getProposito());
+            data.put("Problema.created", Text.formatDateForTable(problema.getCreated()));
+            data.put("Problema.modified", Text.formatDateForTable(problema.getModified()));
+
+            return new Request(data);
+        } catch (Exception error) {
+            Map<String, String> data = new HashMap<>();
+            data.put("Error.mensagem", "Erro inesperado.");
+            return new Request(data);
+        }
+    }
+    
 }

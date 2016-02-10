@@ -1,20 +1,67 @@
 
 package view.TomadaDeDecisao;
 
+import controller.ControllerProblema;
+import java.util.List;
+import static model.Acessar_.idProblema;
+import settings.KeepData;
 import util.Internal;
+import util.MyDefaultTableModel;
+import util.Request;
 
 /**
  *
- * @author Bleno Vale
+ * @author Géssica
  */
 public class ViewMotivacaoEObjetivos extends javax.swing.JInternalFrame {
+    
+    private MyDefaultTableModel myDefaultTableModel;
+    private Request request;
+    private final ControllerProblema controllerProblema = new ControllerProblema();
 
     public ViewMotivacaoEObjetivos() {
         initComponents();
         
-        Internal.retiraBorda(this); 
-    }
+        showInformation();
 
+        Internal.retiraBorda(this); 
+    }     
+      
+    public void showInformation() {
+        String nomeProblema = KeepData.getData("Problema.nome");
+        jLabelProblema.setText("Problema: " + nomeProblema);
+        
+        fillFields();
+        
+        listEnvolvidosInTable(new ControllerProblema().listProblemasByIdOrganizacao(KeepData.getData("Organizacao.id")));
+    }
+    
+    public void listEnvolvidosInTable(List<Request> requestList)
+    {
+        String columns[] = {"Nome", "Perfil"};
+        myDefaultTableModel = new MyDefaultTableModel(columns, 0, false);
+        
+        for (Request request: requestList)
+        {
+            String line[] = {request.getData("Usuario.nome"),
+                             request.getData("Perfil.nome")};
+            
+            myDefaultTableModel.addRow(line);
+        }
+        jTableEnvolvidos.setModel(myDefaultTableModel);
+    }  
+    
+    private void fillFields() {
+        
+        request = controllerProblema.findProblemaById(Integer.parseInt(KeepData.getData("Problema.id")));
+
+        jTextAreaProposito.setText(request.getData("Problema.proposito"));
+        jTextAreaPlanejamento.setText(request.getData("Problema.planejamento"));
+        jTextAreaContexto.setText(request.getData("Problema.contexto"));
+    }
+    
+    
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -23,23 +70,23 @@ public class ViewMotivacaoEObjetivos extends javax.swing.JInternalFrame {
         jScrollPane3 = new javax.swing.JScrollPane();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
+        jLabelProblema = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        jTextAreaProposito = new javax.swing.JTextArea();
         jPanel4 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea2 = new javax.swing.JTextArea();
+        jTextAreaPlanejamento = new javax.swing.JTextArea();
         jPanel5 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         jScrollPane4 = new javax.swing.JScrollPane();
-        jTextArea3 = new javax.swing.JTextArea();
+        jTextAreaContexto = new javax.swing.JTextArea();
         jPanel6 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         jScrollPane5 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jTableEnvolvidos = new javax.swing.JTable();
 
         jTextField1.setEditable(false);
         jTextField1.setBackground(new java.awt.Color(246, 179, 111));
@@ -51,8 +98,8 @@ public class ViewMotivacaoEObjetivos extends javax.swing.JInternalFrame {
 
         jPanel2.setBackground(new java.awt.Color(204, 204, 204));
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel1.setText("<html><b>Problema:</b> Decisão sobre a ferramenta de Getão.</html>");
+        jLabelProblema.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabelProblema.setText("<html><b>Problema:</b> Decisão sobre a ferramenta de Getão.</html>");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -60,14 +107,14 @@ public class ViewMotivacaoEObjetivos extends javax.swing.JInternalFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(219, 219, 219)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jLabelProblema, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jLabelProblema, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -76,14 +123,14 @@ public class ViewMotivacaoEObjetivos extends javax.swing.JInternalFrame {
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel2.setText("<html><b>Propósito:</b></html>");
 
-        jTextArea1.setEditable(false);
-        jTextArea1.setColumns(20);
-        jTextArea1.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
-        jTextArea1.setLineWrap(true);
-        jTextArea1.setRows(5);
-        jTextArea1.setWrapStyleWord(true);
-        jTextArea1.setBorder(null);
-        jScrollPane1.setViewportView(jTextArea1);
+        jTextAreaProposito.setEditable(false);
+        jTextAreaProposito.setColumns(20);
+        jTextAreaProposito.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
+        jTextAreaProposito.setLineWrap(true);
+        jTextAreaProposito.setRows(5);
+        jTextAreaProposito.setWrapStyleWord(true);
+        jTextAreaProposito.setBorder(null);
+        jScrollPane1.setViewportView(jTextAreaProposito);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -113,14 +160,14 @@ public class ViewMotivacaoEObjetivos extends javax.swing.JInternalFrame {
         jLabel3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel3.setText("<html><b>Planejamento:</b></html>");
 
-        jTextArea2.setEditable(false);
-        jTextArea2.setColumns(20);
-        jTextArea2.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
-        jTextArea2.setLineWrap(true);
-        jTextArea2.setRows(5);
-        jTextArea2.setWrapStyleWord(true);
-        jTextArea2.setBorder(null);
-        jScrollPane2.setViewportView(jTextArea2);
+        jTextAreaPlanejamento.setEditable(false);
+        jTextAreaPlanejamento.setColumns(20);
+        jTextAreaPlanejamento.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
+        jTextAreaPlanejamento.setLineWrap(true);
+        jTextAreaPlanejamento.setRows(5);
+        jTextAreaPlanejamento.setWrapStyleWord(true);
+        jTextAreaPlanejamento.setBorder(null);
+        jScrollPane2.setViewportView(jTextAreaPlanejamento);
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -150,14 +197,14 @@ public class ViewMotivacaoEObjetivos extends javax.swing.JInternalFrame {
         jLabel4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel4.setText("<html><b>Contexto/Cenário:</b></html>");
 
-        jTextArea3.setEditable(false);
-        jTextArea3.setColumns(20);
-        jTextArea3.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
-        jTextArea3.setLineWrap(true);
-        jTextArea3.setRows(5);
-        jTextArea3.setWrapStyleWord(true);
-        jTextArea3.setBorder(null);
-        jScrollPane4.setViewportView(jTextArea3);
+        jTextAreaContexto.setEditable(false);
+        jTextAreaContexto.setColumns(20);
+        jTextAreaContexto.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
+        jTextAreaContexto.setLineWrap(true);
+        jTextAreaContexto.setRows(5);
+        jTextAreaContexto.setWrapStyleWord(true);
+        jTextAreaContexto.setBorder(null);
+        jScrollPane4.setViewportView(jTextAreaContexto);
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -187,7 +234,7 @@ public class ViewMotivacaoEObjetivos extends javax.swing.JInternalFrame {
         jLabel5.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel5.setText("<html><b>Envolvidos:</b></html>");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jTableEnvolvidos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {"", null},
                 {null, null},
@@ -198,7 +245,7 @@ public class ViewMotivacaoEObjetivos extends javax.swing.JInternalFrame {
                 "Nome", "Perfil"
             }
         ));
-        jScrollPane5.setViewportView(jTable1);
+        jScrollPane5.setViewportView(jTableEnvolvidos);
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
@@ -275,11 +322,11 @@ public class ViewMotivacaoEObjetivos extends javax.swing.JInternalFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabelProblema;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -291,10 +338,10 @@ public class ViewMotivacaoEObjetivos extends javax.swing.JInternalFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextArea jTextArea2;
-    private javax.swing.JTextArea jTextArea3;
+    private javax.swing.JTable jTableEnvolvidos;
+    private javax.swing.JTextArea jTextAreaContexto;
+    private javax.swing.JTextArea jTextAreaPlanejamento;
+    private javax.swing.JTextArea jTextAreaProposito;
     private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
 }
