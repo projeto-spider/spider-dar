@@ -26,19 +26,23 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Bleno Vale
+ * @author Iuri Raiol
  */
 @Entity
 @Table(name = "organizacao")
 @XmlRootElement
-@NamedQueries({
+@NamedQueries(
+{
     @NamedQuery(name = "Organizacao.findAll", query = "SELECT o FROM Organizacao o"),
     @NamedQuery(name = "Organizacao.findById", query = "SELECT o FROM Organizacao o WHERE o.id = :id"),
     @NamedQuery(name = "Organizacao.findByNome", query = "SELECT o FROM Organizacao o WHERE o.nome = :nome"),
     @NamedQuery(name = "Organizacao.findByDescricao", query = "SELECT o FROM Organizacao o WHERE o.descricao = :descricao"),
     @NamedQuery(name = "Organizacao.findByCreated", query = "SELECT o FROM Organizacao o WHERE o.created = :created"),
-    @NamedQuery(name = "Organizacao.findByModified", query = "SELECT o FROM Organizacao o WHERE o.modified = :modified")})
-public class Organizacao implements Serializable {
+    @NamedQuery(name = "Organizacao.findByModified", query = "SELECT o FROM Organizacao o WHERE o.modified = :modified")
+})
+public class Organizacao implements Serializable
+{
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -59,23 +63,20 @@ public class Organizacao implements Serializable {
     @Column(name = "modified")
     @Temporal(TemporalType.TIMESTAMP)
     private Date modified;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "organizacao")
-    private List<Acessar> acessarList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idOrganizacao")
     private List<Problema> problemaList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idOrganizacao")
-    private List<Perfil> perfilList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idOrganizacao")
-    private List<Guia> guiaList;
 
-    public Organizacao() {
+    public Organizacao()
+    {
     }
 
-    public Organizacao(Integer id) {
+    public Organizacao(Integer id)
+    {
         this.id = id;
     }
 
-    public Organizacao(Integer id, String nome, String descricao, Date created, Date modified) {
+    public Organizacao(Integer id, String nome, String descricao, Date created, Date modified)
+    {
         this.id = id;
         this.nome = nome;
         this.descricao = descricao;
@@ -83,104 +84,94 @@ public class Organizacao implements Serializable {
         this.modified = modified;
     }
 
-    public Integer getId() {
+    public Integer getId()
+    {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Integer id)
+    {
         this.id = id;
     }
 
-    public String getNome() {
+    public String getNome()
+    {
         return nome;
     }
 
-    public void setNome(String nome) {
+    public void setNome(String nome)
+    {
         this.nome = nome;
     }
 
-    public String getDescricao() {
+    public String getDescricao()
+    {
         return descricao;
     }
 
-    public void setDescricao(String descricao) {
+    public void setDescricao(String descricao)
+    {
         this.descricao = descricao;
     }
 
-    public Date getCreated() {
+    public Date getCreated()
+    {
         return created;
     }
 
-    public void setCreated(Date created) {
+    public void setCreated(Date created)
+    {
         this.created = created;
     }
 
-    public Date getModified() {
+    public Date getModified()
+    {
         return modified;
     }
 
-    public void setModified(Date modified) {
+    public void setModified(Date modified)
+    {
         this.modified = modified;
     }
 
     @XmlTransient
-    public List<Acessar> getAcessarList() {
-        return acessarList;
-    }
-
-    public void setAcessarList(List<Acessar> acessarList) {
-        this.acessarList = acessarList;
-    }
-
-    @XmlTransient
-    public List<Problema> getProblemaList() {
+    public List<Problema> getProblemaList()
+    {
         return problemaList;
     }
 
-    public void setProblemaList(List<Problema> problemaList) {
+    public void setProblemaList(List<Problema> problemaList)
+    {
         this.problemaList = problemaList;
     }
 
-    @XmlTransient
-    public List<Perfil> getPerfilList() {
-        return perfilList;
-    }
-
-    public void setPerfilList(List<Perfil> perfilList) {
-        this.perfilList = perfilList;
-    }
-
-    @XmlTransient
-    public List<Guia> getGuiaList() {
-        return guiaList;
-    }
-
-    public void setGuiaList(List<Guia> guiaList) {
-        this.guiaList = guiaList;
-    }
-
     @Override
-    public int hashCode() {
+    public int hashCode()
+    {
         int hash = 0;
         hash += (id != null ? id.hashCode() : 0);
         return hash;
     }
 
     @Override
-    public boolean equals(Object object) {
+    public boolean equals(Object object)
+    {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Organizacao)) {
+        if (!(object instanceof Organizacao))
+        {
             return false;
         }
         Organizacao other = (Organizacao) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)))
+        {
             return false;
         }
         return true;
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         return "model.Organizacao[ id=" + id + " ]";
     }
     

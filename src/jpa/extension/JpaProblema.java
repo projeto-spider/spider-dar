@@ -62,15 +62,15 @@ public class JpaProblema extends ProblemaJpaController {
         }
     }
     
-    public Problema findProblemaByCodigoAndIdOrganizacao(String codigo, int idOrganizacao)
+    public Problema findProblemaById(int idProblema, int idOrganizacao)
     {
         EntityManager em = getEntityManager();
         
         try
         {
-            TypedQuery<Problema> query = em.createQuery("FROM Problema p WHERE p.codigo = :codigo AND p.idOrganizacao.id = :idOrganizacao",Problema.class);
+            TypedQuery<Problema> query = em.createQuery("FROM Problema p WHERE p.id = :idProblema AND p.idOrganizacao.id = :idOrganizacao",Problema.class);
             
-            TypedQuery<Problema> result = query.setParameter("codigo", codigo).setParameter("idOrganizacao", idOrganizacao);
+            TypedQuery<Problema> result = query.setParameter("idProblema", idProblema).setParameter("idOrganizacao", idOrganizacao);
             
             return result.getSingleResult();
         }

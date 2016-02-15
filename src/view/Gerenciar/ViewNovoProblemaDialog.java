@@ -28,28 +28,27 @@ public class ViewNovoProblemaDialog extends javax.swing.JDialog
         this.setLocationRelativeTo(null);
     }
     
-    public ViewNovoProblemaDialog(java.awt.Frame parent, boolean modal, String codigoProblema)
+    public ViewNovoProblemaDialog(java.awt.Frame parent, boolean modal, String idProblema)
     {
         super(parent, modal);
         initComponents();
         
         this.type = Constant.UPDATE;
-        this.fillFieldsProblemaByCodigoProblema(codigoProblema);
+        this.fillFieldsProblemaById(idProblema);
         
         this.setLocationRelativeTo(null);
     }
     
-    private void fillFieldsProblemaByCodigoProblema(String idProblema)
+    private void fillFieldsProblemaById(String idProblema)
     {
         request.setData("Problema.id", idProblema);
         request.setData("Problema.idOrganizacao", KeepData.getData("Organizacao.id"));
         
-        Request problema = controllerProblema.getProblemaByCodigo(request);
+        Request problema = controllerProblema.getProblemaById(request);
         
         request.setData("Problema.id",problema.getData("Problema.id"));
         
         jTextFieldProblemaNome.setText(problema.getData("Problema.nome"));
-        jTextFieldProblemaCodigo.setText(problema.getData("Problema.codigo"));
         jTextAreaProblemaProposito.setText(problema.getData("Problema.proposito"));
         jTextAreaProblemaPlanejamento.setText(problema.getData("Problema.planejamento"));
         jTextAreaProblemaContexto.setText(problema.getData("Problema.contexto"));
@@ -73,15 +72,21 @@ public class ViewNovoProblemaDialog extends javax.swing.JDialog
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        jTextFieldProblemaCodigo = new javax.swing.JTextField();
+        jLabelKeyword = new javax.swing.JLabel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        jTableKeywords = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Nova Tomada de Decisão");
         setResizable(false);
 
+        jTextFieldProblemaNome.setNextFocusableComponent(jTextAreaProblemaProposito);
+
         jTextAreaProblemaProposito.setColumns(20);
+        jTextAreaProblemaProposito.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
+        jTextAreaProblemaProposito.setLineWrap(true);
         jTextAreaProblemaProposito.setRows(2);
+        jTextAreaProblemaProposito.setNextFocusableComponent(jTextAreaProblemaPlanejamento);
         jScrollPane1.setViewportView(jTextAreaProblemaProposito);
 
         jButtonCancelar.setText("Cancelar");
@@ -94,10 +99,15 @@ public class ViewNovoProblemaDialog extends javax.swing.JDialog
         });
 
         jTextAreaProblemaPlanejamento.setColumns(20);
+        jTextAreaProblemaPlanejamento.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
+        jTextAreaProblemaPlanejamento.setLineWrap(true);
         jTextAreaProblemaPlanejamento.setRows(2);
+        jTextAreaProblemaPlanejamento.setNextFocusableComponent(jTextAreaProblemaContexto);
         jScrollPane2.setViewportView(jTextAreaProblemaPlanejamento);
 
         jTextAreaProblemaContexto.setColumns(20);
+        jTextAreaProblemaContexto.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
+        jTextAreaProblemaContexto.setLineWrap(true);
         jTextAreaProblemaContexto.setRows(2);
         jScrollPane3.setViewportView(jTextAreaProblemaContexto);
 
@@ -118,7 +128,23 @@ public class ViewNovoProblemaDialog extends javax.swing.JDialog
 
         jLabel4.setText("Contexto/Cenário:");
 
-        jLabel5.setText("Código do Problema:");
+        jLabelKeyword.setText("Palavras-Chave (Até 3 palavras):");
+
+        jTableKeywords.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][]
+            {
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
+            },
+            new String []
+            {
+                "Nº", "Palavra", "Nova", "Editar", "Excluirl"
+            }
+        ));
+        jTableKeywords.setNextFocusableComponent(jButtonSalvar);
+        jScrollPane4.setViewportView(jTableKeywords);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -128,23 +154,23 @@ public class ViewNovoProblemaDialog extends javax.swing.JDialog
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jTextFieldProblemaNome)
-                    .addComponent(jTextFieldProblemaCodigo)
+                    .addComponent(jScrollPane1)
+                    .addComponent(jScrollPane3)
+                    .addComponent(jScrollPane2)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jButtonSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButtonCancelar))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 536, Short.MAX_VALUE)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 536, Short.MAX_VALUE)
-                    .addComponent(jScrollPane2)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
-                            .addComponent(jLabel5)
                             .addComponent(jLabel2)
+                            .addComponent(jLabel3)
                             .addComponent(jLabel4)
-                            .addComponent(jLabel3))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                            .addComponent(jLabelKeyword)
+                            .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 184, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -154,27 +180,27 @@ public class ViewNovoProblemaDialog extends javax.swing.JDialog
                 .addComponent(jLabel1)
                 .addGap(0, 0, 0)
                 .addComponent(jTextFieldProblemaNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(12, 12, 12)
-                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0)
-                .addComponent(jTextFieldProblemaCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel2)
                 .addGap(0, 0, 0)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(12, 12, 12)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel3)
                 .addGap(0, 0, 0)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(12, 12, 12)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel4)
-                .addGap(0, 0, 0)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabelKeyword)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonSalvar)
                     .addComponent(jButtonCancelar))
-                .addContainerGap(33, Short.MAX_VALUE))
+                .addGap(17, 17, 17))
         );
 
         pack();
@@ -212,7 +238,6 @@ public class ViewNovoProblemaDialog extends javax.swing.JDialog
         request.setHashMapValueToInput();
         
         request.setDataInput("Problema.nome", new Input(1, "text", "Nome do Problema", jTextFieldProblemaNome.getText()));
-        request.setDataInput("Problema.codigo", new Input(2,"text","Código do Problema",jTextFieldProblemaCodigo.getText()));
         request.setDataInput("Problema.proposito", new Input(3, "textarea", "Propósito", jTextAreaProblemaProposito.getText()));
         request.setDataInput("Problema.planejamento", new Input(4, "textarea", "Planejamento", jTextAreaProblemaPlanejamento.getText()));
         request.setDataInput("Problema.contexto", new Input(5, "textarea", "Contexto/Cenário", jTextAreaProblemaContexto.getText()));
@@ -259,14 +284,15 @@ public class ViewNovoProblemaDialog extends javax.swing.JDialog
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabelKeyword;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JTable jTableKeywords;
     private javax.swing.JTextArea jTextAreaProblemaContexto;
     private javax.swing.JTextArea jTextAreaProblemaPlanejamento;
     private javax.swing.JTextArea jTextAreaProblemaProposito;
-    private javax.swing.JTextField jTextFieldProblemaCodigo;
     private javax.swing.JTextField jTextFieldProblemaNome;
     // End of variables declaration//GEN-END:variables
 }
