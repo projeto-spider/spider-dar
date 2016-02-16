@@ -18,6 +18,7 @@
     <class>model.Perfil</class>
     <class>model.Alternativa</class>
     <class>model.Itemguia</class>
+    <class>model.Keyword</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/spiderdar"/>
       <property name="javax.persistence.jdbc.user" value="root"/>

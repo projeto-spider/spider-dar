@@ -1,13 +1,17 @@
 package view.Gerenciar;
 
 import controller.ControllerProblema;
+import java.awt.Dimension;
 import java.util.HashMap;
 import java.util.Map;
+import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
+import net.sf.nachocalendar.holidays.DefaultHoliDay;
 import settings.Constant;
 import settings.KeepData;
 import util.Input;
 import util.Request;
+import util.swing.ComboItem;
 
 /**
  *
@@ -18,6 +22,7 @@ public class ViewNovoProblemaDialog extends javax.swing.JDialog
     private final ControllerProblema controllerProblema = new ControllerProblema();
     private int type;
     private Request request = new Request();
+    private DefaultListModel myJListModel = new DefaultListModel<Object>();
 
     public ViewNovoProblemaDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -73,8 +78,10 @@ public class ViewNovoProblemaDialog extends javax.swing.JDialog
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabelKeyword = new javax.swing.JLabel();
-        jScrollPane4 = new javax.swing.JScrollPane();
-        jTableKeywords = new javax.swing.JTable();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        jListKeywords = new javax.swing.JList<>();
+        jButtonNovaKeyword = new javax.swing.JButton();
+        jButtonExcluirKeyword = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Nova Tomada de Decisão");
@@ -130,21 +137,27 @@ public class ViewNovoProblemaDialog extends javax.swing.JDialog
 
         jLabelKeyword.setText("Palavras-Chave (Até 3 palavras):");
 
-        jTableKeywords.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][]
+        jListKeywords.setToolTipText("");
+        jScrollPane5.setViewportView(jListKeywords);
+
+        jButtonNovaKeyword.setText("Nova Palavra");
+        jButtonNovaKeyword.setToolTipText("");
+        jButtonNovaKeyword.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
             {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
-            },
-            new String []
-            {
-                "Nº", "Palavra", "Nova", "Editar", "Excluirl"
+                jButtonNovaKeywordActionPerformed(evt);
             }
-        ));
-        jTableKeywords.setNextFocusableComponent(jButtonSalvar);
-        jScrollPane4.setViewportView(jTableKeywords);
+        });
+
+        jButtonExcluirKeyword.setText("Excluir Palavra");
+        jButtonExcluirKeyword.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                jButtonExcluirKeywordActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -158,19 +171,23 @@ public class ViewNovoProblemaDialog extends javax.swing.JDialog
                     .addComponent(jScrollPane3)
                     .addComponent(jScrollPane2)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabelKeyword))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButtonSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButtonCancelar))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabelKeyword)
-                            .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 184, Short.MAX_VALUE)))
+                        .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 391, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jButtonExcluirKeyword, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButtonNovaKeyword, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(0, 2, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -195,8 +212,13 @@ public class ViewNovoProblemaDialog extends javax.swing.JDialog
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabelKeyword)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jButtonNovaKeyword)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButtonExcluirKeyword))
+                    .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(53, 53, 53)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonSalvar)
                     .addComponent(jButtonCancelar))
@@ -268,6 +290,33 @@ public class ViewNovoProblemaDialog extends javax.swing.JDialog
             JOptionPane.showMessageDialog(null, e.getMessage(),"ERRO AO SALVAR", JOptionPane.ERROR_MESSAGE);
         }
     }
+    
+    private void addKeywords()
+    {
+        int numberElements = jListKeywords.getModel().getSize();
+        
+        if (!(numberElements > 2))
+        {
+            String value = JOptionPane.showInputDialog("Insira uma Palavra Chave");
+            myJListModel.addElement(new ComboItem(String.valueOf(numberElements), value));
+        }
+        else
+            JOptionPane.showMessageDialog(null, "Somente 3 palavras chaves no máximo!");
+        
+        jListKeywords.setModel(myJListModel);
+    }
+    
+    private void excluirKeyword()
+    {
+        int indexItemSelected = jListKeywords.getSelectedIndex();
+
+        if (indexItemSelected < 0)
+            JOptionPane.showMessageDialog(null, "Selecione uma das palavras para excluir"); 
+        else
+            myJListModel.remove(indexItemSelected);
+        
+        JOptionPane.showMessageDialog(null, indexItemSelected);
+    }
 
     private void jButtonCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelarActionPerformed
         this.dispose();
@@ -277,19 +326,31 @@ public class ViewNovoProblemaDialog extends javax.swing.JDialog
         this.save();// TODO add your handling code here:
     }//GEN-LAST:event_jButtonSalvarActionPerformed
 
+    private void jButtonNovaKeywordActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonNovaKeywordActionPerformed
+    {//GEN-HEADEREND:event_jButtonNovaKeywordActionPerformed
+        this.addKeywords();
+    }//GEN-LAST:event_jButtonNovaKeywordActionPerformed
+
+    private void jButtonExcluirKeywordActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonExcluirKeywordActionPerformed
+    {//GEN-HEADEREND:event_jButtonExcluirKeywordActionPerformed
+        this.excluirKeyword();
+    }//GEN-LAST:event_jButtonExcluirKeywordActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonCancelar;
+    private javax.swing.JButton jButtonExcluirKeyword;
+    private javax.swing.JButton jButtonNovaKeyword;
     private javax.swing.JButton jButtonSalvar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabelKeyword;
+    private javax.swing.JList<String> jListKeywords;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JTable jTableKeywords;
+    private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JTextArea jTextAreaProblemaContexto;
     private javax.swing.JTextArea jTextAreaProblemaPlanejamento;
     private javax.swing.JTextArea jTextAreaProblemaProposito;
