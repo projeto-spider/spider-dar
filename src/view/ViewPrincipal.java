@@ -130,6 +130,7 @@ public class ViewPrincipal extends javax.swing.JFrame {
         jMenuItemPermissoes = new javax.swing.JMenuItem();
         jSeparator2 = new javax.swing.JPopupMenu.Separator();
         jMenuItemConta = new javax.swing.JMenuItem();
+        jMenuItem3 = new javax.swing.JMenuItem();
         jMenuOrganizacional = new javax.swing.JMenu();
         jMenuItemGuiadaGestao = new javax.swing.JMenuItem();
         jMenuSobre = new javax.swing.JMenu();
@@ -478,6 +479,14 @@ public class ViewPrincipal extends javax.swing.JFrame {
         });
         jMenuGerenciar.add(jMenuItemConta);
 
+        jMenuItem3.setText("Configurações");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
+        jMenuGerenciar.add(jMenuItem3);
+
         jMenuBar1.add(jMenuGerenciar);
 
         jMenuOrganizacional.setText("Organizacional");
@@ -630,6 +639,10 @@ public class ViewPrincipal extends javax.swing.JFrame {
         viewHistorico.showViewHistorico();
     }//GEN-LAST:event_jButtonHistoricoActionPerformed
 
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        new ViewConfiguracoes(null, true).setVisible(true);
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
+
     public void reload() {
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
@@ -767,6 +780,7 @@ public class ViewPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenu jMenuGerenciar;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItemAjuda;
     private javax.swing.JMenuItem jMenuItemConta;
     private javax.swing.JMenuItem jMenuItemDecisoes;
