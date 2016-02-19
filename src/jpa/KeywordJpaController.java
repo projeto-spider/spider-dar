@@ -21,199 +21,158 @@ import model.Problema;
 
 /**
  *
- * @author Iuri Raiol
+ * @author Bleno Vale
  */
-public class KeywordJpaController implements Serializable
-{
+public class KeywordJpaController implements Serializable {
 
-    public KeywordJpaController(EntityManagerFactory emf)
-    {
+    public KeywordJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
     private EntityManagerFactory emf = null;
 
-    public EntityManager getEntityManager()
-    {
+    public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
 
-    public void create(Keyword keyword) throws PreexistingEntityException, Exception
-    {
-        if (keyword.getKeywordPK() == null)
-        {
+    public void create(Keyword keyword) throws PreexistingEntityException, Exception {
+        if (keyword.getKeywordPK() == null) {
             keyword.setKeywordPK(new KeywordPK());
         }
         keyword.getKeywordPK().setIdForeignKey(keyword.getProblema().getId());
         EntityManager em = null;
-        try
-        {
+        try {
             em = getEntityManager();
             em.getTransaction().begin();
             Problema problema = keyword.getProblema();
-            if (problema != null)
-            {
+            if (problema != null) {
                 problema = em.getReference(problema.getClass(), problema.getId());
                 keyword.setProblema(problema);
             }
             em.persist(keyword);
-            if (problema != null)
-            {
+            if (problema != null) {
                 problema.getKeywordList().add(keyword);
                 problema = em.merge(problema);
             }
             em.getTransaction().commit();
-        } catch (Exception ex)
-        {
-            if (findKeyword(keyword.getKeywordPK()) != null)
-            {
+        } catch (Exception ex) {
+            if (findKeyword(keyword.getKeywordPK()) != null) {
                 throw new PreexistingEntityException("Keyword " + keyword + " already exists.", ex);
             }
             throw ex;
-        } finally
-        {
-            if (em != null)
-            {
+        } finally {
+            if (em != null) {
                 em.close();
             }
         }
     }
 
-    public void edit(Keyword keyword) throws NonexistentEntityException, Exception
-    {
+    public void edit(Keyword keyword) throws NonexistentEntityException, Exception {
         keyword.getKeywordPK().setIdForeignKey(keyword.getProblema().getId());
         EntityManager em = null;
-        try
-        {
+        try {
             em = getEntityManager();
             em.getTransaction().begin();
             Keyword persistentKeyword = em.find(Keyword.class, keyword.getKeywordPK());
             Problema problemaOld = persistentKeyword.getProblema();
             Problema problemaNew = keyword.getProblema();
-            if (problemaNew != null)
-            {
+            if (problemaNew != null) {
                 problemaNew = em.getReference(problemaNew.getClass(), problemaNew.getId());
                 keyword.setProblema(problemaNew);
             }
             keyword = em.merge(keyword);
-            if (problemaOld != null && !problemaOld.equals(problemaNew))
-            {
+            if (problemaOld != null && !problemaOld.equals(problemaNew)) {
                 problemaOld.getKeywordList().remove(keyword);
                 problemaOld = em.merge(problemaOld);
             }
-            if (problemaNew != null && !problemaNew.equals(problemaOld))
-            {
+            if (problemaNew != null && !problemaNew.equals(problemaOld)) {
                 problemaNew.getKeywordList().add(keyword);
                 problemaNew = em.merge(problemaNew);
             }
             em.getTransaction().commit();
-        } catch (Exception ex)
-        {
+        } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
-            if (msg == null || msg.length() == 0)
-            {
+            if (msg == null || msg.length() == 0) {
                 KeywordPK id = keyword.getKeywordPK();
-                if (findKeyword(id) == null)
-                {
+                if (findKeyword(id) == null) {
                     throw new NonexistentEntityException("The keyword with id " + id + " no longer exists.");
                 }
             }
             throw ex;
-        } finally
-        {
-            if (em != null)
-            {
+        } finally {
+            if (em != null) {
                 em.close();
             }
         }
     }
 
-    public void destroy(KeywordPK id) throws NonexistentEntityException
-    {
+    public void destroy(KeywordPK id) throws NonexistentEntityException {
         EntityManager em = null;
-        try
-        {
+        try {
             em = getEntityManager();
             em.getTransaction().begin();
             Keyword keyword;
-            try
-            {
+            try {
                 keyword = em.getReference(Keyword.class, id);
                 keyword.getKeywordPK();
-            } catch (EntityNotFoundException enfe)
-            {
+            } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The keyword with id " + id + " no longer exists.", enfe);
             }
             Problema problema = keyword.getProblema();
-            if (problema != null)
-            {
+            if (problema != null) {
                 problema.getKeywordList().remove(keyword);
                 problema = em.merge(problema);
             }
             em.remove(keyword);
             em.getTransaction().commit();
-        } finally
-        {
-            if (em != null)
-            {
+        } finally {
+            if (em != null) {
                 em.close();
             }
         }
     }
 
-    public List<Keyword> findKeywordEntities()
-    {
+    public List<Keyword> findKeywordEntities() {
         return findKeywordEntities(true, -1, -1);
     }
 
-    public List<Keyword> findKeywordEntities(int maxResults, int firstResult)
-    {
+    public List<Keyword> findKeywordEntities(int maxResults, int firstResult) {
         return findKeywordEntities(false, maxResults, firstResult);
     }
 
-    private List<Keyword> findKeywordEntities(boolean all, int maxResults, int firstResult)
-    {
+    private List<Keyword> findKeywordEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();
-        try
-        {
+        try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
             cq.select(cq.from(Keyword.class));
             Query q = em.createQuery(cq);
-            if (!all)
-            {
+            if (!all) {
                 q.setMaxResults(maxResults);
                 q.setFirstResult(firstResult);
             }
             return q.getResultList();
-        } finally
-        {
+        } finally {
             em.close();
         }
     }
 
-    public Keyword findKeyword(KeywordPK id)
-    {
+    public Keyword findKeyword(KeywordPK id) {
         EntityManager em = getEntityManager();
-        try
-        {
+        try {
             return em.find(Keyword.class, id);
-        } finally
-        {
+        } finally {
             em.close();
         }
     }
 
-    public int getKeywordCount()
-    {
+    public int getKeywordCount() {
         EntityManager em = getEntityManager();
-        try
-        {
+        try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
             Root<Keyword> rt = cq.from(Keyword.class);
             cq.select(em.getCriteriaBuilder().count(rt));
             Query q = em.createQuery(cq);
             return ((Long) q.getSingleResult()).intValue();
-        } finally
-        {
+        } finally {
             em.close();
         }
     }

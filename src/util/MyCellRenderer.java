@@ -62,7 +62,7 @@ public class MyCellRenderer extends JTextPane implements TableCellRenderer {
             table.setRowHeight(row, getPreferredSize().height);
         }
 
-        table.getTableHeader().setResizingAllowed(false);
+//        table.getTableHeader().setResizingAllowed(false);
 
         return this;
     }

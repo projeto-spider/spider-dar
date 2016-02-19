@@ -19,186 +19,148 @@ import model.Itemguia;
 
 /**
  *
- * @author Iuri Raiol
+ * @author Bleno Vale
  */
-public class ItemguiaJpaController implements Serializable
-{
+public class ItemguiaJpaController implements Serializable {
 
-    public ItemguiaJpaController(EntityManagerFactory emf)
-    {
+    public ItemguiaJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
     private EntityManagerFactory emf = null;
 
-    public EntityManager getEntityManager()
-    {
+    public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
 
-    public void create(Itemguia itemguia)
-    {
+    public void create(Itemguia itemguia) {
         EntityManager em = null;
-        try
-        {
+        try {
             em = getEntityManager();
             em.getTransaction().begin();
             Guia idGuia = itemguia.getIdGuia();
-            if (idGuia != null)
-            {
+            if (idGuia != null) {
                 idGuia = em.getReference(idGuia.getClass(), idGuia.getId());
                 itemguia.setIdGuia(idGuia);
             }
             em.persist(itemguia);
-            if (idGuia != null)
-            {
+            if (idGuia != null) {
                 idGuia.getItemguiaList().add(itemguia);
                 idGuia = em.merge(idGuia);
             }
             em.getTransaction().commit();
-        } finally
-        {
-            if (em != null)
-            {
+        } finally {
+            if (em != null) {
                 em.close();
             }
         }
     }
 
-    public void edit(Itemguia itemguia) throws NonexistentEntityException, Exception
-    {
+    public void edit(Itemguia itemguia) throws NonexistentEntityException, Exception {
         EntityManager em = null;
-        try
-        {
+        try {
             em = getEntityManager();
             em.getTransaction().begin();
             Itemguia persistentItemguia = em.find(Itemguia.class, itemguia.getId());
             Guia idGuiaOld = persistentItemguia.getIdGuia();
             Guia idGuiaNew = itemguia.getIdGuia();
-            if (idGuiaNew != null)
-            {
+            if (idGuiaNew != null) {
                 idGuiaNew = em.getReference(idGuiaNew.getClass(), idGuiaNew.getId());
                 itemguia.setIdGuia(idGuiaNew);
             }
             itemguia = em.merge(itemguia);
-            if (idGuiaOld != null && !idGuiaOld.equals(idGuiaNew))
-            {
+            if (idGuiaOld != null && !idGuiaOld.equals(idGuiaNew)) {
                 idGuiaOld.getItemguiaList().remove(itemguia);
                 idGuiaOld = em.merge(idGuiaOld);
             }
-            if (idGuiaNew != null && !idGuiaNew.equals(idGuiaOld))
-            {
+            if (idGuiaNew != null && !idGuiaNew.equals(idGuiaOld)) {
                 idGuiaNew.getItemguiaList().add(itemguia);
                 idGuiaNew = em.merge(idGuiaNew);
             }
             em.getTransaction().commit();
-        } catch (Exception ex)
-        {
+        } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
-            if (msg == null || msg.length() == 0)
-            {
+            if (msg == null || msg.length() == 0) {
                 Integer id = itemguia.getId();
-                if (findItemguia(id) == null)
-                {
+                if (findItemguia(id) == null) {
                     throw new NonexistentEntityException("The itemguia with id " + id + " no longer exists.");
                 }
             }
             throw ex;
-        } finally
-        {
-            if (em != null)
-            {
+        } finally {
+            if (em != null) {
                 em.close();
             }
         }
     }
 
-    public void destroy(Integer id) throws NonexistentEntityException
-    {
+    public void destroy(Integer id) throws NonexistentEntityException {
         EntityManager em = null;
-        try
-        {
+        try {
             em = getEntityManager();
             em.getTransaction().begin();
             Itemguia itemguia;
-            try
-            {
+            try {
                 itemguia = em.getReference(Itemguia.class, id);
                 itemguia.getId();
-            } catch (EntityNotFoundException enfe)
-            {
+            } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The itemguia with id " + id + " no longer exists.", enfe);
             }
             Guia idGuia = itemguia.getIdGuia();
-            if (idGuia != null)
-            {
+            if (idGuia != null) {
                 idGuia.getItemguiaList().remove(itemguia);
                 idGuia = em.merge(idGuia);
             }
             em.remove(itemguia);
             em.getTransaction().commit();
-        } finally
-        {
-            if (em != null)
-            {
+        } finally {
+            if (em != null) {
                 em.close();
             }
         }
     }
 
-    public List<Itemguia> findItemguiaEntities()
-    {
+    public List<Itemguia> findItemguiaEntities() {
         return findItemguiaEntities(true, -1, -1);
     }
 
-    public List<Itemguia> findItemguiaEntities(int maxResults, int firstResult)
-    {
+    public List<Itemguia> findItemguiaEntities(int maxResults, int firstResult) {
         return findItemguiaEntities(false, maxResults, firstResult);
     }
 
-    private List<Itemguia> findItemguiaEntities(boolean all, int maxResults, int firstResult)
-    {
+    private List<Itemguia> findItemguiaEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();
-        try
-        {
+        try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
             cq.select(cq.from(Itemguia.class));
             Query q = em.createQuery(cq);
-            if (!all)
-            {
+            if (!all) {
                 q.setMaxResults(maxResults);
                 q.setFirstResult(firstResult);
             }
             return q.getResultList();
-        } finally
-        {
+        } finally {
             em.close();
         }
     }
 
-    public Itemguia findItemguia(Integer id)
-    {
+    public Itemguia findItemguia(Integer id) {
         EntityManager em = getEntityManager();
-        try
-        {
+        try {
             return em.find(Itemguia.class, id);
-        } finally
-        {
+        } finally {
             em.close();
         }
     }
 
-    public int getItemguiaCount()
-    {
+    public int getItemguiaCount() {
         EntityManager em = getEntityManager();
-        try
-        {
+        try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
             Root<Itemguia> rt = cq.from(Itemguia.class);
             cq.select(em.getCriteriaBuilder().count(rt));
             Query q = em.createQuery(cq);
             return ((Long) q.getSingleResult()).intValue();
-        } finally
-        {
+        } finally {
             em.close();
         }
     }

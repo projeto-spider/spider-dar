@@ -24,7 +24,7 @@ import view.Gerenciar.ViewUsuarios;
 import view.Organizacional.ViewGuiaGestaoDeDecisao;
 import view.Gerenciar.ViewPermissoesDePerfil;
 import view.TomadaDeDecisao.ViewAlternativaDeSolucao;
-import view.TomadaDeDecisao.ViewCalendario;
+import view.TomadaDeDecisao.ViewTarefas;
 import view.TomadaDeDecisao.ViewCriteriosDeAvaliacao;
 import view.TomadaDeDecisao.ViewAvaliacao;
 import view.TomadaDeDecisao.ViewHistorico;
@@ -50,7 +50,7 @@ public class ViewPrincipal extends javax.swing.JFrame {
 
     //View.TomadaDeDecisao
     private final ViewMotivacaoEObjetivos viewMotivacaoEObjetivos = new ViewMotivacaoEObjetivos();
-    private final ViewCalendario viewCalendario = new ViewCalendario();
+    private final ViewTarefas viewCalendario = new ViewTarefas();
     private final ViewAlternativaDeSolucao viewAlternativaDeSolucao = new ViewAlternativaDeSolucao();
     private final ViewCriteriosDeAvaliacao viewCriteriosDeAvaliacao = new ViewCriteriosDeAvaliacao();
     private final ViewAvaliacao viewDecisao = new ViewAvaliacao();

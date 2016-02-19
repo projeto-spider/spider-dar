@@ -1,5 +1,6 @@
 package util;
 
+import javax.swing.ImageIcon;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -9,7 +10,9 @@ import javax.swing.table.DefaultTableModel;
 public class MyDefaultTableModel extends DefaultTableModel {
 
     private boolean isEditable;
-
+    private boolean hasIcon;
+    private int columnCheck;
+    private ImageIcon icon;
     /**
      * Cria um modelo para a JTable
      *
@@ -21,9 +24,31 @@ public class MyDefaultTableModel extends DefaultTableModel {
         super(columnNames, rowCount);
         this.isEditable = isEditable;
     }
+    
+    // Tabelas que possuem icone
+    public MyDefaultTableModel(Object[] columnNames, int rowCount, boolean isEditable, boolean hasIcon, int columnCheck) {
+        super(columnNames, rowCount);
+        this.isEditable = isEditable;
+        this.hasIcon =  hasIcon;
+        this.columnCheck = columnCheck;
+    }
 
     @Override
     public boolean isCellEditable(int row, int column) {
-        return isEditable;
+        if (column == columnCheck) {
+            return true;
+        } else {
+            return isEditable;
+        }
     }
+    
+    @Override
+    public Class getColumnClass(int column){
+        if (hasIcon){
+            return getValueAt(0, column).getClass();
+        } else{
+            return Object.class;
+        }
+    }
+    
 }

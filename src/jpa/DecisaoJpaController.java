@@ -19,186 +19,148 @@ import model.Decisao;
 
 /**
  *
- * @author Iuri Raiol
+ * @author Bleno Vale
  */
-public class DecisaoJpaController implements Serializable
-{
+public class DecisaoJpaController implements Serializable {
 
-    public DecisaoJpaController(EntityManagerFactory emf)
-    {
+    public DecisaoJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
     private EntityManagerFactory emf = null;
 
-    public EntityManager getEntityManager()
-    {
+    public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
 
-    public void create(Decisao decisao)
-    {
+    public void create(Decisao decisao) {
         EntityManager em = null;
-        try
-        {
+        try {
             em = getEntityManager();
             em.getTransaction().begin();
             Alternativa idAlternativa = decisao.getIdAlternativa();
-            if (idAlternativa != null)
-            {
+            if (idAlternativa != null) {
                 idAlternativa = em.getReference(idAlternativa.getClass(), idAlternativa.getId());
                 decisao.setIdAlternativa(idAlternativa);
             }
             em.persist(decisao);
-            if (idAlternativa != null)
-            {
+            if (idAlternativa != null) {
                 idAlternativa.getDecisaoList().add(decisao);
                 idAlternativa = em.merge(idAlternativa);
             }
             em.getTransaction().commit();
-        } finally
-        {
-            if (em != null)
-            {
+        } finally {
+            if (em != null) {
                 em.close();
             }
         }
     }
 
-    public void edit(Decisao decisao) throws NonexistentEntityException, Exception
-    {
+    public void edit(Decisao decisao) throws NonexistentEntityException, Exception {
         EntityManager em = null;
-        try
-        {
+        try {
             em = getEntityManager();
             em.getTransaction().begin();
             Decisao persistentDecisao = em.find(Decisao.class, decisao.getId());
             Alternativa idAlternativaOld = persistentDecisao.getIdAlternativa();
             Alternativa idAlternativaNew = decisao.getIdAlternativa();
-            if (idAlternativaNew != null)
-            {
+            if (idAlternativaNew != null) {
                 idAlternativaNew = em.getReference(idAlternativaNew.getClass(), idAlternativaNew.getId());
                 decisao.setIdAlternativa(idAlternativaNew);
             }
             decisao = em.merge(decisao);
-            if (idAlternativaOld != null && !idAlternativaOld.equals(idAlternativaNew))
-            {
+            if (idAlternativaOld != null && !idAlternativaOld.equals(idAlternativaNew)) {
                 idAlternativaOld.getDecisaoList().remove(decisao);
                 idAlternativaOld = em.merge(idAlternativaOld);
             }
-            if (idAlternativaNew != null && !idAlternativaNew.equals(idAlternativaOld))
-            {
+            if (idAlternativaNew != null && !idAlternativaNew.equals(idAlternativaOld)) {
                 idAlternativaNew.getDecisaoList().add(decisao);
                 idAlternativaNew = em.merge(idAlternativaNew);
             }
             em.getTransaction().commit();
-        } catch (Exception ex)
-        {
+        } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
-            if (msg == null || msg.length() == 0)
-            {
+            if (msg == null || msg.length() == 0) {
                 Integer id = decisao.getId();
-                if (findDecisao(id) == null)
-                {
+                if (findDecisao(id) == null) {
                     throw new NonexistentEntityException("The decisao with id " + id + " no longer exists.");
                 }
             }
             throw ex;
-        } finally
-        {
-            if (em != null)
-            {
+        } finally {
+            if (em != null) {
                 em.close();
             }
         }
     }
 
-    public void destroy(Integer id) throws NonexistentEntityException
-    {
+    public void destroy(Integer id) throws NonexistentEntityException {
         EntityManager em = null;
-        try
-        {
+        try {
             em = getEntityManager();
             em.getTransaction().begin();
             Decisao decisao;
-            try
-            {
+            try {
                 decisao = em.getReference(Decisao.class, id);
                 decisao.getId();
-            } catch (EntityNotFoundException enfe)
-            {
+            } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The decisao with id " + id + " no longer exists.", enfe);
             }
             Alternativa idAlternativa = decisao.getIdAlternativa();
-            if (idAlternativa != null)
-            {
+            if (idAlternativa != null) {
                 idAlternativa.getDecisaoList().remove(decisao);
                 idAlternativa = em.merge(idAlternativa);
             }
             em.remove(decisao);
             em.getTransaction().commit();
-        } finally
-        {
-            if (em != null)
-            {
+        } finally {
+            if (em != null) {
                 em.close();
             }
         }
     }
 
-    public List<Decisao> findDecisaoEntities()
-    {
+    public List<Decisao> findDecisaoEntities() {
         return findDecisaoEntities(true, -1, -1);
     }
 
-    public List<Decisao> findDecisaoEntities(int maxResults, int firstResult)
-    {
+    public List<Decisao> findDecisaoEntities(int maxResults, int firstResult) {
         return findDecisaoEntities(false, maxResults, firstResult);
     }
 
-    private List<Decisao> findDecisaoEntities(boolean all, int maxResults, int firstResult)
-    {
+    private List<Decisao> findDecisaoEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();
-        try
-        {
+        try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
             cq.select(cq.from(Decisao.class));
             Query q = em.createQuery(cq);
-            if (!all)
-            {
+            if (!all) {
                 q.setMaxResults(maxResults);
                 q.setFirstResult(firstResult);
             }
             return q.getResultList();
-        } finally
-        {
+        } finally {
             em.close();
         }
     }
 
-    public Decisao findDecisao(Integer id)
-    {
+    public Decisao findDecisao(Integer id) {
         EntityManager em = getEntityManager();
-        try
-        {
+        try {
             return em.find(Decisao.class, id);
-        } finally
-        {
+        } finally {
             em.close();
         }
     }
 
-    public int getDecisaoCount()
-    {
+    public int getDecisaoCount() {
         EntityManager em = getEntityManager();
-        try
-        {
+        try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
             Root<Decisao> rt = cq.from(Decisao.class);
             cq.select(em.getCriteriaBuilder().count(rt));
             Query q = em.createQuery(cq);
             return ((Long) q.getSingleResult()).intValue();
-        } finally
-        {
+        } finally {
             em.close();
         }
     }

@@ -11,273 +11,486 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import model.Organizacao;
-import model.Keyword;
+import model.Acessar;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import jpa.exceptions.IllegalOrphanException;
 import jpa.exceptions.NonexistentEntityException;
+import model.Tarefa;
+import model.Historico;
+import model.Alternativa;
+import model.Criterio;
+import model.Keyword;
 import model.Problema;
 
 /**
  *
- * @author Iuri Raiol
+ * @author Bleno Vale
  */
-public class ProblemaJpaController implements Serializable
-{
+public class ProblemaJpaController implements Serializable {
 
-    public ProblemaJpaController(EntityManagerFactory emf)
-    {
+    public ProblemaJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
     private EntityManagerFactory emf = null;
 
-    public EntityManager getEntityManager()
-    {
+    public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
 
-    public void create(Problema problema)
-    {
-        if (problema.getKeywordList() == null)
-        {
+    public void create(Problema problema) {
+        if (problema.getAcessarList() == null) {
+            problema.setAcessarList(new ArrayList<Acessar>());
+        }
+        if (problema.getTarefaList() == null) {
+            problema.setTarefaList(new ArrayList<Tarefa>());
+        }
+        if (problema.getHistoricoList() == null) {
+            problema.setHistoricoList(new ArrayList<Historico>());
+        }
+        if (problema.getAlternativaList() == null) {
+            problema.setAlternativaList(new ArrayList<Alternativa>());
+        }
+        if (problema.getCriterioList() == null) {
+            problema.setCriterioList(new ArrayList<Criterio>());
+        }
+        if (problema.getKeywordList() == null) {
             problema.setKeywordList(new ArrayList<Keyword>());
         }
         EntityManager em = null;
-        try
-        {
+        try {
             em = getEntityManager();
             em.getTransaction().begin();
             Organizacao idOrganizacao = problema.getIdOrganizacao();
-            if (idOrganizacao != null)
-            {
+            if (idOrganizacao != null) {
                 idOrganizacao = em.getReference(idOrganizacao.getClass(), idOrganizacao.getId());
                 problema.setIdOrganizacao(idOrganizacao);
             }
+            List<Acessar> attachedAcessarList = new ArrayList<Acessar>();
+            for (Acessar acessarListAcessarToAttach : problema.getAcessarList()) {
+                acessarListAcessarToAttach = em.getReference(acessarListAcessarToAttach.getClass(), acessarListAcessarToAttach.getAcessarPK());
+                attachedAcessarList.add(acessarListAcessarToAttach);
+            }
+            problema.setAcessarList(attachedAcessarList);
+            List<Tarefa> attachedTarefaList = new ArrayList<Tarefa>();
+            for (Tarefa tarefaListTarefaToAttach : problema.getTarefaList()) {
+                tarefaListTarefaToAttach = em.getReference(tarefaListTarefaToAttach.getClass(), tarefaListTarefaToAttach.getId());
+                attachedTarefaList.add(tarefaListTarefaToAttach);
+            }
+            problema.setTarefaList(attachedTarefaList);
+            List<Historico> attachedHistoricoList = new ArrayList<Historico>();
+            for (Historico historicoListHistoricoToAttach : problema.getHistoricoList()) {
+                historicoListHistoricoToAttach = em.getReference(historicoListHistoricoToAttach.getClass(), historicoListHistoricoToAttach.getId());
+                attachedHistoricoList.add(historicoListHistoricoToAttach);
+            }
+            problema.setHistoricoList(attachedHistoricoList);
+            List<Alternativa> attachedAlternativaList = new ArrayList<Alternativa>();
+            for (Alternativa alternativaListAlternativaToAttach : problema.getAlternativaList()) {
+                alternativaListAlternativaToAttach = em.getReference(alternativaListAlternativaToAttach.getClass(), alternativaListAlternativaToAttach.getId());
+                attachedAlternativaList.add(alternativaListAlternativaToAttach);
+            }
+            problema.setAlternativaList(attachedAlternativaList);
+            List<Criterio> attachedCriterioList = new ArrayList<Criterio>();
+            for (Criterio criterioListCriterioToAttach : problema.getCriterioList()) {
+                criterioListCriterioToAttach = em.getReference(criterioListCriterioToAttach.getClass(), criterioListCriterioToAttach.getId());
+                attachedCriterioList.add(criterioListCriterioToAttach);
+            }
+            problema.setCriterioList(attachedCriterioList);
             List<Keyword> attachedKeywordList = new ArrayList<Keyword>();
-            for (Keyword keywordListKeywordToAttach : problema.getKeywordList())
-            {
+            for (Keyword keywordListKeywordToAttach : problema.getKeywordList()) {
                 keywordListKeywordToAttach = em.getReference(keywordListKeywordToAttach.getClass(), keywordListKeywordToAttach.getKeywordPK());
                 attachedKeywordList.add(keywordListKeywordToAttach);
             }
             problema.setKeywordList(attachedKeywordList);
             em.persist(problema);
-            if (idOrganizacao != null)
-            {
+            if (idOrganizacao != null) {
                 idOrganizacao.getProblemaList().add(problema);
                 idOrganizacao = em.merge(idOrganizacao);
             }
-            for (Keyword keywordListKeyword : problema.getKeywordList())
-            {
+            for (Acessar acessarListAcessar : problema.getAcessarList()) {
+                Problema oldIdProblemaOfAcessarListAcessar = acessarListAcessar.getIdProblema();
+                acessarListAcessar.setIdProblema(problema);
+                acessarListAcessar = em.merge(acessarListAcessar);
+                if (oldIdProblemaOfAcessarListAcessar != null) {
+                    oldIdProblemaOfAcessarListAcessar.getAcessarList().remove(acessarListAcessar);
+                    oldIdProblemaOfAcessarListAcessar = em.merge(oldIdProblemaOfAcessarListAcessar);
+                }
+            }
+            for (Tarefa tarefaListTarefa : problema.getTarefaList()) {
+                Problema oldIdProblemaOfTarefaListTarefa = tarefaListTarefa.getIdProblema();
+                tarefaListTarefa.setIdProblema(problema);
+                tarefaListTarefa = em.merge(tarefaListTarefa);
+                if (oldIdProblemaOfTarefaListTarefa != null) {
+                    oldIdProblemaOfTarefaListTarefa.getTarefaList().remove(tarefaListTarefa);
+                    oldIdProblemaOfTarefaListTarefa = em.merge(oldIdProblemaOfTarefaListTarefa);
+                }
+            }
+            for (Historico historicoListHistorico : problema.getHistoricoList()) {
+                Problema oldIdProblemaOfHistoricoListHistorico = historicoListHistorico.getIdProblema();
+                historicoListHistorico.setIdProblema(problema);
+                historicoListHistorico = em.merge(historicoListHistorico);
+                if (oldIdProblemaOfHistoricoListHistorico != null) {
+                    oldIdProblemaOfHistoricoListHistorico.getHistoricoList().remove(historicoListHistorico);
+                    oldIdProblemaOfHistoricoListHistorico = em.merge(oldIdProblemaOfHistoricoListHistorico);
+                }
+            }
+            for (Alternativa alternativaListAlternativa : problema.getAlternativaList()) {
+                Problema oldIdProblemaOfAlternativaListAlternativa = alternativaListAlternativa.getIdProblema();
+                alternativaListAlternativa.setIdProblema(problema);
+                alternativaListAlternativa = em.merge(alternativaListAlternativa);
+                if (oldIdProblemaOfAlternativaListAlternativa != null) {
+                    oldIdProblemaOfAlternativaListAlternativa.getAlternativaList().remove(alternativaListAlternativa);
+                    oldIdProblemaOfAlternativaListAlternativa = em.merge(oldIdProblemaOfAlternativaListAlternativa);
+                }
+            }
+            for (Criterio criterioListCriterio : problema.getCriterioList()) {
+                Problema oldIdProblemaOfCriterioListCriterio = criterioListCriterio.getIdProblema();
+                criterioListCriterio.setIdProblema(problema);
+                criterioListCriterio = em.merge(criterioListCriterio);
+                if (oldIdProblemaOfCriterioListCriterio != null) {
+                    oldIdProblemaOfCriterioListCriterio.getCriterioList().remove(criterioListCriterio);
+                    oldIdProblemaOfCriterioListCriterio = em.merge(oldIdProblemaOfCriterioListCriterio);
+                }
+            }
+            for (Keyword keywordListKeyword : problema.getKeywordList()) {
                 Problema oldProblemaOfKeywordListKeyword = keywordListKeyword.getProblema();
                 keywordListKeyword.setProblema(problema);
                 keywordListKeyword = em.merge(keywordListKeyword);
-                if (oldProblemaOfKeywordListKeyword != null)
-                {
+                if (oldProblemaOfKeywordListKeyword != null) {
                     oldProblemaOfKeywordListKeyword.getKeywordList().remove(keywordListKeyword);
                     oldProblemaOfKeywordListKeyword = em.merge(oldProblemaOfKeywordListKeyword);
                 }
             }
             em.getTransaction().commit();
-        } finally
-        {
-            if (em != null)
-            {
+        } finally {
+            if (em != null) {
                 em.close();
             }
         }
     }
 
-    public void edit(Problema problema) throws IllegalOrphanException, NonexistentEntityException, Exception
-    {
+    public void edit(Problema problema) throws IllegalOrphanException, NonexistentEntityException, Exception {
         EntityManager em = null;
-        try
-        {
+        try {
             em = getEntityManager();
             em.getTransaction().begin();
             Problema persistentProblema = em.find(Problema.class, problema.getId());
             Organizacao idOrganizacaoOld = persistentProblema.getIdOrganizacao();
             Organizacao idOrganizacaoNew = problema.getIdOrganizacao();
+            List<Acessar> acessarListOld = persistentProblema.getAcessarList();
+            List<Acessar> acessarListNew = problema.getAcessarList();
+            List<Tarefa> tarefaListOld = persistentProblema.getTarefaList();
+            List<Tarefa> tarefaListNew = problema.getTarefaList();
+            List<Historico> historicoListOld = persistentProblema.getHistoricoList();
+            List<Historico> historicoListNew = problema.getHistoricoList();
+            List<Alternativa> alternativaListOld = persistentProblema.getAlternativaList();
+            List<Alternativa> alternativaListNew = problema.getAlternativaList();
+            List<Criterio> criterioListOld = persistentProblema.getCriterioList();
+            List<Criterio> criterioListNew = problema.getCriterioList();
             List<Keyword> keywordListOld = persistentProblema.getKeywordList();
             List<Keyword> keywordListNew = problema.getKeywordList();
             List<String> illegalOrphanMessages = null;
-            for (Keyword keywordListOldKeyword : keywordListOld)
-            {
-                if (!keywordListNew.contains(keywordListOldKeyword))
-                {
-                    if (illegalOrphanMessages == null)
-                    {
+            for (Tarefa tarefaListOldTarefa : tarefaListOld) {
+                if (!tarefaListNew.contains(tarefaListOldTarefa)) {
+                    if (illegalOrphanMessages == null) {
+                        illegalOrphanMessages = new ArrayList<String>();
+                    }
+                    illegalOrphanMessages.add("You must retain Tarefa " + tarefaListOldTarefa + " since its idProblema field is not nullable.");
+                }
+            }
+            for (Historico historicoListOldHistorico : historicoListOld) {
+                if (!historicoListNew.contains(historicoListOldHistorico)) {
+                    if (illegalOrphanMessages == null) {
+                        illegalOrphanMessages = new ArrayList<String>();
+                    }
+                    illegalOrphanMessages.add("You must retain Historico " + historicoListOldHistorico + " since its idProblema field is not nullable.");
+                }
+            }
+            for (Alternativa alternativaListOldAlternativa : alternativaListOld) {
+                if (!alternativaListNew.contains(alternativaListOldAlternativa)) {
+                    if (illegalOrphanMessages == null) {
+                        illegalOrphanMessages = new ArrayList<String>();
+                    }
+                    illegalOrphanMessages.add("You must retain Alternativa " + alternativaListOldAlternativa + " since its idProblema field is not nullable.");
+                }
+            }
+            for (Criterio criterioListOldCriterio : criterioListOld) {
+                if (!criterioListNew.contains(criterioListOldCriterio)) {
+                    if (illegalOrphanMessages == null) {
+                        illegalOrphanMessages = new ArrayList<String>();
+                    }
+                    illegalOrphanMessages.add("You must retain Criterio " + criterioListOldCriterio + " since its idProblema field is not nullable.");
+                }
+            }
+            for (Keyword keywordListOldKeyword : keywordListOld) {
+                if (!keywordListNew.contains(keywordListOldKeyword)) {
+                    if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
                     illegalOrphanMessages.add("You must retain Keyword " + keywordListOldKeyword + " since its problema field is not nullable.");
                 }
             }
-            if (illegalOrphanMessages != null)
-            {
+            if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
-            if (idOrganizacaoNew != null)
-            {
+            if (idOrganizacaoNew != null) {
                 idOrganizacaoNew = em.getReference(idOrganizacaoNew.getClass(), idOrganizacaoNew.getId());
                 problema.setIdOrganizacao(idOrganizacaoNew);
             }
+            List<Acessar> attachedAcessarListNew = new ArrayList<Acessar>();
+            for (Acessar acessarListNewAcessarToAttach : acessarListNew) {
+                acessarListNewAcessarToAttach = em.getReference(acessarListNewAcessarToAttach.getClass(), acessarListNewAcessarToAttach.getAcessarPK());
+                attachedAcessarListNew.add(acessarListNewAcessarToAttach);
+            }
+            acessarListNew = attachedAcessarListNew;
+            problema.setAcessarList(acessarListNew);
+            List<Tarefa> attachedTarefaListNew = new ArrayList<Tarefa>();
+            for (Tarefa tarefaListNewTarefaToAttach : tarefaListNew) {
+                tarefaListNewTarefaToAttach = em.getReference(tarefaListNewTarefaToAttach.getClass(), tarefaListNewTarefaToAttach.getId());
+                attachedTarefaListNew.add(tarefaListNewTarefaToAttach);
+            }
+            tarefaListNew = attachedTarefaListNew;
+            problema.setTarefaList(tarefaListNew);
+            List<Historico> attachedHistoricoListNew = new ArrayList<Historico>();
+            for (Historico historicoListNewHistoricoToAttach : historicoListNew) {
+                historicoListNewHistoricoToAttach = em.getReference(historicoListNewHistoricoToAttach.getClass(), historicoListNewHistoricoToAttach.getId());
+                attachedHistoricoListNew.add(historicoListNewHistoricoToAttach);
+            }
+            historicoListNew = attachedHistoricoListNew;
+            problema.setHistoricoList(historicoListNew);
+            List<Alternativa> attachedAlternativaListNew = new ArrayList<Alternativa>();
+            for (Alternativa alternativaListNewAlternativaToAttach : alternativaListNew) {
+                alternativaListNewAlternativaToAttach = em.getReference(alternativaListNewAlternativaToAttach.getClass(), alternativaListNewAlternativaToAttach.getId());
+                attachedAlternativaListNew.add(alternativaListNewAlternativaToAttach);
+            }
+            alternativaListNew = attachedAlternativaListNew;
+            problema.setAlternativaList(alternativaListNew);
+            List<Criterio> attachedCriterioListNew = new ArrayList<Criterio>();
+            for (Criterio criterioListNewCriterioToAttach : criterioListNew) {
+                criterioListNewCriterioToAttach = em.getReference(criterioListNewCriterioToAttach.getClass(), criterioListNewCriterioToAttach.getId());
+                attachedCriterioListNew.add(criterioListNewCriterioToAttach);
+            }
+            criterioListNew = attachedCriterioListNew;
+            problema.setCriterioList(criterioListNew);
             List<Keyword> attachedKeywordListNew = new ArrayList<Keyword>();
-            for (Keyword keywordListNewKeywordToAttach : keywordListNew)
-            {
+            for (Keyword keywordListNewKeywordToAttach : keywordListNew) {
                 keywordListNewKeywordToAttach = em.getReference(keywordListNewKeywordToAttach.getClass(), keywordListNewKeywordToAttach.getKeywordPK());
                 attachedKeywordListNew.add(keywordListNewKeywordToAttach);
             }
             keywordListNew = attachedKeywordListNew;
             problema.setKeywordList(keywordListNew);
             problema = em.merge(problema);
-            if (idOrganizacaoOld != null && !idOrganizacaoOld.equals(idOrganizacaoNew))
-            {
+            if (idOrganizacaoOld != null && !idOrganizacaoOld.equals(idOrganizacaoNew)) {
                 idOrganizacaoOld.getProblemaList().remove(problema);
                 idOrganizacaoOld = em.merge(idOrganizacaoOld);
             }
-            if (idOrganizacaoNew != null && !idOrganizacaoNew.equals(idOrganizacaoOld))
-            {
+            if (idOrganizacaoNew != null && !idOrganizacaoNew.equals(idOrganizacaoOld)) {
                 idOrganizacaoNew.getProblemaList().add(problema);
                 idOrganizacaoNew = em.merge(idOrganizacaoNew);
             }
-            for (Keyword keywordListNewKeyword : keywordListNew)
-            {
-                if (!keywordListOld.contains(keywordListNewKeyword))
-                {
+            for (Acessar acessarListOldAcessar : acessarListOld) {
+                if (!acessarListNew.contains(acessarListOldAcessar)) {
+                    acessarListOldAcessar.setIdProblema(null);
+                    acessarListOldAcessar = em.merge(acessarListOldAcessar);
+                }
+            }
+            for (Acessar acessarListNewAcessar : acessarListNew) {
+                if (!acessarListOld.contains(acessarListNewAcessar)) {
+                    Problema oldIdProblemaOfAcessarListNewAcessar = acessarListNewAcessar.getIdProblema();
+                    acessarListNewAcessar.setIdProblema(problema);
+                    acessarListNewAcessar = em.merge(acessarListNewAcessar);
+                    if (oldIdProblemaOfAcessarListNewAcessar != null && !oldIdProblemaOfAcessarListNewAcessar.equals(problema)) {
+                        oldIdProblemaOfAcessarListNewAcessar.getAcessarList().remove(acessarListNewAcessar);
+                        oldIdProblemaOfAcessarListNewAcessar = em.merge(oldIdProblemaOfAcessarListNewAcessar);
+                    }
+                }
+            }
+            for (Tarefa tarefaListNewTarefa : tarefaListNew) {
+                if (!tarefaListOld.contains(tarefaListNewTarefa)) {
+                    Problema oldIdProblemaOfTarefaListNewTarefa = tarefaListNewTarefa.getIdProblema();
+                    tarefaListNewTarefa.setIdProblema(problema);
+                    tarefaListNewTarefa = em.merge(tarefaListNewTarefa);
+                    if (oldIdProblemaOfTarefaListNewTarefa != null && !oldIdProblemaOfTarefaListNewTarefa.equals(problema)) {
+                        oldIdProblemaOfTarefaListNewTarefa.getTarefaList().remove(tarefaListNewTarefa);
+                        oldIdProblemaOfTarefaListNewTarefa = em.merge(oldIdProblemaOfTarefaListNewTarefa);
+                    }
+                }
+            }
+            for (Historico historicoListNewHistorico : historicoListNew) {
+                if (!historicoListOld.contains(historicoListNewHistorico)) {
+                    Problema oldIdProblemaOfHistoricoListNewHistorico = historicoListNewHistorico.getIdProblema();
+                    historicoListNewHistorico.setIdProblema(problema);
+                    historicoListNewHistorico = em.merge(historicoListNewHistorico);
+                    if (oldIdProblemaOfHistoricoListNewHistorico != null && !oldIdProblemaOfHistoricoListNewHistorico.equals(problema)) {
+                        oldIdProblemaOfHistoricoListNewHistorico.getHistoricoList().remove(historicoListNewHistorico);
+                        oldIdProblemaOfHistoricoListNewHistorico = em.merge(oldIdProblemaOfHistoricoListNewHistorico);
+                    }
+                }
+            }
+            for (Alternativa alternativaListNewAlternativa : alternativaListNew) {
+                if (!alternativaListOld.contains(alternativaListNewAlternativa)) {
+                    Problema oldIdProblemaOfAlternativaListNewAlternativa = alternativaListNewAlternativa.getIdProblema();
+                    alternativaListNewAlternativa.setIdProblema(problema);
+                    alternativaListNewAlternativa = em.merge(alternativaListNewAlternativa);
+                    if (oldIdProblemaOfAlternativaListNewAlternativa != null && !oldIdProblemaOfAlternativaListNewAlternativa.equals(problema)) {
+                        oldIdProblemaOfAlternativaListNewAlternativa.getAlternativaList().remove(alternativaListNewAlternativa);
+                        oldIdProblemaOfAlternativaListNewAlternativa = em.merge(oldIdProblemaOfAlternativaListNewAlternativa);
+                    }
+                }
+            }
+            for (Criterio criterioListNewCriterio : criterioListNew) {
+                if (!criterioListOld.contains(criterioListNewCriterio)) {
+                    Problema oldIdProblemaOfCriterioListNewCriterio = criterioListNewCriterio.getIdProblema();
+                    criterioListNewCriterio.setIdProblema(problema);
+                    criterioListNewCriterio = em.merge(criterioListNewCriterio);
+                    if (oldIdProblemaOfCriterioListNewCriterio != null && !oldIdProblemaOfCriterioListNewCriterio.equals(problema)) {
+                        oldIdProblemaOfCriterioListNewCriterio.getCriterioList().remove(criterioListNewCriterio);
+                        oldIdProblemaOfCriterioListNewCriterio = em.merge(oldIdProblemaOfCriterioListNewCriterio);
+                    }
+                }
+            }
+            for (Keyword keywordListNewKeyword : keywordListNew) {
+                if (!keywordListOld.contains(keywordListNewKeyword)) {
                     Problema oldProblemaOfKeywordListNewKeyword = keywordListNewKeyword.getProblema();
                     keywordListNewKeyword.setProblema(problema);
                     keywordListNewKeyword = em.merge(keywordListNewKeyword);
-                    if (oldProblemaOfKeywordListNewKeyword != null && !oldProblemaOfKeywordListNewKeyword.equals(problema))
-                    {
+                    if (oldProblemaOfKeywordListNewKeyword != null && !oldProblemaOfKeywordListNewKeyword.equals(problema)) {
                         oldProblemaOfKeywordListNewKeyword.getKeywordList().remove(keywordListNewKeyword);
                         oldProblemaOfKeywordListNewKeyword = em.merge(oldProblemaOfKeywordListNewKeyword);
                     }
                 }
             }
             em.getTransaction().commit();
-        } catch (Exception ex)
-        {
+        } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
-            if (msg == null || msg.length() == 0)
-            {
+            if (msg == null || msg.length() == 0) {
                 Integer id = problema.getId();
-                if (findProblema(id) == null)
-                {
+                if (findProblema(id) == null) {
                     throw new NonexistentEntityException("The problema with id " + id + " no longer exists.");
                 }
             }
             throw ex;
-        } finally
-        {
-            if (em != null)
-            {
+        } finally {
+            if (em != null) {
                 em.close();
             }
         }
     }
 
-    public void destroy(Integer id) throws IllegalOrphanException, NonexistentEntityException
-    {
+    public void destroy(Integer id) throws IllegalOrphanException, NonexistentEntityException {
         EntityManager em = null;
-        try
-        {
+        try {
             em = getEntityManager();
             em.getTransaction().begin();
             Problema problema;
-            try
-            {
+            try {
                 problema = em.getReference(Problema.class, id);
                 problema.getId();
-            } catch (EntityNotFoundException enfe)
-            {
+            } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The problema with id " + id + " no longer exists.", enfe);
             }
             List<String> illegalOrphanMessages = null;
+            List<Tarefa> tarefaListOrphanCheck = problema.getTarefaList();
+            for (Tarefa tarefaListOrphanCheckTarefa : tarefaListOrphanCheck) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("This Problema (" + problema + ") cannot be destroyed since the Tarefa " + tarefaListOrphanCheckTarefa + " in its tarefaList field has a non-nullable idProblema field.");
+            }
+            List<Historico> historicoListOrphanCheck = problema.getHistoricoList();
+            for (Historico historicoListOrphanCheckHistorico : historicoListOrphanCheck) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("This Problema (" + problema + ") cannot be destroyed since the Historico " + historicoListOrphanCheckHistorico + " in its historicoList field has a non-nullable idProblema field.");
+            }
+            List<Alternativa> alternativaListOrphanCheck = problema.getAlternativaList();
+            for (Alternativa alternativaListOrphanCheckAlternativa : alternativaListOrphanCheck) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("This Problema (" + problema + ") cannot be destroyed since the Alternativa " + alternativaListOrphanCheckAlternativa + " in its alternativaList field has a non-nullable idProblema field.");
+            }
+            List<Criterio> criterioListOrphanCheck = problema.getCriterioList();
+            for (Criterio criterioListOrphanCheckCriterio : criterioListOrphanCheck) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("This Problema (" + problema + ") cannot be destroyed since the Criterio " + criterioListOrphanCheckCriterio + " in its criterioList field has a non-nullable idProblema field.");
+            }
             List<Keyword> keywordListOrphanCheck = problema.getKeywordList();
-            for (Keyword keywordListOrphanCheckKeyword : keywordListOrphanCheck)
-            {
-                if (illegalOrphanMessages == null)
-                {
+            for (Keyword keywordListOrphanCheckKeyword : keywordListOrphanCheck) {
+                if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
                 illegalOrphanMessages.add("This Problema (" + problema + ") cannot be destroyed since the Keyword " + keywordListOrphanCheckKeyword + " in its keywordList field has a non-nullable problema field.");
             }
-            if (illegalOrphanMessages != null)
-            {
+            if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
             Organizacao idOrganizacao = problema.getIdOrganizacao();
-            if (idOrganizacao != null)
-            {
+            if (idOrganizacao != null) {
                 idOrganizacao.getProblemaList().remove(problema);
                 idOrganizacao = em.merge(idOrganizacao);
             }
+            List<Acessar> acessarList = problema.getAcessarList();
+            for (Acessar acessarListAcessar : acessarList) {
+                acessarListAcessar.setIdProblema(null);
+                acessarListAcessar = em.merge(acessarListAcessar);
+            }
             em.remove(problema);
             em.getTransaction().commit();
-        } finally
-        {
-            if (em != null)
-            {
+        } finally {
+            if (em != null) {
                 em.close();
             }
         }
     }
 
-    public List<Problema> findProblemaEntities()
-    {
+    public List<Problema> findProblemaEntities() {
         return findProblemaEntities(true, -1, -1);
     }
 
-    public List<Problema> findProblemaEntities(int maxResults, int firstResult)
-    {
+    public List<Problema> findProblemaEntities(int maxResults, int firstResult) {
         return findProblemaEntities(false, maxResults, firstResult);
     }
 
-    private List<Problema> findProblemaEntities(boolean all, int maxResults, int firstResult)
-    {
+    private List<Problema> findProblemaEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();
-        try
-        {
+        try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
             cq.select(cq.from(Problema.class));
             Query q = em.createQuery(cq);
-            if (!all)
-            {
+            if (!all) {
                 q.setMaxResults(maxResults);
                 q.setFirstResult(firstResult);
             }
             return q.getResultList();
-        } finally
-        {
+        } finally {
             em.close();
         }
     }
 
-    public Problema findProblema(Integer id)
-    {
+    public Problema findProblema(Integer id) {
         EntityManager em = getEntityManager();
-        try
-        {
+        try {
             return em.find(Problema.class, id);
-        } finally
-        {
+        } finally {
             em.close();
         }
     }
 
-    public int getProblemaCount()
-    {
+    public int getProblemaCount() {
         EntityManager em = getEntityManager();
-        try
-        {
+        try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
             Root<Problema> rt = cq.from(Problema.class);
             cq.select(em.getCriteriaBuilder().count(rt));
             Query q = em.createQuery(cq);
             return ((Long) q.getSingleResult()).intValue();
-        } finally
-        {
+        } finally {
             em.close();
         }
     }

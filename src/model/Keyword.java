@@ -22,23 +22,19 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author Iuri Raiol
+ * @author Bleno Vale
  */
 @Entity
 @Table(name = "keyword")
 @XmlRootElement
-@NamedQueries(
-{
+@NamedQueries({
     @NamedQuery(name = "Keyword.findAll", query = "SELECT k FROM Keyword k"),
     @NamedQuery(name = "Keyword.findById", query = "SELECT k FROM Keyword k WHERE k.keywordPK.id = :id"),
     @NamedQuery(name = "Keyword.findByIdForeignKey", query = "SELECT k FROM Keyword k WHERE k.keywordPK.idForeignKey = :idForeignKey"),
     @NamedQuery(name = "Keyword.findByNome", query = "SELECT k FROM Keyword k WHERE k.nome = :nome"),
     @NamedQuery(name = "Keyword.findByCreated", query = "SELECT k FROM Keyword k WHERE k.created = :created"),
-    @NamedQuery(name = "Keyword.findByModified", query = "SELECT k FROM Keyword k WHERE k.modified = :modified")
-})
-public class Keyword implements Serializable
-{
-
+    @NamedQuery(name = "Keyword.findByModified", query = "SELECT k FROM Keyword k WHERE k.modified = :modified")})
+public class Keyword implements Serializable {
     private static final long serialVersionUID = 1L;
     @EmbeddedId
     protected KeywordPK keywordPK;
@@ -57,105 +53,86 @@ public class Keyword implements Serializable
     @ManyToOne(optional = false)
     private Problema problema;
 
-    public Keyword()
-    {
+    public Keyword() {
     }
 
-    public Keyword(KeywordPK keywordPK)
-    {
+    public Keyword(KeywordPK keywordPK) {
         this.keywordPK = keywordPK;
     }
 
-    public Keyword(KeywordPK keywordPK, String nome, Date created, Date modified)
-    {
+    public Keyword(KeywordPK keywordPK, String nome, Date created, Date modified) {
         this.keywordPK = keywordPK;
         this.nome = nome;
         this.created = created;
         this.modified = modified;
     }
 
-    public Keyword(int id, int idForeignKey)
-    {
+    public Keyword(int id, int idForeignKey) {
         this.keywordPK = new KeywordPK(id, idForeignKey);
     }
 
-    public KeywordPK getKeywordPK()
-    {
+    public KeywordPK getKeywordPK() {
         return keywordPK;
     }
 
-    public void setKeywordPK(KeywordPK keywordPK)
-    {
+    public void setKeywordPK(KeywordPK keywordPK) {
         this.keywordPK = keywordPK;
     }
 
-    public String getNome()
-    {
+    public String getNome() {
         return nome;
     }
 
-    public void setNome(String nome)
-    {
+    public void setNome(String nome) {
         this.nome = nome;
     }
 
-    public Date getCreated()
-    {
+    public Date getCreated() {
         return created;
     }
 
-    public void setCreated(Date created)
-    {
+    public void setCreated(Date created) {
         this.created = created;
     }
 
-    public Date getModified()
-    {
+    public Date getModified() {
         return modified;
     }
 
-    public void setModified(Date modified)
-    {
+    public void setModified(Date modified) {
         this.modified = modified;
     }
 
-    public Problema getProblema()
-    {
+    public Problema getProblema() {
         return problema;
     }
 
-    public void setProblema(Problema problema)
-    {
+    public void setProblema(Problema problema) {
         this.problema = problema;
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         int hash = 0;
         hash += (keywordPK != null ? keywordPK.hashCode() : 0);
         return hash;
     }
 
     @Override
-    public boolean equals(Object object)
-    {
+    public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Keyword))
-        {
+        if (!(object instanceof Keyword)) {
             return false;
         }
         Keyword other = (Keyword) object;
-        if ((this.keywordPK == null && other.keywordPK != null) || (this.keywordPK != null && !this.keywordPK.equals(other.keywordPK)))
-        {
+        if ((this.keywordPK == null && other.keywordPK != null) || (this.keywordPK != null && !this.keywordPK.equals(other.keywordPK))) {
             return false;
         }
         return true;
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "model.Keyword[ keywordPK=" + keywordPK + " ]";
     }
     
