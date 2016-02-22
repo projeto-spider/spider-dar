@@ -13,6 +13,7 @@ public class MyDefaultTableModel extends DefaultTableModel {
     private boolean hasIcon;
     private int columnCheck;
     private ImageIcon icon;
+
     /**
      * Cria um modelo para a JTable
      *
@@ -23,13 +24,14 @@ public class MyDefaultTableModel extends DefaultTableModel {
     public MyDefaultTableModel(Object[] columnNames, int rowCount, boolean isEditable) {
         super(columnNames, rowCount);
         this.isEditable = isEditable;
+        this.columnCheck = -1;
     }
-    
+
     // Tabelas que possuem icone
     public MyDefaultTableModel(Object[] columnNames, int rowCount, boolean isEditable, boolean hasIcon, int columnCheck) {
         super(columnNames, rowCount);
         this.isEditable = isEditable;
-        this.hasIcon =  hasIcon;
+        this.hasIcon = hasIcon;
         this.columnCheck = columnCheck;
     }
 
@@ -41,14 +43,15 @@ public class MyDefaultTableModel extends DefaultTableModel {
             return isEditable;
         }
     }
-    
+
     @Override
-    public Class getColumnClass(int column){
-        if (hasIcon){
+    public Class getColumnClass(int column) {
+        if (hasIcon) {
             return getValueAt(0, column).getClass();
-        } else{
+        } else {
             return Object.class;
         }
+
     }
-    
+
 }

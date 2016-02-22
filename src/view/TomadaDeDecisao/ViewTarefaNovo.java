@@ -1,10 +1,12 @@
 package view.TomadaDeDecisao;
 
+import controller.ControllerTarefas;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.JOptionPane;
 import settings.Constant;
+import settings.KeepData;
 import util.Input;
 import util.Request;
 
@@ -17,15 +19,58 @@ public class ViewTarefaNovo extends javax.swing.JDialog {
     private final int type;
     private Request request;
     private int idTarefa;
+    private final ControllerTarefas controllerTarefas = new ControllerTarefas();
 
     public ViewTarefaNovo(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-
+        
+        buttonGruop();
+        jRadioButton1.setSelected(true); 
         this.type = Constant.CREATE;
         this.setLocationRelativeTo(null);
     }
 
+    public ViewTarefaNovo(java.awt.Frame parent, boolean modal, int idTarefa) {
+        super(parent, modal);
+        initComponents();
+        
+        buttonGruop();
+        this.type = Constant.UPDATE;
+        this.idTarefa = idTarefa;
+        fillFields();
+        this.setLocationRelativeTo(null);
+    }
+    
+    private void buttonGruop() {
+        buttonGroup.add(jRadioButton1);
+        buttonGroup.add(jRadioButton2);
+        buttonGroup.add(jRadioButton3);
+        buttonGroup.add(jRadioButton4);
+    }
+    
+    private void fillFields(){
+        request = new Request();
+        request = controllerTarefas.getTarefasSelected(idTarefa);
+        
+        jTextFieldNome.setText(request.getData("Tarefa.nome")); 
+        jTextAreaDescricao.setText(request.getData("Tarefa.descricao")); 
+        selectedJRadioButton(Integer.parseInt(request.getData("Tarefa.marcador"))); 
+        dateFieldData.setValue(controllerTarefas.getPrazoTarefaSelected(idTarefa)); 
+    }
+    
+    private void selectedJRadioButton(int mardador){
+        if (mardador ==Constant.TRIVIAL){
+            jRadioButton1.setSelected(true); 
+        } else if (mardador ==Constant.PEQUENO){
+            jRadioButton2.setSelected(true); 
+        } else if (mardador == Constant.MEDIO){
+            jRadioButton3.setSelected(true); 
+        }  else if (mardador == Constant.GRANDE){
+            jRadioButton4.setSelected(true); 
+        }
+    }
+    
     private boolean isValidData(Request request) {
         HashMap<String, Input> fields = request.getAllHashMapDataInputs();
 
@@ -52,6 +97,20 @@ public class ViewTarefaNovo extends javax.swing.JDialog {
         Date chosenDate = (Date) dateFieldData.getValue();
         return chosenDate.before(new Date());
     }
+    
+    private int getRadioButtonSelected(){
+        int marcador = 1;
+        if (jRadioButton1.isSelected()){
+            marcador = Constant.TRIVIAL;
+        } else if (jRadioButton2.isSelected()){
+            marcador = Constant.PEQUENO;
+        } else if (jRadioButton3.isSelected()){
+            marcador = Constant.MEDIO;
+        }  else if (jRadioButton4.isSelected()){
+            marcador = Constant.GRANDE;
+        }
+        return marcador;
+    }
 
     private void save() {
         request = new Request();
@@ -59,16 +118,33 @@ public class ViewTarefaNovo extends javax.swing.JDialog {
 
         request.setDataInput("Tarefa.nome", new Input(1, "text", "Nome da Tarefa", jTextFieldNome.getText()));
         request.setDataInput("Tarefa.descricao", new Input(2, "text", "Descrição", jTextAreaDescricao.getText()));
-        request.setDataInput("Tarefa.marcador", new Input(3, "text", "Marcador", String.valueOf(1)));
+        request.setDataInput("Tarefa.marcador", new Input(3, "text", "Marcador", String.valueOf(getRadioButtonSelected())));
 
         if (!isValidData(request)) {
             return;
         }
-        
+
         if (isValidDate()) {
-            JOptionPane.showMessageDialog(null, 
+            JOptionPane.showMessageDialog(null,
                     "Data não pode ser menor que a data atual.", null, JOptionPane.ERROR_MESSAGE);
             return;
+        }
+
+        request.setDataInput("Problema.id", new Input(4, "text", "id do Problema", KeepData.getData("Problema.id")));
+        Date chosenDate = (Date) dateFieldData.getValue();
+
+        try {
+            if (type == Constant.CREATE) {
+                controllerTarefas.addTarefa(request, chosenDate);
+            } else {
+               request.setDataInput("Tarefa.id", new Input(5, "text", "id Tarefa", String.valueOf(idTarefa))); 
+               controllerTarefas.upDateTarefa(request, chosenDate); 
+            }
+
+            JOptionPane.showMessageDialog(null, "\"Tarefa\" foi salva com sucesso.");
+            this.dispose();
+        } catch (Exception error) {
+            JOptionPane.showMessageDialog(null, error.getMessage(), "ERRO AO SALVAR", JOptionPane.ERROR_MESSAGE);
         }
 
     }
@@ -77,7 +153,7 @@ public class ViewTarefaNovo extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        buttonGroup1 = new javax.swing.ButtonGroup();
+        buttonGroup = new javax.swing.ButtonGroup();
         jLabel1 = new javax.swing.JLabel();
         jTextFieldNome = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
@@ -214,12 +290,10 @@ public class ViewTarefaNovo extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(12, 12, 12)
-                        .addComponent(jLabel1)
-                        .addGap(0, 0, 0))
+                        .addComponent(jLabel1))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jLabel4)
-                        .addGap(0, 0, 0)))
+                        .addComponent(jLabel4)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jTextFieldNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(dateFieldData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -256,7 +330,7 @@ public class ViewTarefaNovo extends javax.swing.JDialog {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.ButtonGroup buttonGroup;
     private net.sf.nachocalendar.components.DateField dateFieldData;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;

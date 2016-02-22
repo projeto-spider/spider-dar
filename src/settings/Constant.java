@@ -19,4 +19,10 @@ public class Constant {
     public static int SOLUCOES = 6; 
     
     public static int ID_ADMIN = 1;
+    
+    //Tarefas Marcadores
+    public static int TRIVIAL = 1;
+    public static int PEQUENO = 2;
+    public static int MEDIO = 3;
+    public static int GRANDE = 4;
 }

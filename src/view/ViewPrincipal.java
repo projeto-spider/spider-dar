@@ -50,7 +50,7 @@ public class ViewPrincipal extends javax.swing.JFrame {
 
     //View.TomadaDeDecisao
     private final ViewMotivacaoEObjetivos viewMotivacaoEObjetivos = new ViewMotivacaoEObjetivos();
-    private final ViewTarefas viewCalendario = new ViewTarefas();
+    private final ViewTarefas viewTarefas = new ViewTarefas();
     private final ViewAlternativaDeSolucao viewAlternativaDeSolucao = new ViewAlternativaDeSolucao();
     private final ViewCriteriosDeAvaliacao viewCriteriosDeAvaliacao = new ViewCriteriosDeAvaliacao();
     private final ViewAvaliacao viewDecisao = new ViewAvaliacao();
@@ -247,7 +247,7 @@ public class ViewPrincipal extends javax.swing.JFrame {
         jButtonCalendario.setBackground(new java.awt.Color(65, 65, 65));
         jButtonCalendario.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
         jButtonCalendario.setForeground(new java.awt.Color(255, 255, 255));
-        jButtonCalendario.setText("CALENDÁRIO");
+        jButtonCalendario.setText("TAREFAS");
         jButtonCalendario.setContentAreaFilled(false);
         jButtonCalendario.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jButtonCalendario.addChangeListener(new javax.swing.event.ChangeListener() {
@@ -602,7 +602,8 @@ public class ViewPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonCalendarioStateChanged
 
     private void jButtonCalendarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCalendarioActionPerformed
-        changeViews(viewCalendario); 
+        changeViews(viewTarefas);  
+        viewTarefas.showViewTarefas();
     }//GEN-LAST:event_jButtonCalendarioActionPerformed
 
     private void jButtonAlternativasStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jButtonAlternativasStateChanged
@@ -667,7 +668,7 @@ public class ViewPrincipal extends javax.swing.JFrame {
         jDesktopPane.add(viewTomadaDeDecisoes);
         jDesktopPane.add(viewUsuarios);
         jDesktopPane.add(viewMotivacaoEObjetivos);
-        jDesktopPane.add(viewCalendario);
+        jDesktopPane.add(viewTarefas);
         jDesktopPane.add(viewAlternativaDeSolucao);
         jDesktopPane.add(viewCriteriosDeAvaliacao);
         jDesktopPane.add(viewDecisao);
@@ -682,7 +683,7 @@ public class ViewPrincipal extends javax.swing.JFrame {
         viewTomadaDeDecisoes.setVisible(false);
         viewUsuarios.setVisible(false);
         viewMotivacaoEObjetivos.setVisible(false);
-        viewCalendario.setVisible(false);
+        viewTarefas.setVisible(false);
         viewAlternativaDeSolucao.setVisible(false);
         viewCriteriosDeAvaliacao.setVisible(false);
         viewDecisao.setVisible(false);
@@ -721,7 +722,7 @@ public class ViewPrincipal extends javax.swing.JFrame {
             if (nodeFilho.equals("Motivação e Objetivos")) {
                 changeViews(viewMotivacaoEObjetivos);
             } else if (nodeFilho.equals("Calendário")) {
-                changeViews(viewCalendario);
+                changeViews(viewTarefas);
             } else if (nodeFilho.equals("Alternativas de Solução")) {
                 changeViews(viewAlternativaDeSolucao);
                 viewAlternativaDeSolucao.showViewAlternativaDeSolucao();

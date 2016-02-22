@@ -1,10 +1,14 @@
 package view.TomadaDeDecisao;
 
+import controller.ControllerTarefas;
 import java.awt.Color;
+import java.util.List;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 import settings.Constant;
+import settings.CustomTableTarefa;
+import settings.KeepData;
 import util.Internal;
-import util.MyCellRenderer;
 import util.MyDefaultTableModel;
 import util.Request;
 
@@ -14,32 +18,81 @@ import util.Request;
  */
 public class ViewTarefas extends javax.swing.JInternalFrame {
 
-    private MyDefaultTableModel myDefaultTableModel;
     private final int type;
     private Request request;
-    private int idTarefa;
+    private MyDefaultTableModel myDefaultTableModel;
+    private final ControllerTarefas controllerTarefas = new ControllerTarefas();
 
     public ViewTarefas() {
         initComponents();
 
         this.type = Constant.CREATE;
-        fillTable();
         Internal.retiraBorda(this);
     }
 
-    public void fillTable() {
+    public void showViewTarefas() {
+        int idProblema = Integer.parseInt(KeepData.getData("Problema.id"));
+        fillTable(controllerTarefas.listTarefasByProjeto(idProblema));
+    }
+
+    private boolean isDone(String done) {
+        return done.equals("true");
+    }
+
+    private String getMarcador(int valor) {
+        String marcador = null;
+        switch (valor) {
+            case 1:
+                marcador = "TRIVIAL";
+                break;
+            case 2:
+                marcador = "PEQUENO";
+                break;
+            case 3:
+                marcador = "MEDÍO";
+                break;
+            case 4:
+                marcador = "GRANDE";
+                break;
+        }
+        return marcador;
+    }
+
+    public void fillTable(List<Request> requestList) {
         ImageIcon icon = new ImageIcon(getClass().getResource("/resources/image/task.png"));
-        String columns[] = {" -", "Feito", "Tarefa", "Data"};
-        Object[] line = {icon, false, "teste", "teste"};
 
-        myDefaultTableModel = new MyDefaultTableModel(columns, 0, false, true, 1);
-        myDefaultTableModel.addRow(line);
+        String columns[] = {"id", " ", "Feito", "Tarefa", "Marcador", "Prazo"};
+        myDefaultTableModel = new MyDefaultTableModel(columns, 0, false, true, 2);
+
+        for (Request request : requestList) {
+            Object line[] = {
+                request.getData("Tarefa.id"),
+                icon,
+                isDone(request.getData("Tarefa.feito")),
+                request.getData("Tarefa.nome"),
+                getMarcador(Integer.parseInt(request.getData("Tarefa.marcador"))),
+                request.getData("Tarefa.data")
+            };
+            myDefaultTableModel.addRow(line);
+        }
+
         jTableTarefas.setModel(myDefaultTableModel);
-        jTableTarefas.setDefaultRenderer(Object.class, new MyCellRenderer());
-        jTableTarefas.setRowHeight(25);
-        
-        jTableTarefas.setGridColor(new Color(229,229,229)); 
 
+        jTableTarefas.removeColumn(jTableTarefas.getColumnModel().getColumn(0));
+        jTableTarefas.setDefaultRenderer(Object.class, new CustomTableTarefa());
+
+        jTableTarefas.getColumnModel().getColumn(0).setPreferredWidth(1);
+        jTableTarefas.getColumnModel().getColumn(1).setPreferredWidth(1);
+        jTableTarefas.getColumnModel().getColumn(2).setPreferredWidth(460);
+        jTableTarefas.getColumnModel().getColumn(3).setPreferredWidth(50);
+        jTableTarefas.getColumnModel().getColumn(4).setPreferredWidth(95);
+
+        jTableTarefas.setRowHeight(25);
+        jTableTarefas.setGridColor(new Color(229, 229, 229));
+    }
+
+    private boolean rowIsSelected() {
+        return jTableTarefas.getSelectedRow() > -1;
     }
 
     @SuppressWarnings("unchecked")
@@ -50,8 +103,10 @@ public class ViewTarefas extends javax.swing.JInternalFrame {
         jTextField1 = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTableTarefas = new javax.swing.JTable();
-        jButton1 = new javax.swing.JButton();
+        jButtonNovo = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        jButtonExcluir = new javax.swing.JButton();
+        jButtonEditar = new javax.swing.JButton();
 
         jTextField1.setEditable(false);
         jTextField1.setBackground(new java.awt.Color(246, 179, 111));
@@ -72,14 +127,23 @@ public class ViewTarefas extends javax.swing.JInternalFrame {
         ));
         jScrollPane1.setViewportView(jTableTarefas);
 
-        jButton1.setText("Nova Tarefa");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        jButtonNovo.setText("Nova Tarefa");
+        jButtonNovo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                jButtonNovoActionPerformed(evt);
             }
         });
 
         jButton2.setText("Salvar alterações na tabela");
+
+        jButtonExcluir.setText("Excluir");
+
+        jButtonEditar.setText("Editar");
+        jButtonEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonEditarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -88,12 +152,16 @@ public class ViewTarefas extends javax.swing.JInternalFrame {
             .addComponent(jTextField1)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 761, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                    .addGroup(layout.createSequentialGroup()
                         .addComponent(jButton2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton1)))
+                        .addComponent(jButtonNovo)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButtonEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButtonExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -101,24 +169,42 @@ public class ViewTarefas extends javax.swing.JInternalFrame {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 417, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 421, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2))
+                    .addComponent(jButtonNovo)
+                    .addComponent(jButton2)
+                    .addComponent(jButtonExcluir)
+                    .addComponent(jButtonEditar))
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void jButtonNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonNovoActionPerformed
         new ViewTarefaNovo(null, true).setVisible(true);
-    }//GEN-LAST:event_jButton1ActionPerformed
+        showViewTarefas();
+    }//GEN-LAST:event_jButtonNovoActionPerformed
+
+    private void jButtonEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditarActionPerformed
+        if (!rowIsSelected()) {
+            JOptionPane.showMessageDialog(null, "Selecione uma linha na tabela.");
+            return;
+        }
+
+        int idATarefa = Integer.parseInt(jTableTarefas.getModel()
+                .getValueAt(jTableTarefas.getSelectedRow(), 0).toString());
+
+        new ViewTarefaNovo(null, true, idATarefa).setVisible(true);
+        showViewTarefas();
+    }//GEN-LAST:event_jButtonEditarActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButtonEditar;
+    private javax.swing.JButton jButtonExcluir;
+    private javax.swing.JButton jButtonNovo;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTableTarefas;
     private javax.swing.JTextField jTextField1;

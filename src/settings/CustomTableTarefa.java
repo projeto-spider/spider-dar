@@ -1,23 +1,19 @@
-package util;
+package settings;
 
 import java.awt.Color;
 import java.awt.Component;
-import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.JTextPane;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
-import javax.swing.text.SimpleAttributeSet;
-import javax.swing.text.StyleConstants;
-import javax.swing.text.StyledDocument;
 
 /**
  *
  * @author Bleno Vale
  */
-public class MyCellRenderer extends JTextPane implements TableCellRenderer {
+public class CustomTableTarefa extends JTextPane implements TableCellRenderer {
 
-    public MyCellRenderer() {
+    public CustomTableTarefa() {
+
     }
 
     @Override
@@ -39,19 +35,14 @@ public class MyCellRenderer extends JTextPane implements TableCellRenderer {
             if (row % 2 == 0) {
                 this.setForeground(table.getForeground());
                 this.setBackground(Color.WHITE);
-
             } else {
                 this.setForeground(table.getForeground());
                 this.setBackground(new Color(229, 229, 229));
             }
         }
 
-        // Centraliza verticalmente o Texto na celula da tabela.
-        StyledDocument doc = this.getStyledDocument();
-        SimpleAttributeSet center = new SimpleAttributeSet();
-        StyleConstants.setAlignment(center, StyleConstants.ALIGN_JUSTIFIED);
-        doc.setParagraphAttributes(0, doc.getLength(), center, false);
-        this.setDocument(doc);
+        this.setForeground(Color.BLACK);
+        paintCell(column);
 
         // Aumentao tamanho da celula da tabela conforme o número de linhas que a preenche. 
         setText((value == null) ? "" : value.toString());
@@ -62,15 +53,25 @@ public class MyCellRenderer extends JTextPane implements TableCellRenderer {
             table.setRowHeight(row, getPreferredSize().height);
         }
 
-//        table.getTableHeader().setResizingAllowed(false);
         return this;
     }
 
-    public void ComponentsRenderer(JTable table) {
-        // Centraliza o nome das colunas da tabela.
-        DefaultTableCellRenderer renderer = (DefaultTableCellRenderer) table.getTableHeader().getDefaultRenderer();
-        renderer.setHorizontalAlignment(JLabel.CENTER);
-
+    private void paintCell(int column) {
+        if (column == 3) {
+            switch (this.getText()) {
+                case "TRIVIAL":
+                    this.setBackground(new Color(71, 235, 137));
+                    break;
+                case "PEQUENO":
+                    this.setBackground(new Color(102, 204, 255));
+                    break;
+                case "MEDÍO":
+                    this.setBackground(new Color(255, 255, 102));
+                    break;
+                case "GRANDE":
+                    this.setBackground(new Color(255, 102, 102));
+                    break;
+            }
+        }
     }
-
 }

@@ -10,6 +10,7 @@ import jpa.extension.JpaHistorico;
 import jpa.extension.JpaOrganizacao;
 import jpa.extension.JpaPerfil;
 import jpa.extension.JpaProblema;
+import jpa.extension.JpaTarefa;
 import jpa.extension.JpaUsuario;
 
 /**
@@ -84,6 +85,10 @@ public class Facade {
     
     public JpaHistorico initializeHistorico(){
         return new JpaHistorico(Connection.connect()); 
+    }
+    
+    public JpaTarefa initializeTarefa(){
+        return new JpaTarefa(Connection.connect()); 
     }
 
 }

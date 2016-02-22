@@ -35,6 +35,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Tarefa.findById", query = "SELECT t FROM Tarefa t WHERE t.id = :id"),
     @NamedQuery(name = "Tarefa.findByData", query = "SELECT t FROM Tarefa t WHERE t.data = :data"),
     @NamedQuery(name = "Tarefa.findByNome", query = "SELECT t FROM Tarefa t WHERE t.nome = :nome"),
+    @NamedQuery(name = "Tarefa.findByMarcador", query = "SELECT t FROM Tarefa t WHERE t.marcador = :marcador"),
+    @NamedQuery(name = "Tarefa.findByFeito", query = "SELECT t FROM Tarefa t WHERE t.feito = :feito"),
     @NamedQuery(name = "Tarefa.findByCreated", query = "SELECT t FROM Tarefa t WHERE t.created = :created"),
     @NamedQuery(name = "Tarefa.findByModified", query = "SELECT t FROM Tarefa t WHERE t.modified = :modified")})
 public class Tarefa implements Serializable {
@@ -56,6 +58,12 @@ public class Tarefa implements Serializable {
     @Column(name = "descricao")
     private String descricao;
     @Basic(optional = false)
+    @Column(name = "marcador")
+    private int marcador;
+    @Basic(optional = false)
+    @Column(name = "feito")
+    private boolean feito;
+    @Basic(optional = false)
     @Column(name = "created")
     @Temporal(TemporalType.TIMESTAMP)
     private Date created;
@@ -74,11 +82,13 @@ public class Tarefa implements Serializable {
         this.id = id;
     }
 
-    public Tarefa(Integer id, Date data, String nome, String descricao, Date created, Date modified) {
+    public Tarefa(Integer id, Date data, String nome, String descricao, int marcador, boolean feito, Date created, Date modified) {
         this.id = id;
         this.data = data;
         this.nome = nome;
         this.descricao = descricao;
+        this.marcador = marcador;
+        this.feito = feito;
         this.created = created;
         this.modified = modified;
     }
@@ -113,6 +123,22 @@ public class Tarefa implements Serializable {
 
     public void setDescricao(String descricao) {
         this.descricao = descricao;
+    }
+
+    public int getMarcador() {
+        return marcador;
+    }
+
+    public void setMarcador(int marcador) {
+        this.marcador = marcador;
+    }
+
+    public boolean getFeito() {
+        return feito;
+    }
+
+    public void setFeito(boolean feito) {
+        this.feito = feito;
     }
 
     public Date getCreated() {
