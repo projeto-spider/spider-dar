@@ -65,7 +65,7 @@ public class CustomTableTarefa extends JTextPane implements TableCellRenderer {
                 case "PEQUENO":
                     this.setBackground(new Color(102, 204, 255));
                     break;
-                case "MEDÍO":
+                case "MÉDIO":
                     this.setBackground(new Color(255, 255, 102));
                     break;
                 case "GRANDE":

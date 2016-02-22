@@ -49,7 +49,7 @@ public class ViewTarefas extends javax.swing.JInternalFrame {
                 marcador = "PEQUENO";
                 break;
             case 3:
-                marcador = "MEDÍO";
+                marcador = "MÉDIO";
                 break;
             case 4:
                 marcador = "GRANDE";
@@ -95,6 +95,24 @@ public class ViewTarefas extends javax.swing.JInternalFrame {
         return jTableTarefas.getSelectedRow() > -1;
     }
 
+    private void removeTarefa() {
+        int Result = JOptionPane.showConfirmDialog(null, "Deseja Excluir esta Tarefa?", "EXCLUIR", JOptionPane.YES_NO_OPTION);
+
+        if (Result == JOptionPane.YES_OPTION) {
+            try {
+                int idTarefa = Integer.parseInt(jTableTarefas.getModel()
+                        .getValueAt(jTableTarefas.getSelectedRow(), 0).toString());
+
+                controllerTarefas.removeTarefa(idTarefa);
+
+                JOptionPane.showMessageDialog(null, "\"Tarefa\" foi excluída com sucesso.");
+            } catch (Exception error) {
+                JOptionPane.showMessageDialog(null, error.getMessage(), "ERRO AO EXCLUIR", JOptionPane.ERROR_MESSAGE);
+            }
+
+        }
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -107,11 +125,13 @@ public class ViewTarefas extends javax.swing.JInternalFrame {
         jButton2 = new javax.swing.JButton();
         jButtonExcluir = new javax.swing.JButton();
         jButtonEditar = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jTextField2 = new javax.swing.JTextField();
 
         jTextField1.setEditable(false);
         jTextField1.setBackground(new java.awt.Color(246, 179, 111));
         jTextField1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jTextField1.setText(" Calendário");
+        jTextField1.setText(" Tarefas");
         jTextField1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
         jTableTarefas.setModel(new javax.swing.table.DefaultTableModel(
@@ -137,6 +157,11 @@ public class ViewTarefas extends javax.swing.JInternalFrame {
         jButton2.setText("Salvar alterações na tabela");
 
         jButtonExcluir.setText("Excluir");
+        jButtonExcluir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonExcluirActionPerformed(evt);
+            }
+        });
 
         jButtonEditar.setText("Editar");
         jButtonEditar.addActionListener(new java.awt.event.ActionListener() {
@@ -145,6 +170,8 @@ public class ViewTarefas extends javax.swing.JInternalFrame {
             }
         });
 
+        jLabel1.setText("Pesquisa:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -152,16 +179,21 @@ public class ViewTarefas extends javax.swing.JInternalFrame {
             .addComponent(jTextField1)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 761, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 761, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jButton2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButtonNovo)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButtonEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButtonExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jButtonExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -169,14 +201,18 @@ public class ViewTarefas extends javax.swing.JInternalFrame {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 421, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 392, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonNovo)
                     .addComponent(jButton2)
                     .addComponent(jButtonExcluir)
                     .addComponent(jButtonEditar))
-                .addContainerGap())
+                .addGap(15, 15, 15))
         );
 
         pack();
@@ -200,14 +236,26 @@ public class ViewTarefas extends javax.swing.JInternalFrame {
         showViewTarefas();
     }//GEN-LAST:event_jButtonEditarActionPerformed
 
+    private void jButtonExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonExcluirActionPerformed
+        if (!rowIsSelected()) {
+            JOptionPane.showMessageDialog(null, "Selecione uma linha na tabela.");
+            return;
+        }
+
+        removeTarefa();
+        showViewTarefas();
+    }//GEN-LAST:event_jButtonExcluirActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButtonEditar;
     private javax.swing.JButton jButtonExcluir;
     private javax.swing.JButton jButtonNovo;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTableTarefas;
     private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField jTextField2;
     private net.sf.nachocalendar.tasks.TaskDataModel taskDataModel;
     // End of variables declaration//GEN-END:variables
 }

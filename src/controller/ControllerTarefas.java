@@ -81,6 +81,26 @@ public class ControllerTarefas {
         }
     }
 
+    public void removeTarefa(int idTarefa) throws Exception{
+        try {
+            tarefa = new Tarefa(); 
+            tarefa =  facade.initializeTarefa().findTarefa(idTarefa);
+            
+            facade.initializeTarefa().destroy(tarefa.getId());
+            
+            historico = new Historico();
+            historico.setDescricao("Tarefa \"" + tarefa.getNome() + "\" foi Excluída.");
+            historico.setUsuarioNome(KeepData.getData("Usuario.nome"));
+            historico.setCreated(new Date());
+            historico.setModified(new Date());
+            historico.setIdProblema(facade.initializeJpaProblema().findProblema(tarefa.getIdProblema().getId()));  
+            
+            facade.initializeHistorico().create(historico);
+        } catch (Exception error) {
+            throw new Exception(this.getExceptionMessage(error, "Excluir"), error);
+        }
+    }
+    
     public List<Request> listTarefasByProjeto(int idProjeto) {
         try {
             List<Tarefa> list = facade.initializeTarefa().findTarefaByIdProblema(idProjeto);

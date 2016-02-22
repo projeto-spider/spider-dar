@@ -196,24 +196,22 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" attributes="0">
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jScrollPane1" min="-2" pref="215" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="jButtonMotivacaoEObj" min="-2" pref="225" max="-2" attributes="0"/>
+                          <Component id="jButtonCalendario" min="-2" pref="225" max="-2" attributes="0"/>
+                          <Group type="103" alignment="0" groupAlignment="1" attributes="0">
+                              <Component id="jButtonCriterios" min="-2" pref="225" max="-2" attributes="0"/>
+                              <Component id="jButtonAlternativas" min="-2" pref="225" max="-2" attributes="0"/>
+                          </Group>
+                          <Component id="jButtonAvaliacao" alignment="1" min="-2" pref="225" max="-2" attributes="0"/>
+                          <Component id="jButtonHistorico" alignment="1" min="-2" pref="225" max="-2" attributes="0"/>
                       </Group>
-                      <Component id="jButtonMotivacaoEObj" min="-2" pref="225" max="-2" attributes="0"/>
-                      <Group type="102" attributes="0">
-                          <EmptySpace min="-2" pref="53" max="-2" attributes="0"/>
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace min="-2" pref="43" max="-2" attributes="0"/>
                           <Component id="jLabelBemvindo" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
                       </Group>
-                      <Component id="jButtonCalendario" min="-2" pref="225" max="-2" attributes="0"/>
-                      <Group type="103" alignment="0" groupAlignment="1" attributes="0">
-                          <Component id="jButtonCriterios" min="-2" pref="225" max="-2" attributes="0"/>
-                          <Component id="jButtonAlternativas" min="-2" pref="225" max="-2" attributes="0"/>
-                      </Group>
-                      <Component id="jButtonAvaliacao" alignment="1" min="-2" pref="225" max="-2" attributes="0"/>
-                      <Component id="jButtonHistorico" alignment="1" min="-2" pref="225" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="jDesktopPane" max="32767" attributes="0"/>
                       <Component id="jPanel2" max="32767" attributes="0"/>
@@ -229,18 +227,17 @@
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
-                  <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="103" groupAlignment="1" attributes="0">
                       <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
-                      <Group type="102" alignment="1" attributes="0">
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jLabelBemvindo" min="-2" pref="30" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                      </Group>
+                      <Component id="jLabelBemvindo" min="-2" pref="30" max="-2" attributes="0"/>
                   </Group>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="jDesktopPane" max="32767" attributes="0"/>
+                      <Group type="102" attributes="0">
+                          <Component id="jDesktopPane" max="32767" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                      </Group>
                       <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace min="-2" pref="33" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="58" max="-2" attributes="0"/>
                           <Component id="jButtonMotivacaoEObj" min="-2" pref="32" max="-2" attributes="0"/>
                           <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                           <Component id="jButtonCalendario" min="-2" pref="31" max="-2" attributes="0"/>
@@ -253,10 +250,8 @@
                           <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                           <Component id="jButtonHistorico" min="-2" pref="33" max="-2" attributes="0"/>
                           <EmptySpace max="32767" attributes="0"/>
-                          <Component id="jScrollPane1" min="-2" pref="173" max="-2" attributes="0"/>
                       </Group>
                   </Group>
-                  <EmptySpace max="-2" attributes="0"/>
                   <Component id="jLabel2" min="-2" pref="22" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -275,22 +270,6 @@
             <Property name="text" type="java.lang.String" value="Bem-vindo(a), ADM"/>
           </Properties>
         </Component>
-        <Container class="javax.swing.JScrollPane" name="jScrollPane1">
-
-          <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
-          <SubComponents>
-            <Component class="javax.swing.JTree" name="jTree">
-              <Properties>
-                <Property name="model" type="javax.swing.tree.TreeModel" editor="org.netbeans.modules.form.editors2.TreeModelEditor">
-                  <TreeModel code="Funcionalidades&#xa; Organiza&#xe7;&#xe3;o&#xa;  Guia de Gest&#xe3;o de Decis&#xe3;o&#xa; Problema&#xa;  Motiva&#xe7;&#xe3;o e Objetivos&#xa;  Calend&#xe1;rio&#xa;  Alternativas de Solu&#xe7;&#xe3;o&#xa;  Crit&#xe9;rios de Avalia&#xe7;&#xe3;o&#xa;  Avalia&#xe7;&#xe3;o&#xa;  Hist&#xf3;rico"/>
-                </Property>
-              </Properties>
-              <Events>
-                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jTreeMouseClicked"/>
-              </Events>
-            </Component>
-          </SubComponents>
-        </Container>
         <Container class="javax.swing.JDesktopPane" name="jDesktopPane">
 
           <Layout>
