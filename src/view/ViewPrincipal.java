@@ -76,8 +76,8 @@ public class ViewPrincipal extends javax.swing.JFrame {
 //        String nomeOrganizacaoLabel = (nomeOrganizacao.isEmpty() || nomeOrganizacao == null) ? "-" : nomeOrganizacao;
 //        String nomeProblemaLabel = (nomeProblema.isEmpty() || nomeProblema == null) ? "-" : nomeProblema;
         jLabelBemvindo.setText("Bem-Vindo, " + KeepData.getData("Usuario.nome"));
-        jLabelOrganizacao.setText("Organização: " + nomeOrganizacao);
-        jLabelProblema.setText("Problema: " + nomeProblema);
+        jLabelOrganizacao.setText("<html>" + nomeOrganizacao + "</html>");
+        jLabelProblema.setText("<html>" + nomeProblema + "</html>");
 
         changeViews(viewHome);
     }
@@ -100,8 +100,6 @@ public class ViewPrincipal extends javax.swing.JFrame {
         jDesktopPane = new javax.swing.JDesktopPane();
         jPanel2 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
-        jLabelOrganizacao = new javax.swing.JLabel();
-        jLabelProblema = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jButtonMotivacaoEObj = new javax.swing.JButton();
         jButtonCalendario = new javax.swing.JButton();
@@ -109,6 +107,11 @@ public class ViewPrincipal extends javax.swing.JFrame {
         jButtonCriterios = new javax.swing.JButton();
         jButtonAvaliacao = new javax.swing.JButton();
         jButtonHistorico = new javax.swing.JButton();
+        jPanel3 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabelOrganizacao = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabelProblema = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenuArquivo = new javax.swing.JMenu();
         jMenuItemNovaOrganizacao = new javax.swing.JMenuItem();
@@ -159,10 +162,6 @@ public class ViewPrincipal extends javax.swing.JFrame {
             }
         });
 
-        jLabelOrganizacao.setText("Organização: Desenvolvimento");
-
-        jLabelProblema.setText("Problema: nome Problema");
-
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -170,24 +169,13 @@ public class ViewPrincipal extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 524, Short.MAX_VALUE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabelOrganizacao, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabelProblema, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+                .addContainerGap(683, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabelOrganizacao)
-                        .addGap(0, 0, 0)
-                        .addComponent(jLabelProblema))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(6, 6, 6)
-                        .addComponent(jButton1)))
+                .addGap(6, 6, 6)
+                .addComponent(jButton1)
                 .addGap(8, 8, 8))
         );
 
@@ -198,6 +186,7 @@ public class ViewPrincipal extends javax.swing.JFrame {
         jButtonMotivacaoEObj.setBackground(new java.awt.Color(65, 65, 65));
         jButtonMotivacaoEObj.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
         jButtonMotivacaoEObj.setForeground(new java.awt.Color(255, 255, 255));
+        jButtonMotivacaoEObj.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/image/goal.png"))); // NOI18N
         jButtonMotivacaoEObj.setText("MOTIVAÇÃO E OBJETIVOS");
         jButtonMotivacaoEObj.setContentAreaFilled(false);
         jButtonMotivacaoEObj.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -215,6 +204,7 @@ public class ViewPrincipal extends javax.swing.JFrame {
         jButtonCalendario.setBackground(new java.awt.Color(65, 65, 65));
         jButtonCalendario.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
         jButtonCalendario.setForeground(new java.awt.Color(255, 255, 255));
+        jButtonCalendario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/image/task.png"))); // NOI18N
         jButtonCalendario.setText("TAREFAS");
         jButtonCalendario.setContentAreaFilled(false);
         jButtonCalendario.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -232,6 +222,7 @@ public class ViewPrincipal extends javax.swing.JFrame {
         jButtonAlternativas.setBackground(new java.awt.Color(65, 65, 65));
         jButtonAlternativas.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
         jButtonAlternativas.setForeground(new java.awt.Color(255, 255, 255));
+        jButtonAlternativas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/image/alternatives.png"))); // NOI18N
         jButtonAlternativas.setText("ALTERNATIVAS DE SOLUÇÃO");
         jButtonAlternativas.setContentAreaFilled(false);
         jButtonAlternativas.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -249,6 +240,7 @@ public class ViewPrincipal extends javax.swing.JFrame {
         jButtonCriterios.setBackground(new java.awt.Color(65, 65, 65));
         jButtonCriterios.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
         jButtonCriterios.setForeground(new java.awt.Color(255, 255, 255));
+        jButtonCriterios.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/image/criteria.png"))); // NOI18N
         jButtonCriterios.setText("CRITÉRIOS DE AVALIAÇÃO");
         jButtonCriterios.setContentAreaFilled(false);
         jButtonCriterios.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -266,6 +258,7 @@ public class ViewPrincipal extends javax.swing.JFrame {
         jButtonAvaliacao.setBackground(new java.awt.Color(65, 65, 65));
         jButtonAvaliacao.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
         jButtonAvaliacao.setForeground(new java.awt.Color(255, 255, 255));
+        jButtonAvaliacao.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/image/evaluation.png"))); // NOI18N
         jButtonAvaliacao.setText("AVALIAÇÃO");
         jButtonAvaliacao.setContentAreaFilled(false);
         jButtonAvaliacao.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -283,6 +276,7 @@ public class ViewPrincipal extends javax.swing.JFrame {
         jButtonHistorico.setBackground(new java.awt.Color(65, 65, 65));
         jButtonHistorico.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
         jButtonHistorico.setForeground(new java.awt.Color(255, 255, 255));
+        jButtonHistorico.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/image/historic.png"))); // NOI18N
         jButtonHistorico.setText("HISTÓRICO");
         jButtonHistorico.setContentAreaFilled(false);
         jButtonHistorico.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -297,24 +291,66 @@ public class ViewPrincipal extends javax.swing.JFrame {
             }
         });
 
+        jPanel3.setBackground(new java.awt.Color(54, 54, 54));
+
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setText("Organização:");
+
+        jLabelOrganizacao.setForeground(new java.awt.Color(255, 255, 255));
+        jLabelOrganizacao.setText("Desenvolvimento");
+
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel3.setText("Problema:");
+
+        jLabelProblema.setForeground(new java.awt.Color(255, 255, 255));
+        jLabelProblema.setText("nome Problema");
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(19, 19, 19)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabelOrganizacao, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel3)
+                    .addComponent(jLabelProblema, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabelOrganizacao)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabelProblema)
+                .addContainerGap(82, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jButtonMotivacaoEObj, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jButtonCalendario, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jButtonCriterios, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButtonAlternativas, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addComponent(jButtonAvaliacao, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jButtonHistorico, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jButtonMotivacaoEObj, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButtonCalendario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButtonCriterios, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButtonAlternativas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButtonAvaliacao, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButtonHistorico, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(43, 43, 43)
-                        .addComponent(jLabelBemvindo)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                        .addComponent(jLabelBemvindo))
+                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(0, 0, 0)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jDesktopPane)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
@@ -346,6 +382,8 @@ public class ViewPrincipal extends javax.swing.JFrame {
                         .addComponent(jButtonAvaliacao, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, 0)
                         .addComponent(jButtonHistorico, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -480,7 +518,7 @@ public class ViewPrincipal extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -694,7 +732,9 @@ public class ViewPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton jButtonHistorico;
     private javax.swing.JButton jButtonMotivacaoEObj;
     private javax.swing.JDesktopPane jDesktopPane;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabelBemvindo;
     private javax.swing.JLabel jLabelOrganizacao;
     private javax.swing.JLabel jLabelProblema;
@@ -719,6 +759,7 @@ public class ViewPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenu jMenuSobre;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JPopupMenu.Separator jSeparator3;

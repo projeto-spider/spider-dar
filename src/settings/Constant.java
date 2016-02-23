@@ -1,5 +1,7 @@
 package settings;
 
+import javax.swing.ImageIcon;
+
 /**
  *
  * @author Bleno Vale
@@ -25,4 +27,5 @@ public class Constant {
     public static int PEQUENO = 2;
     public static int MEDIO = 3;
     public static int GRANDE = 4;
+    
 }
