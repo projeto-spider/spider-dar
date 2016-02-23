@@ -121,7 +121,7 @@ public class ControllerTarefas {
             tarefa.setModified(new Date());
 
             facade.initializeTarefa().edit(tarefa);
-            return true;
+            return status;
         } catch (Exception error) {
             return false;
         }
