@@ -192,7 +192,7 @@
         <Component class="javax.swing.JRadioButton" name="jRadioButton1">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-              <Color blue="89" green="eb" red="47" type="rgb"/>
+              <Color blue="99" green="ff" red="99" type="rgb"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Trivial"/>
           </Properties>
@@ -200,7 +200,7 @@
         <Component class="javax.swing.JRadioButton" name="jRadioButton2">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-              <Color blue="ff" green="cc" red="66" type="rgb"/>
+              <Color blue="fb" green="e0" red="ca" type="rgb"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Pequeno"/>
           </Properties>
@@ -208,7 +208,7 @@
         <Component class="javax.swing.JRadioButton" name="jRadioButton3">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-              <Color blue="66" green="ff" red="ff" type="rgb"/>
+              <Color blue="99" green="ff" red="ff" type="rgb"/>
             </Property>
             <Property name="text" type="java.lang.String" value="M&#xe9;dio"/>
           </Properties>
@@ -216,7 +216,7 @@
         <Component class="javax.swing.JRadioButton" name="jRadioButton4">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-              <Color blue="66" green="66" red="ff" type="rgb"/>
+              <Color blue="99" green="99" red="ff" type="rgb"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Grande"/>
           </Properties>

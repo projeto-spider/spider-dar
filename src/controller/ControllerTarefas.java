@@ -1,10 +1,12 @@
 package controller;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.swing.JOptionPane;
 import model.Historico;
 import model.Tarefa;
 import settings.Facade;
@@ -52,13 +54,29 @@ public class ControllerTarefas {
         }
     }
 
+    public boolean isValidDate(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        Date now = calendar.getTime();
+
+        if (date.compareTo(now) < 0) {
+            return true;
+        } else{
+            return false;
+        }
+    }
+
     public void upDateTarefa(Request request, Date date) throws Exception {
         try {
             int idTarefa = Integer.parseInt(request.getDataInput("Tarefa.id").getValor());
 
             tarefa = new Tarefa();
             tarefa = facade.initializeTarefa().findTarefa(idTarefa);
-            
+
             tarefa.setNome(request.getDataInput("Tarefa.nome").getValor());
             tarefa.setDescricao(request.getDataInput("Tarefa.descricao").getValor());
             int marcador = Integer.parseInt(request.getDataInput("Tarefa.marcador").getValor());
@@ -81,26 +99,54 @@ public class ControllerTarefas {
         }
     }
 
-    public void removeTarefa(int idTarefa) throws Exception{
+    public boolean upDateStatusTarefa(int idTarefa, boolean status) {
         try {
-            tarefa = new Tarefa(); 
-            tarefa =  facade.initializeTarefa().findTarefa(idTarefa);
-            
+            tarefa = new Tarefa();
+            tarefa = facade.initializeTarefa().findTarefa(idTarefa);
+
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(new Date());
+            calendar.set(Calendar.HOUR_OF_DAY, 0);
+            calendar.set(Calendar.MINUTE, 0);
+            calendar.set(Calendar.SECOND, 0);
+            calendar.set(Calendar.MILLISECOND, 0);
+            Date now = calendar.getTime();
+
+            if (tarefa.getData().compareTo(now) < 0) {
+                JOptionPane.showMessageDialog(null, "O Prazo expirou.");
+                return tarefa.getFeito();
+            }
+
+            tarefa.setFeito(status);
+            tarefa.setModified(new Date());
+
+            facade.initializeTarefa().edit(tarefa);
+            return true;
+        } catch (Exception error) {
+            return false;
+        }
+    }
+
+    public void removeTarefa(int idTarefa) throws Exception {
+        try {
+            tarefa = new Tarefa();
+            tarefa = facade.initializeTarefa().findTarefa(idTarefa);
+
             facade.initializeTarefa().destroy(tarefa.getId());
-            
+
             historico = new Historico();
             historico.setDescricao("Tarefa \"" + tarefa.getNome() + "\" foi Excluída.");
             historico.setUsuarioNome(KeepData.getData("Usuario.nome"));
             historico.setCreated(new Date());
             historico.setModified(new Date());
-            historico.setIdProblema(facade.initializeJpaProblema().findProblema(tarefa.getIdProblema().getId()));  
-            
+            historico.setIdProblema(facade.initializeJpaProblema().findProblema(tarefa.getIdProblema().getId()));
+
             facade.initializeHistorico().create(historico);
         } catch (Exception error) {
             throw new Exception(this.getExceptionMessage(error, "Excluir"), error);
         }
     }
-    
+
     public List<Request> listTarefasByProjeto(int idProjeto) {
         try {
             List<Tarefa> list = facade.initializeTarefa().findTarefaByIdProblema(idProjeto);

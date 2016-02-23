@@ -95,7 +95,7 @@ public class ViewTarefaNovo extends javax.swing.JDialog {
 
     private boolean isValidDate() {
         Date chosenDate = (Date) dateFieldData.getValue();
-        return chosenDate.before(new Date());
+        return controllerTarefas.isValidDate(chosenDate);
     }
     
     private int getRadioButtonSelected(){
@@ -195,16 +195,16 @@ public class ViewTarefaNovo extends javax.swing.JDialog {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)), " Marcadores", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(51, 51, 51))); // NOI18N
 
-        jRadioButton1.setBackground(new java.awt.Color(71, 235, 137));
+        jRadioButton1.setBackground(new java.awt.Color(153, 255, 153));
         jRadioButton1.setText("Trivial");
 
-        jRadioButton2.setBackground(new java.awt.Color(102, 204, 255));
+        jRadioButton2.setBackground(new java.awt.Color(202, 224, 251));
         jRadioButton2.setText("Pequeno");
 
-        jRadioButton3.setBackground(new java.awt.Color(255, 255, 102));
+        jRadioButton3.setBackground(new java.awt.Color(255, 255, 153));
         jRadioButton3.setText("Médio");
 
-        jRadioButton4.setBackground(new java.awt.Color(255, 102, 102));
+        jRadioButton4.setBackground(new java.awt.Color(255, 153, 153));
         jRadioButton4.setText("Grande");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);

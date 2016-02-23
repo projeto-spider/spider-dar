@@ -12,6 +12,11 @@ import javax.swing.table.TableCellRenderer;
  */
 public class CustomTableTarefa extends JTextPane implements TableCellRenderer {
 
+    private static final Color GREEN = new Color(153,255,153);
+    private static final Color BLUE = new Color(202,224,251);
+    private static Color YELLOW = new Color(255,255,153);
+    private static Color RED = new Color(255,153,153);
+    
     public CustomTableTarefa() {
 
     }
@@ -60,18 +65,19 @@ public class CustomTableTarefa extends JTextPane implements TableCellRenderer {
         if (column == 3) {
             switch (this.getText()) {
                 case "TRIVIAL":
-                    this.setBackground(new Color(71, 235, 137));
+                    this.setBackground(GREEN);
                     break;
                 case "PEQUENO":
-                    this.setBackground(new Color(102, 204, 255));
+                    this.setBackground(BLUE);
                     break;
                 case "MÉDIO":
-                    this.setBackground(new Color(255, 255, 102));
+                    this.setBackground(YELLOW);
                     break;
                 case "GRANDE":
-                    this.setBackground(new Color(255, 102, 102));
+                    this.setBackground(RED);
                     break;
             }
         }
     }
+    
 }
