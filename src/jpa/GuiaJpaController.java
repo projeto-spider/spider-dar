@@ -22,7 +22,7 @@ import model.Guia;
 
 /**
  *
- * @author Bleno Vale
+ * @author Spider
  */
 public class GuiaJpaController implements Serializable {
 

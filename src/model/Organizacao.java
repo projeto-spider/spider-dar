@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Bleno Vale
+ * @author Spider
  */
 @Entity
 @Table(name = "organizacao")
@@ -173,9 +173,8 @@ public class Organizacao implements Serializable {
             return false;
         }
         Organizacao other = (Organizacao) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)))
             return false;
-        }
         return true;
     }
 

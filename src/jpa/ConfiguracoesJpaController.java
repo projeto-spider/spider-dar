@@ -14,16 +14,15 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import jpa.exceptions.NonexistentEntityException;
-import model.Problema;
-import model.Tarefa;
+import model.Configuracoes;
 
 /**
  *
  * @author Spider
  */
-public class TarefaJpaController implements Serializable {
+public class ConfiguracoesJpaController implements Serializable {
 
-    public TarefaJpaController(EntityManagerFactory emf) {
+    public ConfiguracoesJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
     private EntityManagerFactory emf = null;
@@ -32,21 +31,12 @@ public class TarefaJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(Tarefa tarefa) {
+    public void create(Configuracoes configuracoes) {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Problema idProblema = tarefa.getIdProblema();
-            if (idProblema != null) {
-                idProblema = em.getReference(idProblema.getClass(), idProblema.getId());
-                tarefa.setIdProblema(idProblema);
-            }
-            em.persist(tarefa);
-            if (idProblema != null) {
-                idProblema.getTarefaList().add(tarefa);
-                idProblema = em.merge(idProblema);
-            }
+            em.persist(configuracoes);
             em.getTransaction().commit();
         } finally {
             if (em != null) {
@@ -55,34 +45,19 @@ public class TarefaJpaController implements Serializable {
         }
     }
 
-    public void edit(Tarefa tarefa) throws NonexistentEntityException, Exception {
+    public void edit(Configuracoes configuracoes) throws NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Tarefa persistentTarefa = em.find(Tarefa.class, tarefa.getId());
-            Problema idProblemaOld = persistentTarefa.getIdProblema();
-            Problema idProblemaNew = tarefa.getIdProblema();
-            if (idProblemaNew != null) {
-                idProblemaNew = em.getReference(idProblemaNew.getClass(), idProblemaNew.getId());
-                tarefa.setIdProblema(idProblemaNew);
-            }
-            tarefa = em.merge(tarefa);
-            if (idProblemaOld != null && !idProblemaOld.equals(idProblemaNew)) {
-                idProblemaOld.getTarefaList().remove(tarefa);
-                idProblemaOld = em.merge(idProblemaOld);
-            }
-            if (idProblemaNew != null && !idProblemaNew.equals(idProblemaOld)) {
-                idProblemaNew.getTarefaList().add(tarefa);
-                idProblemaNew = em.merge(idProblemaNew);
-            }
+            configuracoes = em.merge(configuracoes);
             em.getTransaction().commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
-                Integer id = tarefa.getId();
-                if (findTarefa(id) == null) {
-                    throw new NonexistentEntityException("The tarefa with id " + id + " no longer exists.");
+                Integer id = configuracoes.getId();
+                if (findConfiguracoes(id) == null) {
+                    throw new NonexistentEntityException("The configuracoes with id " + id + " no longer exists.");
                 }
             }
             throw ex;
@@ -98,19 +73,14 @@ public class TarefaJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Tarefa tarefa;
+            Configuracoes configuracoes;
             try {
-                tarefa = em.getReference(Tarefa.class, id);
-                tarefa.getId();
+                configuracoes = em.getReference(Configuracoes.class, id);
+                configuracoes.getId();
             } catch (EntityNotFoundException enfe) {
-                throw new NonexistentEntityException("The tarefa with id " + id + " no longer exists.", enfe);
+                throw new NonexistentEntityException("The configuracoes with id " + id + " no longer exists.", enfe);
             }
-            Problema idProblema = tarefa.getIdProblema();
-            if (idProblema != null) {
-                idProblema.getTarefaList().remove(tarefa);
-                idProblema = em.merge(idProblema);
-            }
-            em.remove(tarefa);
+            em.remove(configuracoes);
             em.getTransaction().commit();
         } finally {
             if (em != null) {
@@ -119,19 +89,19 @@ public class TarefaJpaController implements Serializable {
         }
     }
 
-    public List<Tarefa> findTarefaEntities() {
-        return findTarefaEntities(true, -1, -1);
+    public List<Configuracoes> findConfiguracoesEntities() {
+        return findConfiguracoesEntities(true, -1, -1);
     }
 
-    public List<Tarefa> findTarefaEntities(int maxResults, int firstResult) {
-        return findTarefaEntities(false, maxResults, firstResult);
+    public List<Configuracoes> findConfiguracoesEntities(int maxResults, int firstResult) {
+        return findConfiguracoesEntities(false, maxResults, firstResult);
     }
 
-    private List<Tarefa> findTarefaEntities(boolean all, int maxResults, int firstResult) {
+    private List<Configuracoes> findConfiguracoesEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(Tarefa.class));
+            cq.select(cq.from(Configuracoes.class));
             Query q = em.createQuery(cq);
             if (!all) {
                 q.setMaxResults(maxResults);
@@ -143,20 +113,20 @@ public class TarefaJpaController implements Serializable {
         }
     }
 
-    public Tarefa findTarefa(Integer id) {
+    public Configuracoes findConfiguracoes(Integer id) {
         EntityManager em = getEntityManager();
         try {
-            return em.find(Tarefa.class, id);
+            return em.find(Configuracoes.class, id);
         } finally {
             em.close();
         }
     }
 
-    public int getTarefaCount() {
+    public int getConfiguracoesCount() {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            Root<Tarefa> rt = cq.from(Tarefa.class);
+            Root<Configuracoes> rt = cq.from(Configuracoes.class);
             cq.select(em.getCriteriaBuilder().count(rt));
             Query q = em.createQuery(cq);
             return ((Long) q.getSingleResult()).intValue();

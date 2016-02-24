@@ -19,7 +19,7 @@ import model.Decisao;
 
 /**
  *
- * @author Bleno Vale
+ * @author Spider
  */
 public class DecisaoJpaController implements Serializable {
 

@@ -12,7 +12,7 @@ import javax.persistence.Embeddable;
 
 /**
  *
- * @author Bleno Vale
+ * @author Spider
  */
 @Embeddable
 public class AcessarPK implements Serializable {
@@ -75,15 +75,12 @@ public class AcessarPK implements Serializable {
             return false;
         }
         AcessarPK other = (AcessarPK) object;
-        if (this.idOrganizacao != other.idOrganizacao) {
+        if (this.idOrganizacao != other.idOrganizacao)
             return false;
-        }
-        if (this.idUsuario != other.idUsuario) {
+        if (this.idUsuario != other.idUsuario)
             return false;
-        }
-        if (this.idPerfil != other.idPerfil) {
+        if (this.idPerfil != other.idPerfil)
             return false;
-        }
         return true;
     }
 

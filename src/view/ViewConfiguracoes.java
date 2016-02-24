@@ -1,9 +1,11 @@
 package view;
 
+import controller.ControllerConfiguracoes;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.JOptionPane;
-import util.Input;
+import model.Configuracoes;
+import settings.Constant;
 import util.Request;
 
 /**
@@ -12,11 +14,19 @@ import util.Request;
  */
 public class ViewConfiguracoes extends javax.swing.JDialog {
 
+    private int type;
+    private Configuracoes configuracoes;
+    private Request request;
+    private final ControllerConfiguracoes controllerConfiguracoes = new ControllerConfiguracoes();
+    private int idConfiguracoes;
+    
     public ViewConfiguracoes(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         
         buttonGruop();
+        fillFields(this.idConfiguracoes);
+        jRadioButtonSSL.setSelected(true);
         this.setLocationRelativeTo(null);
     }
     
@@ -26,27 +36,85 @@ public class ViewConfiguracoes extends javax.swing.JDialog {
         buttonGroup.add(jRadioButtonNenhum);
     }
     
-    private boolean isValidData(Request request) {
-        HashMap<String, Input> fields = request.getAllHashMapDataInputs();
-
-        int fieldsSize = fields.size();
-
-        for (int index = 1; index <= fieldsSize; index++) {
-            for (Map.Entry<String, Input> entry : fields.entrySet()) {
-                Input inputToValidate = entry.getValue();
-
-                boolean isNotEqualsToHidden = !(inputToValidate.getTipo().equals("hidden"));
-
-                if (index == inputToValidate.getOrdem() && isNotEqualsToHidden) {
-                    if (inputToValidate.getValor().isEmpty()) {
-                        JOptionPane.showMessageDialog(null, "Campo Obigatório: " + inputToValidate.getNome(), "ERRO AO CADASTRAR", JOptionPane.ERROR_MESSAGE);
-                        return false;
-                    }
-                }
-            }
-        }
-        return true;
+     private void selecionarCheckBox() {
+        if (configuracoes.getTipoCript().equals("SSL"))
+            jRadioButtonSSL.setSelected(true);
+        else if (configuracoes.getTipoCript().equals("TLS")) {
+            jRadioButtonTLS.setSelected(true);
+        } else 
+            jRadioButtonNenhum.setSelected(true);
     }
+     
+    private String getSelectedTipoCript() {
+        if (jRadioButtonSSL.isSelected())
+            return "SSL";
+        else if (jRadioButtonTLS.isSelected()) {
+            return "TLS";
+        } else
+            return "Nenhum";
+    }
+    
+
+    public boolean fieldValidation() {
+        if (jTextFieldEmail.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "O campo \"E-mail\" é obrigatório.");
+            return false;
+        } else if (jPasswordFieldSenha.getPassword().length < 1) {
+            JOptionPane.showMessageDialog(this, "O campo \"Senha\" é obrigatório.");
+            return false;
+        } else if (jTextFieldPorta.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "O campo \"Porta\" é obrigatório.");
+            return false;
+        } else if (jTextFieldServidor.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "O campo \"Servidor\" é obrigatório.");
+            return false;
+        } else
+            return true;
+    }
+    
+     private void fillFields(int idConfiguracoes) {
+
+        request = new Request();
+        request = controllerConfiguracoes.findConfiguracoesById(idConfiguracoes);
+
+
+        jTextFieldEmail.setText(request.getData("Configuracoes.email"));
+        jPasswordFieldSenha.setText(request.getData("Configuracoes.senha"));
+        jTextFieldServidor.setText(request.getData("Configuracoes.servidor"));
+        jTextFieldPorta.setText(request.getData("Configuracoes.porta"));  
+        selecionarCheckBox();
+    }
+     
+    private void save() {
+        if (!fieldValidation()) {
+            return;
+        }
+        
+        Map<String, String> data = new HashMap<>();
+        data.put("Configuracoes.email", jTextFieldEmail.getText());
+        String senha = new String(jPasswordFieldSenha.getPassword());
+        data.put("Configuracoes.senha", senha);
+        data.put("Configuracoes.porta", jTextFieldPorta.getText());
+        data.put("Configuracoes.servidor", jTextFieldServidor.getText());
+        data.put("Configuracoes.tipoCript", getSelectedTipoCript());
+        
+        boolean isDone = false;
+        if (type == Constant.CREATE) {
+            request = new Request(data);
+            isDone = controllerConfiguracoes.createConfiguracao(request);
+        } else {
+            data.put("Configuracoes.id", request.getData("Configuracoes.id"));
+            request = new Request(data);
+            isDone = controllerConfiguracoes.updateConfiguracao(request);
+        }
+        
+        if (isDone) {
+            JOptionPane.showMessageDialog(null, "Salvo com Sucesso.");
+        } else {
+            JOptionPane.showMessageDialog(null,
+                    "Erro ao salvar.", "ERRO AO SALVAR", JOptionPane.ERROR_MESSAGE);
+        }
+    }    
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -54,16 +122,16 @@ public class ViewConfiguracoes extends javax.swing.JDialog {
 
         buttonGroup = new javax.swing.ButtonGroup();
         jLabel1 = new javax.swing.JLabel();
-        jTextFieldNome = new javax.swing.JTextField();
+        jTextFieldEmail = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        jTextFieldLogin = new javax.swing.JTextField();
+        jTextFieldServidor = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         jPasswordFieldSenha = new javax.swing.JPasswordField();
-        jButton2 = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
-        jTextField1 = new javax.swing.JTextField();
+        jButtonSalvar = new javax.swing.JButton();
+        jButtonCancelar = new javax.swing.JButton();
+        jTextFieldPorta = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
-        jPanel1 = new javax.swing.JPanel();
+        jPanelTipoCript = new javax.swing.JPanel();
         jRadioButtonSSL = new javax.swing.JRadioButton();
         jRadioButtonTLS = new javax.swing.JRadioButton();
         jRadioButtonNenhum = new javax.swing.JRadioButton();
@@ -72,50 +140,39 @@ public class ViewConfiguracoes extends javax.swing.JDialog {
 
         jLabel1.setText("E-mail de envio:");
 
-        jLabel2.setText("Host:");
+        jLabel2.setText("Servidor SMTP:");
 
         jLabel4.setText("Senha:");
 
-        jButton2.setText("Salvar");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        jButtonSalvar.setText("Salvar");
+        jButtonSalvar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                jButtonSalvarActionPerformed(evt);
             }
         });
 
-        jButton1.setText("Cancelar");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        jButtonCancelar.setText("Cancelar");
+        jButtonCancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                jButtonCancelarActionPerformed(evt);
             }
         });
 
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
-            }
-        });
+        jLabel7.setText("Porta SMTP:");
 
-        jLabel7.setText("Porta:");
-
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Tipo de Criptografia:"));
+        jPanelTipoCript.setBorder(javax.swing.BorderFactory.createTitledBorder("Tipo de Criptografia:"));
 
         jRadioButtonSSL.setText("SSL");
-        jRadioButtonSSL.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButtonSSLActionPerformed(evt);
-            }
-        });
 
         jRadioButtonTLS.setText("TLS");
 
         jRadioButtonNenhum.setText("Nenhuma");
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        javax.swing.GroupLayout jPanelTipoCriptLayout = new javax.swing.GroupLayout(jPanelTipoCript);
+        jPanelTipoCript.setLayout(jPanelTipoCriptLayout);
+        jPanelTipoCriptLayout.setHorizontalGroup(
+            jPanelTipoCriptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelTipoCriptLayout.createSequentialGroup()
                 .addComponent(jRadioButtonSSL)
                 .addGap(18, 18, 18)
                 .addComponent(jRadioButtonTLS)
@@ -123,9 +180,9 @@ public class ViewConfiguracoes extends javax.swing.JDialog {
                 .addComponent(jRadioButtonNenhum)
                 .addGap(0, 175, Short.MAX_VALUE))
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+        jPanelTipoCriptLayout.setVerticalGroup(
+            jPanelTipoCriptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelTipoCriptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                 .addComponent(jRadioButtonSSL)
                 .addComponent(jRadioButtonTLS)
                 .addComponent(jRadioButtonNenhum))
@@ -138,7 +195,7 @@ public class ViewConfiguracoes extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanelTipoCript, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
@@ -146,18 +203,18 @@ public class ViewConfiguracoes extends javax.swing.JDialog {
                             .addComponent(jLabel7))
                         .addGap(16, 16, 16)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextField1)
-                            .addComponent(jTextFieldLogin)
-                            .addComponent(jTextFieldNome)))
+                            .addComponent(jTextFieldPorta)
+                            .addComponent(jTextFieldServidor)
+                            .addComponent(jTextFieldEmail)))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel4)
                         .addGap(58, 58, 58)
                         .addComponent(jPasswordFieldSenha))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButtonSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(4, 4, 4)
-                        .addComponent(jButton1)))
+                        .addComponent(jButtonCancelar)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -166,7 +223,7 @@ public class ViewConfiguracoes extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(jTextFieldNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jTextFieldEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
@@ -174,38 +231,30 @@ public class ViewConfiguracoes extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jTextFieldLogin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jTextFieldServidor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jTextFieldPorta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanelTipoCript, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton2)
-                    .addComponent(jButton1))
+                    .addComponent(jButtonSalvar)
+                    .addComponent(jButtonCancelar))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        
-    }//GEN-LAST:event_jButton2ActionPerformed
+    private void jButtonSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSalvarActionPerformed
+        save();
+    }//GEN-LAST:event_jButtonSalvarActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void jButtonCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelarActionPerformed
         this.dispose();
-    }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
-
-    private void jRadioButtonSSLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonSSLActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jRadioButtonSSLActionPerformed
+    }//GEN-LAST:event_jButtonCancelarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -251,19 +300,19 @@ public class ViewConfiguracoes extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButtonCancelar;
+    private javax.swing.JButton jButtonSalvar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanelTipoCript;
     private javax.swing.JPasswordField jPasswordFieldSenha;
     private javax.swing.JRadioButton jRadioButtonNenhum;
     private javax.swing.JRadioButton jRadioButtonSSL;
     private javax.swing.JRadioButton jRadioButtonTLS;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextFieldLogin;
-    private javax.swing.JTextField jTextFieldNome;
+    private javax.swing.JTextField jTextFieldEmail;
+    private javax.swing.JTextField jTextFieldPorta;
+    private javax.swing.JTextField jTextFieldServidor;
     // End of variables declaration//GEN-END:variables
 }

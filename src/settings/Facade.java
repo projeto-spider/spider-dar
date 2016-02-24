@@ -4,6 +4,7 @@ import jpa.AcessarJpaController;
 import jpa.ItemguiaJpaController;
 import jpa.extension.JpaAcessar;
 import jpa.extension.JpaAlternativa;
+import jpa.extension.JpaConfiguracoes;
 import jpa.extension.JpaFuncionalidades;
 import jpa.extension.JpaGuia;
 import jpa.extension.JpaHistorico;
@@ -89,6 +90,10 @@ public class Facade {
     
     public JpaTarefa initializeTarefa(){
         return new JpaTarefa(Connection.connect()); 
+    }
+    
+    public JpaConfiguracoes initializeJpaConfiguracoes(){
+        return new JpaConfiguracoes(Connection.connect()); 
     }
 
 }

@@ -24,7 +24,7 @@ import model.Organizacao;
 
 /**
  *
- * @author Bleno Vale
+ * @author Spider
  */
 public class OrganizacaoJpaController implements Serializable {
 
