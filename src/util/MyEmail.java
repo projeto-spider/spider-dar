@@ -3,6 +3,7 @@ package util;
 import org.apache.commons.mail.DefaultAuthenticator;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.HtmlEmail;
+import settings.Facade;
 
 /**
  *
@@ -14,6 +15,7 @@ public class MyEmail {
     private String password;
     private String host;
     private int port;
+    private Facade facade = Facade.getInstance();
 
     public MyEmail() {
 //        sender = "iuri.raiol@icen.ufpa.br";
@@ -38,19 +40,19 @@ public class MyEmail {
                 + "Olá, " + name + "<br><br>"
                 + "Sua nova senha é: " + newPassword
                 + "</html>";
-        sendEmail(address, subject, message, 2 );
+        sendEmail(address, subject, message, facade.initializeJpaConfiguracoes().findConfiguracoes(1).getTipoCript() );
     }
         
-    private void sendEmail(String address, String subject, String message, int operation) {
+    private void sendEmail(String address, String subject, String message, String operation) {
         
         switch(operation) {
-            case (1) :
+            case ("Nenhum") :
                 sendEmailWithoutCript(address, subject, message);
                 break;
-            case (2) :
+            case ("SSL") :
                 sendEmailSSL(address, subject, message);
                 break;
-            case (3) :
+            case ("TLS") :
                 sendEmailTLS(address, subject, message);
                 break; 
         }

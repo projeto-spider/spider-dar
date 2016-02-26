@@ -118,4 +118,13 @@ public class ControllerConfiguracoes {
             throw error;
         }
     }
+    
+    public boolean validateEmail(String email) {
+        try {
+            String regular_expression = "[A-Za-z0-9\\._-]+@[A-Za-z0-9]+(\\.[A-Za-z]+)+(\\.[A-Za-z]+)*";
+            return email.matches(regular_expression);
+        } catch (Exception error) {
+            throw error;
+        }
+    }
 }

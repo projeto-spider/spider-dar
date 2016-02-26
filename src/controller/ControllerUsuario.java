@@ -371,20 +371,20 @@ public class ControllerUsuario {
         }
 
     }
-
+    
     public void createNewPassword(Usuario usuario) {
         try {
             //cria string aleatória de 6 digitos.
             UUID uuid = UUID.randomUUID();
             String newPassword = uuid.toString().substring(0, 6);
-
-            new MyEmail().SendNewPassword(usuario.getEmail(), usuario.getNome(), newPassword);
+            
+            MyEmail myEmail =  new MyEmail();
+            myEmail.SendNewPassword(usuario.getEmail(), usuario.getNome(), newPassword);
 
             String newPasswordCrip = criptografia.encryptMessage(newPassword);
             usuario.setSenha(newPasswordCrip);
 
             facade.initializeJpaUsuario().edit(usuario);
-
         } catch (Exception error) {
             error.printStackTrace();
             JOptionPane.showMessageDialog(null, "Erro inesperado.");

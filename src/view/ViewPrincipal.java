@@ -155,8 +155,6 @@ public class ViewPrincipal extends javax.swing.JFrame {
             .addGap(0, 473, Short.MAX_VALUE)
         );
 
-        jPanel2.setBackground(new java.awt.Color(65, 65, 65));
-
         jButton1.setText("<html>Selecionar<br>Organização</html>");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

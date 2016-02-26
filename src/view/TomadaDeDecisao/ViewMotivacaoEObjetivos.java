@@ -89,8 +89,9 @@ public class ViewMotivacaoEObjetivos extends javax.swing.JInternalFrame {
         jTableEnvolvidos = new javax.swing.JTable();
 
         jTextField1.setEditable(false);
-        jTextField1.setBackground(new java.awt.Color(246, 179, 111));
+        jTextField1.setBackground(new java.awt.Color(31, 109, 165));
         jTextField1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jTextField1.setForeground(new java.awt.Color(255, 255, 255));
         jTextField1.setText(" Motivação e Objetivos");
         jTextField1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 

@@ -49,8 +49,7 @@ public class ViewProblema extends javax.swing.JInternalFrame {
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents()
-    {
+    private void initComponents() {
 
         jTextField1 = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -61,30 +60,27 @@ public class ViewProblema extends javax.swing.JInternalFrame {
         jButtonCadastrarProblema = new javax.swing.JButton();
 
         jTextField1.setEditable(false);
-        jTextField1.setBackground(new java.awt.Color(246, 179, 111));
+        jTextField1.setBackground(new java.awt.Color(31, 109, 165));
         jTextField1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jTextField1.setForeground(new java.awt.Color(255, 255, 255));
         jTextField1.setText(" Problemas Cadastrados");
         jTextField1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
         jTableProblemas.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][]
-            {
+            new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
                 {null, null, null, null},
                 {null, null, null, null}
             },
-            new String []
-            {
+            new String [] {
                 "Código", "Nome do Problema", "Criado em", "Modificado em"
             }
         ));
         jScrollPane1.setViewportView(jTableProblemas);
 
-        jTextFieldProblemaPesquisa.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        jTextFieldProblemaPesquisa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextFieldProblemaPesquisaActionPerformed(evt);
             }
         });
@@ -92,19 +88,15 @@ public class ViewProblema extends javax.swing.JInternalFrame {
         jLabel1.setText("Pesquisar:");
 
         jButtonEditarProblema.setText("Editar");
-        jButtonEditarProblema.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        jButtonEditarProblema.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonEditarProblemaActionPerformed(evt);
             }
         });
 
         jButtonCadastrarProblema.setText("Novo");
-        jButtonCadastrarProblema.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        jButtonCadastrarProblema.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonCadastrarProblemaActionPerformed(evt);
             }
         });

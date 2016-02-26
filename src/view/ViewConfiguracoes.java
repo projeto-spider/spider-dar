@@ -1,6 +1,7 @@
 package view;
 
 import controller.ControllerConfiguracoes;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.JOptionPane;
@@ -21,7 +22,6 @@ public class ViewConfiguracoes extends javax.swing.JDialog {
 
         buttonGruop();
         fillFields();
-        jRadioButtonSSL.setSelected(true);
         this.setLocationRelativeTo(null);
     }
 
@@ -42,8 +42,8 @@ public class ViewConfiguracoes extends javax.swing.JDialog {
     }
 
     public boolean fieldValidation() {
-        if (jTextFieldEmail.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "O campo \"E-mail\" é obrigatório.");
+        if (!controllerConfiguracoes.validateEmail(jTextFieldEmail.getText())) {
+            JOptionPane.showMessageDialog(this,"Campo \"E-mail\" não é um endereço válido.");
             return false;
         } else if (jPasswordFieldSenha.getPassword().length < 1) {
             JOptionPane.showMessageDialog(this, "O campo \"Senha\" é obrigatório.");
@@ -54,8 +54,18 @@ public class ViewConfiguracoes extends javax.swing.JDialog {
         } else if (jTextFieldServidor.getText().isEmpty()) {
             JOptionPane.showMessageDialog(this, "O campo \"Servidor\" é obrigatório.");
             return false;
+        } else if (!Arrays.equals(jPasswordFieldSenha.getPassword(), jPasswordFieldConfirmaSenha.getPassword())) {
+            JOptionPane.showMessageDialog(this,"Campos \"Senha\"  e \"Confirmar senha\" não correspondem.");
+            return false;
         } else {
             return true;
+        }
+    }
+    
+    public void jTextFieldSomenteNumeros(java.awt.event.KeyEvent evt) {
+        String caracteres = "9876543210";
+        if (!caracteres.contains(evt.getKeyChar() + "")) {
+            evt.consume();
         }
     }
 
@@ -125,6 +135,8 @@ public class ViewConfiguracoes extends javax.swing.JDialog {
         jRadioButtonSSL = new javax.swing.JRadioButton();
         jRadioButtonTLS = new javax.swing.JRadioButton();
         jRadioButtonNenhum = new javax.swing.JRadioButton();
+        jLabel6 = new javax.swing.JLabel();
+        jPasswordFieldConfirmaSenha = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Configurações");
@@ -149,6 +161,12 @@ public class ViewConfiguracoes extends javax.swing.JDialog {
             }
         });
 
+        jTextFieldPorta.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextFieldPortaKeyTyped(evt);
+            }
+        });
+
         jLabel7.setText("Porta SMTP:");
 
         jPanelTipoCript.setBorder(javax.swing.BorderFactory.createTitledBorder("Tipo de Criptografia:"));
@@ -169,7 +187,7 @@ public class ViewConfiguracoes extends javax.swing.JDialog {
                 .addComponent(jRadioButtonTLS)
                 .addGap(18, 18, 18)
                 .addComponent(jRadioButtonNenhum)
-                .addGap(0, 175, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanelTipoCriptLayout.setVerticalGroup(
             jPanelTipoCriptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -178,6 +196,8 @@ public class ViewConfiguracoes extends javax.swing.JDialog {
                 .addComponent(jRadioButtonTLS)
                 .addComponent(jRadioButtonNenhum))
         );
+
+        jLabel6.setText("Confirmar senha:");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -203,9 +223,15 @@ public class ViewConfiguracoes extends javax.swing.JDialog {
                         .addComponent(jPasswordFieldSenha))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButtonSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(4, 4, 4)
-                        .addComponent(jButtonCancelar)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(jButtonSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(4, 4, 4)
+                                .addComponent(jButtonCancelar))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(jLabel6)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jPasswordFieldConfirmaSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 287, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -219,6 +245,10 @@ public class ViewConfiguracoes extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(jPasswordFieldSenha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(jPasswordFieldConfirmaSenha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
@@ -246,6 +276,10 @@ public class ViewConfiguracoes extends javax.swing.JDialog {
     private void jButtonCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelarActionPerformed
         this.dispose();
     }//GEN-LAST:event_jButtonCancelarActionPerformed
+
+    private void jTextFieldPortaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldPortaKeyTyped
+        jTextFieldSomenteNumeros(evt);
+    }//GEN-LAST:event_jTextFieldPortaKeyTyped
 
     /**
      * @param args the command line arguments
@@ -296,8 +330,10 @@ public class ViewConfiguracoes extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanelTipoCript;
+    private javax.swing.JPasswordField jPasswordFieldConfirmaSenha;
     private javax.swing.JPasswordField jPasswordFieldSenha;
     private javax.swing.JRadioButton jRadioButtonNenhum;
     private javax.swing.JRadioButton jRadioButtonSSL;
