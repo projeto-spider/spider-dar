@@ -3,6 +3,7 @@ package view.TomadaDeDecisao;
 import controller.ControllerAlternativa;
 import java.awt.Color;
 import java.util.List;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import util.Internal;
 import util.MyCellRenderer;
@@ -29,14 +30,15 @@ public class ViewAlternativaDeSolucao extends javax.swing.JInternalFrame {
     }
 
     private void listAlternativasInTable(List<Request> requestList) {
-        String columns[] = {"id", "Alternativa", "Descrição", "Custo", "Tempo", "Criada em"};
-        myDefaultTableModel = new MyDefaultTableModel(columns, 0, false);
+        ImageIcon icon = new ImageIcon(getClass().getResource("/resources/image/alternatives.png"));
+        String columns[] = {"id", " ", "Alternativa", "Custo", "Tempo", "Criada em"};
+        myDefaultTableModel = new MyDefaultTableModel(columns, 0, false, true, 2);
 
         for (Request request : requestList) {
-            String line[] = {
+            Object line[] = {
                 request.getData("Alternativa.id"),
+                icon,
                 request.getData("Alternativa.nome"),
-                request.getData("Alternativa.descricao"),
                 request.getData("Alternativa.estimativaCusto"),
                 request.getData("Alternativa.estimativaTempo"),
                 request.getData("Alternativa.created")
@@ -50,11 +52,12 @@ public class ViewAlternativaDeSolucao extends javax.swing.JInternalFrame {
         // transformar as celulas da tabela em textArea.
         jTableAlternativas.setDefaultRenderer(Object.class, new MyCellRenderer());
 
-        jTableAlternativas.getColumnModel().getColumn(0).setPreferredWidth(230);
+        jTableAlternativas.getColumnModel().getColumn(0).setPreferredWidth(45);
         jTableAlternativas.getColumnModel().getColumn(1).setPreferredWidth(430);
-        jTableAlternativas.getColumnModel().getColumn(2).setPreferredWidth(70);
-        jTableAlternativas.getColumnModel().getColumn(3).setPreferredWidth(70);
+        jTableAlternativas.getColumnModel().getColumn(2).setPreferredWidth(140);
+        jTableAlternativas.getColumnModel().getColumn(3).setPreferredWidth(140);
         jTableAlternativas.getColumnModel().getColumn(4).setPreferredWidth(140);
+        jTableAlternativas.setRowHeight(25);
         
         jTableAlternativas.setGridColor(new Color(229,229,229)); 
 
@@ -119,7 +122,7 @@ public class ViewAlternativaDeSolucao extends javax.swing.JInternalFrame {
         jTableAlternativas.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jScrollPane1.setViewportView(jTableAlternativas);
 
-        jLabel1.setText("Pesquisar:");
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/image/spyglass.png"))); // NOI18N
 
         jTextFieldPesquisa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -158,9 +161,10 @@ public class ViewAlternativaDeSolucao extends javax.swing.JInternalFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1)
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(8, 8, 8)
                         .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextFieldPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jTextFieldPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 252, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
@@ -176,7 +180,7 @@ public class ViewAlternativaDeSolucao extends javax.swing.JInternalFrame {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel1)
                     .addComponent(jTextFieldPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
