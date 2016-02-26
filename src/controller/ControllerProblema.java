@@ -10,9 +10,12 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import jpa.extension.JpaProblema;
+import model.Keyword;
 import model.Problema;
 import settings.Facade;
+import util.Input;
 import util.Request;
 import util.Text;
 
@@ -40,6 +43,27 @@ public class ControllerProblema
             problema.setIdOrganizacao(facade.initializeJpaOrganizacao().findOrganizacao(idOrganizacao));
             problema.setCreated(new Date());
             problema.setModified(new Date());
+            
+            List<Keyword> keywordList = new ArrayList<>();
+            
+            HashMap<String,Input> fields = request.getAllHashMapDataInputs();
+            
+            int listSize = 3;
+
+            for (int keywordIndex = 0; keywordIndex < listSize; keywordIndex++)
+            {
+                for(Entry<String,Input> entry : fields.entrySet())
+                {
+                    Input fieldToInsert = entry.getValue();
+                    
+                    if (entry.getKey() == "Keyword." + keywordIndex + ".nome")
+                    {
+                        
+                    }
+                }
+            }
+            
+            problema.setKeywordList(keywordList);
             
             jpaProblema.create(problema);
         }
