@@ -8,6 +8,7 @@ import jpa.extension.JpaConfiguracoes;
 import jpa.extension.JpaFuncionalidades;
 import jpa.extension.JpaGuia;
 import jpa.extension.JpaHistorico;
+import jpa.extension.JpaKeyword;
 import jpa.extension.JpaOrganizacao;
 import jpa.extension.JpaPerfil;
 import jpa.extension.JpaProblema;
@@ -28,7 +29,7 @@ public class Facade {
 
     private JpaOrganizacao jpaOrganizacao;
 
-    private Facade() {
+    public Facade() {
 
     }
 
@@ -95,5 +96,9 @@ public class Facade {
     public JpaConfiguracoes initializeJpaConfiguracoes(){
         return new JpaConfiguracoes(Connection.connect()); 
     }
-
+    
+    public JpaKeyword initializeJpaKeyword()
+    {
+        return new JpaKeyword(Connection.connect());
+    }
 }

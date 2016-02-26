@@ -18,11 +18,13 @@ import util.Request;
  *
  * @author Bleno Vale
  */
-public class JpaProblema extends ProblemaJpaController {
+public class JpaProblema extends ProblemaJpaController{
 
     public JpaProblema(EntityManagerFactory emf) {
         super(emf);
     }
+    
+    
 
     public List<Problema> findProblemasByIdOrganizacao(int idOrg) {
         try {

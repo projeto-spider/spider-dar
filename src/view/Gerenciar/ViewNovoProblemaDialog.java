@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
+import javax.swing.ListModel;
 import net.sf.nachocalendar.holidays.DefaultHoliDay;
 import settings.Constant;
 import settings.KeepData;
@@ -228,29 +229,93 @@ public class ViewNovoProblemaDialog extends javax.swing.JDialog
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    static class fieldTypeValue
+    {
+        public static final int TEXT = 1;
+        public static final int TEXTAREA = 2;
+        public static final int HIDDEN = 3;
+        public static final int LIST = 4;
+    }
+    
     private boolean isValidData(Request request)
     {
         HashMap<String, Input> fields = request.getAllHashMapDataInputs();
-     
         int fieldsSize = fields.size();
-        
+
         for (int index = 1; index <= fieldsSize; index++)
         {
             for (Map.Entry<String, Input> entry: fields.entrySet())
             {
                 Input inputToValidate = entry.getValue();
-                
-                boolean isNotEqualsToHidden = !(inputToValidate.getTipo().equals("hidden"));
-                
-                if (index == inputToValidate.getOrdem() && isNotEqualsToHidden)
+
+                if (index == inputToValidate.getOrdem())
                 {
-                    if (inputToValidate.getValor().isEmpty())
+                    HashMap<String,Integer> caseHash = new HashMap<>();
+                    caseHash.put("text", 1);
+                    caseHash.put("textarea", 2);
+                    caseHash.put("hidden", 3);
+                    caseHash.put("list", 4);
+                    
+                    String fieldType = inputToValidate.getTipo();
+                    
+                    int caseThisValue = caseHash.containsKey(fieldType) ? caseHash.get(fieldType) : -1;
+                    
+                    switch (caseThisValue)
                     {
-                        JOptionPane.showMessageDialog(null, "Campo Obigatório: " + inputToValidate.getNome(),"ERRO AO CADASTRAR", JOptionPane.ERROR_MESSAGE);
-                        return false;
+                        case fieldTypeValue.TEXT:
+                            if(!this.isValidText(inputToValidate))
+                                return false;
+                            break;
+                        case fieldTypeValue.TEXTAREA:
+                            if(!this.isValidTextarea(inputToValidate))
+                                return false;
+                            break;
+                        case fieldTypeValue.HIDDEN:
+                            break;
+                        case fieldTypeValue.LIST:
+                            if (!this.isValidListField(inputToValidate))
+                                return false;
+                            break;
+                        default:
+                            JOptionPane.showMessageDialog(null, "Campo Obigatório: " + inputToValidate.getNome(),"ERRO AO CADASTRAR", JOptionPane.ERROR_MESSAGE);
+                            return false;
                     }
                 }
             }
+        }
+        return true;
+    }
+    
+    private boolean isValidText(Input inputToValidate)
+    {
+        if (inputToValidate.getValor().trim().length() <= 0)
+        {
+            JOptionPane.showMessageDialog(null, "Campo Obigatório: " + inputToValidate.getNome(),"ERRO AO CADASTRAR", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        return true;
+    }
+    
+    private boolean isValidTextarea(Input inputToValidate)
+    {
+        String newline = System.getProperty("line.separator");
+        
+        boolean hasNewline = inputToValidate.getValor().contains(newline);
+        
+        if (inputToValidate.getValor().trim().length() <= 0 || hasNewline)
+        {
+            JOptionPane.showMessageDialog(null, "Campo Obigatório: " + inputToValidate.getNome(),"ERRO AO CADASTRAR", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        return true;
+    }
+    
+    private boolean isValidListField(Input inputToValidate)
+    {
+        if (inputToValidate.getValor().trim().length() <= 0)
+        {
+            JOptionPane.showMessageDialog(null, "Campo Obigatório: " + inputToValidate.getNome(),"ERRO AO CADASTRAR", JOptionPane.ERROR_MESSAGE);
+            return false;
         }
         return true;
     }
@@ -260,13 +325,31 @@ public class ViewNovoProblemaDialog extends javax.swing.JDialog
         request.setHashMapValueToInput();
         
         request.setDataInput("Problema.nome", new Input(1, "text", "Nome do Problema", jTextFieldProblemaNome.getText()));
-        request.setDataInput("Problema.proposito", new Input(3, "textarea", "Propósito", jTextAreaProblemaProposito.getText()));
-        request.setDataInput("Problema.planejamento", new Input(4, "textarea", "Planejamento", jTextAreaProblemaPlanejamento.getText()));
-        request.setDataInput("Problema.contexto", new Input(5, "textarea", "Contexto/Cenário", jTextAreaProblemaContexto.getText()));
-        request.setDataInput("Problema.idOrganizacao", new Input(6, "hidden", "idOrganizacao", KeepData.getData("Organizacao.id")));
+        request.setDataInput("Problema.proposito", new Input(2, "textarea", "Propósito", jTextAreaProblemaProposito.getText()));
+        request.setDataInput("Problema.planejamento", new Input(3, "textarea", "Planejamento", jTextAreaProblemaPlanejamento.getText()));
+        request.setDataInput("Problema.contexto", new Input(4, "textarea", "Contexto/Cenário", jTextAreaProblemaContexto.getText()));
+        request.setDataInput("Problema.idOrganizacao", new Input(5, "hidden", "idOrganizacao", KeepData.getData("Organizacao.id")));
+        
+        ListModel listModel = jListKeywords.getModel();
+        int keywordIndex;
+        boolean isEmptyList = false;
+        
+        if (listModel.getSize() > 0)
+        {
+            for (keywordIndex = 0; keywordIndex < listModel.getSize(); keywordIndex++)
+                request.setDataInput("Keyword."+ keywordIndex + ".nome", new Input(6, "list", "Palavras-Chave", listModel.getElementAt(keywordIndex).toString()));
+        }
+        else
+            isEmptyList = true;
         
         if (!this.isValidData(request))
             return;
+        
+        if (isEmptyList)
+        {
+            JOptionPane.showMessageDialog(null, "É necessário cadastrar pelo menos 01 (uma) Palavra-chave.");
+            return;
+        }
         
         try
         {
@@ -297,8 +380,15 @@ public class ViewNovoProblemaDialog extends javax.swing.JDialog
         
         if (!(numberElements > 2))
         {
-            String value = JOptionPane.showInputDialog("Insira uma Palavra Chave");
-            myJListModel.addElement(new ComboItem(String.valueOf(numberElements), value));
+            String value = JOptionPane.showInputDialog("Insira uma Palavra-Chave");
+            
+            if (value != null)
+            {
+                if (value.trim().length() > 0)
+                    myJListModel.addElement(new ComboItem(String.valueOf(numberElements), value));
+                else
+                   JOptionPane.showMessageDialog(null,"texto não pode ser vazio ou espaços em branco");
+            }
         }
         else
             JOptionPane.showMessageDialog(null, "Somente 3 palavras chaves no máximo!");
@@ -314,8 +404,6 @@ public class ViewNovoProblemaDialog extends javax.swing.JDialog
             JOptionPane.showMessageDialog(null, "Selecione uma das palavras para excluir"); 
         else
             myJListModel.remove(indexItemSelected);
-        
-        JOptionPane.showMessageDialog(null, indexItemSelected);
     }
 
     private void jButtonCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelarActionPerformed
