@@ -127,6 +127,7 @@ public class ViewConfiguracoes extends javax.swing.JDialog {
         jRadioButtonNenhum = new javax.swing.JRadioButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Configurações");
 
         jLabel1.setText("E-mail de envio:");
 
