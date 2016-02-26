@@ -19,7 +19,7 @@ import model.Problema;
 
 /**
  *
- * @author Spider
+ * @author Bleno Vale
  */
 public class HistoricoJpaController implements Serializable {
 

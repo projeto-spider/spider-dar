@@ -23,7 +23,7 @@ import model.Avaliar;
 
 /**
  *
- * @author Spider
+ * @author Bleno Vale
  */
 public class AlternativaJpaController implements Serializable {
 

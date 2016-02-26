@@ -24,7 +24,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author Spider
+ * @author Bleno Vale
  */
 @Entity
 @Table(name = "nota")
@@ -138,8 +138,9 @@ public class Nota implements Serializable {
             return false;
         }
         Nota other = (Nota) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)))
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
+        }
         return true;
     }
 

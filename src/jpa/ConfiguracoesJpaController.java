@@ -18,7 +18,7 @@ import model.Configuracoes;
 
 /**
  *
- * @author Spider
+ * @author Bleno Vale
  */
 public class ConfiguracoesJpaController implements Serializable {
 

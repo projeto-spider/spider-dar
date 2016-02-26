@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author Spider
+ * @author Bleno Vale
  */
 @Entity
 @Table(name = "acessar")
@@ -109,8 +109,9 @@ public class Acessar implements Serializable {
             return false;
         }
         Acessar other = (Acessar) object;
-        if ((this.acessarPK == null && other.acessarPK != null) || (this.acessarPK != null && !this.acessarPK.equals(other.acessarPK)))
+        if ((this.acessarPK == null && other.acessarPK != null) || (this.acessarPK != null && !this.acessarPK.equals(other.acessarPK))) {
             return false;
+        }
         return true;
     }
 

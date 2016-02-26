@@ -600,7 +600,7 @@ public class ViewPrincipal extends javax.swing.JFrame {
 
     private void jButtonCalendarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCalendarioActionPerformed
         changeViews(viewTarefas);
-        viewTarefas.showViewTarefas();
+        viewTarefas.reloadViewTarefas();
     }//GEN-LAST:event_jButtonCalendarioActionPerformed
 
     private void jButtonAlternativasStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jButtonAlternativasStateChanged

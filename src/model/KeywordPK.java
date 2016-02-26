@@ -12,7 +12,7 @@ import javax.persistence.Embeddable;
 
 /**
  *
- * @author Spider
+ * @author Bleno Vale
  */
 @Embeddable
 public class KeywordPK implements Serializable {
@@ -62,10 +62,12 @@ public class KeywordPK implements Serializable {
             return false;
         }
         KeywordPK other = (KeywordPK) object;
-        if (this.id != other.id)
+        if (this.id != other.id) {
             return false;
-        if (this.idForeignKey != other.idForeignKey)
+        }
+        if (this.idForeignKey != other.idForeignKey) {
             return false;
+        }
         return true;
     }
 

@@ -9,6 +9,7 @@ import java.util.Map;
 import javax.swing.JOptionPane;
 import model.Historico;
 import model.Tarefa;
+import settings.Constant;
 import settings.Facade;
 import settings.KeepData;
 import util.Request;
@@ -44,6 +45,7 @@ public class ControllerTarefas {
             historico = new Historico();
             historico.setDescricao("Tarefa \"" + tarefa.getNome() + "\" foi Cadastrada.");
             historico.setUsuarioNome(KeepData.getData("Usuario.nome"));
+            historico.setTipo(Constant.FUC_TAREFAS); 
             historico.setCreated(new Date());
             historico.setModified(new Date());
             historico.setIdProblema(facade.initializeJpaProblema().findProblema(idProblema));
@@ -65,7 +67,7 @@ public class ControllerTarefas {
 
         if (date.compareTo(now) < 0) {
             return true;
-        } else{
+        } else {
             return false;
         }
     }
@@ -89,6 +91,7 @@ public class ControllerTarefas {
             historico = new Historico();
             historico.setDescricao("Tarefa \"" + tarefa.getNome() + "\" foi Editada.");
             historico.setUsuarioNome(KeepData.getData("Usuario.nome"));
+            historico.setTipo(Constant.FUC_TAREFAS); 
             historico.setCreated(new Date());
             historico.setModified(new Date());
             historico.setIdProblema(tarefa.getIdProblema());
@@ -137,6 +140,7 @@ public class ControllerTarefas {
             historico = new Historico();
             historico.setDescricao("Tarefa \"" + tarefa.getNome() + "\" foi Excluída.");
             historico.setUsuarioNome(KeepData.getData("Usuario.nome"));
+            historico.setTipo(Constant.FUC_TAREFAS); 
             historico.setCreated(new Date());
             historico.setModified(new Date());
             historico.setIdProblema(facade.initializeJpaProblema().findProblema(tarefa.getIdProblema().getId()));
@@ -150,6 +154,24 @@ public class ControllerTarefas {
     public List<Request> listTarefasByProjeto(int idProjeto) {
         try {
             List<Tarefa> list = facade.initializeTarefa().findTarefaByIdProblema(idProjeto);
+            return getRequesytListTarefas(list);
+        } catch (Exception error) {
+            throw error;
+        }
+    }
+
+    public List<Request> listTarefasBySearch(String nome, boolean isFeito, boolean isEmAndamento, int idProjeto) {
+        try {
+            List<Tarefa> list = new ArrayList<>();
+
+            if (isFeito && isEmAndamento == false) {
+                list = facade.initializeTarefa().findTarefaByPartNomeAndFeitoAndIdProjeto(nome, true, idProjeto);
+            } else if (isFeito  == false && isEmAndamento) {
+                list = facade.initializeTarefa().findTarefaByPartNomeAndFeitoAndIdProjeto(nome, false, idProjeto);
+            } else {
+                list = facade.initializeTarefa().findTarefaByPartNomeAndIdProjeto(nome, idProjeto);
+            }
+
             return getRequesytListTarefas(list);
         } catch (Exception error) {
             throw error;

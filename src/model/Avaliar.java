@@ -22,7 +22,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author Spider
+ * @author Bleno Vale
  */
 @Entity
 @Table(name = "avaliar")
@@ -135,8 +135,9 @@ public class Avaliar implements Serializable {
             return false;
         }
         Avaliar other = (Avaliar) object;
-        if ((this.avaliarPK == null && other.avaliarPK != null) || (this.avaliarPK != null && !this.avaliarPK.equals(other.avaliarPK)))
+        if ((this.avaliarPK == null && other.avaliarPK != null) || (this.avaliarPK != null && !this.avaliarPK.equals(other.avaliarPK))) {
             return false;
+        }
         return true;
     }
 

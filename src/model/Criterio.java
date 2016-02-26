@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Spider
+ * @author Bleno Vale
  */
 @Entity
 @Table(name = "criterio")
@@ -174,8 +174,9 @@ public class Criterio implements Serializable {
             return false;
         }
         Criterio other = (Criterio) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)))
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
+        }
         return true;
     }
 

@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import model.Alternativa;
 import model.Historico;
+import settings.Constant;
 import settings.Facade;
 import settings.KeepData;
 import util.Request;
@@ -41,6 +42,7 @@ public class ControllerAlternativa {
             historico = new Historico();
             historico.setDescricao("Alternativa \"" + alternativa.getNome() + "\" foi Cadastrada.");
             historico.setUsuarioNome(KeepData.getData("Usuario.nome"));
+            historico.setTipo(Constant.FUC_ALTERNATIVAS); 
             historico.setCreated(new Date());
             historico.setModified(new Date());
             historico.setIdProblema(facade.initializeJpaProblema().findProblema(idProblema));
@@ -67,6 +69,7 @@ public class ControllerAlternativa {
             historico = new Historico();
             historico.setDescricao("Alternativa \"" + alternativa.getNome() + "\" foi Editada.");
             historico.setUsuarioNome(KeepData.getData("Usuario.nome"));
+            historico.setTipo(Constant.FUC_ALTERNATIVAS);  
             historico.setCreated(new Date());
             historico.setModified(new Date());
             historico.setIdProblema(facade.initializeJpaProblema().findProblema(alternativa.getIdProblema().getId()));
@@ -159,6 +162,7 @@ public class ControllerAlternativa {
             historico = new Historico();
             historico.setDescricao("Alternativa \"" + alternativa.getNome() + "\" foi Excluída.");
             historico.setUsuarioNome(KeepData.getData("Usuario.nome"));
+            historico.setTipo(Constant.FUC_ALTERNATIVAS); 
             historico.setCreated(new Date());
             historico.setModified(new Date());
             historico.setIdProblema(facade.initializeJpaProblema().findProblema(alternativa.getIdProblema().getId()));  

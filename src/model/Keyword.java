@@ -22,7 +22,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author Spider
+ * @author Bleno Vale
  */
 @Entity
 @Table(name = "keyword")
@@ -125,8 +125,9 @@ public class Keyword implements Serializable {
             return false;
         }
         Keyword other = (Keyword) object;
-        if ((this.keywordPK == null && other.keywordPK != null) || (this.keywordPK != null && !this.keywordPK.equals(other.keywordPK)))
+        if ((this.keywordPK == null && other.keywordPK != null) || (this.keywordPK != null && !this.keywordPK.equals(other.keywordPK))) {
             return false;
+        }
         return true;
     }
 

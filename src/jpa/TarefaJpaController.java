@@ -19,7 +19,7 @@ import model.Tarefa;
 
 /**
  *
- * @author Spider
+ * @author Bleno Vale
  */
 public class TarefaJpaController implements Serializable {
 

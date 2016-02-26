@@ -27,7 +27,7 @@ import model.Problema;
 
 /**
  *
- * @author Spider
+ * @author Bleno Vale
  */
 public class ProblemaJpaController implements Serializable {
 

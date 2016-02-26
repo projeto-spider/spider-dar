@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author Spider
+ * @author Bleno Vale
  */
 @Entity
 @Table(name = "historico")
@@ -33,6 +33,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "Historico.findAll", query = "SELECT h FROM Historico h"),
     @NamedQuery(name = "Historico.findById", query = "SELECT h FROM Historico h WHERE h.id = :id"),
+    @NamedQuery(name = "Historico.findByTipo", query = "SELECT h FROM Historico h WHERE h.tipo = :tipo"),
     @NamedQuery(name = "Historico.findByUsuarioNome", query = "SELECT h FROM Historico h WHERE h.usuarioNome = :usuarioNome"),
     @NamedQuery(name = "Historico.findByCreated", query = "SELECT h FROM Historico h WHERE h.created = :created"),
     @NamedQuery(name = "Historico.findByModified", query = "SELECT h FROM Historico h WHERE h.modified = :modified")})
@@ -47,6 +48,9 @@ public class Historico implements Serializable {
     @Lob
     @Column(name = "descricao")
     private String descricao;
+    @Basic(optional = false)
+    @Column(name = "tipo")
+    private int tipo;
     @Basic(optional = false)
     @Column(name = "usuarioNome")
     private String usuarioNome;
@@ -69,9 +73,10 @@ public class Historico implements Serializable {
         this.id = id;
     }
 
-    public Historico(Integer id, String descricao, String usuarioNome, Date created, Date modified) {
+    public Historico(Integer id, String descricao, int tipo, String usuarioNome, Date created, Date modified) {
         this.id = id;
         this.descricao = descricao;
+        this.tipo = tipo;
         this.usuarioNome = usuarioNome;
         this.created = created;
         this.modified = modified;
@@ -91,6 +96,14 @@ public class Historico implements Serializable {
 
     public void setDescricao(String descricao) {
         this.descricao = descricao;
+    }
+
+    public int getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(int tipo) {
+        this.tipo = tipo;
     }
 
     public String getUsuarioNome() {
@@ -139,8 +152,9 @@ public class Historico implements Serializable {
             return false;
         }
         Historico other = (Historico) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)))
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
+        }
         return true;
     }
 

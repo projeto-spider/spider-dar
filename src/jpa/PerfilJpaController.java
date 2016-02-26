@@ -24,7 +24,7 @@ import model.Perfil;
 
 /**
  *
- * @author Spider
+ * @author Bleno Vale
  */
 public class PerfilJpaController implements Serializable {
 
