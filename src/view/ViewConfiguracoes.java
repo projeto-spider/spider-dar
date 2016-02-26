@@ -4,8 +4,6 @@ import controller.ControllerConfiguracoes;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.JOptionPane;
-import model.Configuracoes;
-import settings.Constant;
 import util.Request;
 
 /**
@@ -14,37 +12,34 @@ import util.Request;
  */
 public class ViewConfiguracoes extends javax.swing.JDialog {
 
-    private int type;
-    private Configuracoes configuracoes;
     private Request request;
     private final ControllerConfiguracoes controllerConfiguracoes = new ControllerConfiguracoes();
-    
+
     public ViewConfiguracoes(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        
+
         buttonGruop();
         fillFields();
         jRadioButtonSSL.setSelected(true);
         this.setLocationRelativeTo(null);
     }
-    
+
     private void buttonGruop() {
         buttonGroup.add(jRadioButtonSSL);
         buttonGroup.add(jRadioButtonTLS);
         buttonGroup.add(jRadioButtonNenhum);
     }
-    
-     
+
     private String getSelectedTipoCript() {
-        if (jRadioButtonSSL.isSelected())
+        if (jRadioButtonSSL.isSelected()) {
             return "SSL";
-        else if (jRadioButtonTLS.isSelected()) {
+        } else if (jRadioButtonTLS.isSelected()) {
             return "TLS";
-        } else
+        } else {
             return "Nenhum";
+        }
     }
-    
 
     public boolean fieldValidation() {
         if (jTextFieldEmail.getText().isEmpty()) {
@@ -59,61 +54,57 @@ public class ViewConfiguracoes extends javax.swing.JDialog {
         } else if (jTextFieldServidor.getText().isEmpty()) {
             JOptionPane.showMessageDialog(this, "O campo \"Servidor\" é obrigatório.");
             return false;
-        } else
+        } else {
             return true;
+        }
     }
-    
-    private void selecionarCheckBox() {
-        if (configuracoes.getTipoCript().equals("SSL"))
-            jRadioButtonSSL.setSelected(true);
-        else if (configuracoes.getTipoCript().equals("TLS")) 
-            jRadioButtonTLS.setSelected(true);
-        else 
-            jRadioButtonNenhum.setSelected(true);
-    }
-    
-     private void fillFields() {
 
-        request = controllerConfiguracoes.findConfiguracao(); 
+    private void selecionarCheckBox() {
+        if (request.getData("Configuracoes.crip").equals("SSL")) {
+            jRadioButtonSSL.setSelected(true);
+        } else if (request.getData("Configuracoes.crip").equals("TLS")) {
+            jRadioButtonTLS.setSelected(true);
+        } else {
+            jRadioButtonNenhum.setSelected(true);
+        }
+    }
+
+    private void fillFields() {
+
+        request = controllerConfiguracoes.findConfiguracao();
 
         jTextFieldEmail.setText(request.getData("Configuracoes.email"));
         jPasswordFieldSenha.setText(request.getData("Configuracoes.senha"));
         jTextFieldServidor.setText(request.getData("Configuracoes.servidor"));
-        jTextFieldPorta.setText(request.getData("Configuracoes.porta"));  
+        jTextFieldPorta.setText(request.getData("Configuracoes.porta"));
         selecionarCheckBox();
     }
-     
-     
+
     private void save() {
         if (!fieldValidation()) {
             return;
         }
-        
+
         Map<String, String> data = new HashMap<>();
         data.put("Configuracoes.email", jTextFieldEmail.getText());
         String senha = new String(jPasswordFieldSenha.getPassword());
         data.put("Configuracoes.senha", senha);
         data.put("Configuracoes.porta", jTextFieldPorta.getText());
         data.put("Configuracoes.servidor", jTextFieldServidor.getText());
-        data.put("Configuracoes.tipoCript", getSelectedTipoCript());
-        
-        boolean isDone = false;
-        if (type == Constant.CREATE) {
-            request = new Request(data);
-            isDone = controllerConfiguracoes.createConfiguracao(request);
-        } else {
-            data.put("Configuracoes.id", request.getData("Configuracoes.id"));
-            request = new Request(data);
-            isDone = controllerConfiguracoes.updateConfiguracao(request);
-        }
-        
+        data.put("Configuracoes.crip", getSelectedTipoCript());
+
+        data.put("Configuracoes.id", request.getData("Configuracoes.id"));
+        request = new Request(data);
+        boolean isDone = controllerConfiguracoes.updateConfiguracao(request);
+
         if (isDone) {
             JOptionPane.showMessageDialog(null, "Salvo com Sucesso.");
+            this.dispose();
         } else {
             JOptionPane.showMessageDialog(null,
-                "Erro ao salvar.", "ERRO AO SALVAR", JOptionPane.ERROR_MESSAGE);
+                    "Erro ao salvar.", "ERRO AO SALVAR", JOptionPane.ERROR_MESSAGE);
         }
-    }    
+    }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents

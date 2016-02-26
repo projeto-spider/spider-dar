@@ -1,6 +1,7 @@
 package controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,7 +27,9 @@ public class ControllerConfiguracoes {
             configuracoes.setSenha(request.getData("Configuracoes.senha"));
             configuracoes.setPorta(request.getData("Configuracoes.porta"));
             configuracoes.setServidor(request.getData("Configuracoes.servidor"));
-            configuracoes.setTipoCript(request.getData("Configuracoes.tipoCript"));
+            configuracoes.setTipoCript(request.getData("Configuracoes.crip"));
+            configuracoes.setCreated(new Date());
+            configuracoes.setModified(new Date()); 
 
             facade.initializeJpaConfiguracoes().create(configuracoes);
             return true;
@@ -38,12 +41,14 @@ public class ControllerConfiguracoes {
     public boolean updateConfiguracao(Request request) {
         try {
             configuracoes = new Configuracoes();
+            configuracoes =  facade.initializeJpaConfiguracoes().findConfiguracoes(1);
 
             configuracoes.setEmail(request.getData("Configuracoes.email"));
             configuracoes.setSenha(request.getData("Configuracoes.senha"));
             configuracoes.setPorta(request.getData("Configuracoes.porta"));
             configuracoes.setServidor(request.getData("Configuracoes.servidor"));
-            configuracoes.setTipoCript(request.getData("Configuracoes.tipoCript"));
+            configuracoes.setTipoCript(request.getData("Configuracoes.crip"));
+            configuracoes.setModified(new Date()); 
 
             facade.initializeJpaConfiguracoes().edit(configuracoes);
             return true;
@@ -55,15 +60,17 @@ public class ControllerConfiguracoes {
     public Request findConfiguracao() {
         try {
             configuracoes = new Configuracoes();
+            configuracoes =  facade.initializeJpaConfiguracoes().findConfiguracoes(1);
 
             Map<String, String> data = new HashMap<>();
             data.put("Configuracoes.id", String.valueOf(configuracoes.getId()));
-            data.put("Configuracoes.email", configuracoes.getSenha());
-            data.put("Guia.caminhoguia", configuracoes.getPorta());
-            data.put("Guia.descricao", configuracoes.getServidor());
-            data.put("Guia.descricao", configuracoes.getTipoCript());
-            data.put("Guia.created", Text.formatDate(configuracoes.getCreated()));
-            data.put("Guia.modified", Text.formatDate(configuracoes.getModified()));
+            data.put("Configuracoes.email", configuracoes.getEmail());
+            data.put("Configuracoes.porta", configuracoes.getPorta());
+            data.put("Configuracoes.servidor", configuracoes.getServidor());
+            data.put("Configuracoes.senha", configuracoes.getSenha());
+            data.put("Configuracoes.crip", configuracoes.getTipoCript());
+            data.put("Configuracoes.created", Text.formatDate(configuracoes.getCreated()));
+            data.put("Configuracoes.modified", Text.formatDate(configuracoes.getModified()));
             return new Request(data);
         } catch (Exception error) {
             return null;
