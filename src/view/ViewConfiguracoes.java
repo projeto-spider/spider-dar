@@ -18,14 +18,13 @@ public class ViewConfiguracoes extends javax.swing.JDialog {
     private Configuracoes configuracoes;
     private Request request;
     private final ControllerConfiguracoes controllerConfiguracoes = new ControllerConfiguracoes();
-    private int idConfiguracoes;
     
     public ViewConfiguracoes(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         
         buttonGruop();
-        fillFields(this.idConfiguracoes);
+        fillFields();
         jRadioButtonSSL.setSelected(true);
         this.setLocationRelativeTo(null);
     }
@@ -36,14 +35,6 @@ public class ViewConfiguracoes extends javax.swing.JDialog {
         buttonGroup.add(jRadioButtonNenhum);
     }
     
-     private void selecionarCheckBox() {
-        if (configuracoes.getTipoCript().equals("SSL"))
-            jRadioButtonSSL.setSelected(true);
-        else if (configuracoes.getTipoCript().equals("TLS")) {
-            jRadioButtonTLS.setSelected(true);
-        } else 
-            jRadioButtonNenhum.setSelected(true);
-    }
      
     private String getSelectedTipoCript() {
         if (jRadioButtonSSL.isSelected())
@@ -72,11 +63,18 @@ public class ViewConfiguracoes extends javax.swing.JDialog {
             return true;
     }
     
-     private void fillFields(int idConfiguracoes) {
+    private void selecionarCheckBox() {
+        if (configuracoes.getTipoCript().equals("SSL"))
+            jRadioButtonSSL.setSelected(true);
+        else if (configuracoes.getTipoCript().equals("TLS")) 
+            jRadioButtonTLS.setSelected(true);
+        else 
+            jRadioButtonNenhum.setSelected(true);
+    }
+    
+     private void fillFields() {
 
-        request = new Request();
-        request = controllerConfiguracoes.findConfiguracoesById(idConfiguracoes);
-
+        request = controllerConfiguracoes.findConfiguracao(); 
 
         jTextFieldEmail.setText(request.getData("Configuracoes.email"));
         jPasswordFieldSenha.setText(request.getData("Configuracoes.senha"));
@@ -84,6 +82,7 @@ public class ViewConfiguracoes extends javax.swing.JDialog {
         jTextFieldPorta.setText(request.getData("Configuracoes.porta"));  
         selecionarCheckBox();
     }
+     
      
     private void save() {
         if (!fieldValidation()) {
@@ -112,7 +111,7 @@ public class ViewConfiguracoes extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(null, "Salvo com Sucesso.");
         } else {
             JOptionPane.showMessageDialog(null,
-                    "Erro ao salvar.", "ERRO AO SALVAR", JOptionPane.ERROR_MESSAGE);
+                "Erro ao salvar.", "ERRO AO SALVAR", JOptionPane.ERROR_MESSAGE);
         }
     }    
 
