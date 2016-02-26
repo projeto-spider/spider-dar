@@ -156,7 +156,7 @@
     </Component>
     <Component class="javax.swing.JCheckBox" name="jCheckBoxFeitas">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Feitas"/>
+        <Property name="text" type="java.lang.String" value="Conclu&#xed;das"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jCheckBoxFeitasActionPerformed"/>

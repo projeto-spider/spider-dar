@@ -66,7 +66,7 @@ public class ViewTarefas extends javax.swing.JInternalFrame {
     public void fillTable(List<Request> requestList) {
         ImageIcon icon = new ImageIcon(getClass().getResource("/resources/image/task.png"));
 
-        String columns[] = {"id", " ", "Feito", "Tarefa", "Marcador", "Prazo"};
+        String columns[] = {"id", " ", "Concluída", "Tarefa", "Marcador", "Prazo"};
         myDefaultTableModel = new MyDefaultTableModel(columns, 0, false, true, 2);
 
         for (Request request : requestList) {
@@ -195,7 +195,7 @@ public class ViewTarefas extends javax.swing.JInternalFrame {
             }
         });
 
-        jCheckBoxFeitas.setText("Feitas");
+        jCheckBoxFeitas.setText("Concluídas");
         jCheckBoxFeitas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jCheckBoxFeitasActionPerformed(evt);
