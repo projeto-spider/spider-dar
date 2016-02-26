@@ -21,15 +21,15 @@ public class MyEmail {
 //        host = "smtp.ufpa.br";
 //        port = 25;
         
-        sender = "luiz-odl@hotmail.com";
-        password = "motorola1986";
-        host = "smtp.live.com";
-        port = 587;
+//        sender = "luiz-odl@hotmail.com";
+//        password = "motorola1986";
+//        host = "smtp.live.com";
+//        port = 587;
         
-//        sender = "projetospiderdar@gmail.com";
-//        password = "5p1d3rd4r";
-//        host = "smtp.gmail.com";
-//        port = 465;
+        sender = "projetospiderdar@gmail.com";
+        password = "5p1d3rd4r";
+        host = "smtp.gmail.com";
+        port = 465;
     }
 
     public void SendNewPassword(String address, String name, String newPassword) {
@@ -38,7 +38,7 @@ public class MyEmail {
                 + "Olá, " + name + "<br><br>"
                 + "Sua nova senha é: " + newPassword
                 + "</html>";
-        sendEmail(address, subject, message, 3 );
+        sendEmail(address, subject, message, 2 );
     }
         
     private void sendEmail(String address, String subject, String message, int operation) {
