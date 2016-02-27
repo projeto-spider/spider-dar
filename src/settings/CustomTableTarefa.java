@@ -12,11 +12,11 @@ import javax.swing.table.TableCellRenderer;
  */
 public class CustomTableTarefa extends JTextPane implements TableCellRenderer {
 
-    private static final Color GREEN = new Color(153,255,153);
-    private static final Color BLUE = new Color(202,224,251);
-    private static Color YELLOW = new Color(255,255,153);
-    private static Color RED = new Color(255,153,153);
-    
+    private static final Color GREEN = new Color(153, 255, 153);
+    private static final Color BLUE = new Color(202, 224, 251);
+    private static Color YELLOW = new Color(255, 255, 153);
+    private static Color RED = new Color(255, 153, 153);
+
     public CustomTableTarefa() {
 
     }
@@ -36,14 +36,15 @@ public class CustomTableTarefa extends JTextPane implements TableCellRenderer {
             this.setForeground(table.getSelectionForeground());
             this.setBackground(table.getSelectionBackground());
         } else {
-
-            if (row % 2 == 0) {
-                this.setForeground(table.getForeground());
-                this.setBackground(Color.WHITE);
-            } else {
-                this.setForeground(table.getForeground());
-                this.setBackground(new Color(229, 229, 229));
-            }
+            this.setForeground(table.getForeground());
+            this.setBackground(Color.WHITE);
+//            if (row % 2 == 0) {
+//                this.setForeground(table.getForeground());
+//                this.setBackground(Color.WHITE);
+//            } else {
+//                this.setForeground(table.getForeground());
+//                this.setBackground(new Color(229, 229, 229));
+//            }
         }
 
         this.setForeground(Color.BLACK);
@@ -79,5 +80,5 @@ public class CustomTableTarefa extends JTextPane implements TableCellRenderer {
             }
         }
     }
-    
+
 }

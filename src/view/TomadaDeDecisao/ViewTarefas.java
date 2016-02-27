@@ -87,13 +87,13 @@ public class ViewTarefas extends javax.swing.JInternalFrame {
         jTableTarefas.setDefaultRenderer(Object.class, new CustomTableTarefa());
 
         jTableTarefas.getColumnModel().getColumn(0).setPreferredWidth(1);
-        jTableTarefas.getColumnModel().getColumn(1).setPreferredWidth(1);
+        jTableTarefas.getColumnModel().getColumn(1).setPreferredWidth(36);
         jTableTarefas.getColumnModel().getColumn(2).setPreferredWidth(460);
         jTableTarefas.getColumnModel().getColumn(3).setPreferredWidth(50);
         jTableTarefas.getColumnModel().getColumn(4).setPreferredWidth(95);
 
         jTableTarefas.setRowHeight(25);
-        jTableTarefas.setGridColor(new Color(229, 229, 229));
+        jTableTarefas.setGridColor(new Color(182,182,182));
     }
 
     private boolean rowIsSelected() {

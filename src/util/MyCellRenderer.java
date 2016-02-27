@@ -35,15 +35,16 @@ public class MyCellRenderer extends JTextPane implements TableCellRenderer {
             this.setForeground(table.getSelectionForeground());
             this.setBackground(table.getSelectionBackground());
         } else {
-
-            if (row % 2 == 0) {
-                this.setForeground(table.getForeground());
-                this.setBackground(Color.WHITE);
-
-            } else {
-                this.setForeground(table.getForeground());
-                this.setBackground(new Color(229, 229, 229));
-            }
+            this.setForeground(table.getForeground());
+            this.setBackground(Color.WHITE);
+//            if (row % 2 == 0) {
+//                this.setForeground(table.getForeground());
+//                this.setBackground(Color.WHITE);
+//
+//            } else {
+//                this.setForeground(table.getForeground());
+//                this.setBackground(new Color(229, 229, 229));
+//            }
         }
 
         // Centraliza verticalmente o Texto na celula da tabela.

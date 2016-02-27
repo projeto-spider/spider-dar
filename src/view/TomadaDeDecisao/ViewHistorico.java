@@ -104,7 +104,7 @@ public class ViewHistorico extends javax.swing.JInternalFrame {
         jTableHistorico.getColumnModel().getColumn(3).setPreferredWidth(95);
 
         jTableHistorico.setRowHeight(25);
-        jTableHistorico.setGridColor(new Color(229, 229, 229));
+        jTableHistorico.setGridColor(new Color(182,182,182));
     }
 
     @SuppressWarnings("unchecked")
