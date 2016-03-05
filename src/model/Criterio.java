@@ -12,6 +12,8 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -42,6 +44,7 @@ import javax.xml.bind.annotation.XmlTransient;
 public class Criterio implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
@@ -50,7 +53,7 @@ public class Criterio implements Serializable {
     private String nome;
     @Basic(optional = false)
     @Column(name = "peso")
-    private String peso;
+    private int peso;
     @Basic(optional = false)
     @Column(name = "justificativa")
     private String justificativa;
@@ -77,7 +80,7 @@ public class Criterio implements Serializable {
         this.id = id;
     }
 
-    public Criterio(Integer id, String nome, String peso, String justificativa, Date created, Date modified) {
+    public Criterio(Integer id, String nome, int peso, String justificativa, Date created, Date modified) {
         this.id = id;
         this.nome = nome;
         this.peso = peso;
@@ -102,11 +105,11 @@ public class Criterio implements Serializable {
         this.nome = nome;
     }
 
-    public String getPeso() {
+    public int getPeso() {
         return peso;
     }
 
-    public void setPeso(String peso) {
+    public void setPeso(int peso) {
         this.peso = peso;
     }
 

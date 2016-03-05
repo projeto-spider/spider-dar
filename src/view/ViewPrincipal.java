@@ -22,9 +22,9 @@ import view.Gerenciar.ViewProblema;
 import view.Gerenciar.ViewUsuarios;
 import view.Organizacional.ViewGuiaGestaoDeDecisao;
 import view.Gerenciar.ViewPermissoesDePerfil;
-import view.TomadaDeDecisao.ViewAlternativaDeSolucao;
+import view.TomadaDeDecisao.ViewAlternativas;
 import view.TomadaDeDecisao.ViewTarefas;
-import view.TomadaDeDecisao.ViewCriteriosDeAvaliacao;
+import view.TomadaDeDecisao.ViewCriterios;
 import view.TomadaDeDecisao.ViewAvaliacao;
 import view.TomadaDeDecisao.ViewHistorico;
 import view.TomadaDeDecisao.ViewMotivacaoEObjetivos;
@@ -50,8 +50,8 @@ public class ViewPrincipal extends javax.swing.JFrame {
     //View.TomadaDeDecisao
     private final ViewMotivacaoEObjetivos viewMotivacaoEObjetivos = new ViewMotivacaoEObjetivos();
     private final ViewTarefas viewTarefas = new ViewTarefas();
-    private final ViewAlternativaDeSolucao viewAlternativaDeSolucao = new ViewAlternativaDeSolucao();
-    private final ViewCriteriosDeAvaliacao viewCriteriosDeAvaliacao = new ViewCriteriosDeAvaliacao();
+    private final ViewAlternativas viewAlternativaDeSolucao = new ViewAlternativas();
+    private final ViewCriterios viewCriterios = new ViewCriterios();
     private final ViewAvaliacao viewDecisao = new ViewAvaliacao();
     private final ViewHistorico viewHistorico = new ViewHistorico();
 
@@ -619,7 +619,8 @@ public class ViewPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonCriteriosStateChanged
 
     private void jButtonCriteriosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCriteriosActionPerformed
-        changeViews(viewCriteriosDeAvaliacao);
+        changeViews(viewCriterios);
+        viewCriterios.reloadViewTarefas(); 
     }//GEN-LAST:event_jButtonCriteriosActionPerformed
 
     private void jButtonAvaliacaoStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jButtonAvaliacaoStateChanged
@@ -669,7 +670,7 @@ public class ViewPrincipal extends javax.swing.JFrame {
         jDesktopPane.add(viewMotivacaoEObjetivos);
         jDesktopPane.add(viewTarefas);
         jDesktopPane.add(viewAlternativaDeSolucao);
-        jDesktopPane.add(viewCriteriosDeAvaliacao);
+        jDesktopPane.add(viewCriterios);
         jDesktopPane.add(viewDecisao);
         jDesktopPane.add(viewHistorico);
     }
@@ -684,7 +685,7 @@ public class ViewPrincipal extends javax.swing.JFrame {
         viewMotivacaoEObjetivos.setVisible(false);
         viewTarefas.setVisible(false);
         viewAlternativaDeSolucao.setVisible(false);
-        viewCriteriosDeAvaliacao.setVisible(false);
+        viewCriterios.setVisible(false);
         viewDecisao.setVisible(false);
         viewHistorico.setVisible(false);
 

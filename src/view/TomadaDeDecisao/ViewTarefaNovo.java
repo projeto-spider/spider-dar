@@ -138,7 +138,7 @@ public class ViewTarefaNovo extends javax.swing.JDialog {
                 controllerTarefas.addTarefa(request, chosenDate);
             } else {
                request.setDataInput("Tarefa.id", new Input(5, "text", "id Tarefa", String.valueOf(idTarefa))); 
-               controllerTarefas.upDateTarefa(request, chosenDate); 
+               controllerTarefas.updateTarefa(request, chosenDate); 
             }
 
             JOptionPane.showMessageDialog(null, "\"Tarefa\" foi salva com sucesso.");

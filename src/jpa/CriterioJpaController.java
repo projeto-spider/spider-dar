@@ -18,7 +18,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import jpa.exceptions.IllegalOrphanException;
 import jpa.exceptions.NonexistentEntityException;
-import jpa.exceptions.PreexistingEntityException;
 import model.Criterio;
 import model.Nota;
 
@@ -37,7 +36,7 @@ public class CriterioJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(Criterio criterio) throws PreexistingEntityException, Exception {
+    public void create(Criterio criterio) {
         if (criterio.getAvaliarList() == null) {
             criterio.setAvaliarList(new ArrayList<Avaliar>());
         }
@@ -89,11 +88,6 @@ public class CriterioJpaController implements Serializable {
                 }
             }
             em.getTransaction().commit();
-        } catch (Exception ex) {
-            if (findCriterio(criterio.getId()) != null) {
-                throw new PreexistingEntityException("Criterio " + criterio + " already exists.", ex);
-            }
-            throw ex;
         } finally {
             if (em != null) {
                 em.close();

@@ -72,7 +72,7 @@ public class ControllerTarefas {
         }
     }
 
-    public void upDateTarefa(Request request, Date date) throws Exception {
+    public void updateTarefa(Request request, Date date) throws Exception {
         try {
             int idTarefa = Integer.parseInt(request.getDataInput("Tarefa.id").getValor());
 
@@ -98,7 +98,7 @@ public class ControllerTarefas {
 
             facade.initializeHistorico().create(historico);
         } catch (Exception error) {
-            throw new Exception(this.getExceptionMessage(error, "Cadastrar"), error);
+            throw new Exception(this.getExceptionMessage(error, "Editar"), error);
         }
     }
 

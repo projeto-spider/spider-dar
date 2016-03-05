@@ -5,6 +5,7 @@ import jpa.ItemguiaJpaController;
 import jpa.extension.JpaAcessar;
 import jpa.extension.JpaAlternativa;
 import jpa.extension.JpaConfiguracoes;
+import jpa.extension.JpaCriterio;
 import jpa.extension.JpaFuncionalidades;
 import jpa.extension.JpaGuia;
 import jpa.extension.JpaHistorico;
@@ -100,5 +101,9 @@ public class Facade {
     public JpaKeyword initializeJpaKeyword()
     {
         return new JpaKeyword(Connection.connect());
+    }
+    
+    public JpaCriterio initializeJpaCriterio(){
+        return new JpaCriterio(Connection.connect()); 
     }
 }

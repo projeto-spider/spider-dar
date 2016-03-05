@@ -17,7 +17,14 @@ import javax.swing.text.StyledDocument;
  */
 public class MyCellRenderer extends JTextPane implements TableCellRenderer {
 
+    int columnchosen;
+
     public MyCellRenderer() {
+        columnchosen = -1;
+    }
+
+    public MyCellRenderer(int columnchosen) {
+        this.columnchosen = columnchosen;
     }
 
     @Override
@@ -45,6 +52,11 @@ public class MyCellRenderer extends JTextPane implements TableCellRenderer {
 //                this.setForeground(table.getForeground());
 //                this.setBackground(new Color(229, 229, 229));
 //            }
+        }
+
+        if ( columnchosen != -1 && column == columnchosen) {
+            this.setForeground(Color.BLACK);
+            this.setBackground(new Color(249,202,179));
         }
 
         // Centraliza verticalmente o Texto na celula da tabela.

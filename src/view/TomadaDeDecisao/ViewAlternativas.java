@@ -14,12 +14,12 @@ import util.Request;
  *
  * @author Bleno Vale
  */
-public class ViewAlternativaDeSolucao extends javax.swing.JInternalFrame {
+public class ViewAlternativas extends javax.swing.JInternalFrame {
 
     private MyDefaultTableModel myDefaultTableModel;
     private final ControllerAlternativa controllerAlternativa = new ControllerAlternativa();
 
-    public ViewAlternativaDeSolucao() {
+    public ViewAlternativas() {
         initComponents();
 
         Internal.retiraBorda(this);
@@ -198,7 +198,7 @@ public class ViewAlternativaDeSolucao extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        new ViewAlternativaDeSolucaoNovo(null, true).setVisible(true);
+        new ViewAlternativaNovo(null, true).setVisible(true);
         listAlternativasInTable(controllerAlternativa.listAlternativasByProblema());
     }//GEN-LAST:event_jButton2ActionPerformed
 
@@ -210,7 +210,7 @@ public class ViewAlternativaDeSolucao extends javax.swing.JInternalFrame {
         int idAltenativa = Integer.parseInt(jTableAlternativas.getModel()
                 .getValueAt(jTableAlternativas.getSelectedRow(), 0).toString());
 
-        new ViewAlternativaDeSolucaoNovo(null, true, idAltenativa).setVisible(true);
+        new ViewAlternativaNovo(null, true, idAltenativa).setVisible(true);
         listAlternativasInTable(controllerAlternativa.listAlternativasByProblema());
     }//GEN-LAST:event_jButton1ActionPerformed
 

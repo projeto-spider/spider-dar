@@ -12,14 +12,14 @@ import util.Request;
  *
  * @author Bleno Vale
  */
-public class ViewAlternativaDeSolucaoNovo extends javax.swing.JDialog {
+public class ViewAlternativaNovo extends javax.swing.JDialog {
 
     private final int type;
     private Request request;
     private int idAlternativa;
     private final ControllerAlternativa controllerAlternativa = new ControllerAlternativa();
 
-    public ViewAlternativaDeSolucaoNovo(java.awt.Frame parent, boolean modal) {
+    public ViewAlternativaNovo(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
 
@@ -28,7 +28,7 @@ public class ViewAlternativaDeSolucaoNovo extends javax.swing.JDialog {
         this.setLocationRelativeTo(null);
     }
 
-    public ViewAlternativaDeSolucaoNovo(java.awt.Frame parent, boolean modal, int idAlternativa) {
+    public ViewAlternativaNovo(java.awt.Frame parent, boolean modal, int idAlternativa) {
         super(parent, modal);
         initComponents();
 
