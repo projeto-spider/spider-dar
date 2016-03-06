@@ -93,12 +93,12 @@ public class ViewPrincipal extends javax.swing.JFrame {
 
         myButton.repaint();
     }
-    
+
     //Abrir o PDF na tela usando o Runtime.exec para chamar o executável do AcrobatReader
     public final void openPDF() {
         try {
             Runtime.getRuntime().exec("rundll32 url.dll,FileProtocolHandler  " + "Relatório.pdf");
-        }catch (Exception e) {
+        } catch (Exception e) {
             System.out.println("Failed to open file ");
         }
     }
@@ -350,10 +350,15 @@ public class ViewPrincipal extends javax.swing.JFrame {
         jButtonRelatorio.setBackground(new java.awt.Color(65, 65, 65));
         jButtonRelatorio.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
         jButtonRelatorio.setForeground(new java.awt.Color(255, 255, 255));
-        jButtonRelatorio.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/image/alternatives.png"))); // NOI18N
+        jButtonRelatorio.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/image/report.png"))); // NOI18N
         jButtonRelatorio.setText("RELATÓRIO");
         jButtonRelatorio.setContentAreaFilled(false);
         jButtonRelatorio.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jButtonRelatorio.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jButtonRelatorioStateChanged(evt);
+            }
+        });
         jButtonRelatorio.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonRelatorioActionPerformed(evt);
@@ -648,7 +653,7 @@ public class ViewPrincipal extends javax.swing.JFrame {
 
     private void jButtonCriteriosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCriteriosActionPerformed
         changeViews(viewCriterios);
-        viewCriterios.reloadViewTarefas(); 
+        viewCriterios.reloadViewTarefas();
     }//GEN-LAST:event_jButtonCriteriosActionPerformed
 
     private void jButtonAvaliacaoStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jButtonAvaliacaoStateChanged
@@ -676,12 +681,16 @@ public class ViewPrincipal extends javax.swing.JFrame {
         Relatorio relatorio = new Relatorio();
         try {
             relatorio.gerarRelatorio();
-        } catch (IOException ex) {          
+        } catch (IOException ex) {
         } catch (DocumentException ex) {
         }
-        
+
         openPDF();
     }//GEN-LAST:event_jButtonRelatorioActionPerformed
+
+    private void jButtonRelatorioStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jButtonRelatorioStateChanged
+        changeButtonColor(jButtonRelatorio);
+    }//GEN-LAST:event_jButtonRelatorioStateChanged
 
     public void reload() {
         Timer timer = new Timer();
