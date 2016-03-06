@@ -98,6 +98,12 @@ public class ViewCriteriosNovo extends javax.swing.JDialog {
     }
 
     private void putNotaInTable() {
+        if (jTextFieldNota.getText().isEmpty()){
+            return;
+        } else if (jTextFieldValor.getText().isEmpty()){
+            return;
+        }
+        
         String line[] = {
             jTextFieldNota.getText(),
             jTextFieldValor.getText()
@@ -116,6 +122,13 @@ public class ViewCriteriosNovo extends javax.swing.JDialog {
         return jTable1.getRowCount() != 0;
     }
 
+    public void jTextFieldOnlyNumbers(java.awt.event.KeyEvent evt) {
+        String caracteres = "9876543210";
+        if (!caracteres.contains(evt.getKeyChar() + "")) {
+            evt.consume();
+        }
+    }
+    
     private void save() {
         request = new Request();
         request.setHashMapValueToInput();
@@ -220,6 +233,11 @@ public class ViewCriteriosNovo extends javax.swing.JDialog {
                 jTextFieldValorActionPerformed(evt);
             }
         });
+        jTextFieldValor.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextFieldValorKeyTyped(evt);
+            }
+        });
 
         jLabel5.setText("Nota:");
 
@@ -295,6 +313,11 @@ public class ViewCriteriosNovo extends javax.swing.JDialog {
 
         jTextFieldPeso.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jTextFieldPeso.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        jTextFieldPeso.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextFieldPesoKeyTyped(evt);
+            }
+        });
 
         jTextField1.setEditable(false);
         jTextField1.setBackground(new java.awt.Color(255, 255, 255));
@@ -386,6 +409,14 @@ public class ViewCriteriosNovo extends javax.swing.JDialog {
     private void jButtonCriarNotaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCriarNotaActionPerformed
         putNotaInTable();
     }//GEN-LAST:event_jButtonCriarNotaActionPerformed
+
+    private void jTextFieldPesoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldPesoKeyTyped
+        jTextFieldOnlyNumbers(evt);
+    }//GEN-LAST:event_jTextFieldPesoKeyTyped
+
+    private void jTextFieldValorKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldValorKeyTyped
+        jTextFieldOnlyNumbers(evt); 
+    }//GEN-LAST:event_jTextFieldValorKeyTyped
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
