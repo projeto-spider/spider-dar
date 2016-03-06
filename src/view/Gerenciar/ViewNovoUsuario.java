@@ -73,7 +73,7 @@ public class ViewNovoUsuario extends javax.swing.JDialog {
         myDefaultTableModel = new MyDefaultTableModel(columns, 0, false);
     }
 
-    private void putNewRowOnTheTable(Request requestAllocate) {
+    private void putNewRowInTheTable(Request requestAllocate) { 
         if (requestAllocate == null) {
             return;
         }
@@ -364,7 +364,7 @@ public class ViewNovoUsuario extends javax.swing.JDialog {
 
         ViewAlocarUsuario viewAlocarUsuario = new ViewAlocarUsuario(null, true, idOrganizacao);
         viewAlocarUsuario.setVisible(true);
-        putNewRowOnTheTable(viewAlocarUsuario.getRequest());
+        putNewRowInTheTable(viewAlocarUsuario.getRequest());
     }//GEN-LAST:event_jButtonAlocarActionPerformed
 
     private void jButtonCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelarActionPerformed

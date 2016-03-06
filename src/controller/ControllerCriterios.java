@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import model.Criterio;
 import model.Historico;
+import model.Nota;
 import settings.Constant;
 import settings.Facade;
 import settings.KeepData;
@@ -23,7 +24,7 @@ public class ControllerCriterios {
     Historico historico;
     Facade facade = Facade.getInstance();
 
-    public void addCriterio(Request request) throws Exception {
+    public void addCriterio(Request request, List<Request> notas) throws Exception {
         try {
             int idProblema = Integer.parseInt(request.getDataInput("Problema.id").getValor());
 
@@ -37,6 +38,8 @@ public class ControllerCriterios {
             criterio.setModified(new Date());
 
             facade.initializeJpaCriterio().create(criterio);
+
+            addNotas(notas, criterio);
 
             historico = new Historico();
             historico.setDescricao("Critério \"" + criterio.getNome() + "\" foi Cadastrada.");
@@ -52,7 +55,7 @@ public class ControllerCriterios {
         }
     }
 
-    public void updateCriterio(Request request) throws Exception {
+    public void updateCriterio(Request request, List<Request> notas) throws Exception {
         try {
             int idCriterio = Integer.parseInt(request.getDataInput("Criterio.id").getValor());
 
@@ -66,6 +69,8 @@ public class ControllerCriterios {
             criterio.setModified(new Date());
 
             facade.initializeJpaCriterio().edit(criterio);
+
+            addNotas(notas, criterio);
 
             historico = new Historico();
             historico.setDescricao("Critério \"" + criterio.getNome() + "\" foi Editado.");
@@ -81,11 +86,42 @@ public class ControllerCriterios {
         }
     }
 
+    private void addNotas(List<Request> notas, Criterio ct) {
+        try {
+            if (ct.getId() == null) {
+                criterio = facade.initializeJpaCriterio().findlastestCriterioCreated(ct.getIdProblema().getId());
+            } else {
+                criterio = facade.initializeJpaCriterio().findCriterio(ct.getId());
+            }
+            Nota nota;
+
+            for (Request aux : notas) {
+                nota = facade.initializeJpaNota().findNotaByNome(aux.getData("Nota.nome"), criterio.getId());
+                if (nota == null) {
+                    nota = new Nota();
+                    nota.setDescricao(aux.getData("Nota.nome"));
+                    nota.setNota(Integer.parseInt(aux.getData("Nota.valor")));
+                    nota.setIdCriterio(criterio);
+                    nota.setCreated(new Date());
+                    nota.setModified(new Date());
+                    facade.initializeJpaNota().create(nota);
+                }
+            }
+
+        } catch (Exception error) {
+            error.printStackTrace();
+        }
+    }
+
     public void removeCriterio(int idCriterio) throws Exception {
         try {
 
             criterio = new Criterio();
             criterio = facade.initializeJpaCriterio().findCriterio(idCriterio);
+
+            for (Nota nota : criterio.getNotaList()) {
+                facade.initializeJpaNota().destroy(nota.getId());
+            }
 
             facade.initializeJpaCriterio().destroy(idCriterio);
 
@@ -172,6 +208,28 @@ public class ControllerCriterios {
             data.put("Criterio.created", Text.formatDateForTable(criterio.getCreated()));
             data.put("Criterio.modified", Text.formatDateForTable(criterio.getModified()));
             return new Request(data);
+        } catch (Exception error) {
+            throw error;
+        }
+    }
+
+    public List<Request> listNotasByCriterio(int idCriterio) {
+        try {
+            List<Request> requestlist = new ArrayList<>();
+            List<Nota> notas = new ArrayList<>();
+            notas = facade.initializeJpaNota().findNotaByIdCriterio(idCriterio);
+            for (Nota another : notas) {
+                Map<String, String> data = new HashMap<>();
+
+                data.put("Nota.id", another.getId().toString());
+                data.put("Nota.nome", another.getDescricao());
+                data.put("Nota.valor", String.valueOf(another.getNota()));
+                data.put("Nota.created", Text.formatDateForTable(another.getCreated()));
+                data.put("Nota.modified", Text.formatDateForTable(another.getModified()));
+                requestlist.add(new Request(data));
+            }
+
+            return requestlist;
         } catch (Exception error) {
             throw error;
         }

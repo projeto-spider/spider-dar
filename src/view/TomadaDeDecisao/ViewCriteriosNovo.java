@@ -1,12 +1,15 @@
 package view.TomadaDeDecisao;
 
 import controller.ControllerCriterios;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.swing.JOptionPane;
 import settings.Constant;
 import settings.KeepData;
 import util.Input;
+import util.MyDefaultTableModel;
 import util.Request;
 
 /**
@@ -19,11 +22,13 @@ public class ViewCriteriosNovo extends javax.swing.JDialog {
     private Request request;
     private int idCriterio;
     private final ControllerCriterios controllerCriterios = new ControllerCriterios();
+    private MyDefaultTableModel myDefaultTableModel;
 
     public ViewCriteriosNovo(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
 
+        initialiazeTable();
         this.type = Constant.CREATE;
         this.setLocationRelativeTo(null);
     }
@@ -38,6 +43,27 @@ public class ViewCriteriosNovo extends javax.swing.JDialog {
         this.setLocationRelativeTo(null);
     }
 
+    private void initialiazeTable() {
+        String columns[] = {"Nota", "Valor"};
+        myDefaultTableModel = new MyDefaultTableModel(columns, 0, false);
+        jTable1.setModel(myDefaultTableModel);
+    }
+
+    private void fillTable() {
+        initialiazeTable();
+
+        List<Request> list = controllerCriterios.listNotasByCriterio(idCriterio);
+        for (Request requestNota : list) {
+            String line[] = {
+                requestNota.getData("Nota.nome"),
+                requestNota.getData("Nota.valor")
+            };
+
+            myDefaultTableModel.addRow(line);
+            jTable1.setModel(myDefaultTableModel);
+        }
+    }
+
     private void fillFields() {
         request = new Request();
         request = controllerCriterios.getCriterioSelected(idCriterio);
@@ -45,6 +71,8 @@ public class ViewCriteriosNovo extends javax.swing.JDialog {
         jTextFieldNome.setText(request.getData("Criterio.nome"));
         jTextFieldPeso.setText(request.getData("Criterio.peso"));
         jTextAreaJustificativa.setText(request.getData("Criterio.justificativa"));
+
+        fillTable();
     }
 
     private boolean isValidData(Request request) {
@@ -69,6 +97,25 @@ public class ViewCriteriosNovo extends javax.swing.JDialog {
         return true;
     }
 
+    private void putNotaInTable() {
+        String line[] = {
+            jTextFieldNota.getText(),
+            jTextFieldValor.getText()
+        };
+
+        myDefaultTableModel.addRow(line);
+        jTable1.setModel(myDefaultTableModel);
+
+    }
+
+    private void removeNotaInTable() {
+
+    }
+    
+    private boolean theresRowInTable() {
+        return jTable1.getRowCount() != 0;
+    }
+
     private void save() {
         request = new Request();
         request.setHashMapValueToInput();
@@ -81,14 +128,32 @@ public class ViewCriteriosNovo extends javax.swing.JDialog {
             return;
         }
 
+        if (!theresRowInTable()) {
+            JOptionPane.showMessageDialog(null, "É necessário cadastrar notas para o Critério");
+            return;
+        }
+
+        List<Request> list = new ArrayList<>();
+        for (int i = 0; i < jTable1.getRowCount(); i++) {
+            Map<String, String> data = new HashMap<>();
+
+            String nome = jTable1.getValueAt(i, 0).toString();
+            String valor = jTable1.getValueAt(i, 1).toString();
+
+            data.put("Nota.nome", nome);
+            data.put("Nota.valor", valor);
+            list.add(new Request(data));
+
+        }
+
         request.setDataInput("Problema.id", new Input(4, "text", "id do Problema", KeepData.getData("Problema.id")));
 
         try {
             if (type == Constant.CREATE) {
-                controllerCriterios.addCriterio(request);
+                controllerCriterios.addCriterio(request, list);
             } else {
                 request.setDataInput("Criterio.id", new Input(5, "text", "id Critério", String.valueOf(idCriterio)));
-                controllerCriterios.updateCriterio(request);
+                controllerCriterios.updateCriterio(request, list);
             }
 
             JOptionPane.showMessageDialog(null, "\"Critério\" foi salva com sucesso.");
@@ -161,6 +226,11 @@ public class ViewCriteriosNovo extends javax.swing.JDialog {
         jLabel6.setText("Valor:");
 
         jButtonCriarNota.setText("Criar ");
+        jButtonCriarNota.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonCriarNotaActionPerformed(evt);
+            }
+        });
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -312,6 +382,10 @@ public class ViewCriteriosNovo extends javax.swing.JDialog {
     private void jButtonCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelarActionPerformed
         this.dispose();
     }//GEN-LAST:event_jButtonCancelarActionPerformed
+
+    private void jButtonCriarNotaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCriarNotaActionPerformed
+        putNotaInTable();
+    }//GEN-LAST:event_jButtonCriarNotaActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;

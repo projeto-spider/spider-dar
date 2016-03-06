@@ -5,7 +5,6 @@ import java.awt.Color;
 import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
-import settings.CustomTableTarefa;
 import settings.KeepData;
 import util.Internal;
 import util.MyCellRenderer;

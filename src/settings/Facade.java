@@ -1,6 +1,5 @@
 package settings;
 
-import jpa.AcessarJpaController;
 import jpa.ItemguiaJpaController;
 import jpa.extension.JpaAcessar;
 import jpa.extension.JpaAlternativa;
@@ -10,6 +9,7 @@ import jpa.extension.JpaFuncionalidades;
 import jpa.extension.JpaGuia;
 import jpa.extension.JpaHistorico;
 import jpa.extension.JpaKeyword;
+import jpa.extension.JpaNotas;
 import jpa.extension.JpaOrganizacao;
 import jpa.extension.JpaPerfil;
 import jpa.extension.JpaProblema;
@@ -61,49 +61,52 @@ public class Facade {
     public JpaGuia initializeJpaGuia() {
         return new JpaGuia(Connection.connect());
     }
-    
-    public ItemguiaJpaController initializeJpaItemGuia(){
+
+    public ItemguiaJpaController initializeJpaItemGuia() {
         return new ItemguiaJpaController(Connection.connect());
     }
-    
-    public JpaFuncionalidades initializeJpaFuncionalidades(){
-        return new JpaFuncionalidades(Connection.connect()); 
+
+    public JpaFuncionalidades initializeJpaFuncionalidades() {
+        return new JpaFuncionalidades(Connection.connect());
     }
-    
-    public JpaUsuario initializeJpaUsuario(){
-        return new JpaUsuario(Connection.connect()); 
+
+    public JpaUsuario initializeJpaUsuario() {
+        return new JpaUsuario(Connection.connect());
     }
-    
-    public JpaAcessar initializeJpaAcessa(){
+
+    public JpaAcessar initializeJpaAcessa() {
         return new JpaAcessar(Connection.connect());
     }
-    
-    public JpaProblema initializeJpaProblema(){
+
+    public JpaProblema initializeJpaProblema() {
         return new JpaProblema(Connection.connect());
     }
-    
-    public JpaAlternativa initializeAlternativa(){
+
+    public JpaAlternativa initializeAlternativa() {
         return new JpaAlternativa(Connection.connect());
     }
-    
-    public JpaHistorico initializeHistorico(){
-        return new JpaHistorico(Connection.connect()); 
+
+    public JpaHistorico initializeHistorico() {
+        return new JpaHistorico(Connection.connect());
     }
-    
-    public JpaTarefa initializeTarefa(){
-        return new JpaTarefa(Connection.connect()); 
+
+    public JpaTarefa initializeTarefa() {
+        return new JpaTarefa(Connection.connect());
     }
-    
-    public JpaConfiguracoes initializeJpaConfiguracoes(){
-        return new JpaConfiguracoes(Connection.connect()); 
+
+    public JpaConfiguracoes initializeJpaConfiguracoes() {
+        return new JpaConfiguracoes(Connection.connect());
     }
-    
-    public JpaKeyword initializeJpaKeyword()
-    {
+
+    public JpaKeyword initializeJpaKeyword() {
         return new JpaKeyword(Connection.connect());
     }
-    
-    public JpaCriterio initializeJpaCriterio(){
-        return new JpaCriterio(Connection.connect()); 
+
+    public JpaCriterio initializeJpaCriterio() {
+        return new JpaCriterio(Connection.connect());
+    }
+
+    public JpaNotas initializeJpaNota() {
+        return new JpaNotas(Connection.connect());
     }
 }
