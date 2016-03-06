@@ -66,7 +66,7 @@ public class ViewTarefas extends javax.swing.JInternalFrame {
     public void fillTable(List<Request> requestList) {
         ImageIcon icon = new ImageIcon(getClass().getResource("/resources/image/task.png"));
 
-        String columns[] = {"id", " ", "Concluída", "Tarefa", "Marcador", "Prazo"};
+        String columns[] = {"id", " ", "Concluída", "Tarefa", "Complexidade", "Prazo"};
         myDefaultTableModel = new MyDefaultTableModel(columns, 0, false, true, 2);
 
         for (Request request : requestList) {
@@ -89,7 +89,7 @@ public class ViewTarefas extends javax.swing.JInternalFrame {
         jTableTarefas.getColumnModel().getColumn(0).setPreferredWidth(1);
         jTableTarefas.getColumnModel().getColumn(1).setPreferredWidth(36);
         jTableTarefas.getColumnModel().getColumn(2).setPreferredWidth(460);
-        jTableTarefas.getColumnModel().getColumn(3).setPreferredWidth(50);
+        jTableTarefas.getColumnModel().getColumn(3).setPreferredWidth(60);
         jTableTarefas.getColumnModel().getColumn(4).setPreferredWidth(95);
 
         jTableTarefas.setRowHeight(25);
