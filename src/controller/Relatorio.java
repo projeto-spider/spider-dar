@@ -3,12 +3,15 @@ package controller;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfWriter;
+import java.io.IOException;
     
     public class Relatorio {
-        public static void main(String[] args) throws Exception {
+        
+        public void gerarRelatorio() throws IOException, DocumentException {
             
             Document doc = null;
             OutputStream os = null;
@@ -18,7 +21,7 @@ import com.itextpdf.text.pdf.PdfWriter;
                     doc = new Document(PageSize.A4, 72, 72, 72, 72);
 
 	            //cria a stream de saída
-	            os = new FileOutputStream("out.pdf");
+	            os = new FileOutputStream("Relatório.pdf");
 	       
 	            //associa a stream de saída ao
 	            PdfWriter.getInstance(doc, os);
@@ -27,7 +30,7 @@ import com.itextpdf.text.pdf.PdfWriter;
 	            doc.open();	 
 
 	            //adiciona o texto ao PDF
-	            Paragraph p = new Paragraph("Meu primeiro arquivo PDF!");
+	            Paragraph p = new Paragraph("Teste!");
 	            doc.add(p);
 	 
 	        } finally {

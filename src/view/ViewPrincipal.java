@@ -1,5 +1,6 @@
 package view;
 
+import com.itextpdf.text.DocumentException;
 import view.Gerenciar.ViewNovoUsuario;
 import view.Gerenciar.ViewNovaOrganizacao;
 import view.Gerenciar.ViewNovoProblemaDialog;
@@ -7,8 +8,10 @@ import controller.ControllerOrganizacao;
 import controller.ControllerPerfil;
 import controller.ControllerProblema;
 import controller.ControllerUsuario;
+import controller.Relatorio;
 import java.awt.Color;
 import java.beans.PropertyVetoException;
+import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 import javax.swing.JButton;
@@ -90,6 +93,15 @@ public class ViewPrincipal extends javax.swing.JFrame {
 
         myButton.repaint();
     }
+    
+    //Abrir o PDF na tela usando o Runtime.exec para chamar o executável do AcrobatReader
+    public final void openPDF() {
+        try {
+            Runtime.getRuntime().exec("rundll32 url.dll,FileProtocolHandler  " + "Relatório.pdf");
+        }catch (Exception e) {
+            System.out.println("Failed to open file ");
+        }
+    }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -112,6 +124,7 @@ public class ViewPrincipal extends javax.swing.JFrame {
         jLabelOrganizacao = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabelProblema = new javax.swing.JLabel();
+        jButtonRelatorio = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenuArquivo = new javax.swing.JMenu();
         jMenuItemNovaOrganizacao = new javax.swing.JMenuItem();
@@ -334,6 +347,19 @@ public class ViewPrincipal extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        jButtonRelatorio.setBackground(new java.awt.Color(65, 65, 65));
+        jButtonRelatorio.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
+        jButtonRelatorio.setForeground(new java.awt.Color(255, 255, 255));
+        jButtonRelatorio.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/image/alternatives.png"))); // NOI18N
+        jButtonRelatorio.setText("RELATÓRIO");
+        jButtonRelatorio.setContentAreaFilled(false);
+        jButtonRelatorio.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jButtonRelatorio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonRelatorioActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -347,11 +373,11 @@ public class ViewPrincipal extends javax.swing.JFrame {
                         .addComponent(jButtonAlternativas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButtonAvaliacao, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButtonHistorico, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButtonRelatorio, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(46, 46, 46)
-                        .addComponent(jLabelBemvindo)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                        .addComponent(jLabelBemvindo)))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jDesktopPane)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
@@ -384,6 +410,8 @@ public class ViewPrincipal extends javax.swing.JFrame {
                         .addComponent(jButtonAvaliacao, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, 0)
                         .addComponent(jButtonHistorico, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, 0)
+                        .addComponent(jButtonRelatorio, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(jDesktopPane))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -644,6 +672,17 @@ public class ViewPrincipal extends javax.swing.JFrame {
         new ViewConfiguracoes(null, true).setVisible(true);
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
+    private void jButtonRelatorioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRelatorioActionPerformed
+        Relatorio relatorio = new Relatorio();
+        try {
+            relatorio.gerarRelatorio();
+        } catch (IOException ex) {          
+        } catch (DocumentException ex) {
+        }
+        
+        openPDF();
+    }//GEN-LAST:event_jButtonRelatorioActionPerformed
+
     public void reload() {
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
@@ -734,6 +773,7 @@ public class ViewPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton jButtonCriterios;
     private javax.swing.JButton jButtonHistorico;
     private javax.swing.JButton jButtonMotivacaoEObj;
+    private javax.swing.JButton jButtonRelatorio;
     private javax.swing.JDesktopPane jDesktopPane;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
