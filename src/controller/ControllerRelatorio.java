@@ -10,10 +10,31 @@ import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfWriter;
 import java.io.IOException;
+import java.util.Date;
+import model.Historico;
+import settings.Constant;
+import settings.Facade;
 import settings.KeepData;
 import util.Request;
     
-    public class Relatorio {
+    public class ControllerRelatorio {
+        
+        Facade facade = Facade.getInstance();
+        
+        public void addHistoricoRelatorio(int idProblema) {
+            try {
+                Historico historico = new Historico();
+                historico.setDescricao("Relatório foi Gerado.");
+                historico.setUsuarioNome(KeepData.getData("Usuario.nome"));
+                historico.setTipo(Constant.FUC_TAREFAS); 
+                historico.setCreated(new Date());
+                historico.setModified(new Date());
+                historico.setIdProblema(facade.initializeJpaProblema().findProblema(idProblema));
+
+                facade.initializeHistorico().create(historico);
+            } catch (Exception e) {
+            }
+        }
         
         public void gerarRelatorio() throws IOException, DocumentException {
             
@@ -54,6 +75,7 @@ import util.Request;
                     Paragraph p4 = new Paragraph("2. Problema: " + nomeProblema, fonte2);
                     doc.add(p4);
 	 
+                    addHistoricoRelatorio(Integer.parseInt(KeepData.getData("Problema.id")));
 	        } finally {
 	            if (doc != null) {
 	                //fechamento do documento
