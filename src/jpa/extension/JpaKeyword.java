@@ -50,10 +50,15 @@ public class JpaKeyword extends KeywordJpaController
     public void deleteAllKeywordsByIdProblema(int idProblema)
     {
         EntityManager em = super.getEntityManager();
+        EntityTransaction tx = em.getTransaction();
         
         try
         {
-            em.createQuery("");
+            tx.begin();
+            em.createQuery("DELETE FROM Keyword k WHERE k.problema.id = :idProb").
+                    setParameter("idProb", idProblema).
+                    executeUpdate();
+            tx.commit();
         }
         finally
         {

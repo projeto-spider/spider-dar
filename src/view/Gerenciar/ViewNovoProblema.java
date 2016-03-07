@@ -19,7 +19,7 @@ import util.swing.ComboItem;
  *
  * @author Bleno Vale
  */
-public class ViewNovoProblemaDialog extends javax.swing.JDialog
+public class ViewNovoProblema extends javax.swing.JDialog
 {
     private final ControllerProblema controllerProblema = new ControllerProblema();
     private final ControllerKeywords controllerKeywords = new ControllerKeywords();
@@ -27,7 +27,7 @@ public class ViewNovoProblemaDialog extends javax.swing.JDialog
     private Request request = new Request();
     private DefaultListModel myJListModel = new DefaultListModel<>();
 
-    public ViewNovoProblemaDialog(java.awt.Frame parent, boolean modal) {
+    public ViewNovoProblema(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
 
@@ -36,7 +36,7 @@ public class ViewNovoProblemaDialog extends javax.swing.JDialog
         this.setLocationRelativeTo(null);
     }
     
-    public ViewNovoProblemaDialog(java.awt.Frame parent, boolean modal, String idProblema)
+    public ViewNovoProblema(java.awt.Frame parent, boolean modal, String idProblema)
     {
         super(parent, modal);
         initComponents();
@@ -418,7 +418,9 @@ public class ViewNovoProblemaDialog extends javax.swing.JDialog
         if (indexItemSelected < 0)
             JOptionPane.showMessageDialog(null, "Selecione uma das palavras para excluir"); 
         else
+        {
             myJListModel.remove(indexItemSelected);
+        }
     }
 
     private void jButtonCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelarActionPerformed

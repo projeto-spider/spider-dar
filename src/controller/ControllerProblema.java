@@ -13,9 +13,11 @@ import java.util.Map;
 import java.util.Map.Entry;
 import jpa.extension.JpaKeyword;
 import jpa.extension.JpaProblema;
-import model.Keyword;
+import model.Historico;
 import model.Problema;
+import settings.Constant;
 import settings.Facade;
+import settings.KeepData;
 import util.Input;
 import util.Request;
 import util.Text;
@@ -28,13 +30,13 @@ public class ControllerProblema
 {
     private Problema problema = new Problema();
     private final Facade facade = Facade.getInstance();
+//    private Historico historico;
     
     public void addProblema(Request request) throws Exception 
     {
         try
         {
             JpaProblema jpaProblema = facade.initializeJpaProblema();
-            
             int idOrganizacao = Integer.parseInt(request.getDataInput("Problema.idOrganizacao").getValor());
             
             problema.setNome(request.getDataInput("Problema.nome").getValor());
@@ -46,11 +48,7 @@ public class ControllerProblema
             problema.setModified(new Date());
             
             Problema lastInsertedProblema = jpaProblema.createProblema(problema);
-            
             String idProblema = String.valueOf(lastInsertedProblema.getId());
-            
-            List<Keyword> keywordList = new ArrayList<>();
-            
             HashMap<String,Input> fields = request.getAllHashMapDataInputs();
             
             //TODO: verificar o tamanho da JList pela jlist
@@ -65,7 +63,6 @@ public class ControllerProblema
                     if (entry.getKey().equals("Keyword." + keywordIndex + ".nome"))
                     {
                         Request requestKeyword = new Request();
-                        
                         requestKeyword.setData("Keyword.nome", entry.getValue().getValor());
                         requestKeyword.setData("Problema.id", idProblema);
                         
@@ -73,9 +70,6 @@ public class ControllerProblema
                     }
                 }
             }
-            
-            problema.setKeywordList(keywordList);
-            
         }
         catch(Exception e)
         {
@@ -102,6 +96,39 @@ public class ControllerProblema
             jpaKeyword.deleteAllKeywordsByIdProblema(idProblema);
             
             jpaProblema.edit(problema);
+            
+            HashMap<String,Input> fields = request.getAllHashMapDataInputs();
+            
+            //TODO: verificar o tamanho da JList pela jlist
+            int listSize = 3;
+            
+            ControllerKeywords controllerKeywords = new ControllerKeywords();
+            
+            for (int keywordIndex = 0; keywordIndex < listSize; keywordIndex++)
+            {
+                for(Entry<String,Input> entry : fields.entrySet())
+                {
+                    if (entry.getKey().equals("Keyword." + keywordIndex + ".nome"))
+                    {
+                        Request requestKeyword = new Request();
+                        
+                        requestKeyword.setData("Keyword.nome", entry.getValue().getValor());
+                        requestKeyword.setData("Problema.id", String.valueOf(idProblema));
+                        
+                        controllerKeywords.addKeyword(requestKeyword);
+                    }
+                }
+            }
+            
+//            historico = new Historico();
+//            historico.setDescricao("Problema \"" + problema.getNome() + "\" foi editado.");
+//            historico.setUsuarioNome(KeepData.getData("Usuario.nome"));
+//            historico.setTipo(Constant.FUC_PROBLEMA);
+//            historico.setCreated(new Date());
+//            historico.setModified(new Date());
+//            historico.setIdProblema(facade.initializeJpaProblema().findProblema(idProblema));
+//
+//            facade.initializeHistorico().create(historico);
          }
         catch (Exception e)
         {
@@ -191,7 +218,7 @@ public class ControllerProblema
             if (request.getData("Problema.busca").equals("")) 
                 problemas = this.facade.initializeJpaProblema().listAllProblemasByIdOrganizacao(request);
             else
-                problemas = this.facade.initializeJpaProblema().listProblemasByNomeOuCodigo(request);
+                problemas = this.facade.initializeJpaProblema().listProblemasByNomeCodigoOuKeyword(request);
             
             return this.getRequestListFromProblemaList(problemas);
         }

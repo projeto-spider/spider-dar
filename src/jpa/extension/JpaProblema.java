@@ -114,7 +114,7 @@ public class JpaProblema extends ProblemaJpaController{
         }
     }
     
-    public List<Problema> listProblemasByNomeOuCodigo(Request request)
+    public List<Problema> listProblemasByNomeCodigoOuKeyword(Request request)
     {
         EntityManager em = getEntityManager();
         
@@ -122,13 +122,22 @@ public class JpaProblema extends ProblemaJpaController{
         {
             String busca = request.getData("Problema.busca");
             
-            String queryString = "FROM Problema p WHERE p.idOrganizacao.id = :idOrganizacao AND (p.codigo LIKE :buscaCodigo OR p.nome LIKE :buscaNome)";
+//                            SELECT * 
+//                            FROM Problema p 
+//                            JOIN Keyword k ON(k.idForeignKey = p.id)
+//                            WHERE p.idOrganizacao = 1 
+//                                    AND (p.nome LIKE "%111%" OR k.nome LIKE "%111%")
+            
+            String queryString = "FROM Problema p, Keyword k "
+                                    + "WHERE p.idOrganizacao.id = :idOrganizacao "
+                                    + "AND p.id = k.problema.id "
+                                    + "AND (p.nome LIKE :nomeProblema OR k.nome LIKE :nomeKeyword)";
             
             TypedQuery<Problema> query = em.createQuery(queryString,Problema.class);
             
             TypedQuery<Problema> result = query.setParameter("idOrganizacao", Integer.parseInt(request.getData("Problema.idOrganizacao"))).
-                                                setParameter("buscaCodigo", "%" + busca + "%").
-                                                setParameter("buscaNome", "%" + busca + "%");
+                                                setParameter("nomeKeyword", "%" + busca + "%").
+                                                setParameter("nomeProblema", "%" + busca + "%");
             
             return result.getResultList();
         }

@@ -3,7 +3,7 @@ package view;
 import com.itextpdf.text.DocumentException;
 import view.Gerenciar.ViewNovoUsuario;
 import view.Gerenciar.ViewNovaOrganizacao;
-import view.Gerenciar.ViewNovoProblemaDialog;
+import view.Gerenciar.ViewNovoProblema;
 import controller.ControllerOrganizacao;
 import controller.ControllerPerfil;
 import controller.ControllerProblema;
@@ -564,7 +564,7 @@ public class ViewPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jMenuItemNovaDecisaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemNovaDecisaoActionPerformed
-        new ViewNovoProblemaDialog(null, true).setVisible(true);
+        new ViewNovoProblema(null, true).setVisible(true);
     }//GEN-LAST:event_jMenuItemNovaDecisaoActionPerformed
 
     private void jMenuItemNovoUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemNovoUsuarioActionPerformed

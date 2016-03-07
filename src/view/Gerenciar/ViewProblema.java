@@ -2,6 +2,7 @@ package view.Gerenciar;
 
 import controller.ControllerProblema;
 import java.util.List;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import settings.KeepData;
 import util.Internal;
@@ -27,12 +28,15 @@ public class ViewProblema extends javax.swing.JInternalFrame {
     
     public void listProblemasInTable(List<Request> requestList)
     {
-        String columns[] = {"id", "Nome do Problema", "Criado em", "Modificado em"};
-        myDefaultTableModel = new MyDefaultTableModel(columns, 0, false);
+        String columns[] = {"id"," ", "Nome do Problema", "Criado em", "Modificado em"};
+        myDefaultTableModel = new MyDefaultTableModel(columns, 0, false,true,2);
+        
+        ImageIcon icon = new ImageIcon(getClass().getResource("/resources/image/problema.png"));
         
         for (Request request: requestList)
         {
-            String line[] = {request.getData("Problema.id"),
+            Object line[] = {request.getData("Problema.id"),
+                                icon,
                                 request.getData("Problema.nome"),
                                 request.getData("Problema.created"),
                                 request.getData("Problema.modified")};
@@ -45,6 +49,12 @@ public class ViewProblema extends javax.swing.JInternalFrame {
         jTableProblemas.getRowSorter().toggleSortOrder(2);
         jTableProblemas.removeColumn(jTableProblemas.getColumnModel().getColumn(0));
         jTableProblemas.setDefaultRenderer(Object.class, new MyCellRenderer());
+        
+        jTableProblemas.getColumnModel().getColumn(0).setPreferredWidth(40);
+        jTableProblemas.getColumnModel().getColumn(1).setPreferredWidth(430);
+        jTableProblemas.getColumnModel().getColumn(2).setPreferredWidth(140);
+        jTableProblemas.getColumnModel().getColumn(3).setPreferredWidth(140);
+        jTableProblemas.setRowHeight(25);
     }
 
     @SuppressWarnings("unchecked")
@@ -149,14 +159,14 @@ public class ViewProblema extends javax.swing.JInternalFrame {
         if (index > -1)
         {
             String idProblema = jTableProblemas.getModel().getValueAt(index, 0).toString();
-            new ViewNovoProblemaDialog(null, true, idProblema).setVisible(true);
+            new ViewNovoProblema(null, true, idProblema).setVisible(true);
         }
         else
             JOptionPane.showMessageDialog(null, "Selecione uma linha na tabela.");
     }
     
     private void jButtonCadastrarProblemaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCadastrarProblemaActionPerformed
-        new ViewNovoProblemaDialog(null, true).setVisible(true);
+        new ViewNovoProblema(null, true).setVisible(true);
         listProblemasInTable(new ControllerProblema().listProblemasByIdOrganizacao(KeepData.getData("Organizacao.id")));
     }//GEN-LAST:event_jButtonCadastrarProblemaActionPerformed
 
