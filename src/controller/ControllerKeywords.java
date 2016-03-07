@@ -5,7 +5,9 @@
  */
 package controller;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import jpa.extension.JpaKeyword;
 import jpa.extension.JpaProblema;
 import model.Keyword;
@@ -26,7 +28,6 @@ public class ControllerKeywords
     {
         try
         {
-
             JpaKeyword jpaKeyword = facade.initializeJpaKeyword();
             JpaProblema jpaProblema = facade.initializeJpaProblema();
 
@@ -45,6 +46,14 @@ public class ControllerKeywords
         {
             throw new Exception(getExceptionMessage(e, "cadastrar"), e);
         }
+    }
+    
+    public List<Keyword> listKeywordsByIdProblema(Request request)
+    {
+        ArrayList<Keyword> keywordsList = new ArrayList<Keyword>();
+        
+        JpaKeyword jpaKeyword = facade.initializeJpaKeyword();
+        return jpaKeyword.findKeywordsByIdProblema(Integer.parseInt(request.getData("Problema.id")));
     }
     
     private String getExceptionMessage(Exception e, String operacao)

@@ -3,15 +3,10 @@ package jpa.extension;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.Query;
+import javax.persistence.EntityTransaction;
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 import jpa.ProblemaJpaController;
-import model.Organizacao;
 import model.Problema;
-import org.eclipse.persistence.internal.jpa.JPAQuery;
 import util.Request;
 
 /**
@@ -24,7 +19,24 @@ public class JpaProblema extends ProblemaJpaController{
         super(emf);
     }
     
-    
+    public Problema createProblema(Problema problema)
+    {
+        EntityManager em = getEntityManager();
+        EntityTransaction tx = em.getTransaction();
+        
+        try
+        {
+            tx.begin();
+            em.persist(problema);
+            em.flush();
+            tx.commit();
+            return problema;
+        }
+        finally
+        {
+            em.close();
+        }
+    }
 
     public List<Problema> findProblemasByIdOrganizacao(int idOrg) {
         try {

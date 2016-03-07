@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import jpa.extension.JpaKeyword;
 import jpa.extension.JpaProblema;
 import model.Keyword;
 import model.Problema;
@@ -44,28 +45,37 @@ public class ControllerProblema
             problema.setCreated(new Date());
             problema.setModified(new Date());
             
+            Problema lastInsertedProblema = jpaProblema.createProblema(problema);
+            
+            String idProblema = String.valueOf(lastInsertedProblema.getId());
+            
             List<Keyword> keywordList = new ArrayList<>();
             
             HashMap<String,Input> fields = request.getAllHashMapDataInputs();
             
+            //TODO: verificar o tamanho da JList pela jlist
             int listSize = 3;
-
+            
+            ControllerKeywords controllerKeywords = new ControllerKeywords();
+            
             for (int keywordIndex = 0; keywordIndex < listSize; keywordIndex++)
             {
                 for(Entry<String,Input> entry : fields.entrySet())
                 {
-                    Input fieldToInsert = entry.getValue();
-                    
-                    if (entry.getKey() == "Keyword." + keywordIndex + ".nome")
+                    if (entry.getKey().equals("Keyword." + keywordIndex + ".nome"))
                     {
+                        Request requestKeyword = new Request();
                         
+                        requestKeyword.setData("Keyword.nome", entry.getValue().getValor());
+                        requestKeyword.setData("Problema.id", idProblema);
+                        
+                        controllerKeywords.addKeyword(requestKeyword);
                     }
                 }
             }
             
             problema.setKeywordList(keywordList);
             
-            jpaProblema.create(problema);
         }
         catch(Exception e)
         {
@@ -77,9 +87,11 @@ public class ControllerProblema
     {
         try
         {
-            int idProblema = Integer.parseInt(request.getDataInput("Problema.id").getValor());
+            JpaProblema jpaProblema = facade.initializeJpaProblema();
+            JpaKeyword jpaKeyword = facade.initializeJpaKeyword();
             
-            Problema problema = facade.initializeJpaProblema().findProblema(idProblema);
+            int idProblema = Integer.parseInt(request.getDataInput("Problema.id").getValor());
+            Problema problema = jpaProblema.findProblema(idProblema);
             
             problema.setNome(request.getDataInput("Problema.nome").getValor());
             problema.setProposito(request.getDataInput("Problema.proposito").getValor());
@@ -87,7 +99,9 @@ public class ControllerProblema
             problema.setContexto(request.getDataInput("Problema.contexto").getValor());
             problema.setModified(new Date());
             
-            facade.initializeJpaProblema().edit(problema);
+            jpaKeyword.deleteAllKeywordsByIdProblema(idProblema);
+            
+            jpaProblema.edit(problema);
          }
         catch (Exception e)
         {

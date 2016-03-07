@@ -1,13 +1,14 @@
 package view.Gerenciar;
 
+import controller.ControllerKeywords;
 import controller.ControllerProblema;
-import java.awt.Dimension;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import javax.swing.ListModel;
-import net.sf.nachocalendar.holidays.DefaultHoliDay;
+import model.Keyword;
 import settings.Constant;
 import settings.KeepData;
 import util.Input;
@@ -21,9 +22,10 @@ import util.swing.ComboItem;
 public class ViewNovoProblemaDialog extends javax.swing.JDialog
 {
     private final ControllerProblema controllerProblema = new ControllerProblema();
+    private final ControllerKeywords controllerKeywords = new ControllerKeywords();
     private int type;
     private Request request = new Request();
-    private DefaultListModel myJListModel = new DefaultListModel<Object>();
+    private DefaultListModel myJListModel = new DefaultListModel<>();
 
     public ViewNovoProblemaDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -51,6 +53,7 @@ public class ViewNovoProblemaDialog extends javax.swing.JDialog
         request.setData("Problema.idOrganizacao", KeepData.getData("Organizacao.id"));
         
         Request problema = controllerProblema.getProblemaById(request);
+        List<Keyword> keywordList = controllerKeywords.listKeywordsByIdProblema(request);
         
         request.setData("Problema.id",problema.getData("Problema.id"));
         
@@ -58,6 +61,18 @@ public class ViewNovoProblemaDialog extends javax.swing.JDialog
         jTextAreaProblemaProposito.setText(problema.getData("Problema.proposito"));
         jTextAreaProblemaPlanejamento.setText(problema.getData("Problema.planejamento"));
         jTextAreaProblemaContexto.setText(problema.getData("Problema.contexto"));
+        
+        int keywordsSize = keywordList.size();
+        
+        for (int indexList = 0; indexList < keywordsSize; indexList++)
+        {
+            String idKeyword = String.valueOf(keywordList.get(indexList).getKeywordPK());
+            String nomeKeyword = keywordList.get(indexList).getNome();
+        
+            myJListModel.addElement(new ComboItem(idKeyword, nomeKeyword));
+        }
+        
+        jListKeywords.setModel(myJListModel);
     }
 
     @SuppressWarnings("unchecked")
@@ -387,7 +402,7 @@ public class ViewNovoProblemaDialog extends javax.swing.JDialog
                 if (value.trim().length() > 0)
                     myJListModel.addElement(new ComboItem(String.valueOf(numberElements), value));
                 else
-                   JOptionPane.showMessageDialog(null,"texto não pode ser vazio ou espaços em branco");
+                   JOptionPane.showMessageDialog(null,"A Palavra-chave não pode ser vazia ou somente espaços em branco");
             }
         }
         else
@@ -411,7 +426,7 @@ public class ViewNovoProblemaDialog extends javax.swing.JDialog
     }//GEN-LAST:event_jButtonCancelarActionPerformed
 
     private void jButtonSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSalvarActionPerformed
-        this.save();// TODO add your handling code here:
+        this.save();
     }//GEN-LAST:event_jButtonSalvarActionPerformed
 
     private void jButtonNovaKeywordActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonNovaKeywordActionPerformed
