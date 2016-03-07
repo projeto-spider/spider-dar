@@ -8,7 +8,7 @@ import controller.ControllerOrganizacao;
 import controller.ControllerPerfil;
 import controller.ControllerProblema;
 import controller.ControllerUsuario;
-import controller.Relatorio;
+import controller.ControllerRelatorio;
 import java.awt.Color;
 import java.beans.PropertyVetoException;
 import java.io.IOException;
@@ -678,7 +678,7 @@ public class ViewPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
     private void jButtonRelatorioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRelatorioActionPerformed
-        Relatorio relatorio = new Relatorio();
+        ControllerRelatorio relatorio = new ControllerRelatorio();
         try {
             relatorio.gerarRelatorio();
         } catch (IOException ex) {
