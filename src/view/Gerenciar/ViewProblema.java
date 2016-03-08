@@ -45,8 +45,8 @@ public class ViewProblema extends javax.swing.JInternalFrame {
         }
         jTableProblemas.setModel(myDefaultTableModel);
         jTableProblemas.getTableHeader().setReorderingAllowed(false);
-        jTableProblemas.setAutoCreateRowSorter(true);
-        jTableProblemas.getRowSorter().toggleSortOrder(2);
+        //jTableProblemas.setAutoCreateRowSorter(true);
+        //jTableProblemas.getRowSorter().toggleSortOrder(2);
         jTableProblemas.removeColumn(jTableProblemas.getColumnModel().getColumn(0));
         jTableProblemas.setDefaultRenderer(Object.class, new MyCellRenderer());
         

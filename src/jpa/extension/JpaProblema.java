@@ -124,11 +124,12 @@ public class JpaProblema extends ProblemaJpaController{
             
 //                            SELECT * 
 //                            FROM Problema p 
-//                            JOIN Keyword k ON(k.idForeignKey = p.id)
+//                            LEFT JOIN Keyword k ON(k.idForeignKey = p.id)
 //                            WHERE p.idOrganizacao = 1 
 //                                    AND (p.nome LIKE "%111%" OR k.nome LIKE "%111%")
             
-            String queryString = "FROM Problema p, Keyword k "
+            String queryString = "SELECT DISTINCT p FROM Problema p "
+                                    + "LEFT JOIN Keyword k "
                                     + "WHERE p.idOrganizacao.id = :idOrganizacao "
                                     + "AND p.id = k.problema.id "
                                     + "AND (p.nome LIKE :nomeProblema OR k.nome LIKE :nomeKeyword)";
