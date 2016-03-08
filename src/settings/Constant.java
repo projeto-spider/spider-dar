@@ -34,4 +34,5 @@ public class Constant {
     public static int FUC_CRITERIOS = 4;
     public static int FUC_AVALIACAO = 5;
     public static int FUC_HISTORICO = 6;
+    public static int FUC_RELATORIO = 7;
 }

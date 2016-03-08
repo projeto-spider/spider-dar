@@ -26,7 +26,7 @@ import util.Request;
                 Historico historico = new Historico();
                 historico.setDescricao("Relatório foi Gerado.");
                 historico.setUsuarioNome(KeepData.getData("Usuario.nome"));
-                historico.setTipo(Constant.FUC_TAREFAS); 
+                historico.setTipo(Constant.FUC_RELATORIO); 
                 historico.setCreated(new Date());
                 historico.setModified(new Date());
                 historico.setIdProblema(facade.initializeJpaProblema().findProblema(idProblema));
