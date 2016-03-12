@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.swing.JOptionPane;
 import model.Criterio;
 import model.Historico;
 import model.Nota;
@@ -93,6 +94,11 @@ public class ControllerCriterios {
             } else {
                 criterio = facade.initializeJpaCriterio().findCriterio(ct.getId());
             }
+            
+            for (Nota nota : criterio.getNotaList()) {
+                facade.initializeJpaNota().destroy(nota.getId());
+            }
+
             Nota nota;
 
             for (Request aux : notas) {
@@ -110,6 +116,13 @@ public class ControllerCriterios {
 
         } catch (Exception error) {
             error.printStackTrace();
+        }
+    }
+
+    public void removerNota(int idNota) {
+        try {
+            facade.initializeJpaNota().destroy(idNota);
+        } catch (Exception error) {
         }
     }
 

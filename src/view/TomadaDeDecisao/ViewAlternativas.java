@@ -64,11 +64,7 @@ public class ViewAlternativas extends javax.swing.JInternalFrame {
     }
 
     private boolean rowIsSelected() {
-        if (jTableAlternativas.getSelectedRow() > -1) {
-            return true;
-        } else {
-            return false;
-        }
+        return jTableAlternativas.getSelectedRow() > -1;
     }
 
     private void removeAlternativa() {
