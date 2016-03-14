@@ -13,6 +13,7 @@ import util.Input;
 import util.Request;
 import util.Validate;
 import util.swing.ComboItem;
+import static javax.swing.JOptionPane.*;
 
 /**
  *
@@ -326,10 +327,17 @@ public class ViewNovoProblema extends javax.swing.JDialog
         int indexItemSelected = jListKeywords.getSelectedIndex();
 
         if (indexItemSelected < 0)
-            JOptionPane.showMessageDialog(null, "Selecione uma das palavras para excluir"); 
+            showMessageDialog(null, "Selecione uma das palavras para excluir"); 
         else
-        {
-            myJListModel.remove(indexItemSelected);
+        {   
+            String ObjectButtons[] = {"Sim","Não"};
+
+            int PromptResult = showOptionDialog(null, "Deseja excluir a Palavra-chave?", 
+                    "EXCLUIR", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, 
+                    null, ObjectButtons, ObjectButtons[1]);
+            
+            if (PromptResult == 0)
+                myJListModel.remove(indexItemSelected);
         }
     }
 

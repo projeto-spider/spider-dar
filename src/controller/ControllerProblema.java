@@ -11,13 +11,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import javax.swing.JOptionPane;
 import jpa.extension.JpaKeyword;
 import jpa.extension.JpaProblema;
-import model.Historico;
 import model.Problema;
-import settings.Constant;
 import settings.Facade;
-import settings.KeepData;
 import util.Input;
 import util.Request;
 import util.Text;
@@ -136,6 +134,40 @@ public class ControllerProblema
         }
     }
     
+    public void removeProblemaById(String idProblema) throws Exception
+    {
+        try
+        {
+            if (hasProblemaTarefa(idProblema))
+                throw new Exception("Tarefas");
+            
+            if (hasProblemaAlternativas(idProblema))
+                throw new Exception("Alternativas de Solução");
+            
+            if (hasProblemaCriterios(idProblema))
+                throw new Exception("Critérios de Avaliação");
+        }
+        catch (Exception e)
+        {
+           throw new Exception("<html>Não é possível excluir, o Problema possui <b>" + e.getMessage() +"</b> vinculados(as) a ele.</html>");
+        }
+    }
+    
+    private boolean hasProblemaTarefa(String idProblema)
+    {
+        return false;
+    }
+    
+    private boolean hasProblemaAlternativas(String idProblema)
+    {
+        return true;
+    }
+    
+    private boolean hasProblemaCriterios(String idProblema)
+    {
+        return true;
+    }
+    
     private String getExceptionMessage(Exception e, String operacao)
     {
         String message;
@@ -252,7 +284,6 @@ public class ControllerProblema
 
             data.put("Problema.id", problema.getId().toString());
             data.put("Problema.nome", problema.getNome());
-//            data.put("Problema.codigo", problema.getCodigo());
             data.put("Problema.created", Text.formatDateForTable(problema.getCreated()));
             data.put("Problema.modified", Text.formatDateForTable(problema.getModified()));
 
@@ -271,7 +302,6 @@ public class ControllerProblema
             Map<String, String> data = new HashMap<>();
             data.put("Problema.id", String.valueOf(problema.getId()));
             data.put("Problema.nome", problema.getNome());
-//            data.put("Problema.codigo", problema.getCodigo());
             data.put("Problema.contexto", problema.getContexto());
             data.put("Problema.planejamento", problema.getPlanejamento());
             data.put("Problema.proposito", problema.getProposito());
@@ -279,7 +309,8 @@ public class ControllerProblema
             data.put("Problema.modified", Text.formatDateForTable(problema.getModified()));
 
             return new Request(data);
-        } catch (Exception error) {
+        } catch (Exception error)
+        {
             Map<String, String> data = new HashMap<>();
             data.put("Error.mensagem", "Erro inesperado.");
             return new Request(data);
