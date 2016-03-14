@@ -1,7 +1,14 @@
-
 package view.TomadaDeDecisao;
 
+import controller.ControllerAlternativa;
+import java.awt.Color;
+import java.util.List;
+import javax.swing.ImageIcon;
 import util.Internal;
+import util.MyCellRenderer;
+import util.MyDefaultTableModel;
+import util.Request;
+import util.swing.MyTable;
 
 /**
  *
@@ -9,10 +16,48 @@ import util.Internal;
  */
 public class ViewAvaliacao extends javax.swing.JInternalFrame {
 
+    private MyDefaultTableModel myDefaultTableModel;
+    private final ControllerAlternativa controllerAlternativa = new ControllerAlternativa();
+
     public ViewAvaliacao() {
         initComponents();
-        
-        Internal.retiraBorda(this); 
+
+        Internal.retiraBorda(this);
+    }
+
+    public void showAvaliacao() {
+        initializeTable();
+    }
+
+    private void initializeTable() {
+        myDefaultTableModel = new MyDefaultTableModel(new Object[]{"id", "Alternativas", "Satisfação", "Ranking", "Avaliar"}, 0, false, false, 3);
+        ImageIcon icon = new ImageIcon(getClass().getResource("/resources/image/task.png"));
+
+        List<Request> list = controllerAlternativa.listAlternativasByProblema();
+
+        for (Request request : list) {
+            Object[] line = {
+                request.getData("Alternativa.id"),
+                request.getData("Alternativa.nome"),
+                "0", "0"};
+
+            myDefaultTableModel.addRow(line);
+        }
+
+        jTableAvaliacao.setModel(myDefaultTableModel);
+
+        new MyTable(jTableAvaliacao).putButton();
+
+        jTableAvaliacao.removeColumn(jTableAvaliacao.getColumnModel().getColumn(0));
+        jTableAvaliacao.getColumnModel().getColumn(0).setPreferredWidth(430);
+        jTableAvaliacao.getColumnModel().getColumn(1).setPreferredWidth(100);
+        jTableAvaliacao.getColumnModel().getColumn(2).setPreferredWidth(100);
+        jTableAvaliacao.getColumnModel().getColumn(3).setPreferredWidth(40);
+        jTableAvaliacao.setDefaultRenderer(Object.class, new MyCellRenderer(2, new Color(189, 189, 240)));
+
+        jTableAvaliacao.setRowHeight(25);
+        jTableAvaliacao.setGridColor(new Color(182, 182, 182));
+
     }
 
     @SuppressWarnings("unchecked")
@@ -21,16 +66,11 @@ public class ViewAvaliacao extends javax.swing.JInternalFrame {
 
         jTextField1 = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        jTextField2 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        jTableAvaliacao = new javax.swing.JTable();
         jButton2 = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
-        jLabel2 = new javax.swing.JLabel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        jSeparator1 = new javax.swing.JSeparator();
 
         jTextField1.setEditable(false);
         jTextField1.setBackground(new java.awt.Color(31, 109, 165));
@@ -39,23 +79,23 @@ public class ViewAvaliacao extends javax.swing.JInternalFrame {
         jTextField1.setText("  Avaliação");
         jTextField1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jTableAvaliacao.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null}
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
             },
             new String [] {
-                "Alternativas", "Críterio 1 (16)", "Críterio 2 (32)", "Críterio 3 (24)", "Críterio 3 (28)", "Satifação (%)", "Raking"
+                "Alternativas", "Satifação (%)", "Raking", "Avaliar"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
-
-        jTextField2.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        jTextField2.setText("Critérios/ Pesos");
-
-        jButton1.setText("Salvar alterações na Tabela");
+        jTableAvaliacao.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTableAvaliacaoMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(jTableAvaliacao);
 
         jButton2.setText("Tomar Decisão");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -64,15 +104,11 @@ public class ViewAvaliacao extends javax.swing.JInternalFrame {
             }
         });
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
+        jPanel1.setBackground(new java.awt.Color(189, 189, 240));
+        jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
 
-        jLabel1.setText("Alternativa Escolhida:");
-
-        jLabel2.setText("Justificativa:");
-
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(2);
-        jScrollPane2.setViewportView(jTextArea1);
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel1.setText("Decisão");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -81,13 +117,10 @@ public class ViewAvaliacao extends javax.swing.JInternalFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextField3)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel2))
+                        .addComponent(jLabel1)
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jScrollPane2))
+                    .addComponent(jSeparator1))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -95,13 +128,9 @@ public class ViewAvaliacao extends javax.swing.JInternalFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1)
-                .addGap(0, 0, 0)
-                .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel2)
-                .addGap(0, 0, 0)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 65, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(70, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -109,23 +138,14 @@ public class ViewAvaliacao extends javax.swing.JInternalFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jTextField1)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 763, Short.MAX_VALUE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButton1))))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addGap(119, 119, 119)
-                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 432, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 763, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -133,15 +153,11 @@ public class ViewAvaliacao extends javax.swing.JInternalFrame {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(11, 11, 11)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 272, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -149,22 +165,58 @@ public class ViewAvaliacao extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        new ViewTomarDecisao(null, true).setVisible(true); 
+        new ViewTomarDecisao(null, true).setVisible(true);
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jTableAvaliacaoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableAvaliacaoMouseClicked
+        int column = jTableAvaliacao.columnAtPoint(evt.getPoint());
+
+        if (column == 3) {
+            int idAltenativa = Integer.parseInt(jTableAvaliacao.getModel()
+                    .getValueAt(jTableAvaliacao.getSelectedRow(), 0).toString());
+            new ViewAvaliar(null, true, idAltenativa).setVisible(true);
+        }
+    }//GEN-LAST:event_jTableAvaliacaoMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JTable jTableAvaliacao;
     private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
     // End of variables declaration//GEN-END:variables
+
+//    private void initializeTable() {
+//        model = new MyDefaultTableModel(new Object[]{"Alternativas", "Critério A", "Critério B", "Critério C", 
+//            "<html>Porcentagem<br>  (%)</html>", "Ranking"}, 0, false);
+//
+//        jTableAvaliacao = new JTable(model) {
+//            @Override
+//            protected JTableHeader createDefaultTableHeader() {
+//                return new GroupableTableHeader(columnModel);
+//            }
+//        };
+//        
+//        TableColumnModel cm = jTableAvaliacao.getColumnModel();       
+//        ColumnGroup subColumn = new ColumnGroup("Critérios");
+//        subColumn.add(cm.getColumn(1));
+//        subColumn.add(cm.getColumn(2));
+//        subColumn.add(cm.getColumn(3)); 
+//
+//        GroupableTableHeader header = (GroupableTableHeader) jTableAvaliacao.getTableHeader();
+//        header.addColumnGroup(subColumn);
+//
+//        jScrollPane1.setViewportView(jTableAvaliacao);
+//        jTableAvaliacao.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+//    }
+//
+//    private void putRow(){
+//        Object[] line =  {" 1111111111111111111111111111 "," 1 "," 1 "," 1 "," 1 "," 1 "," 1 "," 1 "," 1 "," 1 "," 1 "," 1 ",};
+//        model.addRow(line);
+//        jTableAvaliacao.setModel(model); 
+//    }
+//    
 }

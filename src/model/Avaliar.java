@@ -9,8 +9,10 @@ import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -29,15 +31,16 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Avaliar.findAll", query = "SELECT a FROM Avaliar a"),
-    @NamedQuery(name = "Avaliar.findByIdAlternativa", query = "SELECT a FROM Avaliar a WHERE a.avaliarPK.idAlternativa = :idAlternativa"),
-    @NamedQuery(name = "Avaliar.findByIdAvaliacao", query = "SELECT a FROM Avaliar a WHERE a.avaliarPK.idAvaliacao = :idAvaliacao"),
-    @NamedQuery(name = "Avaliar.findByIdCriterio", query = "SELECT a FROM Avaliar a WHERE a.avaliarPK.idCriterio = :idCriterio"),
+    @NamedQuery(name = "Avaliar.findById", query = "SELECT a FROM Avaliar a WHERE a.id = :id"),
     @NamedQuery(name = "Avaliar.findByCreated", query = "SELECT a FROM Avaliar a WHERE a.created = :created"),
     @NamedQuery(name = "Avaliar.findByModified", query = "SELECT a FROM Avaliar a WHERE a.modified = :modified")})
 public class Avaliar implements Serializable {
     private static final long serialVersionUID = 1L;
-    @EmbeddedId
-    protected AvaliarPK avaliarPK;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "id")
+    private Integer id;
     @Basic(optional = false)
     @Column(name = "created")
     @Temporal(TemporalType.TIMESTAMP)
@@ -46,39 +49,35 @@ public class Avaliar implements Serializable {
     @Column(name = "modified")
     @Temporal(TemporalType.TIMESTAMP)
     private Date modified;
-    @JoinColumn(name = "idAlternativa", referencedColumnName = "id", insertable = false, updatable = false)
+    @JoinColumn(name = "idAlternativa", referencedColumnName = "id")
     @ManyToOne(optional = false)
-    private Alternativa alternativa;
-    @JoinColumn(name = "idAvaliacao", referencedColumnName = "id", insertable = false, updatable = false)
+    private Alternativa idAlternativa;
+    @JoinColumn(name = "idAvaliacao", referencedColumnName = "id")
     @ManyToOne(optional = false)
-    private Avaliacao avaliacao;
-    @JoinColumn(name = "idCriterio", referencedColumnName = "id", insertable = false, updatable = false)
+    private Avaliacao idAvaliacao;
+    @JoinColumn(name = "idCriterio", referencedColumnName = "id")
     @ManyToOne(optional = false)
-    private Criterio criterio;
+    private Criterio idCriterio;
 
     public Avaliar() {
     }
 
-    public Avaliar(AvaliarPK avaliarPK) {
-        this.avaliarPK = avaliarPK;
+    public Avaliar(Integer id) {
+        this.id = id;
     }
 
-    public Avaliar(AvaliarPK avaliarPK, Date created, Date modified) {
-        this.avaliarPK = avaliarPK;
+    public Avaliar(Integer id, Date created, Date modified) {
+        this.id = id;
         this.created = created;
         this.modified = modified;
     }
 
-    public Avaliar(int idAlternativa, int idAvaliacao, int idCriterio) {
-        this.avaliarPK = new AvaliarPK(idAlternativa, idAvaliacao, idCriterio);
+    public Integer getId() {
+        return id;
     }
 
-    public AvaliarPK getAvaliarPK() {
-        return avaliarPK;
-    }
-
-    public void setAvaliarPK(AvaliarPK avaliarPK) {
-        this.avaliarPK = avaliarPK;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public Date getCreated() {
@@ -97,34 +96,34 @@ public class Avaliar implements Serializable {
         this.modified = modified;
     }
 
-    public Alternativa getAlternativa() {
-        return alternativa;
+    public Alternativa getIdAlternativa() {
+        return idAlternativa;
     }
 
-    public void setAlternativa(Alternativa alternativa) {
-        this.alternativa = alternativa;
+    public void setIdAlternativa(Alternativa idAlternativa) {
+        this.idAlternativa = idAlternativa;
     }
 
-    public Avaliacao getAvaliacao() {
-        return avaliacao;
+    public Avaliacao getIdAvaliacao() {
+        return idAvaliacao;
     }
 
-    public void setAvaliacao(Avaliacao avaliacao) {
-        this.avaliacao = avaliacao;
+    public void setIdAvaliacao(Avaliacao idAvaliacao) {
+        this.idAvaliacao = idAvaliacao;
     }
 
-    public Criterio getCriterio() {
-        return criterio;
+    public Criterio getIdCriterio() {
+        return idCriterio;
     }
 
-    public void setCriterio(Criterio criterio) {
-        this.criterio = criterio;
+    public void setIdCriterio(Criterio idCriterio) {
+        this.idCriterio = idCriterio;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (avaliarPK != null ? avaliarPK.hashCode() : 0);
+        hash += (id != null ? id.hashCode() : 0);
         return hash;
     }
 
@@ -135,7 +134,7 @@ public class Avaliar implements Serializable {
             return false;
         }
         Avaliar other = (Avaliar) object;
-        if ((this.avaliarPK == null && other.avaliarPK != null) || (this.avaliarPK != null && !this.avaliarPK.equals(other.avaliarPK))) {
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
         return true;
@@ -143,7 +142,7 @@ public class Avaliar implements Serializable {
 
     @Override
     public String toString() {
-        return "model.Avaliar[ avaliarPK=" + avaliarPK + " ]";
+        return "model.Avaliar[ id=" + id + " ]";
     }
     
 }

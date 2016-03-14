@@ -68,7 +68,7 @@ public class Criterio implements Serializable {
     @JoinColumn(name = "idProblema", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Problema idProblema;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "criterio")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idCriterio")
     private List<Avaliar> avaliarList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idCriterio")
     private List<Nota> notaList;

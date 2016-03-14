@@ -3,6 +3,7 @@ package settings;
 import jpa.ItemguiaJpaController;
 import jpa.extension.JpaAcessar;
 import jpa.extension.JpaAlternativa;
+import jpa.extension.JpaAvaliacao;
 import jpa.extension.JpaConfiguracoes;
 import jpa.extension.JpaCriterio;
 import jpa.extension.JpaFuncionalidades;
@@ -108,5 +109,9 @@ public class Facade {
 
     public JpaNotas initializeJpaNota() {
         return new JpaNotas(Connection.connect());
+    }
+    
+    public JpaAvaliacao initializeJpaAvaliacao() {
+        return new JpaAvaliacao(Connection.connect());
     }
 }

@@ -34,7 +34,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Avaliacao.findAll", query = "SELECT a FROM Avaliacao a"),
     @NamedQuery(name = "Avaliacao.findById", query = "SELECT a FROM Avaliacao a WHERE a.id = :id"),
-    @NamedQuery(name = "Avaliacao.findByNota", query = "SELECT a FROM Avaliacao a WHERE a.nota = :nota"),
+    @NamedQuery(name = "Avaliacao.findByNotaValor", query = "SELECT a FROM Avaliacao a WHERE a.notaValor = :notaValor"),
     @NamedQuery(name = "Avaliacao.findByCreated", query = "SELECT a FROM Avaliacao a WHERE a.created = :created"),
     @NamedQuery(name = "Avaliacao.findByModified", query = "SELECT a FROM Avaliacao a WHERE a.modified = :modified")})
 public class Avaliacao implements Serializable {
@@ -44,8 +44,9 @@ public class Avaliacao implements Serializable {
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
-    @Column(name = "nota")
-    private String nota;
+    @Basic(optional = false)
+    @Column(name = "notaValor")
+    private int notaValor;
     @Basic(optional = false)
     @Column(name = "created")
     @Temporal(TemporalType.TIMESTAMP)
@@ -54,7 +55,7 @@ public class Avaliacao implements Serializable {
     @Column(name = "modified")
     @Temporal(TemporalType.TIMESTAMP)
     private Date modified;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "avaliacao")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idAvaliacao")
     private List<Avaliar> avaliarList;
 
     public Avaliacao() {
@@ -64,8 +65,9 @@ public class Avaliacao implements Serializable {
         this.id = id;
     }
 
-    public Avaliacao(Integer id, Date created, Date modified) {
+    public Avaliacao(Integer id, int notaValor, Date created, Date modified) {
         this.id = id;
+        this.notaValor = notaValor;
         this.created = created;
         this.modified = modified;
     }
@@ -78,12 +80,12 @@ public class Avaliacao implements Serializable {
         this.id = id;
     }
 
-    public String getNota() {
-        return nota;
+    public int getNotaValor() {
+        return notaValor;
     }
 
-    public void setNota(String nota) {
-        this.nota = nota;
+    public void setNotaValor(int notaValor) {
+        this.notaValor = notaValor;
     }
 
     public Date getCreated() {

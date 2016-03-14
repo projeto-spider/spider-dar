@@ -662,6 +662,7 @@ public class ViewPrincipal extends javax.swing.JFrame {
 
     private void jButtonAvaliacaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAvaliacaoActionPerformed
         changeViews(viewDecisao);
+        viewDecisao.showAvaliacao();
     }//GEN-LAST:event_jButtonAvaliacaoActionPerformed
 
     private void jButtonHistoricoStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jButtonHistoricoStateChanged

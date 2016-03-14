@@ -75,7 +75,7 @@ public class Alternativa implements Serializable {
     private Problema idProblema;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idAlternativa")
     private List<Decisao> decisaoList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "alternativa")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idAlternativa")
     private List<Avaliar> avaliarList;
 
     public Alternativa() {

@@ -14,11 +14,9 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import jpa.exceptions.NonexistentEntityException;
-import jpa.exceptions.PreexistingEntityException;
 import model.Alternativa;
 import model.Avaliacao;
 import model.Avaliar;
-import model.AvaliarPK;
 import model.Criterio;
 
 /**
@@ -36,51 +34,40 @@ public class AvaliarJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(Avaliar avaliar) throws PreexistingEntityException, Exception {
-        if (avaliar.getAvaliarPK() == null) {
-            avaliar.setAvaliarPK(new AvaliarPK());
-        }
-        avaliar.getAvaliarPK().setIdAvaliacao(avaliar.getAvaliacao().getId());
-        avaliar.getAvaliarPK().setIdCriterio(avaliar.getCriterio().getId());
-        avaliar.getAvaliarPK().setIdAlternativa(avaliar.getAlternativa().getId());
+    public void create(Avaliar avaliar) {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Alternativa alternativa = avaliar.getAlternativa();
-            if (alternativa != null) {
-                alternativa = em.getReference(alternativa.getClass(), alternativa.getId());
-                avaliar.setAlternativa(alternativa);
+            Alternativa idAlternativa = avaliar.getIdAlternativa();
+            if (idAlternativa != null) {
+                idAlternativa = em.getReference(idAlternativa.getClass(), idAlternativa.getId());
+                avaliar.setIdAlternativa(idAlternativa);
             }
-            Avaliacao avaliacao = avaliar.getAvaliacao();
-            if (avaliacao != null) {
-                avaliacao = em.getReference(avaliacao.getClass(), avaliacao.getId());
-                avaliar.setAvaliacao(avaliacao);
+            Avaliacao idAvaliacao = avaliar.getIdAvaliacao();
+            if (idAvaliacao != null) {
+                idAvaliacao = em.getReference(idAvaliacao.getClass(), idAvaliacao.getId());
+                avaliar.setIdAvaliacao(idAvaliacao);
             }
-            Criterio criterio = avaliar.getCriterio();
-            if (criterio != null) {
-                criterio = em.getReference(criterio.getClass(), criterio.getId());
-                avaliar.setCriterio(criterio);
+            Criterio idCriterio = avaliar.getIdCriterio();
+            if (idCriterio != null) {
+                idCriterio = em.getReference(idCriterio.getClass(), idCriterio.getId());
+                avaliar.setIdCriterio(idCriterio);
             }
             em.persist(avaliar);
-            if (alternativa != null) {
-                alternativa.getAvaliarList().add(avaliar);
-                alternativa = em.merge(alternativa);
+            if (idAlternativa != null) {
+                idAlternativa.getAvaliarList().add(avaliar);
+                idAlternativa = em.merge(idAlternativa);
             }
-            if (avaliacao != null) {
-                avaliacao.getAvaliarList().add(avaliar);
-                avaliacao = em.merge(avaliacao);
+            if (idAvaliacao != null) {
+                idAvaliacao.getAvaliarList().add(avaliar);
+                idAvaliacao = em.merge(idAvaliacao);
             }
-            if (criterio != null) {
-                criterio.getAvaliarList().add(avaliar);
-                criterio = em.merge(criterio);
+            if (idCriterio != null) {
+                idCriterio.getAvaliarList().add(avaliar);
+                idCriterio = em.merge(idCriterio);
             }
             em.getTransaction().commit();
-        } catch (Exception ex) {
-            if (findAvaliar(avaliar.getAvaliarPK()) != null) {
-                throw new PreexistingEntityException("Avaliar " + avaliar + " already exists.", ex);
-            }
-            throw ex;
         } finally {
             if (em != null) {
                 em.close();
@@ -89,62 +76,59 @@ public class AvaliarJpaController implements Serializable {
     }
 
     public void edit(Avaliar avaliar) throws NonexistentEntityException, Exception {
-        avaliar.getAvaliarPK().setIdAvaliacao(avaliar.getAvaliacao().getId());
-        avaliar.getAvaliarPK().setIdCriterio(avaliar.getCriterio().getId());
-        avaliar.getAvaliarPK().setIdAlternativa(avaliar.getAlternativa().getId());
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Avaliar persistentAvaliar = em.find(Avaliar.class, avaliar.getAvaliarPK());
-            Alternativa alternativaOld = persistentAvaliar.getAlternativa();
-            Alternativa alternativaNew = avaliar.getAlternativa();
-            Avaliacao avaliacaoOld = persistentAvaliar.getAvaliacao();
-            Avaliacao avaliacaoNew = avaliar.getAvaliacao();
-            Criterio criterioOld = persistentAvaliar.getCriterio();
-            Criterio criterioNew = avaliar.getCriterio();
-            if (alternativaNew != null) {
-                alternativaNew = em.getReference(alternativaNew.getClass(), alternativaNew.getId());
-                avaliar.setAlternativa(alternativaNew);
+            Avaliar persistentAvaliar = em.find(Avaliar.class, avaliar.getId());
+            Alternativa idAlternativaOld = persistentAvaliar.getIdAlternativa();
+            Alternativa idAlternativaNew = avaliar.getIdAlternativa();
+            Avaliacao idAvaliacaoOld = persistentAvaliar.getIdAvaliacao();
+            Avaliacao idAvaliacaoNew = avaliar.getIdAvaliacao();
+            Criterio idCriterioOld = persistentAvaliar.getIdCriterio();
+            Criterio idCriterioNew = avaliar.getIdCriterio();
+            if (idAlternativaNew != null) {
+                idAlternativaNew = em.getReference(idAlternativaNew.getClass(), idAlternativaNew.getId());
+                avaliar.setIdAlternativa(idAlternativaNew);
             }
-            if (avaliacaoNew != null) {
-                avaliacaoNew = em.getReference(avaliacaoNew.getClass(), avaliacaoNew.getId());
-                avaliar.setAvaliacao(avaliacaoNew);
+            if (idAvaliacaoNew != null) {
+                idAvaliacaoNew = em.getReference(idAvaliacaoNew.getClass(), idAvaliacaoNew.getId());
+                avaliar.setIdAvaliacao(idAvaliacaoNew);
             }
-            if (criterioNew != null) {
-                criterioNew = em.getReference(criterioNew.getClass(), criterioNew.getId());
-                avaliar.setCriterio(criterioNew);
+            if (idCriterioNew != null) {
+                idCriterioNew = em.getReference(idCriterioNew.getClass(), idCriterioNew.getId());
+                avaliar.setIdCriterio(idCriterioNew);
             }
             avaliar = em.merge(avaliar);
-            if (alternativaOld != null && !alternativaOld.equals(alternativaNew)) {
-                alternativaOld.getAvaliarList().remove(avaliar);
-                alternativaOld = em.merge(alternativaOld);
+            if (idAlternativaOld != null && !idAlternativaOld.equals(idAlternativaNew)) {
+                idAlternativaOld.getAvaliarList().remove(avaliar);
+                idAlternativaOld = em.merge(idAlternativaOld);
             }
-            if (alternativaNew != null && !alternativaNew.equals(alternativaOld)) {
-                alternativaNew.getAvaliarList().add(avaliar);
-                alternativaNew = em.merge(alternativaNew);
+            if (idAlternativaNew != null && !idAlternativaNew.equals(idAlternativaOld)) {
+                idAlternativaNew.getAvaliarList().add(avaliar);
+                idAlternativaNew = em.merge(idAlternativaNew);
             }
-            if (avaliacaoOld != null && !avaliacaoOld.equals(avaliacaoNew)) {
-                avaliacaoOld.getAvaliarList().remove(avaliar);
-                avaliacaoOld = em.merge(avaliacaoOld);
+            if (idAvaliacaoOld != null && !idAvaliacaoOld.equals(idAvaliacaoNew)) {
+                idAvaliacaoOld.getAvaliarList().remove(avaliar);
+                idAvaliacaoOld = em.merge(idAvaliacaoOld);
             }
-            if (avaliacaoNew != null && !avaliacaoNew.equals(avaliacaoOld)) {
-                avaliacaoNew.getAvaliarList().add(avaliar);
-                avaliacaoNew = em.merge(avaliacaoNew);
+            if (idAvaliacaoNew != null && !idAvaliacaoNew.equals(idAvaliacaoOld)) {
+                idAvaliacaoNew.getAvaliarList().add(avaliar);
+                idAvaliacaoNew = em.merge(idAvaliacaoNew);
             }
-            if (criterioOld != null && !criterioOld.equals(criterioNew)) {
-                criterioOld.getAvaliarList().remove(avaliar);
-                criterioOld = em.merge(criterioOld);
+            if (idCriterioOld != null && !idCriterioOld.equals(idCriterioNew)) {
+                idCriterioOld.getAvaliarList().remove(avaliar);
+                idCriterioOld = em.merge(idCriterioOld);
             }
-            if (criterioNew != null && !criterioNew.equals(criterioOld)) {
-                criterioNew.getAvaliarList().add(avaliar);
-                criterioNew = em.merge(criterioNew);
+            if (idCriterioNew != null && !idCriterioNew.equals(idCriterioOld)) {
+                idCriterioNew.getAvaliarList().add(avaliar);
+                idCriterioNew = em.merge(idCriterioNew);
             }
             em.getTransaction().commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
-                AvaliarPK id = avaliar.getAvaliarPK();
+                Integer id = avaliar.getId();
                 if (findAvaliar(id) == null) {
                     throw new NonexistentEntityException("The avaliar with id " + id + " no longer exists.");
                 }
@@ -157,7 +141,7 @@ public class AvaliarJpaController implements Serializable {
         }
     }
 
-    public void destroy(AvaliarPK id) throws NonexistentEntityException {
+    public void destroy(Integer id) throws NonexistentEntityException {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -165,24 +149,24 @@ public class AvaliarJpaController implements Serializable {
             Avaliar avaliar;
             try {
                 avaliar = em.getReference(Avaliar.class, id);
-                avaliar.getAvaliarPK();
+                avaliar.getId();
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The avaliar with id " + id + " no longer exists.", enfe);
             }
-            Alternativa alternativa = avaliar.getAlternativa();
-            if (alternativa != null) {
-                alternativa.getAvaliarList().remove(avaliar);
-                alternativa = em.merge(alternativa);
+            Alternativa idAlternativa = avaliar.getIdAlternativa();
+            if (idAlternativa != null) {
+                idAlternativa.getAvaliarList().remove(avaliar);
+                idAlternativa = em.merge(idAlternativa);
             }
-            Avaliacao avaliacao = avaliar.getAvaliacao();
-            if (avaliacao != null) {
-                avaliacao.getAvaliarList().remove(avaliar);
-                avaliacao = em.merge(avaliacao);
+            Avaliacao idAvaliacao = avaliar.getIdAvaliacao();
+            if (idAvaliacao != null) {
+                idAvaliacao.getAvaliarList().remove(avaliar);
+                idAvaliacao = em.merge(idAvaliacao);
             }
-            Criterio criterio = avaliar.getCriterio();
-            if (criterio != null) {
-                criterio.getAvaliarList().remove(avaliar);
-                criterio = em.merge(criterio);
+            Criterio idCriterio = avaliar.getIdCriterio();
+            if (idCriterio != null) {
+                idCriterio.getAvaliarList().remove(avaliar);
+                idCriterio = em.merge(idCriterio);
             }
             em.remove(avaliar);
             em.getTransaction().commit();
@@ -217,7 +201,7 @@ public class AvaliarJpaController implements Serializable {
         }
     }
 
-    public Avaliar findAvaliar(AvaliarPK id) {
+    public Avaliar findAvaliar(Integer id) {
         EntityManager em = getEntityManager();
         try {
             return em.find(Avaliar.class, id);

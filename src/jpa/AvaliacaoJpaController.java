@@ -44,18 +44,18 @@ public class AvaliacaoJpaController implements Serializable {
             em.getTransaction().begin();
             List<Avaliar> attachedAvaliarList = new ArrayList<Avaliar>();
             for (Avaliar avaliarListAvaliarToAttach : avaliacao.getAvaliarList()) {
-                avaliarListAvaliarToAttach = em.getReference(avaliarListAvaliarToAttach.getClass(), avaliarListAvaliarToAttach.getAvaliarPK());
+                avaliarListAvaliarToAttach = em.getReference(avaliarListAvaliarToAttach.getClass(), avaliarListAvaliarToAttach.getId());
                 attachedAvaliarList.add(avaliarListAvaliarToAttach);
             }
             avaliacao.setAvaliarList(attachedAvaliarList);
             em.persist(avaliacao);
             for (Avaliar avaliarListAvaliar : avaliacao.getAvaliarList()) {
-                Avaliacao oldAvaliacaoOfAvaliarListAvaliar = avaliarListAvaliar.getAvaliacao();
-                avaliarListAvaliar.setAvaliacao(avaliacao);
+                Avaliacao oldIdAvaliacaoOfAvaliarListAvaliar = avaliarListAvaliar.getIdAvaliacao();
+                avaliarListAvaliar.setIdAvaliacao(avaliacao);
                 avaliarListAvaliar = em.merge(avaliarListAvaliar);
-                if (oldAvaliacaoOfAvaliarListAvaliar != null) {
-                    oldAvaliacaoOfAvaliarListAvaliar.getAvaliarList().remove(avaliarListAvaliar);
-                    oldAvaliacaoOfAvaliarListAvaliar = em.merge(oldAvaliacaoOfAvaliarListAvaliar);
+                if (oldIdAvaliacaoOfAvaliarListAvaliar != null) {
+                    oldIdAvaliacaoOfAvaliarListAvaliar.getAvaliarList().remove(avaliarListAvaliar);
+                    oldIdAvaliacaoOfAvaliarListAvaliar = em.merge(oldIdAvaliacaoOfAvaliarListAvaliar);
                 }
             }
             em.getTransaction().commit();
@@ -80,7 +80,7 @@ public class AvaliacaoJpaController implements Serializable {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("You must retain Avaliar " + avaliarListOldAvaliar + " since its avaliacao field is not nullable.");
+                    illegalOrphanMessages.add("You must retain Avaliar " + avaliarListOldAvaliar + " since its idAvaliacao field is not nullable.");
                 }
             }
             if (illegalOrphanMessages != null) {
@@ -88,7 +88,7 @@ public class AvaliacaoJpaController implements Serializable {
             }
             List<Avaliar> attachedAvaliarListNew = new ArrayList<Avaliar>();
             for (Avaliar avaliarListNewAvaliarToAttach : avaliarListNew) {
-                avaliarListNewAvaliarToAttach = em.getReference(avaliarListNewAvaliarToAttach.getClass(), avaliarListNewAvaliarToAttach.getAvaliarPK());
+                avaliarListNewAvaliarToAttach = em.getReference(avaliarListNewAvaliarToAttach.getClass(), avaliarListNewAvaliarToAttach.getId());
                 attachedAvaliarListNew.add(avaliarListNewAvaliarToAttach);
             }
             avaliarListNew = attachedAvaliarListNew;
@@ -96,12 +96,12 @@ public class AvaliacaoJpaController implements Serializable {
             avaliacao = em.merge(avaliacao);
             for (Avaliar avaliarListNewAvaliar : avaliarListNew) {
                 if (!avaliarListOld.contains(avaliarListNewAvaliar)) {
-                    Avaliacao oldAvaliacaoOfAvaliarListNewAvaliar = avaliarListNewAvaliar.getAvaliacao();
-                    avaliarListNewAvaliar.setAvaliacao(avaliacao);
+                    Avaliacao oldIdAvaliacaoOfAvaliarListNewAvaliar = avaliarListNewAvaliar.getIdAvaliacao();
+                    avaliarListNewAvaliar.setIdAvaliacao(avaliacao);
                     avaliarListNewAvaliar = em.merge(avaliarListNewAvaliar);
-                    if (oldAvaliacaoOfAvaliarListNewAvaliar != null && !oldAvaliacaoOfAvaliarListNewAvaliar.equals(avaliacao)) {
-                        oldAvaliacaoOfAvaliarListNewAvaliar.getAvaliarList().remove(avaliarListNewAvaliar);
-                        oldAvaliacaoOfAvaliarListNewAvaliar = em.merge(oldAvaliacaoOfAvaliarListNewAvaliar);
+                    if (oldIdAvaliacaoOfAvaliarListNewAvaliar != null && !oldIdAvaliacaoOfAvaliarListNewAvaliar.equals(avaliacao)) {
+                        oldIdAvaliacaoOfAvaliarListNewAvaliar.getAvaliarList().remove(avaliarListNewAvaliar);
+                        oldIdAvaliacaoOfAvaliarListNewAvaliar = em.merge(oldIdAvaliacaoOfAvaliarListNewAvaliar);
                     }
                 }
             }
@@ -140,7 +140,7 @@ public class AvaliacaoJpaController implements Serializable {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This Avaliacao (" + avaliacao + ") cannot be destroyed since the Avaliar " + avaliarListOrphanCheckAvaliar + " in its avaliarList field has a non-nullable avaliacao field.");
+                illegalOrphanMessages.add("This Avaliacao (" + avaliacao + ") cannot be destroyed since the Avaliar " + avaliarListOrphanCheckAvaliar + " in its avaliarList field has a non-nullable idAvaliacao field.");
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);

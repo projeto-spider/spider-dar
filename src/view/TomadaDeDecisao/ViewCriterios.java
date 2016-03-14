@@ -54,7 +54,7 @@ public class ViewCriterios extends javax.swing.JInternalFrame {
         jTableCriterio.setModel(myDefaultTableModel);
 
         jTableCriterio.removeColumn(jTableCriterio.getColumnModel().getColumn(0));
-        jTableCriterio.setDefaultRenderer(Object.class, new MyCellRenderer(3));
+        jTableCriterio.setDefaultRenderer(Object.class, new MyCellRenderer(3, new Color(189,189,240)));
 
         jTableCriterio.getColumnModel().getColumn(0).setPreferredWidth(1);
         jTableCriterio.getColumnModel().getColumn(1).setPreferredWidth(350);
