@@ -41,8 +41,8 @@ public class AcessarJpaController implements Serializable {
         if (acessar.getAcessarPK() == null) {
             acessar.setAcessarPK(new AcessarPK());
         }
-        acessar.getAcessarPK().setIdPerfil(acessar.getPerfil().getId());
         acessar.getAcessarPK().setIdOrganizacao(acessar.getOrganizacao().getId());
+        acessar.getAcessarPK().setIdPerfil(acessar.getPerfil().getId());
         acessar.getAcessarPK().setIdUsuario(acessar.getUsuario().getId());
         EntityManager em = null;
         try {
@@ -99,8 +99,8 @@ public class AcessarJpaController implements Serializable {
     }
 
     public void edit(Acessar acessar) throws NonexistentEntityException, Exception {
-        acessar.getAcessarPK().setIdPerfil(acessar.getPerfil().getId());
         acessar.getAcessarPK().setIdOrganizacao(acessar.getOrganizacao().getId());
+        acessar.getAcessarPK().setIdPerfil(acessar.getPerfil().getId());
         acessar.getAcessarPK().setIdUsuario(acessar.getUsuario().getId());
         EntityManager em = null;
         try {

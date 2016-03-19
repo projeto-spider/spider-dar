@@ -15,7 +15,6 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import jpa.exceptions.NonexistentEntityException;
 import model.Alternativa;
-import model.Avaliacao;
 import model.Avaliar;
 import model.Criterio;
 
@@ -44,11 +43,6 @@ public class AvaliarJpaController implements Serializable {
                 idAlternativa = em.getReference(idAlternativa.getClass(), idAlternativa.getId());
                 avaliar.setIdAlternativa(idAlternativa);
             }
-            Avaliacao idAvaliacao = avaliar.getIdAvaliacao();
-            if (idAvaliacao != null) {
-                idAvaliacao = em.getReference(idAvaliacao.getClass(), idAvaliacao.getId());
-                avaliar.setIdAvaliacao(idAvaliacao);
-            }
             Criterio idCriterio = avaliar.getIdCriterio();
             if (idCriterio != null) {
                 idCriterio = em.getReference(idCriterio.getClass(), idCriterio.getId());
@@ -58,10 +52,6 @@ public class AvaliarJpaController implements Serializable {
             if (idAlternativa != null) {
                 idAlternativa.getAvaliarList().add(avaliar);
                 idAlternativa = em.merge(idAlternativa);
-            }
-            if (idAvaliacao != null) {
-                idAvaliacao.getAvaliarList().add(avaliar);
-                idAvaliacao = em.merge(idAvaliacao);
             }
             if (idCriterio != null) {
                 idCriterio.getAvaliarList().add(avaliar);
@@ -83,17 +73,11 @@ public class AvaliarJpaController implements Serializable {
             Avaliar persistentAvaliar = em.find(Avaliar.class, avaliar.getId());
             Alternativa idAlternativaOld = persistentAvaliar.getIdAlternativa();
             Alternativa idAlternativaNew = avaliar.getIdAlternativa();
-            Avaliacao idAvaliacaoOld = persistentAvaliar.getIdAvaliacao();
-            Avaliacao idAvaliacaoNew = avaliar.getIdAvaliacao();
             Criterio idCriterioOld = persistentAvaliar.getIdCriterio();
             Criterio idCriterioNew = avaliar.getIdCriterio();
             if (idAlternativaNew != null) {
                 idAlternativaNew = em.getReference(idAlternativaNew.getClass(), idAlternativaNew.getId());
                 avaliar.setIdAlternativa(idAlternativaNew);
-            }
-            if (idAvaliacaoNew != null) {
-                idAvaliacaoNew = em.getReference(idAvaliacaoNew.getClass(), idAvaliacaoNew.getId());
-                avaliar.setIdAvaliacao(idAvaliacaoNew);
             }
             if (idCriterioNew != null) {
                 idCriterioNew = em.getReference(idCriterioNew.getClass(), idCriterioNew.getId());
@@ -107,14 +91,6 @@ public class AvaliarJpaController implements Serializable {
             if (idAlternativaNew != null && !idAlternativaNew.equals(idAlternativaOld)) {
                 idAlternativaNew.getAvaliarList().add(avaliar);
                 idAlternativaNew = em.merge(idAlternativaNew);
-            }
-            if (idAvaliacaoOld != null && !idAvaliacaoOld.equals(idAvaliacaoNew)) {
-                idAvaliacaoOld.getAvaliarList().remove(avaliar);
-                idAvaliacaoOld = em.merge(idAvaliacaoOld);
-            }
-            if (idAvaliacaoNew != null && !idAvaliacaoNew.equals(idAvaliacaoOld)) {
-                idAvaliacaoNew.getAvaliarList().add(avaliar);
-                idAvaliacaoNew = em.merge(idAvaliacaoNew);
             }
             if (idCriterioOld != null && !idCriterioOld.equals(idCriterioNew)) {
                 idCriterioOld.getAvaliarList().remove(avaliar);
@@ -157,11 +133,6 @@ public class AvaliarJpaController implements Serializable {
             if (idAlternativa != null) {
                 idAlternativa.getAvaliarList().remove(avaliar);
                 idAlternativa = em.merge(idAlternativa);
-            }
-            Avaliacao idAvaliacao = avaliar.getIdAvaliacao();
-            if (idAvaliacao != null) {
-                idAvaliacao.getAvaliarList().remove(avaliar);
-                idAvaliacao = em.merge(idAvaliacao);
             }
             Criterio idCriterio = avaliar.getIdCriterio();
             if (idCriterio != null) {

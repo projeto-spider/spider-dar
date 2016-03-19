@@ -15,14 +15,14 @@ public class JpaAvaliacao extends AvaliarJpaController {
     public JpaAvaliacao(EntityManagerFactory emf) {
         super(emf);
     }
-    
-    public List<Avaliar> findAlternativasByProblema(int idAlternativa) { 
+
+    public List<Avaliar> findAvaliaryIdAlternativa(int idAlternativa) {
         try {
             EntityManager entityManager = super.getEntityManager();
             entityManager.getTransaction().begin();
 
             List<Avaliar> list = entityManager
-                    .createQuery("SELECT a FROM Avaliar a WHERE a.alternativa.id =:idAlternativa")
+                    .createQuery("SELECT a FROM Avaliar a WHERE a.idAlternativa.id =:idAlternativa")
                     .setParameter("idAlternativa", idAlternativa)
                     .getResultList();
 
@@ -34,5 +34,26 @@ public class JpaAvaliacao extends AvaliarJpaController {
             throw error;
         }
     }
-    
+
+    public Avaliar findAvaliarByIdCriterioAndIdAlternativa(int idAlternativa, int idCriterio) {
+        Avaliar avaliar = new Avaliar();
+        try {
+            EntityManager entityManager = super.getEntityManager();
+            entityManager.getTransaction().begin();
+
+            avaliar = (Avaliar) entityManager
+                    .createQuery("SELECT a FROM Avaliar a WHERE a.idAlternativa.id =:idAlternativa AND a.idCriterio.id =:idCriterio")
+                    .setParameter("idAlternativa", idAlternativa)
+                    .setParameter("idCriterio", idCriterio)
+                    .getSingleResult();
+
+            entityManager.getTransaction().commit();
+            entityManager.close();
+
+            return avaliar;
+        } catch (Exception error) {
+            return null;
+        }
+    }
+
 }

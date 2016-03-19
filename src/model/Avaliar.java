@@ -32,6 +32,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "Avaliar.findAll", query = "SELECT a FROM Avaliar a"),
     @NamedQuery(name = "Avaliar.findById", query = "SELECT a FROM Avaliar a WHERE a.id = :id"),
+    @NamedQuery(name = "Avaliar.findByNota", query = "SELECT a FROM Avaliar a WHERE a.nota = :nota"),
+    @NamedQuery(name = "Avaliar.findByValor", query = "SELECT a FROM Avaliar a WHERE a.valor = :valor"),
     @NamedQuery(name = "Avaliar.findByCreated", query = "SELECT a FROM Avaliar a WHERE a.created = :created"),
     @NamedQuery(name = "Avaliar.findByModified", query = "SELECT a FROM Avaliar a WHERE a.modified = :modified")})
 public class Avaliar implements Serializable {
@@ -41,6 +43,12 @@ public class Avaliar implements Serializable {
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
+    @Basic(optional = false)
+    @Column(name = "nota")
+    private String nota;
+    @Basic(optional = false)
+    @Column(name = "valor")
+    private int valor;
     @Basic(optional = false)
     @Column(name = "created")
     @Temporal(TemporalType.TIMESTAMP)
@@ -52,9 +60,6 @@ public class Avaliar implements Serializable {
     @JoinColumn(name = "idAlternativa", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Alternativa idAlternativa;
-    @JoinColumn(name = "idAvaliacao", referencedColumnName = "id")
-    @ManyToOne(optional = false)
-    private Avaliacao idAvaliacao;
     @JoinColumn(name = "idCriterio", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Criterio idCriterio;
@@ -66,8 +71,10 @@ public class Avaliar implements Serializable {
         this.id = id;
     }
 
-    public Avaliar(Integer id, Date created, Date modified) {
+    public Avaliar(Integer id, String nota, int valor, Date created, Date modified) {
         this.id = id;
+        this.nota = nota;
+        this.valor = valor;
         this.created = created;
         this.modified = modified;
     }
@@ -78,6 +85,22 @@ public class Avaliar implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getNota() {
+        return nota;
+    }
+
+    public void setNota(String nota) {
+        this.nota = nota;
+    }
+
+    public int getValor() {
+        return valor;
+    }
+
+    public void setValor(int valor) {
+        this.valor = valor;
     }
 
     public Date getCreated() {
@@ -102,14 +125,6 @@ public class Avaliar implements Serializable {
 
     public void setIdAlternativa(Alternativa idAlternativa) {
         this.idAlternativa = idAlternativa;
-    }
-
-    public Avaliacao getIdAvaliacao() {
-        return idAvaliacao;
-    }
-
-    public void setIdAvaliacao(Avaliacao idAvaliacao) {
-        this.idAvaliacao = idAvaliacao;
     }
 
     public Criterio getIdCriterio() {

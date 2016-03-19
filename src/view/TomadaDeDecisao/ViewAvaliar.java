@@ -1,6 +1,7 @@
 package view.TomadaDeDecisao;
 
 import controller.ControllerAlternativa;
+import controller.ControllerAvaliacao;
 import controller.ControllerCriterios;
 import java.awt.Color;
 import java.util.ArrayList;
@@ -24,6 +25,7 @@ public class ViewAvaliar extends javax.swing.JDialog {
     private final int idAlternativa;
     private final ControllerAlternativa controllerAlternativa = new ControllerAlternativa();
     private final ControllerCriterios controllerCriterios = new ControllerCriterios();
+    private final ControllerAvaliacao controllerAvaliacao = new ControllerAvaliacao();
 
     public ViewAvaliar(java.awt.Frame parent, boolean modal, int idAlternativa) {
         super(parent, modal);
@@ -47,11 +49,23 @@ public class ViewAvaliar extends javax.swing.JDialog {
         List<Request> listCriterios = controllerCriterios.listCriteirosByProjeto(idProblema);
 
         for (Request request : listCriterios) {
-            Object[] line = {
-                request.getData("Criterio.id"),
-                request.getData("Criterio.nome"),
-                "--Selecione uma nota--"};
-            myDefaultTableModel.addRow(line);
+            int idCriterio = Integer.parseInt(request.getData("Criterio.id"));
+            Request avRequest = controllerAvaliacao.getAvaliar(idAlternativa, idCriterio);
+
+            if (avRequest.getData("Criterio.id") !=  null) {
+                Object[] line = {
+                    avRequest.getData("Criterio.id"),
+                    avRequest.getData("Criterio.nome"),
+                    avRequest.getData("Avaliacao.nota")};
+                myDefaultTableModel.addRow(line);
+            } else {
+                Object[] line = {
+                    request.getData("Criterio.id"),
+                    request.getData("Criterio.nome"),
+                    "--Selecione uma nota--"};
+                myDefaultTableModel.addRow(line);
+            }
+
         }
 
         List<TableCellEditor> editors = new ArrayList<>();
