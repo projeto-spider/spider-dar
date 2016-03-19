@@ -5,15 +5,21 @@ import controller.ControllerAvaliacao;
 import controller.ControllerCriterios;
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.TableCellEditor;
 import settings.KeepData;
 import util.MyCellRenderer;
 import util.MyDefaultTableModel;
 import util.Request;
+import util.swing.ComboItem;
 
 /**
  *
@@ -52,7 +58,7 @@ public class ViewAvaliar extends javax.swing.JDialog {
             int idCriterio = Integer.parseInt(request.getData("Criterio.id"));
             Request avRequest = controllerAvaliacao.getAvaliar(idAlternativa, idCriterio);
 
-            if (avRequest.getData("Criterio.id") !=  null) {
+            if (avRequest.getData("Criterio.id") != null) {
                 Object[] line = {
                     avRequest.getData("Criterio.id"),
                     avRequest.getData("Criterio.nome"),
@@ -74,9 +80,12 @@ public class ViewAvaliar extends javax.swing.JDialog {
             List<Request> listNotas = controllerCriterios.listNotasByCriterio(idCriterio);
 
             JComboBox comboBox = new JComboBox();
-            comboBox.addItem("--Selecione uma nota--");
+            comboBox.addItem(new ComboItem("", "--Selecione uma Organização--"));
             for (Request nota : listNotas) {
-                comboBox.addItem(nota.getData("Nota.nome"));
+                String nome = nota.getData("Nota.nome");
+                String valor = nota.getData("Nota.valor");
+
+                comboBox.addItem(new ComboItem(valor, nome));
             }
 
             DefaultCellEditor defaultCellEditor = new DefaultCellEditor(comboBox);
@@ -100,6 +109,32 @@ public class ViewAvaliar extends javax.swing.JDialog {
         jTable1.setRowHeight(25);
         jTable1.setTableHeader(null);
         jScrollPane1.setViewportView(jTable1);
+    }
+
+    private void save() {
+
+        List<Request> saveList = new ArrayList<>();
+        for (int i = 0; i < jTable1.getRowCount(); i++) {
+            Map<String, String> data = new HashMap<>();
+
+            data.put("Alternativa.id", String.valueOf(idAlternativa));
+
+            String idCriterio = jTable1.getModel().getValueAt(i, 0).toString();
+            data.put("Criterio.id", idCriterio);
+            data.put("Criterio.nome", jTable1.getValueAt(i, 0).toString());
+
+            data.put("Avaliar.nome", jTable1.getValueAt(i, 1).toString());
+
+            saveList.add(new Request(data));
+        }
+        
+        try { 
+            controllerAvaliacao.saveAvaliar(saveList);
+            JOptionPane.showMessageDialog(null, "\"Avaliação\" foi salva com sucesso.");
+            this.dispose();
+        } catch (Exception error) {
+                JOptionPane.showMessageDialog(null, error.getMessage(), "ERRO AO SALVAR", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -221,7 +256,7 @@ public class ViewAvaliar extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+        save();       
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
