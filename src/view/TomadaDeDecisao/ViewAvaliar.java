@@ -80,7 +80,7 @@ public class ViewAvaliar extends javax.swing.JDialog {
             List<Request> listNotas = controllerCriterios.listNotasByCriterio(idCriterio);
 
             JComboBox comboBox = new JComboBox();
-            comboBox.addItem(new ComboItem("", "--Selecione uma Organização--"));
+            comboBox.addItem(new ComboItem("", "--Selecione uma nota--"));
             for (Request nota : listNotas) {
                 String nome = nota.getData("Nota.nome");
                 String valor = nota.getData("Nota.valor");
@@ -104,6 +104,7 @@ public class ViewAvaliar extends javax.swing.JDialog {
             };
 
         }
+
         jTable1.removeColumn(jTable1.getColumnModel().getColumn(0));
         jTable1.setDefaultRenderer(Object.class, new MyCellRenderer(1, new Color(240, 240, 240)));
         jTable1.setRowHeight(25);
@@ -111,7 +112,23 @@ public class ViewAvaliar extends javax.swing.JDialog {
         jScrollPane1.setViewportView(jTable1);
     }
 
+    private boolean validateCombobox() {
+        boolean isOK = true;
+        for (int i = 0; i < jTable1.getRowCount(); i++) {
+            if (jTable1.getValueAt(i, 1).toString().equals("--Selecione uma nota--")) {
+                isOK = false;
+                break;
+            }
+        }
+
+        return isOK;
+    }
+
     private void save() {
+        if (!validateCombobox()) {
+            JOptionPane.showMessageDialog(null, "E necesário escolher uma nota para cada Critério.");
+            return;
+        }
 
         List<Request> saveList = new ArrayList<>();
         for (int i = 0; i < jTable1.getRowCount(); i++) {
@@ -127,13 +144,13 @@ public class ViewAvaliar extends javax.swing.JDialog {
 
             saveList.add(new Request(data));
         }
-        
-        try { 
+
+        try {
             controllerAvaliacao.saveAvaliar(saveList);
             JOptionPane.showMessageDialog(null, "\"Avaliação\" foi salva com sucesso.");
             this.dispose();
         } catch (Exception error) {
-                JOptionPane.showMessageDialog(null, error.getMessage(), "ERRO AO SALVAR", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, error.getMessage(), "ERRO AO SALVAR", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -256,7 +273,7 @@ public class ViewAvaliar extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        save();       
+        save();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
