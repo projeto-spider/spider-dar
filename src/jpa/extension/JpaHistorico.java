@@ -4,8 +4,10 @@ import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
 import jpa.HistoricoJpaController;
 import model.Historico;
+import org.eclipse.persistence.internal.jpa.transaction.TransactionManagerImpl;
 
 /**
  *
@@ -98,6 +100,26 @@ public class JpaHistorico extends HistoricoJpaController {
             return list;
         } catch (Exception error) {
             throw error;
+        }
+    }
+    
+    public void deleteAllHistoricoByIdProblema(int idProblema)
+    {
+        EntityManager em = super.getEntityManager();
+        EntityTransaction tx = em.getTransaction();
+        
+        try
+        {
+            tx.begin();
+            em.createQuery("DELETE FROM Historico h WHERE h.idProblema.id = :idProb").
+                    setParameter("idProb", idProblema).
+                    executeUpdate();
+            
+            tx.commit();
+        }
+        finally
+        {
+            em.close();
         }
     }
 }

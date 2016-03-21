@@ -12,9 +12,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import javax.swing.JOptionPane;
+import jpa.extension.JpaAlternativa;
+import jpa.extension.JpaAvaliacao;
+import jpa.extension.JpaCriterio;
+import jpa.extension.JpaHistorico;
 import jpa.extension.JpaKeyword;
 import jpa.extension.JpaProblema;
+import jpa.extension.JpaTarefa;
+import model.Alternativa;
+import model.Avaliar;
+import model.Criterio;
 import model.Problema;
+import model.Tarefa;
 import settings.Facade;
 import util.Input;
 import util.Request;
@@ -134,38 +143,73 @@ public class ControllerProblema
         }
     }
     
-    public void removeProblemaById(String idProblema) throws Exception
+    public void removeProblemaById(String idProblemaString) throws Exception
     {
         try
         {
+            int idProblema = Integer.parseInt(idProblemaString);
+            
             if (hasProblemaTarefa(idProblema))
-                throw new Exception("Tarefas");
+                throw new Exception(exceptionItemMessage("Tarefas"));
             
             if (hasProblemaAlternativas(idProblema))
-                throw new Exception("Alternativas de Solução");
+                throw new Exception(exceptionItemMessage("Alternativas de Solução"));
             
             if (hasProblemaCriterios(idProblema))
-                throw new Exception("Critérios de Avaliação");
+                throw new Exception(exceptionItemMessage("Critérios de Avaliação"));
+            
+            JpaKeyword jpaKeyword = facade.initializeJpaKeyword();
+            JpaHistorico jpaHistorico = facade.initializeHistorico();
+            JpaProblema jpaProblema = facade.initializeJpaProblema();
+            
+            jpaKeyword.deleteAllKeywordsByIdProblema(idProblema);
+            jpaHistorico.deleteAllHistoricoByIdProblema(idProblema);
+            jpaProblema.destroy(idProblema);
+            
         }
         catch (Exception e)
         {
-           throw new Exception("<html>Não é possível excluir, o Problema possui <b>" + e.getMessage() +"</b> vinculados(as) a ele.</html>");
+           throw new Exception(e.getMessage());
         }
     }
     
-    private boolean hasProblemaTarefa(String idProblema)
+    private String exceptionItemMessage(String itemString)
     {
+        return "<html>Não é possível excluir, o Problema possui <b>" + itemString +"</b> vinculados(as) a ele.</html>";
+    }
+    
+    private boolean hasProblemaTarefa(int idProblema)
+    {
+        JpaTarefa jpaTarefa = facade.initializeTarefa();
+        
+        List<Tarefa> listTarefa = jpaTarefa.findTarefaByIdProblema(idProblema);
+        
+        return (listTarefa.size() > 0);
+    }
+    
+    private boolean hasProblemaAlternativas(int idProblema)
+    {
+        JpaAlternativa jpaAlternativa = facade.initializeAlternativa();
+        
+        List<Alternativa> listAlternativa = jpaAlternativa.findAlternativasByProblema(idProblema);
+        
+        return (listAlternativa.size() > 0);
+    }
+    
+    private boolean hasProblemaCriterios(int idProblema)
+    {
+        JpaCriterio jpaCriterio = facade.initializeJpaCriterio();
+        
+        List<Criterio> listCriterio = jpaCriterio.findCriterioByIdProblema(idProblema);
+        
+        return (listCriterio.size() > 0);
+    }
+    
+    private boolean hasProblemaAvaliacao(int idProbblema)
+    {
+        JpaAvaliacao jpaAvaliacao = facade.initializeJpaAvaliacao();
+        
         return false;
-    }
-    
-    private boolean hasProblemaAlternativas(String idProblema)
-    {
-        return true;
-    }
-    
-    private boolean hasProblemaCriterios(String idProblema)
-    {
-        return true;
     }
     
     private String getExceptionMessage(Exception e, String operacao)

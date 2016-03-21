@@ -80,10 +80,12 @@ public class ViewProblema extends javax.swing.JInternalFrame {
                 String idProblema = this.getIdProblemaFromTable(index);
 
                 controllerProblema.removeProblemaById(idProblema);
+                
+                showMessageDialog(null, "Problema excluído com sucesso");
             }
             catch (Exception e)
             {
-                showMessageDialog(null, e.getMessage(),"ERRO AO ESCLUIR", JOptionPane.ERROR);
+                showMessageDialog(null, e.getMessage(),"ERRO AO EXCLUIR", JOptionPane.ERROR_MESSAGE);
             }
         }
         else
