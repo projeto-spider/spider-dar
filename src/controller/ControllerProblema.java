@@ -22,9 +22,12 @@ import jpa.extension.JpaTarefa;
 import model.Alternativa;
 import model.Avaliar;
 import model.Criterio;
+import model.Historico;
 import model.Problema;
 import model.Tarefa;
+import settings.Constant;
 import settings.Facade;
+import settings.KeepData;
 import util.Input;
 import util.Request;
 import util.Text;
@@ -37,7 +40,7 @@ public class ControllerProblema
 {
     private Problema problema = new Problema();
     private final Facade facade = Facade.getInstance();
-//    private Historico historico;
+    private Historico historico;
     
     public void addProblema(Request request) throws Exception 
     {
@@ -77,6 +80,8 @@ public class ControllerProblema
                     }
                 }
             }
+            
+            createHistoricoProblema(Integer.parseInt(idProblema),"cadastrado");
         }
         catch(Exception e)
         {
@@ -126,21 +131,27 @@ public class ControllerProblema
                     }
                 }
             }
-            
-//            historico = new Historico();
-//            historico.setDescricao("Problema \"" + problema.getNome() + "\" foi editado.");
-//            historico.setUsuarioNome(KeepData.getData("Usuario.nome"));
-//            historico.setTipo(Constant.FUC_PROBLEMA);
-//            historico.setCreated(new Date());
-//            historico.setModified(new Date());
-//            historico.setIdProblema(facade.initializeJpaProblema().findProblema(idProblema));
-//
-//            facade.initializeHistorico().create(historico);
+            createHistoricoProblema(idProblema, "editado");
          }
         catch (Exception e)
         {
             throw new Exception(this.getExceptionMessage(e, "editar"), e);
         }
+    }
+    
+    private void createHistoricoProblema(int idProblema, String acao)
+    {
+        historico = new Historico();
+        Problema problema = facade.initializeJpaProblema().findProblema(idProblema);
+        
+        historico.setDescricao("Problema \"" + problema.getNome() + "\" foi " + acao +".");
+        historico.setUsuarioNome(KeepData.getData("Usuario.nome"));
+        historico.setTipo(Constant.FUC_PROBLEMA);
+        historico.setCreated(new Date());
+        historico.setModified(new Date());
+        historico.setIdProblema(problema);
+
+        facade.initializeHistorico().create(historico);
     }
     
     public void removeProblemaById(String idProblemaString) throws Exception

@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.util.Date;
 import java.util.List;
 import javax.swing.ImageIcon;
+import javax.swing.JRadioButtonMenuItem;
 import settings.Constant;
 import util.Internal;
 import util.MyCellRenderer;
@@ -41,6 +42,7 @@ public class ViewHistorico extends javax.swing.JInternalFrame {
         buttonGroup.add(jRadioButtonCriterios);
         buttonGroup.add(jRadioButtonAvaliacao);
         buttonGroup.add(jRadioButtonRelatorio);
+        buttonGroup.add(jRadioButtonProblema);
     }
 
     private int chosenTipo() {
@@ -56,6 +58,8 @@ public class ViewHistorico extends javax.swing.JInternalFrame {
             return Constant.FUC_AVALIACAO;
         } else if (jRadioButtonRelatorio.isSelected()) {
             return Constant.FUC_RELATORIO;
+        } else if (jRadioButtonProblema.isSelected()){
+            return Constant.FUC_PROBLEMA;
         } else {
             return -1;
         }
@@ -64,6 +68,9 @@ public class ViewHistorico extends javax.swing.JInternalFrame {
     private ImageIcon getIcon(int type) {
         ImageIcon icon = null;
         switch (type) {
+            case 0:
+                icon = new ImageIcon(getClass().getResource("/resources/image/problema.png"));
+                break;
             case 1:
                 icon = new ImageIcon(getClass().getResource("/resources/image/goal.png"));
                 break;
@@ -115,7 +122,8 @@ public class ViewHistorico extends javax.swing.JInternalFrame {
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents()
+    {
 
         buttonGroup = new javax.swing.ButtonGroup();
         jTextField1 = new javax.swing.JTextField();
@@ -135,6 +143,8 @@ public class ViewHistorico extends javax.swing.JInternalFrame {
         jLabel7 = new javax.swing.JLabel();
         jRadioButtonRelatorio = new javax.swing.JRadioButton();
         jLabel8 = new javax.swing.JLabel();
+        jRadioButtonProblema = new javax.swing.JRadioButton();
+        jLabelIconProblema = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         dateFieldDe = new net.sf.nachocalendar.components.DateField();
         jLabel3 = new javax.swing.JLabel();
@@ -148,13 +158,15 @@ public class ViewHistorico extends javax.swing.JInternalFrame {
         jTextField1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
         jTableHistorico.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
+            new Object [][]
+            {
                 {null, null, null},
                 {null, null, null},
                 {null, null, null},
                 {null, null, null}
             },
-            new String [] {
+            new String []
+            {
                 "Alteração", "Feita por", "Data "
             }
         ));
@@ -162,8 +174,10 @@ public class ViewHistorico extends javax.swing.JInternalFrame {
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/image/spyglass.png"))); // NOI18N
 
-        jTextFieldPesquisa.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jTextFieldPesquisa.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 jTextFieldPesquisaActionPerformed(evt);
             }
         });
@@ -171,51 +185,75 @@ public class ViewHistorico extends javax.swing.JInternalFrame {
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
 
         jRadioButtonTodos.setText("Todos");
-        jRadioButtonTodos.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jRadioButtonTodos.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 jRadioButtonTodosActionPerformed(evt);
             }
         });
 
-        jRadioButtonTarefas.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jRadioButtonTarefas.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 jRadioButtonTarefasActionPerformed(evt);
             }
         });
 
         jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/image/task.png"))); // NOI18N
 
-        jRadioButtonAlternativas.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jRadioButtonAlternativas.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 jRadioButtonAlternativasActionPerformed(evt);
             }
         });
 
         jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/image/alternatives.png"))); // NOI18N
 
-        jRadioButtonCriterios.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jRadioButtonCriterios.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 jRadioButtonCriteriosActionPerformed(evt);
             }
         });
 
         jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/image/criteria.png"))); // NOI18N
 
-        jRadioButtonAvaliacao.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jRadioButtonAvaliacao.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 jRadioButtonAvaliacaoActionPerformed(evt);
             }
         });
 
         jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/image/evaluation.png"))); // NOI18N
 
-        jRadioButtonRelatorio.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jRadioButtonRelatorio.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 jRadioButtonRelatorioActionPerformed(evt);
             }
         });
 
         jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/image/report.png"))); // NOI18N
+
+        jRadioButtonProblema.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                jRadioButtonProblemaActionPerformed(evt);
+            }
+        });
+
+        jLabelIconProblema.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/image/problema.png"))); // NOI18N
+        jLabelIconProblema.setLabelFor(jRadioButtonProblema);
+        jLabelIconProblema.setToolTipText("Problema");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -224,7 +262,11 @@ public class ViewHistorico extends javax.swing.JInternalFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(14, 14, 14)
                 .addComponent(jRadioButtonTodos)
-                .addGap(10, 10, 10)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jRadioButtonProblema)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabelIconProblema)
+                .addGap(18, 18, 18)
                 .addComponent(jRadioButtonTarefas)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel4)
@@ -249,7 +291,7 @@ public class ViewHistorico extends javax.swing.JInternalFrame {
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(21, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel8)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -266,22 +308,28 @@ public class ViewHistorico extends javax.swing.JInternalFrame {
                             .addComponent(jLabel6))
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jRadioButtonRelatorio)
-                            .addComponent(jLabel7))))
+                            .addComponent(jLabel7)))
+                    .addComponent(jRadioButtonProblema)
+                    .addComponent(jLabelIconProblema))
                 .addGap(6, 6, 6))
         );
 
         jLabel2.setText("De:");
 
-        dateFieldDe.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+        dateFieldDe.addChangeListener(new javax.swing.event.ChangeListener()
+        {
+            public void stateChanged(javax.swing.event.ChangeEvent evt)
+            {
                 dateFieldDeStateChanged(evt);
             }
         });
 
         jLabel3.setText("até:");
 
-        dateFieldAte.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+        dateFieldAte.addChangeListener(new javax.swing.event.ChangeListener()
+        {
+            public void stateChanged(javax.swing.event.ChangeEvent evt)
+            {
                 dateFieldAteStateChanged(evt);
             }
         });
@@ -328,7 +376,7 @@ public class ViewHistorico extends javax.swing.JInternalFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 370, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 363, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -371,6 +419,11 @@ public class ViewHistorico extends javax.swing.JInternalFrame {
         reloadViewHistorico();
     }//GEN-LAST:event_jRadioButtonRelatorioActionPerformed
 
+    private void jRadioButtonProblemaActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jRadioButtonProblemaActionPerformed
+    {//GEN-HEADEREND:event_jRadioButtonProblemaActionPerformed
+        reloadViewHistorico();
+    }//GEN-LAST:event_jRadioButtonProblemaActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup;
@@ -384,10 +437,12 @@ public class ViewHistorico extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabelIconProblema;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JRadioButton jRadioButtonAlternativas;
     private javax.swing.JRadioButton jRadioButtonAvaliacao;
     private javax.swing.JRadioButton jRadioButtonCriterios;
+    private javax.swing.JRadioButton jRadioButtonProblema;
     private javax.swing.JRadioButton jRadioButtonRelatorio;
     private javax.swing.JRadioButton jRadioButtonTarefas;
     private javax.swing.JRadioButton jRadioButtonTodos;
