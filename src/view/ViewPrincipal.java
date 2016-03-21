@@ -632,6 +632,7 @@ public class ViewPrincipal extends javax.swing.JFrame {
 
     private void jButtonMotivacaoEObjActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonMotivacaoEObjActionPerformed
         changeViews(viewMotivacaoEObjetivos);
+        viewMotivacaoEObjetivos.showInformation();
     }//GEN-LAST:event_jButtonMotivacaoEObjActionPerformed
 
     private void jButtonCalendarioStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jButtonCalendarioStateChanged

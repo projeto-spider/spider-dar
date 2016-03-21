@@ -1,13 +1,16 @@
 
 package view.TomadaDeDecisao;
 
+import controller.ControllerAcessar;
 import controller.ControllerProblema;
 import java.util.List;
+import model.Acessar;
 import static model.Acessar_.idProblema;
 import settings.KeepData;
 import util.Internal;
 import util.MyDefaultTableModel;
 import util.Request;
+import util.Text;
 
 /**
  *
@@ -22,37 +25,44 @@ public class ViewMotivacaoEObjetivos extends javax.swing.JInternalFrame {
     public ViewMotivacaoEObjetivos() {
         initComponents();
         
-        showInformation();
-
         Internal.retiraBorda(this); 
     }     
       
-    public void showInformation() {
+    public void showInformation()
+    {
         String nomeProblema = KeepData.getData("Problema.nome");
-        jLabelProblema.setText("Problema: " + nomeProblema);
         
-        fillFields();
+        jLabelProblema.setText("<html><b>Problema:</b> " + nomeProblema + "</html>");
         
-        listEnvolvidosInTable(new ControllerProblema().listProblemasByIdOrganizacao(KeepData.getData("Organizacao.id")));
+        fillFieldsDescricaoProblema();
+        
+        request.setData("Problema.id", KeepData.getData("Problema.id"));
+        
+        listUsuariosProblema(new ControllerAcessar().findUsuariosPerfisByIdProblema(request));
     }
     
-    public void listEnvolvidosInTable(List<Request> requestList)
+    public void listUsuariosProblema(List<Acessar> listAcessar)
     {
-        String columns[] = {"Nome", "Perfil"};
+        String columns[] = {"Nome", "Perfil","Alocado em"};
         myDefaultTableModel = new MyDefaultTableModel(columns, 0, false);
         
-        for (Request request: requestList)
+        int listSize = listAcessar.size();
+        
+        for (int indexList = 0; indexList < listSize ; indexList++)
         {
-            String line[] = {request.getData("Usuario.nome"),
-                             request.getData("Perfil.nome")};
+            String nomeUsuario = listAcessar.get(indexList).getUsuario().getNome();
+            String perfilUsuario = listAcessar.get(indexList).getPerfil().getNome();
+            String dataUsuarioAlocado = Text.formatDateForTableHumanize(listAcessar.get(indexList).getUsuario().getCreated());
+            
+            String line[] = {nomeUsuario, perfilUsuario, dataUsuarioAlocado};
             
             myDefaultTableModel.addRow(line);
         }
         jTableEnvolvidos.setModel(myDefaultTableModel);
     }  
     
-    private void fillFields() {
-        
+    private void fillFieldsDescricaoProblema()
+    {
         request = controllerProblema.findProblemaById(Integer.parseInt(KeepData.getData("Problema.id")));
 
         jTextAreaProposito.setText(request.getData("Problema.proposito"));
@@ -64,7 +74,8 @@ public class ViewMotivacaoEObjetivos extends javax.swing.JInternalFrame {
     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents()
+    {
 
         jTextField1 = new javax.swing.JTextField();
         jScrollPane3 = new javax.swing.JScrollPane();
@@ -100,14 +111,14 @@ public class ViewMotivacaoEObjetivos extends javax.swing.JInternalFrame {
         jPanel2.setBackground(new java.awt.Color(204, 204, 204));
 
         jLabelProblema.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabelProblema.setText("<html><b>Problema:</b> Decisão sobre a ferramenta de Getão.</html>");
+        jLabelProblema.setText("<html><b>Problema:</b> Decisão sobre a ferramenta de Gestão.</html>");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(219, 219, 219)
+                .addContainerGap()
                 .addComponent(jLabelProblema, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -142,7 +153,7 @@ public class ViewMotivacaoEObjetivos extends javax.swing.JInternalFrame {
                 .addComponent(jScrollPane1)
                 .addContainerGap())
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(317, 317, 317)
+                .addContainerGap()
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -179,7 +190,7 @@ public class ViewMotivacaoEObjetivos extends javax.swing.JInternalFrame {
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 717, Short.MAX_VALUE)
                 .addContainerGap())
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(310, 310, 310)
+                .addContainerGap()
                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -216,7 +227,7 @@ public class ViewMotivacaoEObjetivos extends javax.swing.JInternalFrame {
                 .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 717, Short.MAX_VALUE)
                 .addContainerGap())
             .addGroup(jPanel5Layout.createSequentialGroup()
-                .addGap(301, 301, 301)
+                .addContainerGap()
                 .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -236,13 +247,15 @@ public class ViewMotivacaoEObjetivos extends javax.swing.JInternalFrame {
         jLabel5.setText("<html><b>Envolvidos:</b></html>");
 
         jTableEnvolvidos.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
+            new Object [][]
+            {
                 {"", null},
                 {null, null},
                 {null, null},
                 {null, null}
             },
-            new String [] {
+            new String []
+            {
                 "Nome", "Perfil"
             }
         ));
