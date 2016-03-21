@@ -82,6 +82,9 @@ public class ViewProblema extends javax.swing.JInternalFrame {
                 controllerProblema.removeProblemaById(idProblema);
                 
                 showMessageDialog(null, "Problema excluído com sucesso");
+                
+                listProblemasInTable(new ControllerProblema().listProblemasByIdOrganizacao(KeepData.getData("Organizacao.id")));
+
             }
             catch (Exception e)
             {
@@ -108,8 +111,9 @@ public class ViewProblema extends javax.swing.JInternalFrame {
         jButtonEditarProblema = new javax.swing.JButton();
         jButtonCadastrarProblema = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
         jButtonExcluirProblema = new javax.swing.JButton();
+
+        setPreferredSize(new java.awt.Dimension(797, 539));
 
         jTextField1.setEditable(false);
         jTextField1.setBackground(new java.awt.Color(31, 109, 165));
@@ -161,8 +165,6 @@ public class ViewProblema extends javax.swing.JInternalFrame {
 
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/image/spyglass.png"))); // NOI18N
 
-        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/image/spyglass.png"))); // NOI18N
-
         jButtonExcluirProblema.setText("Excluir");
         jButtonExcluirProblema.addActionListener(new java.awt.event.ActionListener()
         {
@@ -195,11 +197,6 @@ public class ViewProblema extends javax.swing.JInternalFrame {
                         .addComponent(jTextFieldPesquisarProblema, javax.swing.GroupLayout.PREFERRED_SIZE, 263, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 458, Short.MAX_VALUE)))
                 .addContainerGap())
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(jLabel3)
-                    .addGap(0, 0, Short.MAX_VALUE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -210,18 +207,13 @@ public class ViewProblema extends javax.swing.JInternalFrame {
                     .addComponent(jLabel2)
                     .addComponent(jTextFieldPesquisarProblema, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 370, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 353, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonEditarProblema)
                     .addComponent(jButtonCadastrarProblema)
                     .addComponent(jButtonExcluirProblema))
-                .addContainerGap(20, Short.MAX_VALUE))
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(jLabel3)
-                    .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -260,7 +252,6 @@ public class ViewProblema extends javax.swing.JInternalFrame {
     private javax.swing.JButton jButtonEditarProblema;
     private javax.swing.JButton jButtonExcluirProblema;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTableProblemas;
     private javax.swing.JTextField jTextField1;

@@ -102,6 +102,13 @@ public class ViewPrincipal extends javax.swing.JFrame {
             System.out.println("Failed to open file ");
         }
     }
+    
+    public void desconectar()
+    {
+        reminder.killTimer();
+        new ViewLogin().setVisible(true);
+        this.dispose();
+    }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -579,9 +586,7 @@ public class ViewPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItemPermissoesActionPerformed
 
     private void jMenuItemDesconectarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemDesconectarActionPerformed
-        reminder.killTimer();
-        new ViewLogin().setVisible(true);
-        this.dispose();
+        this.desconectar();
     }//GEN-LAST:event_jMenuItemDesconectarActionPerformed
 
     private void jMenuItemGuiadaGestaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemGuiadaGestaoActionPerformed
