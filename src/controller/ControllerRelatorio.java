@@ -13,6 +13,7 @@ import com.itextpdf.text.pdf.PdfWriter;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
+import model.Acessar;
 import model.Historico;
 import settings.Constant;
 import settings.Facade;
@@ -27,6 +28,8 @@ import util.Request;
         private final ControllerProblema controllerProblema = new ControllerProblema();
         private final ControllerTarefas controllerTarefas = new ControllerTarefas();
         private final ControllerAlternativa controllerAlternativa = new ControllerAlternativa();
+        private final ControllerAcessar controllerAcessar = new ControllerAcessar();
+        private final ControllerCriterios controllerCriterios = new ControllerCriterios();
         
         public void addHistoricoRelatorio(int idProblema) {
             try {
@@ -112,7 +115,18 @@ import util.Request;
                     doc.add(p8);
                     
                     //for para listar todos os envolvidos no problema
-                    
+                    List<Acessar> envolvidosList = controllerAcessar.findUsuariosPerfisByIdProblema(request);
+                    for (int i = 0; i < envolvidosList.size(); i++) { 
+                        String nomeEnvolvidos = envolvidosList.get(i).getUsuario().getNome();
+                        String perfilEnvolvidos = envolvidosList.get(i).getPerfil().getNome();
+                        Paragraph p0 = new Paragraph();
+                        p0.add(new Chunk("Nome: ", fonte3));
+                        p0.add(new Chunk(nomeEnvolvidos, fonte4));
+                        p0.add(new Chunk("   Perfil: ", fonte3));
+                        p0.add(new Chunk(perfilEnvolvidos, fonte4));
+                        p0.setIndentationLeft(14);
+                        doc.add(new Paragraph(p0));
+                    }
                     
                     Paragraph p9 = new Paragraph(" ");
                     doc.add(p9);
@@ -152,13 +166,25 @@ import util.Request;
                         p14.setIndentationLeft(12);
                         doc.add(new Paragraph(p14));
                         
+                        Paragraph p15;
                         String statusTarefa = tarefasList.get(i).getData("Tarefa.feito");
-                        Paragraph p15 = new Paragraph();
-                        p15.add(new Chunk("Status: " , fonte3));
-                        p15.add(new Chunk(statusTarefa, fonte4));
-                        p15.setIndentationLeft(12);
-                        doc.add(new Paragraph(p15));  
-                    
+                        switch (statusTarefa) {
+                            case "true":
+                                p15 = new Paragraph();
+                                p15.add(new Chunk("Status: " , fonte3));
+                                p15.add(new Chunk("Concluída", fonte4));
+                                p15.setIndentationLeft(12);
+                                doc.add(new Paragraph(p15));
+                                break;
+                            case "false":
+                                p15 = new Paragraph();
+                                p15.add(new Chunk("Status: " , fonte3));
+                                p15.add(new Chunk("Em andamento", fonte4));
+                                p15.setIndentationLeft(12);
+                                doc.add(new Paragraph(p15));
+                                break;
+                        }
+                                           
                         Paragraph p16 = new Paragraph(" ");
                         doc.add(p16);
                     } 
@@ -206,7 +232,48 @@ import util.Request;
                     doc.add(p23);
                     
                     //for para listar os critérios do problema
-	 
+                    List<Request> criteriosList = controllerCriterios.listCriteirosByProjeto(idProblema);
+                    for (int i = 0; i < criteriosList.size(); i++) {
+                        String nomeCriterio = criteriosList.get(i).getData("Criterio.nome");
+                        Paragraph p24 = new Paragraph();
+                        p24.add(new Chunk("Nome: " , fonte3));
+                        p24.add(new Chunk(nomeCriterio, fonte4));
+                        p24.setIndentationLeft(12);
+                        doc.add(new Paragraph(p24));
+                        
+                        String pesoCriterio = criteriosList.get(i).getData("Criterio.peso");
+                        Paragraph p25 = new Paragraph();
+                        p25.add(new Chunk("Peso: " , fonte3));
+                        p25.add(new Chunk(pesoCriterio, fonte4));
+                        p25.setIndentationLeft(12);
+                        doc.add(new Paragraph(p25));
+                        
+                        String justificativaCriterio = criteriosList.get(i).getData("Criterio.justificativa");
+                        Paragraph p26 = new Paragraph();
+                        p26.add(new Chunk("Justificativa para o peso: " , fonte3));
+                        p26.add(new Chunk(justificativaCriterio, fonte4));
+                        p26.setIndentationLeft(12);
+                        doc.add(new Paragraph(p26));
+                        
+                        //for para notas e valores
+                        
+//                        String notaCriterio = criteriosList.get(i).getData("Criterio.nota");
+//                        Paragraph p27 = new Paragraph();
+//                        p27.add(new Chunk("Nota: " , fonte3));
+//                        p27.add(new Chunk(notaCriterio, fonte4));
+//                        p27.setIndentationLeft(12);
+//                        doc.add(new Paragraph(p27));
+//                        
+//                        String valorCriterio = criteriosList.get(i).getData("Criterio.valor");
+//                        Paragraph p28 = new Paragraph();
+//                        p28.add(new Chunk("Valor: " , fonte3));
+//                        p28.add(new Chunk(valorCriterio, fonte4));
+//                        p28.setIndentationLeft(12);
+//                        doc.add(new Paragraph(p28));
+                      
+                    }
+                    
+                    
                     addHistoricoRelatorio(Integer.parseInt(KeepData.getData("Problema.id")));
 	        } finally {
 	            if (doc != null) {
