@@ -255,22 +255,25 @@ import util.Request;
                         p26.setIndentationLeft(12);
                         doc.add(new Paragraph(p26));
                         
-                        //for para notas e valores
+                        //for para listar notas e valores
+                        int idCriterios = Integer.parseInt(KeepData.getData("Criterio.id"));
+                        List<Request> notasList = controllerCriterios.listNotasByCriterio(idCriterios);
+                        for (int j = 0; j < notasList.size(); j++) {
                         
-//                        String notaCriterio = criteriosList.get(i).getData("Criterio.nota");
-//                        Paragraph p27 = new Paragraph();
-//                        p27.add(new Chunk("Nota: " , fonte3));
-//                        p27.add(new Chunk(notaCriterio, fonte4));
-//                        p27.setIndentationLeft(12);
-//                        doc.add(new Paragraph(p27));
-//                        
-//                        String valorCriterio = criteriosList.get(i).getData("Criterio.valor");
-//                        Paragraph p28 = new Paragraph();
-//                        p28.add(new Chunk("Valor: " , fonte3));
-//                        p28.add(new Chunk(valorCriterio, fonte4));
-//                        p28.setIndentationLeft(12);
-//                        doc.add(new Paragraph(p28));
-                      
+                            String notaCriterio = notasList.get(j).getData("Nota.nome");
+                            Paragraph p27 = new Paragraph();
+                            p27.add(new Chunk("Nota: " , fonte3));
+                            p27.add(new Chunk(notaCriterio, fonte4));
+                            p27.setIndentationLeft(12);
+                            doc.add(new Paragraph(p27));
+
+                            String valorCriterio = notasList.get(j).getData("Nota.valor");
+                            Paragraph p28 = new Paragraph();
+                            p28.add(new Chunk("Valor: " , fonte3));
+                            p28.add(new Chunk(valorCriterio, fonte4));
+                            p28.setIndentationLeft(12);
+                            doc.add(new Paragraph(p28));
+                        }
                     }
                     
                     
