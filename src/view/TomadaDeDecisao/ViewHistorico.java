@@ -122,8 +122,7 @@ public class ViewHistorico extends javax.swing.JInternalFrame {
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents()
-    {
+    private void initComponents() {
 
         buttonGroup = new javax.swing.ButtonGroup();
         jTextField1 = new javax.swing.JTextField();
@@ -158,15 +157,13 @@ public class ViewHistorico extends javax.swing.JInternalFrame {
         jTextField1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
         jTableHistorico.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][]
-            {
+            new Object [][] {
                 {null, null, null},
                 {null, null, null},
                 {null, null, null},
                 {null, null, null}
             },
-            new String []
-            {
+            new String [] {
                 "Alteração", "Feita por", "Data "
             }
         ));
@@ -174,10 +171,8 @@ public class ViewHistorico extends javax.swing.JInternalFrame {
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/image/spyglass.png"))); // NOI18N
 
-        jTextFieldPesquisa.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        jTextFieldPesquisa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextFieldPesquisaActionPerformed(evt);
             }
         });
@@ -185,68 +180,54 @@ public class ViewHistorico extends javax.swing.JInternalFrame {
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
 
         jRadioButtonTodos.setText("Todos");
-        jRadioButtonTodos.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        jRadioButtonTodos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jRadioButtonTodosActionPerformed(evt);
             }
         });
 
-        jRadioButtonTarefas.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        jRadioButtonTarefas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jRadioButtonTarefasActionPerformed(evt);
             }
         });
 
         jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/image/task.png"))); // NOI18N
 
-        jRadioButtonAlternativas.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        jRadioButtonAlternativas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jRadioButtonAlternativasActionPerformed(evt);
             }
         });
 
         jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/image/alternatives.png"))); // NOI18N
 
-        jRadioButtonCriterios.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        jRadioButtonCriterios.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jRadioButtonCriteriosActionPerformed(evt);
             }
         });
 
         jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/image/criteria.png"))); // NOI18N
 
-        jRadioButtonAvaliacao.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        jRadioButtonAvaliacao.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jRadioButtonAvaliacaoActionPerformed(evt);
             }
         });
 
         jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/image/evaluation.png"))); // NOI18N
 
-        jRadioButtonRelatorio.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        jRadioButtonRelatorio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jRadioButtonRelatorioActionPerformed(evt);
             }
         });
 
         jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/image/report.png"))); // NOI18N
 
-        jRadioButtonProblema.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        jRadioButtonProblema.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jRadioButtonProblemaActionPerformed(evt);
             }
         });
@@ -291,7 +272,7 @@ public class ViewHistorico extends javax.swing.JInternalFrame {
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(21, Short.MAX_VALUE)
+                .addGap(6, 6, 6)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel8)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -316,20 +297,16 @@ public class ViewHistorico extends javax.swing.JInternalFrame {
 
         jLabel2.setText("De:");
 
-        dateFieldDe.addChangeListener(new javax.swing.event.ChangeListener()
-        {
-            public void stateChanged(javax.swing.event.ChangeEvent evt)
-            {
+        dateFieldDe.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 dateFieldDeStateChanged(evt);
             }
         });
 
         jLabel3.setText("até:");
 
-        dateFieldAte.addChangeListener(new javax.swing.event.ChangeListener()
-        {
-            public void stateChanged(javax.swing.event.ChangeEvent evt)
-            {
+        dateFieldAte.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 dateFieldAteStateChanged(evt);
             }
         });

@@ -6,6 +6,7 @@ import jpa.extension.JpaAlternativa;
 import jpa.extension.JpaAvaliacao;
 import jpa.extension.JpaConfiguracoes;
 import jpa.extension.JpaCriterio;
+import jpa.extension.JpaDecisao;
 import jpa.extension.JpaFuncionalidades;
 import jpa.extension.JpaGuia;
 import jpa.extension.JpaHistorico;
@@ -113,5 +114,9 @@ public class Facade {
     
     public JpaAvaliacao initializeJpaAvaliacao() {
         return new JpaAvaliacao(Connection.connect());
+    }
+    
+    public JpaDecisao initializeJpaDecisao(){
+        return new JpaDecisao(Connection.connect()); 
     }
 }

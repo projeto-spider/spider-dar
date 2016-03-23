@@ -6,6 +6,7 @@
 package model;
 
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,6 +19,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -29,17 +32,35 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Decisao.findAll", query = "SELECT d FROM Decisao d"),
-    @NamedQuery(name = "Decisao.findById", query = "SELECT d FROM Decisao d WHERE d.id = :id")})
+    @NamedQuery(name = "Decisao.findByIdProblema", query = "SELECT d FROM Decisao d WHERE d.idProblema = :idProblema"),
+    @NamedQuery(name = "Decisao.findById", query = "SELECT d FROM Decisao d WHERE d.id = :id"),
+    @NamedQuery(name = "Decisao.findByDefinitivo", query = "SELECT d FROM Decisao d WHERE d.definitivo = :definitivo"),
+    @NamedQuery(name = "Decisao.findByCreated", query = "SELECT d FROM Decisao d WHERE d.created = :created"),
+    @NamedQuery(name = "Decisao.findByModified", query = "SELECT d FROM Decisao d WHERE d.modified = :modified")})
 public class Decisao implements Serializable {
     private static final long serialVersionUID = 1L;
+    @Basic(optional = false)
+    @Column(name = "idProblema")
+    private int idProblema;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
+    @Basic(optional = false)
+    @Column(name = "definitivo")
+    private boolean definitivo;
     @Lob
     @Column(name = "justificativa")
     private String justificativa;
+    @Basic(optional = false)
+    @Column(name = "created")
+    @Temporal(TemporalType.DATE)
+    private Date created;
+    @Basic(optional = false)
+    @Column(name = "modified")
+    @Temporal(TemporalType.DATE)
+    private Date modified;
     @JoinColumn(name = "idAlternativa", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Alternativa idAlternativa;
@@ -51,6 +72,22 @@ public class Decisao implements Serializable {
         this.id = id;
     }
 
+    public Decisao(Integer id, int idProblema, boolean definitivo, Date created, Date modified) {
+        this.id = id;
+        this.idProblema = idProblema;
+        this.definitivo = definitivo;
+        this.created = created;
+        this.modified = modified;
+    }
+
+    public int getIdProblema() {
+        return idProblema;
+    }
+
+    public void setIdProblema(int idProblema) {
+        this.idProblema = idProblema;
+    }
+
     public Integer getId() {
         return id;
     }
@@ -59,12 +96,36 @@ public class Decisao implements Serializable {
         this.id = id;
     }
 
+    public boolean getDefinitivo() {
+        return definitivo;
+    }
+
+    public void setDefinitivo(boolean definitivo) {
+        this.definitivo = definitivo;
+    }
+
     public String getJustificativa() {
         return justificativa;
     }
 
     public void setJustificativa(String justificativa) {
         this.justificativa = justificativa;
+    }
+
+    public Date getCreated() {
+        return created;
+    }
+
+    public void setCreated(Date created) {
+        this.created = created;
+    }
+
+    public Date getModified() {
+        return modified;
+    }
+
+    public void setModified(Date modified) {
+        this.modified = modified;
     }
 
     public Alternativa getIdAlternativa() {

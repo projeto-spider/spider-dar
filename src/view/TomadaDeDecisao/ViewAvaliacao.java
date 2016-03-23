@@ -1,6 +1,7 @@
 package view.TomadaDeDecisao;
 
 import controller.ControllerAlternativa;
+import controller.ControllerDecisao;
 import java.awt.Color;
 import java.util.List;
 import javax.swing.ImageIcon;
@@ -18,6 +19,8 @@ public class ViewAvaliacao extends javax.swing.JInternalFrame {
 
     private MyDefaultTableModel myDefaultTableModel;
     private final ControllerAlternativa controllerAlternativa = new ControllerAlternativa();
+    private final ControllerDecisao controllerDecisao = new ControllerDecisao();
+    private int idDecisao = -1;
 
     public ViewAvaliacao() {
         initComponents();
@@ -27,6 +30,7 @@ public class ViewAvaliacao extends javax.swing.JInternalFrame {
 
     public void showAvaliacao() {
         initializeTable();
+        fillFields();
     }
 
     private void initializeTable() {
@@ -60,6 +64,15 @@ public class ViewAvaliacao extends javax.swing.JInternalFrame {
 
     }
 
+    private void fillFields() {
+        Request request = controllerDecisao.findDecisao();
+        if (request.getData("Decisao.id") != null) {
+            idDecisao = Integer.parseInt(request.getData("Decisao.id"));
+            jLabelNome.setText(request.getData("Decisao.alternativa"));
+            jLabelJustificativa.setText("<html>" + request.getData("Decisao.justificativa") + "</html>");
+        }
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -71,6 +84,8 @@ public class ViewAvaliacao extends javax.swing.JInternalFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
+        jLabelNome = new javax.swing.JLabel();
+        jLabelJustificativa = new javax.swing.JLabel();
 
         jTextField1.setEditable(false);
         jTextField1.setBackground(new java.awt.Color(31, 109, 165));
@@ -117,20 +132,26 @@ public class ViewAvaliacao extends javax.swing.JInternalFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jSeparator1, javax.swing.GroupLayout.DEFAULT_SIZE, 741, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel1)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jSeparator1))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabelNome, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jLabelJustificativa, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabelNome, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(70, Short.MAX_VALUE))
+                .addGap(0, 0, 0)
+                .addComponent(jLabelJustificativa, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(59, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -153,11 +174,11 @@ public class ViewAvaliacao extends javax.swing.JInternalFrame {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 272, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButton2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -165,7 +186,13 @@ public class ViewAvaliacao extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        new ViewTomarDecisao(null, true).setVisible(true);
+        if (idDecisao == -1) {
+            new ViewTomarDecisao(null, true).setVisible(true);
+        } else {
+            new ViewTomarDecisao(null, true, idDecisao).setVisible(true);
+        }
+
+        showAvaliacao();
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jTableAvaliacaoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableAvaliacaoMouseClicked
@@ -182,6 +209,8 @@ public class ViewAvaliacao extends javax.swing.JInternalFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabelJustificativa;
+    private javax.swing.JLabel jLabelNome;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
