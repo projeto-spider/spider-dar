@@ -8,6 +8,7 @@ import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.ExceptionConverter;
 import com.itextpdf.text.Font;
+import com.itextpdf.text.Image;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
@@ -19,6 +20,7 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfPageEventHelper;
 import com.itextpdf.text.pdf.PdfTemplate;
 import com.itextpdf.text.pdf.PdfWriter;
+import static com.itextpdf.text.zugferd.checkers.basic.MeasurementUnitCode.MM;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -60,30 +62,63 @@ import util.Request;
             }
         } 
         
-        //cabeçalho
-        public void onEndPage(PdfWriter w, Document d) {
-        PdfContentByte cb = w.getDirectContent();
-        cb.saveState();
-            try {
-                String txt = "Página "+w.getPageNumber();
-                BaseFont bf = BaseFont.createFont(BaseFont.HELVETICA, BaseFont.WINANSI, BaseFont.NOT_EMBEDDED);
-
-                float txtBase = d.top();
-                float txtSize = bf.getWidthPoint(txt, 8);
-                float adj = bf.getWidthPoint("0", 80);
-
-                cb.beginText();
-                cb.setFontAndSize(bf, 8);
-
-                cb.setTextMatrix(d.right() - txtSize - adj, txtBase);
-                cb.showText(txt);
-
-                cb.endText();
-            } catch (DocumentException | IOException e) { 
-                e.printStackTrace();
-            }  
-            cb.restoreState();
-        }
+        //rodapé
+        public void onEndPage(PdfWriter writer, Document document) {
+		try {
+			Rectangle page = document.getPageSize();
+			
+                        Image img = Image.getInstance("src\\resources\\image\\goal.png");
+                        img.setAlignment(Element.ALIGN_RIGHT);
+                        //img.scaleToFit(300, 300);
+                        //document.add(img);
+                        
+			PdfPTable foot = new PdfPTable(2);
+			img.scalePercent(50, 50);
+			PdfPCell cell = new PdfPCell(img);
+			cell.setBorder(0);
+			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+			cell.setVerticalAlignment(Element.ALIGN_BOTTOM);
+			foot.addCell(cell);
+			DateFormat sf = new SimpleDateFormat("dd/MM/yyyy");
+			Date data = new Date();
+			cell = new PdfPCell(new Phrase(sf.format(data)));
+			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			cell.setVerticalAlignment(Element.ALIGN_BOTTOM);
+			cell.setBorder(0);
+			foot.addCell(cell);
+			foot.setTotalWidth(page.getWidth() - document.leftMargin()
+					- document.rightMargin());
+			foot.writeSelectedRows(0, -1, document.leftMargin(), document
+					.bottomMargin(), writer.getDirectContent());
+		} catch (Exception e) {
+			throw new ExceptionConverter(e);
+		}
+	}
+        
+        //rodapé
+//        public void onEndPage(PdfWriter w, Document d) {
+//        PdfContentByte cb = w.getDirectContent();
+//        cb.saveState();
+//            try {
+//                String txt = "Página "+w.getPageNumber();
+//                BaseFont bf = BaseFont.createFont(BaseFont.HELVETICA, BaseFont.WINANSI, BaseFont.NOT_EMBEDDED);
+//
+//                float txtBase = d.left();
+//                float txtSize = bf.getWidthPoint(txt, 8);
+//                float adj = bf.getWidthPoint("0", 80);
+//
+//                cb.beginText();
+//                cb.setFontAndSize(bf, 8);
+//
+//                cb.setTextMatrix(d.right() - txtSize - adj, txtBase);
+//                cb.showText(txt);
+//
+//                cb.endText();
+//            } catch (DocumentException | IOException e) { 
+//                e.printStackTrace();
+//            }  
+//            cb.restoreState();
+//        }
         
         public void gerarRelatorio() throws IOException, DocumentException {
             
@@ -129,6 +164,22 @@ import util.Request;
                     Paragraph p4 = new Paragraph("1. Problema: " + nomeProblema, fonte3);
                     doc.add(p4);
                     
+//                    request = controllerProblema.findProblemaById(Integer.parseInt(KeepData.getData("Problema.id")));
+//                    String propositoProblema = request.getData("Problema.proposito");
+//                    String planejamentoProblema = request.getData("Problema.planejamento");
+//                    String contextoProblema = request.getData("Problema.contexto");
+                    
+//                    PdfPTable t = new PdfPTable(2);
+//                    PdfPCell header = new PdfPCell(new Paragraph("Propósito"));
+//                    PdfPCell header2 = new PdfPCell(new Paragraph(request.getData("Problema.proposito")));
+//                    t.addCell(header);
+//                    t.addCell(header2);
+//                    t.addCell("Planejamento");
+//                    t.addCell(request.getData("Problema.planejamento"));
+//                    t.addCell("Contexto");
+//                    t.addCell(request.getData("Problema.contexto"));
+//                    doc.add(t);
+                    
                     request = controllerProblema.findProblemaById(Integer.parseInt(KeepData.getData("Problema.id")));
                     String propositoProblema = request.getData("Problema.proposito");
                     Paragraph p5 = new Paragraph();
@@ -144,7 +195,7 @@ import util.Request;
                     p6.setIndentationLeft(12);
                     doc.add(new Paragraph(p6));
                     
-                    String contextoProblema = request.getData("Problema.planejamento");
+                    String contextoProblema = request.getData("Problema.contexto");
                     Paragraph p7 = new Paragraph();
                     p7.add(new Chunk("Contexto/Cenário: " , fonte3));
                     p7.add(new Chunk(contextoProblema, fonte4));
