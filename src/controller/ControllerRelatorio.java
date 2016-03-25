@@ -6,11 +6,22 @@ import java.io.OutputStream;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
+import com.itextpdf.text.ExceptionConverter;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.pdf.BaseFont;
+import com.itextpdf.text.pdf.PdfContentByte;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfPageEventHelper;
+import com.itextpdf.text.pdf.PdfTemplate;
 import com.itextpdf.text.pdf.PdfWriter;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import model.Acessar;
@@ -20,7 +31,7 @@ import settings.Facade;
 import settings.KeepData;
 import util.Request;
     
-    public class ControllerRelatorio {
+    public class ControllerRelatorio extends PdfPageEventHelper {
         
         Facade facade = Facade.getInstance();
         private Request request;
@@ -30,6 +41,9 @@ import util.Request;
         private final ControllerAlternativa controllerAlternativa = new ControllerAlternativa();
         private final ControllerAcessar controllerAcessar = new ControllerAcessar();
         private final ControllerCriterios controllerCriterios = new ControllerCriterios();
+        protected PdfTemplate total;     
+        protected BaseFont helv;
+        protected PdfContentByte cb;
         
         public void addHistoricoRelatorio(int idProblema) {
             try {
@@ -44,6 +58,31 @@ import util.Request;
                 facade.initializeHistorico().create(historico);
             } catch (Exception e) {
             }
+        } 
+        
+        //cabeçalho
+        public void onEndPage(PdfWriter w, Document d) {
+        PdfContentByte cb = w.getDirectContent();
+        cb.saveState();
+            try {
+                String txt = "Página "+w.getPageNumber();
+                BaseFont bf = BaseFont.createFont(BaseFont.HELVETICA, BaseFont.WINANSI, BaseFont.NOT_EMBEDDED);
+
+                float txtBase = d.top();
+                float txtSize = bf.getWidthPoint(txt, 8);
+                float adj = bf.getWidthPoint("0", 80);
+
+                cb.beginText();
+                cb.setFontAndSize(bf, 8);
+
+                cb.setTextMatrix(d.right() - txtSize - adj, txtBase);
+                cb.showText(txt);
+
+                cb.endText();
+            } catch (DocumentException | IOException e) { 
+                e.printStackTrace();
+            }  
+            cb.restoreState();
         }
         
         public void gerarRelatorio() throws IOException, DocumentException {
@@ -67,11 +106,13 @@ import util.Request;
 	            os = new FileOutputStream("Relatório.pdf");
 	       
 	            //associa a stream de saída ao
-	            PdfWriter.getInstance(doc, os);
-
-	            //abre o documento
-	            doc.open();	 
-
+	            PdfWriter write = PdfWriter.getInstance(doc, os);
+	            
+                    write.setPageEvent( this );
+                    
+                    //abre o documento
+	            doc.open();	                    
+                    
                     //titulo
                     Paragraph p1 = new Paragraph("RELATÓRIO TOMADA DE DECISÃO", fonte1);
                     p1.setAlignment(Element.ALIGN_CENTER);
