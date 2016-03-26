@@ -1,11 +1,11 @@
 package controller;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.swing.JOptionPane;
 import model.Criterio;
 import model.Historico;
 import model.Nota;
@@ -94,7 +94,7 @@ public class ControllerCriterios {
             } else {
                 criterio = facade.initializeJpaCriterio().findCriterio(ct.getId());
             }
-            
+
             for (Nota nota : criterio.getNotaList()) {
                 facade.initializeJpaNota().destroy(nota.getId());
             }
@@ -132,8 +132,10 @@ public class ControllerCriterios {
             criterio = new Criterio();
             criterio = facade.initializeJpaCriterio().findCriterio(idCriterio);
 
-            for (Nota nota : criterio.getNotaList()) {
-                facade.initializeJpaNota().destroy(nota.getId());
+            if (criterio.getAvaliarList().isEmpty()) {
+                for (Nota nota : criterio.getNotaList()) {
+                    facade.initializeJpaNota().destroy(nota.getId());
+                }
             }
 
             facade.initializeJpaCriterio().destroy(idCriterio);
@@ -173,6 +175,7 @@ public class ControllerCriterios {
     private List<Request> getRequestListCriterios(List<Criterio> list, int idProblema) {
         try {
             int total = sumTotal(idProblema);
+            DecimalFormat decimal = new DecimalFormat("0.0");
 
             List<Request> requestList = new ArrayList<>();
             for (Criterio another : list) {
@@ -182,7 +185,7 @@ public class ControllerCriterios {
                 data.put("Criterio.nome", another.getNome());
                 data.put("Criterio.justificativa", another.getJustificativa());
                 data.put("Criterio.peso", String.valueOf(another.getPeso()));
-                data.put("Criterio.porcentagem", String.valueOf(getPorcentagem(another.getPeso(), total)));
+                data.put("Criterio.porcentagem", decimal.format(getPorcentagem(another.getPeso(), total)));
                 data.put("Criterio.created", Text.formatDateForTable(another.getCreated()));
                 data.put("Criterio.modified", Text.formatDateForTable(another.getModified()));
                 requestList.add(new Request(data));

@@ -70,7 +70,30 @@ public class ControllerDecisao {
 
             facade.initializeHistorico().create(historico);
         } catch (Exception error) {
-            throw new Exception(this.getExceptionMessage(error, "Cadastrar"), error);
+            throw new Exception(this.getExceptionMessage(error, "Editar"), error);
+        }
+    }
+    
+    public void SaveDecisaoDefinitiva(int idDecisao) throws Exception {
+        try {
+            Decisao decisao = new Decisao();
+            decisao = facade.initializeJpaDecisao().findDecisao(idDecisao);
+            decisao.setDefinitivo(true); 
+            decisao.setModified(new Date());
+
+            facade.initializeJpaDecisao().edit(decisao);
+
+            Historico historico = new Historico();
+            historico.setDescricao("Decisão \"" + decisao.getIdAlternativa().getNome() + "\" foi escolhida para solucionar o problema.");
+            historico.setUsuarioNome(KeepData.getData("Usuario.nome"));
+            historico.setTipo(Constant.FUC_AVALIACAO);
+            historico.setCreated(new Date());
+            historico.setModified(new Date());
+            historico.setIdProblema(facade.initializeJpaProblema().findProblema(decisao.getIdProblema()));
+
+            facade.initializeHistorico().create(historico);
+        } catch (Exception error) {
+            throw new Exception(this.getExceptionMessage(error, "Salvar"), error);
         }
     }
 
@@ -85,6 +108,11 @@ public class ControllerDecisao {
                 data.put("Decisao.alternativa", decisao.getIdAlternativa().getNome());
                 data.put("Decisao.alternativa.id", String.valueOf(decisao.getIdAlternativa().getId()));
                 data.put("Decisao.justificativa", decisao.getJustificativa());
+                if (decisao.getDefinitivo()) {
+                    data.put("Decisao.definitivo", "1");
+                } else {
+                    data.put("Decisao.definitivo", "0");
+                }
             }
 
             return new Request(data);

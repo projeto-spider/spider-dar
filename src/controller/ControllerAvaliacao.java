@@ -1,12 +1,17 @@
 package controller;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import model.Alternativa;
 import model.Avaliar;
+import model.Criterio;
+import model.Nota;
 import settings.Facade;
+import settings.KeepData;
 import util.Request;
 
 /**
@@ -82,7 +87,7 @@ public class ControllerAvaliacao {
     public List<Request> listAvaliacaoByAlternativa(int idAlternativa) {
         try {
 
-            List<Avaliar> listAvaliar = facade.initializeJpaAvaliacao().findAvaliaryIdAlternativa(idAlternativa);
+            List<Avaliar> listAvaliar = facade.initializeJpaAvaliacao().findAvaliarByIdAlternativa(idAlternativa);
 
             return getRequesListtAvaliar(listAvaliar);
         } catch (Exception error) {
@@ -104,6 +109,104 @@ public class ControllerAvaliacao {
                 requestList.add(new Request(data));
             }
             return requestList;
+        } catch (Exception error) {
+            throw error;
+        }
+    }
+
+    public List<Request> getRequestListFromAlternativa() {
+        try {
+            List<Request> requestList = new ArrayList<>();
+
+            int idProblema = Integer.parseInt(KeepData.getData("Problema.id"));
+            List<Alternativa> listAlternativas = facade.initializeAlternativa().findAlternativasByProblema(idProblema);
+            Float vetor[] = new Float[listAlternativas.size()];
+            DecimalFormat decimal = new DecimalFormat("0.0");
+            int cont = 0;
+
+            for (Alternativa another : listAlternativas) {
+
+                float satisfacao = calculateSatisfacaoAndRanking(another.getId());
+                vetor[cont] = satisfacao;
+                cont++;
+
+                Map<String, String> data = new HashMap<>();
+                data.put("Avaliacao.alternativa.id", another.getId().toString());
+                data.put("Avaliacao.alternativa.nome", another.getNome());
+                data.put("Avaliacao.satisfacao", decimal.format(satisfacao) + "%");
+
+                requestList.add(new Request(data));
+            }
+
+            return requestList;
+        } catch (Exception error) {
+            throw error;
+        }
+    }
+
+    private String[] rankingAlternativas(Float[] vetor) {
+        float aux;
+        String[] ordenado = new String[vetor.length];
+        for (int i = 0; i < vetor.length; i++) {
+            for (int j = 1; j < vetor.length - 1; j++) {
+                if (vetor[j] > vetor[j + 1]) {
+                    aux = vetor[j];
+                    vetor[j] = vetor[j + 1];
+                    vetor[j + 1] = aux;
+
+                }
+            }
+        }
+
+        DecimalFormat decimal = new DecimalFormat("0.0");
+        for (int i = 0; i < vetor.length; i++) {
+            ordenado[i] = decimal.format(vetor[i]);
+        }
+        return ordenado;
+    }
+
+    private float calculateSatisfacaoAndRanking(int idAlternativa) {
+        try {
+            int idProblema = Integer.parseInt(KeepData.getData("Problema.id"));
+            List<Avaliar> avaliarList = facade.initializeJpaAvaliacao().findAvaliarByIdAlternativa(idAlternativa);
+            List<Criterio> criterioList = facade.initializeJpaCriterio().findCriterioByIdProblema(idProblema);
+            List<Integer> higherNotas = higherNotas(criterioList);
+
+            if (!avaliarList.isEmpty()) {
+                float sumGivenNotas = 0;
+                float sumhigherNotas = 0;
+                //Soma todas as notas dadas na avaliação com os pesos de cada critério.
+                //Soma a maior nota de cada criterio com o seu peso.
+                for (int i = 0; i < avaliarList.size(); i++) {
+                    sumGivenNotas = sumGivenNotas + (avaliarList.get(i).getValor() * criterioList.get(i).getPeso());
+                    sumhigherNotas = sumhigherNotas + (higherNotas.get(i) * criterioList.get(i).getPeso());
+                }
+
+                float satisfacao = (sumGivenNotas / sumhigherNotas) * 100;
+
+                return satisfacao;
+            } else {
+                return 0;
+            }
+
+        } catch (Exception error) {
+            throw error;
+        }
+    }
+
+    private List<Integer> higherNotas(List<Criterio> criterioList) {
+        try {
+            List<Integer> list = new ArrayList<>();
+            for (Criterio criterio : criterioList) {
+                int higher = 0;
+                for (Nota nota : criterio.getNotaList()) {
+                    if (higher < nota.getNota()) {
+                        higher = nota.getNota();
+                    }
+                }
+                list.add(higher);
+            }
+            return list;
         } catch (Exception error) {
             throw error;
         }

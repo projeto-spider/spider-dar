@@ -16,7 +16,7 @@ public class JpaAvaliacao extends AvaliarJpaController {
         super(emf);
     }
 
-    public List<Avaliar> findAvaliaryIdAlternativa(int idAlternativa) {
+    public List<Avaliar> findAvaliarByIdAlternativa(int idAlternativa) {
         try {
             EntityManager entityManager = super.getEntityManager();
             entityManager.getTransaction().begin();

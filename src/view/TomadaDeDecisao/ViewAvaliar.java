@@ -150,6 +150,7 @@ public class ViewAvaliar extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(null, "\"Avaliação\" foi salva com sucesso.");
             this.dispose();
         } catch (Exception error) {
+            error.printStackTrace();
             JOptionPane.showMessageDialog(null, error.getMessage(), "ERRO AO SALVAR", JOptionPane.ERROR_MESSAGE);
         }
     }
