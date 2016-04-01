@@ -13,6 +13,7 @@ import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
 import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.TabSettings;
 import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfPCell;
@@ -20,6 +21,8 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfPageEventHelper;
 import com.itextpdf.text.pdf.PdfTemplate;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.text.pdf.draw.DottedLineSeparator;
+import com.itextpdf.text.pdf.draw.LineSeparator;
 import static com.itextpdf.text.zugferd.checkers.basic.MeasurementUnitCode.MM;
 import java.io.IOException;
 import java.text.DateFormat;
@@ -45,7 +48,7 @@ import util.Request;
         private final ControllerCriterios controllerCriterios = new ControllerCriterios();
         protected PdfTemplate total;     
         protected BaseFont helv;
-        protected PdfContentByte cb;
+        protected PdfContentByte canvas;
         
         public void addHistoricoRelatorio(int idProblema) {
             try {
@@ -66,23 +69,13 @@ import util.Request;
         public void onEndPage(PdfWriter writer, Document document) {
 		try {
 			Rectangle page = document.getPageSize();
-			
-                        Image img = Image.getInstance("src\\resources\\image\\goal.png");
-                        img.setAlignment(Element.ALIGN_RIGHT);
-                        //img.scaleToFit(300, 300);
-                        //document.add(img);
                         
-			PdfPTable foot = new PdfPTable(2);
-			img.scalePercent(50, 50);
-			PdfPCell cell = new PdfPCell(img);
-			cell.setBorder(0);
-			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
-			cell.setVerticalAlignment(Element.ALIGN_BOTTOM);
-			foot.addCell(cell);
+			PdfPTable foot = new PdfPTable(1);
+			PdfPCell cell = new PdfPCell();
 			DateFormat sf = new SimpleDateFormat("dd/MM/yyyy");
 			Date data = new Date();
 			cell = new PdfPCell(new Phrase(sf.format(data)));
-			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
 			cell.setVerticalAlignment(Element.ALIGN_BOTTOM);
 			cell.setBorder(0);
 			foot.addCell(cell);
@@ -90,6 +83,33 @@ import util.Request;
 					- document.rightMargin());
 			foot.writeSelectedRows(0, -1, document.leftMargin(), document
 					.bottomMargin(), writer.getDirectContent());
+                        
+                        PdfContentByte canvas = writer.getDirectContent();
+                        Rectangle rect = new Rectangle(36, 36, 559, 806);
+                        rect.setBorder(Rectangle. BOX);
+                        rect.setBorderWidth(1);
+                        canvas.rectangle(rect);
+                        
+                        canvas.saveState();
+                        try {
+                            String txt = "Página "+writer.getPageNumber();
+                            BaseFont bf = BaseFont.createFont(BaseFont.HELVETICA, BaseFont.WINANSI, BaseFont.NOT_EMBEDDED);
+
+                            float txtBase = document.left();
+                            float txtSize = bf.getWidthPoint(txt, 8);
+                            float adj = bf.getWidthPoint("0", 80);
+
+                            canvas.beginText();
+                            canvas.setFontAndSize(bf, 8);
+
+                            canvas.setTextMatrix(document.right() - txtSize - adj, txtBase);
+                            canvas.showText(txt);
+
+                            canvas.endText();
+                        } catch (DocumentException | IOException e) { 
+                            e.printStackTrace();
+                        }  
+                        canvas.restoreState();
 		} catch (Exception e) {
 			throw new ExceptionConverter(e);
 		}
@@ -97,8 +117,8 @@ import util.Request;
         
         //rodapé
 //        public void onEndPage(PdfWriter w, Document d) {
-//        PdfContentByte cb = w.getDirectContent();
-//        cb.saveState();
+//        PdfContentByte canvas = w.getDirectContent();
+//        canvas.saveState();
 //            try {
 //                String txt = "Página "+w.getPageNumber();
 //                BaseFont bf = BaseFont.createFont(BaseFont.HELVETICA, BaseFont.WINANSI, BaseFont.NOT_EMBEDDED);
@@ -107,17 +127,17 @@ import util.Request;
 //                float txtSize = bf.getWidthPoint(txt, 8);
 //                float adj = bf.getWidthPoint("0", 80);
 //
-//                cb.beginText();
-//                cb.setFontAndSize(bf, 8);
+//                canvas.beginText();
+//                canvas.setFontAndSize(bf, 8);
 //
-//                cb.setTextMatrix(d.right() - txtSize - adj, txtBase);
-//                cb.showText(txt);
+//                canvas.setTextMatrix(d.right() - txtSize - adj, txtBase);
+//                canvas.showText(txt);
 //
-//                cb.endText();
+//                canvas.endText();
 //            } catch (DocumentException | IOException e) { 
 //                e.printStackTrace();
 //            }  
-//            cb.restoreState();
+//            canvas.restoreState();
 //        }
         
         public void gerarRelatorio() throws IOException, DocumentException {
@@ -129,10 +149,10 @@ import util.Request;
 	        try {
                     
                     //fontes
-                    Font fonte1 = new Font(Font.FontFamily.TIMES_ROMAN, 18, Font.BOLD);
-                    Font fonte2 = new Font(Font.FontFamily.TIMES_ROMAN, 14, Font.BOLD);
-                    Font fonte3 = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD);
-                    Font fonte4 = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.NORMAL);
+                    Font fonte1 = new Font(Font.FontFamily.HELVETICA, 18, Font.BOLD);
+                    Font fonte2 = new Font(Font.FontFamily.HELVETICA, 14, Font.BOLD);
+                    Font fonte3 = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD);
+                    Font fonte4 = new Font(Font.FontFamily.HELVETICA, 12, Font.NORMAL);
                     
 	            //cria o documento tamanho A4, margens de 2,54cm
                     doc = new Document(PageSize.A4, 72, 72, 72, 72);
@@ -146,7 +166,22 @@ import util.Request;
                     write.setPageEvent( this );
                     
                     //abre o documento
-	            doc.open();	                    
+	            doc.open();	         
+                    
+                      //criar linha
+//                    doc.add(new Paragraph("Before dotted line"));
+//                    LineSeparator separator = new LineSeparator();
+//                    separator.setPercentage(59500f / 523f);
+//                    Chunk linebreak = new Chunk(separator);
+//                    doc.add(linebreak);
+//                    doc.add(new Paragraph("After dotted line"));
+                    
+                      //criar retangulo ao redor da página
+//                    PdfContentByte canvas = write.getDirectContent();
+//                    Rectangle rect = new Rectangle(36, 36, 559, 806);
+//                    rect.setBorder(Rectangle.BOX);
+//                    rect.setBorderWidth(2);
+//                    canvas.rectangle(rect);
                     
                     //titulo
                     Paragraph p1 = new Paragraph("RELATÓRIO TOMADA DE DECISÃO", fonte1);
@@ -160,26 +195,23 @@ import util.Request;
                     p3.setSpacingAfter(20);
                     doc.add(p3);
                     
+                    Paragraph p4 = new Paragraph();
+                    LineSeparator separator = new LineSeparator();
+                    separator.setPercentage(60500f / 523f);
+                    Chunk linebreak = new Chunk(separator);
+                    doc.add(linebreak);                    
+                    p4.add(new Chunk("1. Problema: " , fonte3));
+                    p4.setIndentationLeft(12);
+                    doc.add(new Paragraph(p4));
+                    doc.add(linebreak);
+                    
                     String nomeProblema = KeepData.getData("Problema.nome");
-                    Paragraph p4 = new Paragraph("1. Problema: " + nomeProblema, fonte3);
-                    doc.add(p4);
-                    
-//                    request = controllerProblema.findProblemaById(Integer.parseInt(KeepData.getData("Problema.id")));
-//                    String propositoProblema = request.getData("Problema.proposito");
-//                    String planejamentoProblema = request.getData("Problema.planejamento");
-//                    String contextoProblema = request.getData("Problema.contexto");
-                    
-//                    PdfPTable t = new PdfPTable(2);
-//                    PdfPCell header = new PdfPCell(new Paragraph("Propósito"));
-//                    PdfPCell header2 = new PdfPCell(new Paragraph(request.getData("Problema.proposito")));
-//                    t.addCell(header);
-//                    t.addCell(header2);
-//                    t.addCell("Planejamento");
-//                    t.addCell(request.getData("Problema.planejamento"));
-//                    t.addCell("Contexto");
-//                    t.addCell(request.getData("Problema.contexto"));
-//                    doc.add(t);
-                    
+                    Paragraph p300 = new Paragraph();                  
+                    p300.add(new Chunk("Nome: " , fonte3));
+                    p300.add(new Chunk(nomeProblema, fonte4));
+                    p300.setIndentationLeft(12);
+                    doc.add(new Paragraph(p300));
+                   
                     request = controllerProblema.findProblemaById(Integer.parseInt(KeepData.getData("Problema.id")));
                     String propositoProblema = request.getData("Problema.proposito");
                     Paragraph p5 = new Paragraph();
@@ -223,8 +255,15 @@ import util.Request;
                     Paragraph p9 = new Paragraph(" ");
                     doc.add(p9);
                     
-                    Paragraph p10 = new Paragraph("2. Tarefas: ", fonte3);
-                    doc.add(p10);
+                    Paragraph p10 = new Paragraph();
+                    LineSeparator separator1 = new LineSeparator();
+                    separator1.setPercentage(60500f / 523f);
+                    Chunk linebreak1 = new Chunk(separator1);
+                    doc.add(linebreak1);                    
+                    p10.add(new Chunk("2. Tarefas: " , fonte3));
+                    p10.setIndentationLeft(12);
+                    doc.add(new Paragraph(p10));
+                    doc.add(linebreak1);
                     
 //                    for pra listar todas as tarefas
                     int idProblema = Integer.parseInt(KeepData.getData("Problema.id"));
@@ -281,8 +320,15 @@ import util.Request;
                         doc.add(p16);
                     } 
                     
-                    Paragraph p17 = new Paragraph("3. Alternativas de Solução: ", fonte3);
-                    doc.add(p17);
+                    Paragraph p17 = new Paragraph();
+                    LineSeparator separator2 = new LineSeparator();
+                    separator2.setPercentage(60500f / 523f);
+                    Chunk linebreak2 = new Chunk(separator2);
+                    doc.add(linebreak2);                    
+                    p17.add(new Chunk("3. Alternativas de Solução: " , fonte3));
+                    p17.setIndentationLeft(12);
+                    doc.add(new Paragraph(p17));
+                    doc.add(linebreak2);
                     
                     //for para listar todas as alternativas de solução
                     List<Request> alternativasList = controllerAlternativa.listAlternativasByProblema(); 
@@ -320,8 +366,15 @@ import util.Request;
                         doc.add(p22);
                     }
                     
-                    Paragraph p23 = new Paragraph("4. Critérios de Avaliação: ", fonte3);
-                    doc.add(p23);
+                    Paragraph p23 = new Paragraph();
+                    LineSeparator separator3 = new LineSeparator();
+                    separator3.setPercentage(60500f / 523f);
+                    Chunk linebreak3 = new Chunk(separator3);
+                    doc.add(linebreak3);                    
+                    p23.add(new Chunk("4. Critérios de Avaliação: " , fonte3));
+                    p23.setIndentationLeft(12);
+                    doc.add(new Paragraph(p23));
+                    doc.add(linebreak3);
                     
                     //for para listar os critérios do problema
                     List<Request> criteriosList = controllerCriterios.listCriteirosByProjeto(idProblema);
