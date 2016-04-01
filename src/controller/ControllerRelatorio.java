@@ -46,6 +46,8 @@ import util.Request;
         private final ControllerAlternativa controllerAlternativa = new ControllerAlternativa();
         private final ControllerAcessar controllerAcessar = new ControllerAcessar();
         private final ControllerCriterios controllerCriterios = new ControllerCriterios();
+        private final ControllerAvaliacao controllerAvaliacao = new ControllerAvaliacao();
+        private final ControllerDecisao controllerDecisao = new ControllerDecisao();
         protected PdfTemplate total;     
         protected BaseFont helv;
         protected PdfContentByte canvas;
@@ -200,7 +202,7 @@ import util.Request;
                     separator.setPercentage(60500f / 523f);
                     Chunk linebreak = new Chunk(separator);
                     doc.add(linebreak);                    
-                    p4.add(new Chunk("1. Problema: " , fonte3));
+                    p4.add(new Chunk("1. Problema " , fonte3));
                     p4.setIndentationLeft(12);
                     doc.add(new Paragraph(p4));
                     doc.add(linebreak);
@@ -260,7 +262,7 @@ import util.Request;
                     separator1.setPercentage(60500f / 523f);
                     Chunk linebreak1 = new Chunk(separator1);
                     doc.add(linebreak1);                    
-                    p10.add(new Chunk("2. Tarefas: " , fonte3));
+                    p10.add(new Chunk("2. Tarefas " , fonte3));
                     p10.setIndentationLeft(12);
                     doc.add(new Paragraph(p10));
                     doc.add(linebreak1);
@@ -290,12 +292,38 @@ import util.Request;
                         p13.setIndentationLeft(12);
                         doc.add(new Paragraph(p13));
                         
+                        Paragraph p14;
                         String complexidadeTarefa = tarefasList.get(i).getData("Tarefa.marcador");
-                        Paragraph p14 = new Paragraph();
-                        p14.add(new Chunk("Complexidade: " , fonte3));
-                        p14.add(new Chunk(complexidadeTarefa, fonte4));
-                        p14.setIndentationLeft(12);
-                        doc.add(new Paragraph(p14));
+                        switch (complexidadeTarefa) {
+                            case "1":
+                                p14 = new Paragraph();
+                                p14.add(new Chunk("Complexidade: " , fonte3));
+                                p14.add(new Chunk("Trivial", fonte4));
+                                p14.setIndentationLeft(12);
+                                doc.add(new Paragraph(p14));
+                                break;
+                            case "2":
+                                p14 = new Paragraph();
+                                p14.add(new Chunk("Complexidade: " , fonte3));
+                                p14.add(new Chunk("Pequeno", fonte4));
+                                p14.setIndentationLeft(12);
+                                doc.add(new Paragraph(p14));
+                                break;
+                            case "3":
+                                p14 = new Paragraph();
+                                p14.add(new Chunk("Complexidade: " , fonte3));
+                                p14.add(new Chunk("Médio", fonte4));
+                                p14.setIndentationLeft(12);
+                                doc.add(new Paragraph(p14));
+                                break;
+                            case "4":
+                                p14 = new Paragraph();
+                                p14.add(new Chunk("Complexidade: " , fonte3));
+                                p14.add(new Chunk("Grande", fonte4));
+                                p14.setIndentationLeft(12);
+                                doc.add(new Paragraph(p14));
+                                break;
+                        }
                         
                         Paragraph p15;
                         String statusTarefa = tarefasList.get(i).getData("Tarefa.feito");
@@ -325,7 +353,7 @@ import util.Request;
                     separator2.setPercentage(60500f / 523f);
                     Chunk linebreak2 = new Chunk(separator2);
                     doc.add(linebreak2);                    
-                    p17.add(new Chunk("3. Alternativas de Solução: " , fonte3));
+                    p17.add(new Chunk("3. Alternativas de Solução " , fonte3));
                     p17.setIndentationLeft(12);
                     doc.add(new Paragraph(p17));
                     doc.add(linebreak2);
@@ -371,7 +399,7 @@ import util.Request;
                     separator3.setPercentage(60500f / 523f);
                     Chunk linebreak3 = new Chunk(separator3);
                     doc.add(linebreak3);                    
-                    p23.add(new Chunk("4. Critérios de Avaliação: " , fonte3));
+                    p23.add(new Chunk("4. Critérios de Avaliação " , fonte3));
                     p23.setIndentationLeft(12);
                     doc.add(new Paragraph(p23));
                     doc.add(linebreak3);
@@ -401,25 +429,98 @@ import util.Request;
                         doc.add(new Paragraph(p26));
                         
                         //for para listar notas e valores
-//                        int idCriterios = Integer.parseInt(KeepData.getData("Criterio.id"));
-//                        List<Request> notasList = controllerCriterios.listNotasByCriterio(idCriterios);
-//                        for (int j = 0; j < notasList.size(); j++) {
-//                        
-//                            String notaCriterio = notasList.get(j).getData("Nota.nome");
-//                            Paragraph p27 = new Paragraph();
-//                            p27.add(new Chunk("Nota: " , fonte3));
-//                            p27.add(new Chunk(notaCriterio, fonte4));
-//                            p27.setIndentationLeft(12);
-//                            doc.add(new Paragraph(p27));
-//
-//                            String valorCriterio = notasList.get(j).getData("Nota.valor");
-//                            Paragraph p28 = new Paragraph();
-//                            p28.add(new Chunk("Valor: " , fonte3));
-//                            p28.add(new Chunk(valorCriterio, fonte4));
-//                            p28.setIndentationLeft(12);
-//                            doc.add(new Paragraph(p28));
-//                        }
+                        int idCriterios = Integer.parseInt(criteriosList.get(i).getData("Criterio.id"));
+                        List<Request> notasList = controllerCriterios.listNotasByCriterio(idCriterios);
+                        for (int j = 0; j < notasList.size(); j++) {
+                        
+                            String notaCriterio = notasList.get(j).getData("Nota.nome");
+                            Paragraph p27 = new Paragraph();
+                            p27.add(new Chunk("Nota: " , fonte3));
+                            p27.add(new Chunk(notaCriterio, fonte4));
+                            p27.setIndentationLeft(12);
+                            doc.add(new Paragraph(p27));
+
+                            String valorCriterio = notasList.get(j).getData("Nota.valor");
+                            Paragraph p28 = new Paragraph();
+                            p28.add(new Chunk("Valor: " , fonte3));
+                            p28.add(new Chunk(valorCriterio, fonte4));
+                            p28.setIndentationLeft(12);
+                            doc.add(new Paragraph(p28));
+                        }              
+                        
+                        Paragraph p150 = new Paragraph(" ");
+                        doc.add(p150);
                     }
+                    
+                    Paragraph p29 = new Paragraph();
+                    LineSeparator separator4 = new LineSeparator();
+                    separator4.setPercentage(60500f / 523f);
+                    Chunk linebreak4 = new Chunk(separator4);
+                    doc.add(linebreak4);                    
+                    p29.add(new Chunk("5. Avaliação " , fonte3));
+                    p29.setIndentationLeft(12);
+                    doc.add(new Paragraph(p29));
+                    doc.add(linebreak4);
+                    
+                    List<Request> avaliacaoList = controllerAvaliacao.getRequestListFromAlternativa(); 
+                    for (int i = 0; i < avaliacaoList.size(); i++) {
+                        
+                        String nomeAlternativas = avaliacaoList.get(i).getData("Avaliacao.alternativa.nome");
+                        Paragraph p30 = new Paragraph();
+                        p30.add(new Chunk("Alternativa: " , fonte3));
+                        p30.add(new Chunk(nomeAlternativas, fonte4));
+                        p30.setIndentationLeft(12);
+                        doc.add(new Paragraph(p30));
+                        
+                        String satisfacaoAvaliar = avaliacaoList.get(i).getData("Avaliacao.satisfacao");
+                        Paragraph p31 = new Paragraph();
+                        p31.add(new Chunk("Satisfação: " , fonte3));
+                        p31.add(new Chunk(satisfacaoAvaliar, fonte4));
+                        p31.setIndentationLeft(12);
+                        doc.add(new Paragraph(p31));
+                        
+                        String rankingAvaliar = avaliacaoList.get(i).getData("Avaliacao.posicao");
+                        Paragraph p32 = new Paragraph();
+                        p32.add(new Chunk("Ranking: " , fonte3));
+                        p32.add(new Chunk(rankingAvaliar, fonte4));
+                        p32.setIndentationLeft(12);
+                        doc.add(new Paragraph(p32));
+                        
+                        Paragraph p35 = new Paragraph(" ");
+                        doc.add(p35);
+                    }
+                    
+                    request = controllerDecisao.findDecisao();
+                    String decisaoAvaliar = request.getData("Decisao.alternativa");
+                    Paragraph p33 = new Paragraph();
+                    p33.add(new Chunk("Decisão: " , fonte3));
+                    p33.add(new Chunk(decisaoAvaliar, fonte4));
+                    p33.setIndentationLeft(12);
+                    doc.add(new Paragraph(p33)); 
+                        
+                    String justificativaAvaliar = request.getData("Decisao.justificativa");
+                    Paragraph p34 = new Paragraph();
+                    p34.add(new Chunk("Justificativa: " , fonte3));
+                    p34.add(new Chunk(justificativaAvaliar, fonte4));
+                    p34.setIndentationLeft(12);
+                    doc.add(new Paragraph(p34));
+                    
+                    Paragraph p15;
+                        String decisaoDefinitivo = request.getData("Decisao.definitivo");
+                        switch (decisaoDefinitivo) {
+                            case "0":
+                                p15 = new Paragraph();
+                                p15.add(new Chunk("Processo de Gestão de Decisão: Em andamento." , fonte3));
+                                p15.setIndentationLeft(12);
+                                doc.add(new Paragraph(p15));
+                                break;
+                            case "1":
+                                p15 = new Paragraph();
+                                p15.add(new Chunk("Processo de Gestão de Decisão: Finalizado." , fonte3));
+                                p15.setIndentationLeft(12);
+                                doc.add(new Paragraph(p15));
+                                break;
+                        }
                       
                     addHistoricoRelatorio(Integer.parseInt(KeepData.getData("Problema.id")));
 	        } finally {
