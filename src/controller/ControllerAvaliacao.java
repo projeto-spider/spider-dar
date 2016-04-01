@@ -2,6 +2,7 @@ package controller;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -10,6 +11,7 @@ import model.Alternativa;
 import model.Avaliar;
 import model.Criterio;
 import model.Nota;
+import settings.Auxiliar;
 import settings.Facade;
 import settings.KeepData;
 import util.Request;
@@ -117,24 +119,33 @@ public class ControllerAvaliacao {
     public List<Request> getRequestListFromAlternativa() {
         try {
             List<Request> requestList = new ArrayList<>();
-
             int idProblema = Integer.parseInt(KeepData.getData("Problema.id"));
             List<Alternativa> listAlternativas = facade.initializeAlternativa().findAlternativasByProblema(idProblema);
-            Float vetor[] = new Float[listAlternativas.size()];
+            List<Auxiliar> listAuxiliar = new ArrayList<>();
+            Auxiliar aux;
             DecimalFormat decimal = new DecimalFormat("0.0");
-            int cont = 0;
 
             for (Alternativa another : listAlternativas) {
 
                 float satisfacao = calculateSatisfacaoAndRanking(another.getId());
-                vetor[cont] = satisfacao;
-                cont++;
 
+                aux = new Auxiliar();
+                aux.setId(another.getId());
+                aux.setAlternativa(another.getNome());
+                aux.setSatifacao(satisfacao);
+
+                listAuxiliar.add(aux);
+            }
+
+            Collections.sort(listAuxiliar);
+
+            int cont = 1;
+            for (Auxiliar auxiliar : listAuxiliar) {
                 Map<String, String> data = new HashMap<>();
-                data.put("Avaliacao.alternativa.id", another.getId().toString());
-                data.put("Avaliacao.alternativa.nome", another.getNome());
-                data.put("Avaliacao.satisfacao", decimal.format(satisfacao) + "%");
-
+                data.put("Avaliacao.alternativa.id", String.valueOf(auxiliar.getId()));
+                data.put("Avaliacao.alternativa.nome", auxiliar.getAlternativa());
+                data.put("Avaliacao.satisfacao", decimal.format(auxiliar.getSatifacao()) + "%");
+                data.put("Avaliacao.posicao", String.valueOf(cont++));
                 requestList.add(new Request(data));
             }
 
@@ -142,27 +153,6 @@ public class ControllerAvaliacao {
         } catch (Exception error) {
             throw error;
         }
-    }
-
-    private String[] rankingAlternativas(Float[] vetor) {
-        float aux;
-        String[] ordenado = new String[vetor.length];
-        for (int i = 0; i < vetor.length; i++) {
-            for (int j = 1; j < vetor.length - 1; j++) {
-                if (vetor[j] > vetor[j + 1]) {
-                    aux = vetor[j];
-                    vetor[j] = vetor[j + 1];
-                    vetor[j + 1] = aux;
-
-                }
-            }
-        }
-
-        DecimalFormat decimal = new DecimalFormat("0.0");
-        for (int i = 0; i < vetor.length; i++) {
-            ordenado[i] = decimal.format(vetor[i]);
-        }
-        return ordenado;
     }
 
     private float calculateSatisfacaoAndRanking(int idAlternativa) {

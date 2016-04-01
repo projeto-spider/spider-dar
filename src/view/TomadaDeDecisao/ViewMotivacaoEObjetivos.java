@@ -5,7 +5,6 @@ import controller.ControllerAcessar;
 import controller.ControllerProblema;
 import java.util.List;
 import model.Acessar;
-import static model.Acessar_.idProblema;
 import settings.KeepData;
 import util.Internal;
 import util.MyDefaultTableModel;

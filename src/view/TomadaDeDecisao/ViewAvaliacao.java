@@ -47,7 +47,7 @@ public class ViewAvaliacao extends javax.swing.JInternalFrame {
                 request.getData("Avaliacao.alternativa.id"),
                 request.getData("Avaliacao.alternativa.nome"),
                 request.getData("Avaliacao.satisfacao"),
-                "0"};
+                request.getData("Avaliacao.posicao")};
 
             myDefaultTableModel.addRow(line);
         }
@@ -93,6 +93,7 @@ public class ViewAvaliacao extends javax.swing.JInternalFrame {
 
         if (idDecisao == -1) {
             JOptionPane.showMessageDialog(null, "A decisão ainda não foi tomada.");
+            jCheckBox1.setSelected(false); 
         } else {
             try {
                 controllerDecisao.SaveDecisaoDefinitiva(idDecisao);
