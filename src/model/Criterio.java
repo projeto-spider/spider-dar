@@ -16,6 +16,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -36,9 +37,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Criterio.findAll", query = "SELECT c FROM Criterio c"),
     @NamedQuery(name = "Criterio.findById", query = "SELECT c FROM Criterio c WHERE c.id = :id"),
-    @NamedQuery(name = "Criterio.findByNome", query = "SELECT c FROM Criterio c WHERE c.nome = :nome"),
     @NamedQuery(name = "Criterio.findByPeso", query = "SELECT c FROM Criterio c WHERE c.peso = :peso"),
-    @NamedQuery(name = "Criterio.findByJustificativa", query = "SELECT c FROM Criterio c WHERE c.justificativa = :justificativa"),
     @NamedQuery(name = "Criterio.findByCreated", query = "SELECT c FROM Criterio c WHERE c.created = :created"),
     @NamedQuery(name = "Criterio.findByModified", query = "SELECT c FROM Criterio c WHERE c.modified = :modified")})
 public class Criterio implements Serializable {
@@ -49,12 +48,14 @@ public class Criterio implements Serializable {
     @Column(name = "id")
     private Integer id;
     @Basic(optional = false)
+    @Lob
     @Column(name = "nome")
     private String nome;
     @Basic(optional = false)
     @Column(name = "peso")
     private int peso;
     @Basic(optional = false)
+    @Lob
     @Column(name = "justificativa")
     private String justificativa;
     @Basic(optional = false)

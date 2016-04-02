@@ -33,6 +33,7 @@ public class ControllerAlternativa {
             alternativa.setDescricao(request.getDataInput("Alternativa.descricao").getValor());
             alternativa.setCusto(request.getDataInput("Alternativa.estimativaCusto").getValor());
             alternativa.setTempo(request.getDataInput("Alternativa.estimativaTempo").getValor());
+            alternativa.setMetodos(request.getDataInput("Alternativa.metodos").getValor()); 
             alternativa.setCreated(new Date());
             alternativa.setModified(new Date());
             alternativa.setIdProblema(facade.initializeJpaProblema().findProblema(idProblema));
@@ -62,6 +63,7 @@ public class ControllerAlternativa {
             alternativa.setDescricao(request.getDataInput("Alternativa.descricao").getValor());
             alternativa.setCusto(request.getDataInput("Alternativa.estimativaCusto").getValor());
             alternativa.setTempo(request.getDataInput("Alternativa.estimativaTempo").getValor());
+            alternativa.setMetodos(request.getDataInput("Alternativa.metodos").getValor()); 
             alternativa.setModified(new Date());
 
             facade.initializeAlternativa().edit(alternativa);
@@ -114,6 +116,7 @@ public class ControllerAlternativa {
                 data.put("Alternativa.id", another.getId().toString());
                 data.put("Alternativa.nome", another.getNome());
                 data.put("Alternativa.descricao", another.getDescricao());
+                data.put("Alternativa.metodos", another.getMetodos());
                 data.put("Alternativa.estimativaCusto", another.getCusto());
                 data.put("Alternativa.estimativaTempo", another.getTempo());
                 data.put("Alternativa.created", Text.formatDateForTable(another.getCreated()));
@@ -141,6 +144,7 @@ public class ControllerAlternativa {
             data.put("Alternativa.id", alternativa.getId().toString());
             data.put("Alternativa.nome", alternativa.getNome());
             data.put("Alternativa.descricao", alternativa.getDescricao());
+            data.put("Alternativa.metodos", alternativa.getMetodos());
             data.put("Alternativa.estimativaCusto", alternativa.getCusto());
             data.put("Alternativa.estimativaTempo", alternativa.getTempo());
             data.put("Alternativa.created", Text.formatDateForTable(alternativa.getCreated()));

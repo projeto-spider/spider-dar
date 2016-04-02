@@ -57,6 +57,10 @@ public class Alternativa implements Serializable {
     @Column(name = "descricao")
     private String descricao;
     @Basic(optional = false)
+    @Lob
+    @Column(name = "metodos")
+    private String metodos;
+    @Basic(optional = false)
     @Column(name = "custo")
     private String custo;
     @Basic(optional = false)
@@ -85,10 +89,11 @@ public class Alternativa implements Serializable {
         this.id = id;
     }
 
-    public Alternativa(Integer id, String nome, String descricao, String custo, String tempo, Date created, Date modified) {
+    public Alternativa(Integer id, String nome, String descricao, String metodos, String custo, String tempo, Date created, Date modified) {
         this.id = id;
         this.nome = nome;
         this.descricao = descricao;
+        this.metodos = metodos;
         this.custo = custo;
         this.tempo = tempo;
         this.created = created;
@@ -117,6 +122,14 @@ public class Alternativa implements Serializable {
 
     public void setDescricao(String descricao) {
         this.descricao = descricao;
+    }
+
+    public String getMetodos() {
+        return metodos;
+    }
+
+    public void setMetodos(String metodos) {
+        this.metodos = metodos;
     }
 
     public String getCusto() {

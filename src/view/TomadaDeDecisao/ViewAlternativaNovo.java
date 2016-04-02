@@ -47,6 +47,7 @@ public class ViewAlternativaNovo extends javax.swing.JDialog {
         jTextAreaDescricao.setText(request.getData("Alternativa.descricao"));
         jTextFieldEstimativaCusto.setText(request.getData("Alternativa.estimativaCusto"));
         jTextFieldEstimativaTempo.setText(request.getData("Alternativa.estimativaTempo"));
+        jTextAreaMetodos.setText(request.getData("Alternativa.metodos"));
 
     }
 
@@ -80,6 +81,7 @@ public class ViewAlternativaNovo extends javax.swing.JDialog {
         request.setDataInput("Alternativa.descricao", new Input(1, "text", "Descrição", jTextAreaDescricao.getText()));
         request.setDataInput("Alternativa.estimativaCusto", new Input(1, "text", "Estimativa de Custo", jTextFieldEstimativaCusto.getText()));
         request.setDataInput("Alternativa.estimativaTempo", new Input(1, "text", "Estimativa de Tempo", jTextFieldEstimativaTempo.getText()));
+         request.setDataInput("Alternativa.metodos", new Input(1, "text", "Metodos", jTextAreaMetodos.getText()));
 
         if (!isValidData(request)) {
             return;
@@ -115,6 +117,9 @@ public class ViewAlternativaNovo extends javax.swing.JDialog {
         jTextFieldEstimativaTempo = new javax.swing.JTextField();
         jButtonCancelar = new javax.swing.JButton();
         jButtonSalvar = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTextAreaMetodos = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Nova Alternativa de Solução");
@@ -147,6 +152,15 @@ public class ViewAlternativaNovo extends javax.swing.JDialog {
             }
         });
 
+        jLabel2.setText("Metodos:");
+
+        jTextAreaMetodos.setColumns(20);
+        jTextAreaMetodos.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
+        jTextAreaMetodos.setLineWrap(true);
+        jTextAreaMetodos.setRows(5);
+        jTextAreaMetodos.setWrapStyleWord(true);
+        jScrollPane2.setViewportView(jTextAreaMetodos);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -157,19 +171,21 @@ public class ViewAlternativaNovo extends javax.swing.JDialog {
                     .addComponent(jTextFieldNome)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 519, Short.MAX_VALUE)
                     .addComponent(jTextFieldEstimativaCusto)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel5))
-                        .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(jTextFieldEstimativaTempo)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jButtonSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButtonCancelar)))
+                        .addComponent(jButtonCancelar))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel2))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jScrollPane2))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -177,20 +193,24 @@ public class ViewAlternativaNovo extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1)
-                .addGap(0, 0, 0)
+                .addGap(1, 1, 1)
                 .addComponent(jTextFieldNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel3)
-                .addGap(0, 0, 0)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(1, 1, 1)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel4)
-                .addGap(0, 0, 0)
+                .addGap(1, 1, 1)
                 .addComponent(jTextFieldEstimativaCusto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel5)
-                .addGap(0, 0, 0)
+                .addGap(1, 1, 1)
                 .addComponent(jTextFieldEstimativaTempo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel2)
+                .addGap(1, 1, 1)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonCancelar)
@@ -213,11 +233,14 @@ public class ViewAlternativaNovo extends javax.swing.JDialog {
     private javax.swing.JButton jButtonCancelar;
     private javax.swing.JButton jButtonSalvar;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextArea jTextAreaDescricao;
+    private javax.swing.JTextArea jTextAreaMetodos;
     private javax.swing.JTextField jTextFieldEstimativaCusto;
     private javax.swing.JTextField jTextFieldEstimativaTempo;
     private javax.swing.JTextField jTextFieldNome;
