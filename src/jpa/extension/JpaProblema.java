@@ -44,7 +44,7 @@ public class JpaProblema extends ProblemaJpaController{
             entityManager.getTransaction().begin();
 
             List<Problema> list = entityManager
-                    .createQuery("SELECT p FROM Problema p WHERE p.idOrganizacao.id =:idOrg")
+                    .createQuery("SELECT p FROM Problema p WHERE p.idOrganizacao.id =:idOrg ORDER BY  p.status, p.created, p.modified")
                     .setParameter("idOrg", idOrg)
                     .getResultList();
 

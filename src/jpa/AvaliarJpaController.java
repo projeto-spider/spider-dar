@@ -20,7 +20,7 @@ import model.Criterio;
 
 /**
  *
- * @author Bleno Vale
+ * @author Sandro Bezerra
  */
 public class AvaliarJpaController implements Serializable {
 

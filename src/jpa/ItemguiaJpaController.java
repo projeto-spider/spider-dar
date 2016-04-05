@@ -19,7 +19,7 @@ import model.Itemguia;
 
 /**
  *
- * @author Bleno Vale
+ * @author Sandro Bezerra
  */
 public class ItemguiaJpaController implements Serializable {
 

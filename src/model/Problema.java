@@ -41,6 +41,9 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Problema.findByCreated", query = "SELECT p FROM Problema p WHERE p.created = :created"),
     @NamedQuery(name = "Problema.findByModified", query = "SELECT p FROM Problema p WHERE p.modified = :modified")})
 public class Problema implements Serializable {
+    @Basic(optional = false)
+    @Column(name = "status")
+    private int status;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -244,6 +247,14 @@ public class Problema implements Serializable {
     @Override
     public String toString() {
         return "model.Problema[ id=" + id + " ]";
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
     
 }

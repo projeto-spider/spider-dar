@@ -52,6 +52,7 @@ public class ControllerProblema
             problema.setPlanejamento(request.getDataInput("Problema.planejamento").getValor());
             problema.setContexto(request.getDataInput("Problema.contexto").getValor());
             problema.setIdOrganizacao(facade.initializeJpaOrganizacao().findOrganizacao(idOrganizacao));
+            problema.setStatus(Constant.PROBLEMA_ATIVO);
             problema.setCreated(new Date());
             problema.setModified(new Date());
             
@@ -152,73 +153,26 @@ public class ControllerProblema
         facade.initializeHistorico().create(historico);
     }
     
-    public void removeProblemaById(String idProblemaString) throws Exception
+    public void inativarProblemaById(String idProblemaString) throws Exception
     {
         try
         {
             int idProblema = Integer.parseInt(idProblemaString);
             
-            if (hasProblemaTarefa(idProblema))
-                throw new Exception(exceptionItemMessage("Tarefas"));
-            
-            if (hasProblemaAlternativas(idProblema))
-                throw new Exception(exceptionItemMessage("Alternativas de Solução"));
-            
-            if (hasProblemaCriterios(idProblema))
-                throw new Exception(exceptionItemMessage("Critérios de Avaliação"));
-            
-            JpaKeyword jpaKeyword = facade.initializeJpaKeyword();
-            JpaHistorico jpaHistorico = facade.initializeHistorico();
             JpaProblema jpaProblema = facade.initializeJpaProblema();
             
-            jpaKeyword.deleteAllKeywordsByIdProblema(idProblema);
-            jpaHistorico.deleteAllHistoricoByIdProblema(idProblema);
-            jpaProblema.destroy(idProblema);
+            Problema problema = jpaProblema.findProblema(idProblema);
             
+            problema.setStatus(Constant.PROBLEMA_INATIVO);
+            
+            jpaProblema.edit(problema);
+            
+            this.createHistoricoProblema(idProblema, "inativado");
         }
         catch (Exception e)
         {
            throw new Exception(e.getMessage());
         }
-    }
-    
-    private String exceptionItemMessage(String itemString)
-    {
-        return "<html>Não é possível excluir, o Problema possui <b>" + itemString +"</b> vinculados(as) a ele.</html>";
-    }
-    
-    private boolean hasProblemaTarefa(int idProblema)
-    {
-        JpaTarefa jpaTarefa = facade.initializeTarefa();
-        
-        List<Tarefa> listTarefa = jpaTarefa.findTarefaByIdProblema(idProblema);
-        
-        return (listTarefa.size() > 0);
-    }
-    
-    private boolean hasProblemaAlternativas(int idProblema)
-    {
-        JpaAlternativa jpaAlternativa = facade.initializeAlternativa();
-        
-        List<Alternativa> listAlternativa = jpaAlternativa.findAlternativasByProblema(idProblema);
-        
-        return (listAlternativa.size() > 0);
-    }
-    
-    private boolean hasProblemaCriterios(int idProblema)
-    {
-        JpaCriterio jpaCriterio = facade.initializeJpaCriterio();
-        
-        List<Criterio> listCriterio = jpaCriterio.findCriterioByIdProblema(idProblema);
-        
-        return (listCriterio.size() > 0);
-    }
-    
-    private boolean hasProblemaAvaliacao(int idProbblema)
-    {
-        JpaAvaliacao jpaAvaliacao = facade.initializeJpaAvaliacao();
-        
-        return false;
     }
     
     private String getExceptionMessage(Exception e, String operacao)
@@ -337,6 +291,7 @@ public class ControllerProblema
 
             data.put("Problema.id", problema.getId().toString());
             data.put("Problema.nome", problema.getNome());
+            data.put("Problema.status", String.valueOf(problema.getStatus()));
             data.put("Problema.created", Text.formatDateForTable(problema.getCreated()));
             data.put("Problema.modified", Text.formatDateForTable(problema.getModified()));
 
@@ -369,5 +324,4 @@ public class ControllerProblema
             return new Request(data);
         }
     }
-    
 }

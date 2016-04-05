@@ -34,7 +34,7 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jButtonEditarProblema" min="-2" pref="76" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jButtonExcluirProblema" min="-2" max="-2" attributes="0"/>
+                      <Component id="jButtonInativarProblema" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <Component id="jScrollPane1" max="32767" attributes="0"/>
                   <Group type="102" attributes="0">
@@ -64,7 +64,7 @@
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jButtonEditarProblema" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jButtonCadastrarProblema" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jButtonExcluirProblema" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jButtonInativarProblema" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="32767" attributes="0"/>
           </Group>
@@ -137,6 +137,9 @@
               <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jTableProblemasMouseClicked"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>
@@ -168,12 +171,12 @@
         </Property>
       </Properties>
     </Component>
-    <Component class="javax.swing.JButton" name="jButtonExcluirProblema">
+    <Component class="javax.swing.JButton" name="jButtonInativarProblema">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Excluir"/>
+        <Property name="text" type="java.lang.String" value="Inativar"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonExcluirProblemaActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonInativarProblemaActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>

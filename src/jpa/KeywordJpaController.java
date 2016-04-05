@@ -21,7 +21,7 @@ import model.Problema;
 
 /**
  *
- * @author Bleno Vale
+ * @author Sandro Bezerra
  */
 public class KeywordJpaController implements Serializable {
 
