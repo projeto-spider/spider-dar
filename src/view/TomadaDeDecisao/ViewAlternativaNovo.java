@@ -152,7 +152,7 @@ public class ViewAlternativaNovo extends javax.swing.JDialog {
             }
         });
 
-        jLabel2.setText("Metodos:");
+        jLabel2.setText("Método de Avaliação:");
 
         jTextAreaMetodos.setColumns(20);
         jTextAreaMetodos.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N

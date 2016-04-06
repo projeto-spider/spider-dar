@@ -470,6 +470,7 @@ import util.Request;
                             t.addCell(rankingAvaliar);  
                         }
                         t.setSpacingBefore(6);
+                        t.setSpacingAfter(6);
                         doc.add(t);
                     
                         if (request.getData("Decisao.id")!=null) {
@@ -488,23 +489,6 @@ import util.Request;
                             p34.add(new Chunk(justificativaAvaliar, fonte4));
                             p34.setIndentationLeft(12);
                             doc.add(new Paragraph(p34));
-
-                            Paragraph p15;
-                                String decisaoDefinitivo = request.getData("Decisao.definitivo");
-                                switch (decisaoDefinitivo) {
-                                    case "0":
-                                        p15 = new Paragraph();
-                                        p15.add(new Chunk("Processo de Gestão de Decisão: Em andamento." , fonte3));
-                                        p15.setIndentationLeft(12);
-                                        doc.add(new Paragraph(p15));
-                                        break;
-                                    case "1":
-                                        p15 = new Paragraph();
-                                        p15.add(new Chunk("Processo de Gestão de Decisão: Finalizado." , fonte3));
-                                        p15.setIndentationLeft(12);
-                                        doc.add(new Paragraph(p15));
-                                        break;
-                                }
                         }    
                       
                     addHistoricoRelatorio(Integer.parseInt(KeepData.getData("Problema.id")));

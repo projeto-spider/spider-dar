@@ -148,7 +148,7 @@
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel2">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Metodos:"/>
+        <Property name="text" type="java.lang.String" value="M&#xe9;todo de Avalia&#xe7;&#xe3;o:"/>
       </Properties>
     </Component>
     <Container class="javax.swing.JScrollPane" name="jScrollPane2">
