@@ -1,6 +1,5 @@
 package jpa.extension;
 
-import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -36,24 +35,35 @@ public class JpaAcessar extends AcessarJpaController {
         }
     }
 
-    public List<Acessar> findUsuariosPerfilFromAcessarByIdProblema(int idProblema)
-    {
+    public List<Acessar> findUsuariosPerfilFromAcessarByIdProblema(int idProblema) {
         EntityManager em = super.getEntityManager();
-        
-        try
-        {
+
+        try {
             List<Acessar> resultListAcessar = em.createQuery("SELECT a FROM Acessar a WHERE a.idProblema.id =:idProblema").
                     setParameter("idProblema", idProblema).
                     getResultList();
-            
+
             return resultListAcessar;
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             throw e;
+        } finally {
+            em.close();
         }
-        finally
-        {
+    }
+    
+    public List<Acessar> findPerfilUser(int idUser, int idProblema) {
+        EntityManager em = super.getEntityManager();
+
+        try {
+            List<Acessar> resultListAcessar = em.createQuery("SELECT a FROM Acessar a WHERE a.usuario.id =:idUser AND a.idProblema.id =:idProblema").
+                    setParameter("idUser", idUser).
+                    setParameter("idProblema", idProblema).
+                    getResultList();
+
+            return resultListAcessar;
+        } catch (Exception e) {
+            throw e;
+        } finally {
             em.close();
         }
     }

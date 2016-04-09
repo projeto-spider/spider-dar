@@ -85,7 +85,7 @@ public class ControllerPerfil {
             return true;
         } catch (NonexistentEntityException | IllegalOrphanException error) {
             return false;
-        } catch(Exception error){
+        } catch (Exception error) {
             return false;
         }
     }
@@ -93,6 +93,31 @@ public class ControllerPerfil {
     public List<Request> getPerfisByIdOrganizacao(int idOrg) {
         try {
             List<Perfil> list = facade.initializeJpaPefil().findPerfisByIdOrganizacao(idOrg);
+            List<Request> requestList = new ArrayList<>();
+
+            for (Perfil anotherPerfil : list) {
+                Map<String, String> data = new HashMap<>();
+                data.put("Perfil.nome", anotherPerfil.getNome());
+                data.put("Perfil.created", Text.formatDateForTable(anotherPerfil.getCreated()));
+
+                if (anotherPerfil.getCreated().equals(anotherPerfil.getModified())) {
+                    data.put("Perfil.modified", "--");
+                } else {
+                    data.put("Perfil.modified", Text.formatDateForTable(anotherPerfil.getModified()));
+                }
+
+                requestList.add(new Request(data));
+            }
+
+            return requestList;
+        } catch (Exception error) {
+            throw error;
+        }
+    }
+
+    public List<Request> getPerfisByIdUsuario(int idUser) {
+        try {
+            List<Perfil> list = facade.initializeJpaPefil().findPerfisByIdOrganizacao(idUser);
             List<Request> requestList = new ArrayList<>();
 
             for (Perfil anotherPerfil : list) {
@@ -159,6 +184,28 @@ public class ControllerPerfil {
                 Map<String, String> data = new HashMap<>();
                 data.put("Funcionalidade.fora.nome", outPerfil.getNome());
                 requestList.add(new Request(data));
+            }
+
+            return requestList;
+        } catch (Exception error) {
+            throw error;
+        }
+    }
+
+    public List<Request> findFuncionalidadesInPerfil(String name) {
+        try {
+            List<Request> requestList = new ArrayList<>();
+            // se for Admin não precisa de perfis funcionais da gestão de decisão.
+            if (!name.equals("Administrador-spiderDAR")) {
+                int idOrg = Integer.parseInt(KeepData.getData("Organizacao.id"));
+                perfil = facade.initializeJpaPefil().findPerfilByNameAndIdOrg(name, idOrg);
+                List<Funcionalidades> listInPerfil = perfil.getFuncionalidadesList();
+
+                for (int i = 0; i < listInPerfil.size(); i++) {
+                    Map<String, String> data = new HashMap<>();
+                    data.put("Funcionalidade.nome", listInPerfil.get(i).getNome());
+                    requestList.add(new Request(data));
+                }
             }
 
             return requestList;
