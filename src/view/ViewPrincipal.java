@@ -1,6 +1,7 @@
 package view;
 
 import com.itextpdf.text.DocumentException;
+import controller.ControllerAcessar;
 import view.Gerenciar.ViewNovoUsuario;
 import view.Gerenciar.ViewNovaOrganizacao;
 import view.Gerenciar.ViewNovoProblema;
@@ -12,6 +13,7 @@ import controller.ControllerRelatorio;
 import java.awt.Color;
 import java.beans.PropertyVetoException;
 import java.io.IOException;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import javax.swing.JButton;
@@ -19,6 +21,7 @@ import javax.swing.JInternalFrame;
 import settings.KeepData;
 import settings.Reminder;
 import util.MyButton;
+import util.Request;
 import view.Gerenciar.ViewConta;
 import view.Gerenciar.ViewOrganizacoes;
 import view.Gerenciar.ViewProblema;
@@ -59,6 +62,7 @@ public class ViewPrincipal extends javax.swing.JFrame {
     private final ViewHistorico viewHistorico = new ViewHistorico();
 
     private Reminder reminder;
+    private Request requestPerfil;
 
     public ViewPrincipal() {
         initComponents();
@@ -75,14 +79,96 @@ public class ViewPrincipal extends javax.swing.JFrame {
     public void showInformation() {
         String nomeOrganizacao = KeepData.getData("Organizacao.nome");
         String nomeProblema = KeepData.getData("Problema.nome");
-
-//        String nomeOrganizacaoLabel = (nomeOrganizacao.isEmpty() || nomeOrganizacao == null) ? "-" : nomeOrganizacao;
-//        String nomeProblemaLabel = (nomeProblema.isEmpty() || nomeProblema == null) ? "-" : nomeProblema;
         jLabelBemvindo.setText("Bem-Vindo, " + KeepData.getData("Usuario.nome"));
         jLabelOrganizacao.setText("<html>" + nomeOrganizacao + "</html>");
         jLabelProblema.setText("<html>" + nomeProblema + "</html>");
+        
+        int id = Integer.parseInt(KeepData.getData("Usuario.id"));
+        requestPerfil = new ControllerAcessar().findPerfilByUser(id);
+        enabledPermitions();
+        enabledAdmin();
 
         changeViews(viewHome);
+    }
+
+    private void enabledAdmin() {
+        if ("Administrador-spiderDAR".equals(requestPerfil.getData("Perfil.nome"))) {
+            jMenuItemNovaOrganizacao.setEnabled(true);
+            jMenuItemOrganizacoes.setEnabled(true); 
+            jMenuItemOrgEProb.setEnabled(true);
+            jMenuItemConfiguracoes.setEnabled(true);
+            jMenuItemNovoUsuario.setEnabled(true);
+            jMenuItemUsuarios.setEnabled(true);
+            jMenuItemNovoProblema.setEnabled(true);
+            jMenuItemProblemas.setEnabled(true);
+            jMenuItemPermissoes.setEnabled(true);
+        } else {
+            jMenuItemNovaOrganizacao.setEnabled(false);
+            jMenuItemOrganizacoes.setEnabled(false); 
+            jMenuItemOrgEProb.setEnabled(false);
+            jMenuItemConfiguracoes.setEnabled(false);
+            jMenuItemNovoUsuario.setEnabled(false);
+            jMenuItemUsuarios.setEnabled(false);
+            jMenuItemNovoProblema.setEnabled(false);
+            jMenuItemProblemas.setEnabled(false);
+            jMenuItemPermissoes.setEnabled(false);
+        }
+    }
+
+    private void enabledPermitions() {
+        jMenuItemNovoProblema.setEnabled(false);
+        jMenuItemProblemas.setEnabled(false);
+        jMenuItemOrganizacoes.setEnabled(false); 
+        jMenuItemNovoUsuario.setEnabled(false);
+        jMenuItemUsuarios.setEnabled(false);
+        jMenuItemPermissoes.setEnabled(false);
+
+        jButtonMotivacaoEObj.setEnabled(false);
+        jButtonCalendario.setEnabled(false);
+        jButtonAlternativas.setEnabled(false);
+        jButtonCriterios.setEnabled(false);
+        jButtonAvaliacao.setEnabled(false);
+        jButtonHistorico.setEnabled(false);
+        jButtonRelatorio.setEnabled(false);
+
+        List<Request> list = new ControllerPerfil().findFuncionalidadesInPerfil(requestPerfil.getData("Perfil.nome"));
+
+        for (Request funcao : list) {
+            switch (funcao.getData("Funcionalidade.nome")) {
+                case "Gerenciar - Problemas":
+                    jMenuItemNovoProblema.setEnabled(true);
+                    jMenuItemProblemas.setEnabled(true);
+                    break;
+                case "Gerenciar - Usuários":
+                    jMenuItemNovoUsuario.setEnabled(true);
+                    jMenuItemUsuarios.setEnabled(true);
+                    break;
+                case "Gerenciar - Permissões de Perfil":
+                    jMenuItemPermissoes.setEnabled(true);
+                    break;
+                case "Problema - Motivação e Objetivos":
+                    jButtonMotivacaoEObj.setEnabled(true);
+                    break;
+                case "Problema - Tarefas":
+                    jButtonCalendario.setEnabled(true);
+                    break;
+                case "Problema - Alternativas de Solução":
+                    jButtonAlternativas.setEnabled(true);
+                    break;
+                case "Problema - Critérios de Avaliação":
+                    jButtonCriterios.setEnabled(true);
+                    break;
+                case "Problema - Avaliação":
+                    jButtonAvaliacao.setEnabled(true);
+                    break;
+                case "Problema - Histórico":
+                    jButtonHistorico.setEnabled(true);
+                    break;
+                case "Problema - Relatório":
+                    jButtonRelatorio.setEnabled(true);
+                    break;
+            }
+        }
     }
 
     private void changeButtonColor(JButton jButton) {
@@ -102,9 +188,8 @@ public class ViewPrincipal extends javax.swing.JFrame {
             System.out.println("Failed to open file ");
         }
     }
-    
-    public void desconectar()
-    {
+
+    public void desconectar() {
         reminder.killTimer();
         new ViewLogin().setVisible(true);
         this.dispose();
@@ -135,20 +220,20 @@ public class ViewPrincipal extends javax.swing.JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenuArquivo = new javax.swing.JMenu();
         jMenuItemNovaOrganizacao = new javax.swing.JMenuItem();
-        jMenuItemNovaDecisao = new javax.swing.JMenuItem();
+        jMenuItemNovoProblema = new javax.swing.JMenuItem();
         jMenuItemNovoUsuario = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
         jMenuItemDesconectar = new javax.swing.JMenuItem();
         jMenuGerenciar = new javax.swing.JMenu();
-        jMenuItem2 = new javax.swing.JMenuItem();
-        jMenuItem1 = new javax.swing.JMenuItem();
-        jMenuItemDecisoes = new javax.swing.JMenuItem();
+        jMenuItemOrgEProb = new javax.swing.JMenuItem();
+        jMenuItemOrganizacoes = new javax.swing.JMenuItem();
+        jMenuItemProblemas = new javax.swing.JMenuItem();
         jSeparator3 = new javax.swing.JPopupMenu.Separator();
         jMenuItemUsuarios = new javax.swing.JMenuItem();
         jMenuItemPermissoes = new javax.swing.JMenuItem();
         jSeparator2 = new javax.swing.JPopupMenu.Separator();
         jMenuItemConta = new javax.swing.JMenuItem();
-        jMenuItem3 = new javax.swing.JMenuItem();
+        jMenuItemConfiguracoes = new javax.swing.JMenuItem();
         jMenuOrganizacional = new javax.swing.JMenu();
         jMenuItemGuiadaGestao = new javax.swing.JMenuItem();
         jMenuSobre = new javax.swing.JMenu();
@@ -443,13 +528,13 @@ public class ViewPrincipal extends javax.swing.JFrame {
         });
         jMenuArquivo.add(jMenuItemNovaOrganizacao);
 
-        jMenuItemNovaDecisao.setText("Novo Problema");
-        jMenuItemNovaDecisao.addActionListener(new java.awt.event.ActionListener() {
+        jMenuItemNovoProblema.setText("Novo Problema");
+        jMenuItemNovoProblema.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemNovaDecisaoActionPerformed(evt);
+                jMenuItemNovoProblemaActionPerformed(evt);
             }
         });
-        jMenuArquivo.add(jMenuItemNovaDecisao);
+        jMenuArquivo.add(jMenuItemNovoProblema);
 
         jMenuItemNovoUsuario.setText("Novo Usuário");
         jMenuItemNovoUsuario.addActionListener(new java.awt.event.ActionListener() {
@@ -472,29 +557,29 @@ public class ViewPrincipal extends javax.swing.JFrame {
 
         jMenuGerenciar.setText("Gerenciar");
 
-        jMenuItem2.setText("Organização/Problema");
-        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+        jMenuItemOrgEProb.setText("Organização/Problema");
+        jMenuItemOrgEProb.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem2ActionPerformed(evt);
+                jMenuItemOrgEProbActionPerformed(evt);
             }
         });
-        jMenuGerenciar.add(jMenuItem2);
+        jMenuGerenciar.add(jMenuItemOrgEProb);
 
-        jMenuItem1.setText("Organizações");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+        jMenuItemOrganizacoes.setText("Organizações");
+        jMenuItemOrganizacoes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
+                jMenuItemOrganizacoesActionPerformed(evt);
             }
         });
-        jMenuGerenciar.add(jMenuItem1);
+        jMenuGerenciar.add(jMenuItemOrganizacoes);
 
-        jMenuItemDecisoes.setText("Problemas");
-        jMenuItemDecisoes.addActionListener(new java.awt.event.ActionListener() {
+        jMenuItemProblemas.setText("Problemas");
+        jMenuItemProblemas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemDecisoesActionPerformed(evt);
+                jMenuItemProblemasActionPerformed(evt);
             }
         });
-        jMenuGerenciar.add(jMenuItemDecisoes);
+        jMenuGerenciar.add(jMenuItemProblemas);
         jMenuGerenciar.add(jSeparator3);
 
         jMenuItemUsuarios.setText("Usuários");
@@ -522,13 +607,13 @@ public class ViewPrincipal extends javax.swing.JFrame {
         });
         jMenuGerenciar.add(jMenuItemConta);
 
-        jMenuItem3.setText("Configurações");
-        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+        jMenuItemConfiguracoes.setText("Configurações");
+        jMenuItemConfiguracoes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem3ActionPerformed(evt);
+                jMenuItemConfiguracoesActionPerformed(evt);
             }
         });
-        jMenuGerenciar.add(jMenuItem3);
+        jMenuGerenciar.add(jMenuItemConfiguracoes);
 
         jMenuBar1.add(jMenuGerenciar);
 
@@ -570,9 +655,9 @@ public class ViewPrincipal extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jMenuItemNovaDecisaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemNovaDecisaoActionPerformed
+    private void jMenuItemNovoProblemaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemNovoProblemaActionPerformed
         new ViewNovoProblema(null, true).setVisible(true);
-    }//GEN-LAST:event_jMenuItemNovaDecisaoActionPerformed
+    }//GEN-LAST:event_jMenuItemNovoProblemaActionPerformed
 
     private void jMenuItemNovoUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemNovoUsuarioActionPerformed
         new ViewNovoUsuario(null, true).setVisible(true);
@@ -599,15 +684,15 @@ public class ViewPrincipal extends javax.swing.JFrame {
         new ViewNovaOrganizacao(null, true).setVisible(true);
     }//GEN-LAST:event_jMenuItemNovaOrganizacaoActionPerformed
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+    private void jMenuItemOrganizacoesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemOrganizacoesActionPerformed
         changeViews(viewOrganizacoes);
         viewOrganizacoes.fillTable(new ControllerOrganizacao().findOrganizacoes());
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
+    }//GEN-LAST:event_jMenuItemOrganizacoesActionPerformed
 
-    private void jMenuItemDecisoesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemDecisoesActionPerformed
+    private void jMenuItemProblemasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemProblemasActionPerformed
         changeViews(viewTomadaDeDecisoes);
         viewTomadaDeDecisoes.listProblemasInTable(new ControllerProblema().listProblemasByIdOrganizacao(KeepData.getData("Organizacao.id")));
-    }//GEN-LAST:event_jMenuItemDecisoesActionPerformed
+    }//GEN-LAST:event_jMenuItemProblemasActionPerformed
 
     private void jMenuItemUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemUsuariosActionPerformed
         changeViews(viewUsuarios);
@@ -618,9 +703,9 @@ public class ViewPrincipal extends javax.swing.JFrame {
         new ViewSelecionarOrganizacao(null, true, this).setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+    private void jMenuItemOrgEProbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemOrgEProbActionPerformed
         new ViewSelecionarOrganizacao(null, true).setVisible(true);
-    }//GEN-LAST:event_jMenuItem2ActionPerformed
+    }//GEN-LAST:event_jMenuItemOrgEProbActionPerformed
 
     private void jMenuItemContaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemContaActionPerformed
         new ViewConta(null, true).setVisible(true);
@@ -680,9 +765,9 @@ public class ViewPrincipal extends javax.swing.JFrame {
         viewHistorico.reloadViewHistorico();
     }//GEN-LAST:event_jButtonHistoricoActionPerformed
 
-    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+    private void jMenuItemConfiguracoesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemConfiguracoesActionPerformed
         new ViewConfiguracoes(null, true).setVisible(true);
-    }//GEN-LAST:event_jMenuItem3ActionPerformed
+    }//GEN-LAST:event_jMenuItemConfiguracoesActionPerformed
 
     private void jButtonRelatorioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRelatorioActionPerformed
         ControllerRelatorio relatorio = new ControllerRelatorio();
@@ -800,18 +885,18 @@ public class ViewPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenu jMenuArquivo;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenu jMenuGerenciar;
-    private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItemAjuda;
+    private javax.swing.JMenuItem jMenuItemConfiguracoes;
     private javax.swing.JMenuItem jMenuItemConta;
-    private javax.swing.JMenuItem jMenuItemDecisoes;
     private javax.swing.JMenuItem jMenuItemDesconectar;
     private javax.swing.JMenuItem jMenuItemGuiadaGestao;
-    private javax.swing.JMenuItem jMenuItemNovaDecisao;
     private javax.swing.JMenuItem jMenuItemNovaOrganizacao;
+    private javax.swing.JMenuItem jMenuItemNovoProblema;
     private javax.swing.JMenuItem jMenuItemNovoUsuario;
+    private javax.swing.JMenuItem jMenuItemOrgEProb;
+    private javax.swing.JMenuItem jMenuItemOrganizacoes;
     private javax.swing.JMenuItem jMenuItemPermissoes;
+    private javax.swing.JMenuItem jMenuItemProblemas;
     private javax.swing.JMenuItem jMenuItemSpiderGDE;
     private javax.swing.JMenuItem jMenuItemUsuarios;
     private javax.swing.JMenu jMenuOrganizacional;

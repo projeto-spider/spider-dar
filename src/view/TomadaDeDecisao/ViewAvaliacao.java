@@ -2,12 +2,14 @@ package view.TomadaDeDecisao;
 
 import controller.ControllerAlternativa;
 import controller.ControllerAvaliacao;
+import controller.ControllerCriterios;
 import controller.ControllerDecisao;
 import controller.ControllerProblema;
 import java.awt.Color;
 import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import settings.KeepData;
 import util.Internal;
 import util.MyCellRenderer;
 import util.MyDefaultTableModel;
@@ -94,7 +96,7 @@ public class ViewAvaliacao extends javax.swing.JInternalFrame {
 
         if (idDecisao == -1) {
             JOptionPane.showMessageDialog(null, "A decisão ainda não foi tomada.");
-            jCheckBox1.setSelected(false); 
+            jCheckBox1.setSelected(false);
         } else {
             try {
                 controllerDecisao.SaveDecisaoDefinitiva(idDecisao);
@@ -256,10 +258,15 @@ public class ViewAvaliacao extends javax.swing.JInternalFrame {
         int column = jTableAvaliacao.columnAtPoint(evt.getPoint());
 
         if (column == 3) {
-            int idAltenativa = Integer.parseInt(jTableAvaliacao.getModel()
-                    .getValueAt(jTableAvaliacao.getSelectedRow(), 0).toString());
-            new ViewAvaliar(null, true, idAltenativa).setVisible(true);
-            showAvaliacao();
+            int id = Integer.parseInt(KeepData.getData("Problema.id"));
+            if (new ControllerCriterios().listCriteirosByProjeto(id).isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Não há Critérios cadastrados para realizar a avaliação.");
+            } else {
+                int idAltenativa = Integer.parseInt(jTableAvaliacao.getModel()
+                        .getValueAt(jTableAvaliacao.getSelectedRow(), 0).toString());
+                new ViewAvaliar(null, true, idAltenativa).setVisible(true);
+                showAvaliacao();
+            }
         }
     }//GEN-LAST:event_jTableAvaliacaoMousePressed
 

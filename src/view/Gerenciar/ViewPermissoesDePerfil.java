@@ -40,17 +40,19 @@ public class ViewPermissoesDePerfil extends javax.swing.JInternalFrame {
         myDefaultTableModel = new MyDefaultTableModel(columns, 0, false);
 
         for (Request request : requestList) {
-            String line[] = {
-                request.getData("Perfil.nome"),
-                request.getData("Perfil.created"),
-                request.getData("Perfil.modified")
-            };
-            myDefaultTableModel.addRow(line);
+            if (!request.getData("Perfil.nome").equals("Administrador-spiderDAR")) { 
+                String line[] = {
+                    request.getData("Perfil.nome"),
+                    request.getData("Perfil.created"),
+                    request.getData("Perfil.modified")
+                };
+                myDefaultTableModel.addRow(line);
+            }
         }
         jTablePerfis.setModel(myDefaultTableModel);
         jTablePerfis.setDefaultRenderer(Object.class, new MyCellRenderer());
-        
-        jTablePerfis.setGridColor(new Color(229,229,229));
+
+        jTablePerfis.setGridColor(new Color(229, 229, 229));
     }
 
     private String getPerfilSelected() {
