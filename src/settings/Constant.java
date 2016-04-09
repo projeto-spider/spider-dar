@@ -37,7 +37,7 @@ public class Constant {
     public static int FUC_RELATORIO = 7;
     
     //Status do Problema
-    public static int PROBLEMA_ATIVO = 1;
-    public static int PROBLEMA_INATIVO = 2;
-    public static int PROBLEMA_FINALIZADO = 3;
+    public static final int PROBLEMA_ATIVO = 1;
+    public static final int PROBLEMA_INATIVO = 9;
+    public static final int PROBLEMA_FINALIZADO = 2;
 }

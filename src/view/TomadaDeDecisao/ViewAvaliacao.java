@@ -3,6 +3,7 @@ package view.TomadaDeDecisao;
 import controller.ControllerAlternativa;
 import controller.ControllerAvaliacao;
 import controller.ControllerDecisao;
+import controller.ControllerProblema;
 import java.awt.Color;
 import java.util.List;
 import javax.swing.ImageIcon;
@@ -97,6 +98,8 @@ public class ViewAvaliacao extends javax.swing.JInternalFrame {
         } else {
             try {
                 controllerDecisao.SaveDecisaoDefinitiva(idDecisao);
+                ControllerProblema controllerProblema = new ControllerProblema();
+                controllerProblema.saveStatusConcluido();
                 showAvaliacao();
             } catch (Exception error) {
                 JOptionPane.showMessageDialog(null, error.getMessage(), "ERRO AO SALVAR", JOptionPane.ERROR_MESSAGE);

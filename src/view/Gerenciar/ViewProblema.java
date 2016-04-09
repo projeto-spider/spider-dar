@@ -3,8 +3,6 @@ package view.Gerenciar;
 import controller.ControllerProblema;
 import java.util.List;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
 import settings.KeepData;
 import util.Internal;
@@ -37,18 +35,52 @@ public class ViewProblema extends javax.swing.JInternalFrame {
         
         ImageIcon iconAtivo = new ImageIcon(getClass().getResource("/resources/image/problema.png"));
         ImageIcon iconInativo = new ImageIcon(getClass().getResource("/resources/image/problema_inativo.png"));
+        ImageIcon iconConcluido = new ImageIcon(getClass().getResource("/resources/image/problema_concluido.png"));
+        int statusProblema = -1;
+        ImageIcon iconProblema = new ImageIcon();
+        String nomeProblema = "";
         
         for (Request request: requestList)
         {
-            String statusProblema = request.getData("Problema.status");
-            boolean isProblemaAtivo = (Integer.parseInt(statusProblema) == Constant.PROBLEMA_ATIVO);
+            statusProblema = controllerProblema.getStatusProblema(request.getData("Problema.id"));
+            String status = request.getData("Problema.status");
+
+            switch (statusProblema)
+            {
+                case Constant.PROBLEMA_ATIVO:
+                {
+                    iconProblema = iconAtivo;
+                    nomeProblema = request.getData("Problema.nome");
+                    break;
+                }
+                case Constant.PROBLEMA_FINALIZADO:
+                {
+                    iconProblema = iconConcluido;
+                    nomeProblema = "(Concluído) " + request.getData("Problema.nome");
+                    break;
+                }
+                case Constant.PROBLEMA_INATIVO:
+                {
+                    iconProblema = iconInativo;
+                    nomeProblema = "(Inativo) " + request.getData("Problema.nome");
+                    break;
+                }
+                default:
+                {
+                    iconProblema = iconAtivo;
+                    nomeProblema = request.getData("Problema.nome");
+                    break;
+                }
+            }
+            
             
             Object line[] = {request.getData("Problema.id"),
-                                statusProblema,
-                                (isProblemaAtivo) ? iconAtivo : iconInativo,
-                                (isProblemaAtivo) ? request.getData("Problema.nome"): "(Inativo) " + request.getData("Problema.nome"),
+                                status,
+                                iconProblema,
+                                nomeProblema,
                                 request.getData("Problema.created"),
                                 request.getData("Problema.modified")};
+            
             
             myDefaultTableModel.addRow(line);
         }
@@ -74,17 +106,18 @@ public class ViewProblema extends javax.swing.JInternalFrame {
             String idProblema = getIdProblemaFromTable(index);
             int statusProblema = controllerProblema.getStatusProblema(idProblema);
             
-            if (statusProblema == Constant.PROBLEMA_INATIVO)
+            switch (statusProblema)
             {
-                showMessageDialog(null, "<html>Não é possível editar o problema, pois está <b>inativo</b>.</html>");
+                case Constant.PROBLEMA_INATIVO:
+                    showMessageDialog(null, "<html>Não é possível editar o problema, pois está <b>inativo</b>.</html>");
+                    break;
+                case Constant.PROBLEMA_FINALIZADO:
+                    showMessageDialog(null, "<html>Não é possível editar o problema, pois foi <b>Finalizado</b>.</html>");
+                    break;
+                default:
+                    new ViewNovoProblema(null, true, idProblema).setVisible(true);
+                    break;
             }
-            else if (statusProblema == Constant.PROBLEMA_FINALIZADO)
-            {
-                showMessageDialog(null, "<html>Não é possível editar o problema, pois foi <b>Finalizado</b>.</html>");
-            }
-            else
-                new ViewNovoProblema(null, true, idProblema).setVisible(true);
-            
         }
         else
             showMessageDialog(null, "Selecione uma linha na tabela.");
@@ -98,19 +131,32 @@ public class ViewProblema extends javax.swing.JInternalFrame {
         {
             try
             {
-                String buttonActivation = jButtonInativarProblema.getText();
                 String idProblema = this.getIdProblemaFromTable(index);
                 String idOrganizacao = KeepData.getData("Organizacao.id");
                 String message = "";
-                if (buttonActivation.equals("Inativar"))
+                
+                int statusProblema = Integer.parseInt(jTableProblemas.getModel().getValueAt(index, 1).toString());
+                
+                switch (statusProblema)
                 {
-                    controllerProblema.inativarProblemaById(idProblema);
-                    message = "<html>Problema <b>Inativado</b> com sucesso.</html>";
-                }
-                else if (buttonActivation.equals("Ativar"))
-                {
-                    controllerProblema.ativarProblemaById(idProblema);
-                    message = "<html>Problema <b>Reativado</b> com sucesso.</html>";
+                    case Constant.PROBLEMA_ATIVO: 
+                    {
+                        controllerProblema.inativarProblemaById(idProblema);
+                        message = "<html>Problema <b>Inativado</b> com sucesso.</html>";
+                        break;
+                    }
+                    case Constant.PROBLEMA_INATIVO:
+                    {
+                        controllerProblema.ativarProblemaById(idProblema);
+                        message = "<html>Problema <b>Reativado</b> com sucesso.</html>";
+                        break;
+                    }
+                    case Constant.PROBLEMA_FINALIZADO: 
+                    {
+                        message = "<html>O Problema não pode ser inativado pois está <b>Concluído</b>.</html>";
+                        break;
+                    }
+                    default: break;
                 }
                 
                 showMessageDialog(null, message);
@@ -137,11 +183,22 @@ public class ViewProblema extends javax.swing.JInternalFrame {
         if (index > -1)
         {
             int status = Integer.parseInt(jTableProblemas.getModel().getValueAt(index, 1).toString());
-            
-            if (status == Constant.PROBLEMA_INATIVO)
-                jButtonInativarProblema.setText("Ativar");
-            else if(status == Constant.PROBLEMA_ATIVO)
-                jButtonInativarProblema.setText("Inativar");
+
+            switch (status)
+            {
+                case Constant.PROBLEMA_INATIVO:
+                    jButtonInativarProblema.setText("Ativar");
+                    break;
+                case Constant.PROBLEMA_ATIVO:
+                    jButtonInativarProblema.setText("Inativar");
+                    break;
+                case Constant.PROBLEMA_FINALIZADO:
+                    jButtonInativarProblema.setText("Inativar");
+                    break;
+                default:
+                    jButtonInativarProblema.setText("Inativar");
+                    break;
+            }
         }
     }
     

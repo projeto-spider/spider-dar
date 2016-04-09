@@ -11,19 +11,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import jpa.extension.JpaAlternativa;
-import jpa.extension.JpaAvaliacao;
-import jpa.extension.JpaCriterio;
-import jpa.extension.JpaHistorico;
 import jpa.extension.JpaKeyword;
 import jpa.extension.JpaProblema;
-import jpa.extension.JpaTarefa;
-import model.Alternativa;
-import model.Criterio;
 import model.Decisao;
 import model.Historico;
 import model.Problema;
-import model.Tarefa;
 import settings.Constant;
 import settings.Facade;
 import settings.KeepData;
@@ -177,7 +169,7 @@ public class ControllerProblema
            throw new Exception(e.getMessage());
         }
     }
-    
+
     private void chageProblemaStatus(String idProblemaString, int status, String textHistorico) throws Exception
     {
         int idProblema = Integer.parseInt(idProblemaString);
@@ -191,6 +183,26 @@ public class ControllerProblema
             jpaProblema.edit(problema);
             
             this.createHistoricoProblema(idProblema, textHistorico);
+    }
+    
+    public void saveStatusConcluido() throws Exception
+    {
+        try
+        {
+            int idProblema = Integer.parseInt(KeepData.getData("Problema.id"));
+
+            JpaProblema jpaProblema = facade.initializeJpaProblema();
+
+            Problema problema = jpaProblema.findProblema(idProblema);
+
+            problema.setStatus(Constant.PROBLEMA_FINALIZADO);
+
+            jpaProblema.edit(problema);
+        }
+        catch(Exception e)
+        {
+            throw new Exception();
+        }
     }
     
     private String getExceptionMessage(Exception e, String operacao)
@@ -258,19 +270,23 @@ public class ControllerProblema
     {
         Request requestProblema = this.getProblemaById(idProblema);
         
-        Decisao decisao = this.facade.initializeJpaDecisao().findDecisaoByProblema(Integer.parseInt(idProblema));
-        
-        boolean isDecisaoDefinitiva = false;
-        isDecisaoDefinitiva = decisao.getDefinitivo();
-        
         int status = 0;
-        
-        if (isDecisaoDefinitiva)
-            status = Constant.PROBLEMA_FINALIZADO;
-        else
-            status = Integer.parseInt(requestProblema.getData("Problema.status"));
+    
+        status = Integer.parseInt(requestProblema.getData("Problema.status"));
         
         return status;
+    }
+    
+    private boolean isProblemaFinalizado(String idProblema)
+    {
+        boolean isDecisaoDefinitiva = false;
+        
+        Decisao decisao = this.facade.initializeJpaDecisao().findDecisaoByProblema(Integer.parseInt(idProblema));
+        
+        if (decisao != null)
+            isDecisaoDefinitiva = decisao.getDefinitivo();
+        
+        return isDecisaoDefinitiva;
     }
     
     public List<Request> listAllProblemas()

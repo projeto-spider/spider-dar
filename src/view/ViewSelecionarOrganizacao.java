@@ -72,7 +72,15 @@ public class ViewSelecionarOrganizacao extends javax.swing.JDialog {
                     for (Request request : requestList)
                     {
                         status = Integer.parseInt(request.getData("Problema.status"));
-                        statusProblema = (Constant.PROBLEMA_ATIVO == status) ? "": "(Inativo) ";
+                        
+                        switch (status)
+                        {
+                            case 1: statusProblema = ""; break;
+                            case 2: statusProblema = "(Concluído) "; break;
+                            case 9: statusProblema = "(Inativo)"; break;
+                            default:statusProblema = ""; break; 
+                        }
+//                        statusProblema = (Constant.PROBLEMA_ATIVO == status) ? "": "(Inativo) ";;
                         
                         String idProblema = request.getData("Problema.id");
                         String nomeProblema = statusProblema + request.getData("Problema.nome");
