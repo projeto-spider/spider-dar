@@ -39,4 +39,5 @@ public class Constant {
     //Status do Problema
     public static int PROBLEMA_ATIVO = 1;
     public static int PROBLEMA_INATIVO = 2;
+    public static int PROBLEMA_FINALIZADO = 3;
 }

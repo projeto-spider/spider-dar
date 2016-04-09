@@ -3,6 +3,8 @@ package view.Gerenciar;
 import controller.ControllerProblema;
 import java.util.List;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
 import settings.KeepData;
 import util.Internal;
@@ -39,12 +41,12 @@ public class ViewProblema extends javax.swing.JInternalFrame {
         for (Request request: requestList)
         {
             String statusProblema = request.getData("Problema.status");
-            boolean isProblemaAtivo = Integer.parseInt(statusProblema) == Constant.PROBLEMA_ATIVO;
+            boolean isProblemaAtivo = (Integer.parseInt(statusProblema) == Constant.PROBLEMA_ATIVO);
             
             Object line[] = {request.getData("Problema.id"),
                                 statusProblema,
-                                isProblemaAtivo ? iconAtivo : iconInativo,
-                                isProblemaAtivo ? request.getData("Problema.nome"): "(Inativo) " + request.getData("Problema.nome"),
+                                (isProblemaAtivo) ? iconAtivo : iconInativo,
+                                (isProblemaAtivo) ? request.getData("Problema.nome"): "(Inativo) " + request.getData("Problema.nome"),
                                 request.getData("Problema.created"),
                                 request.getData("Problema.modified")};
             
@@ -53,7 +55,7 @@ public class ViewProblema extends javax.swing.JInternalFrame {
         jTableProblemas.setModel(myDefaultTableModel);
         jTableProblemas.getTableHeader().setReorderingAllowed(false);
         jTableProblemas.removeColumn(jTableProblemas.getColumnModel().getColumn(0));
-        jTableProblemas.removeColumn(jTableProblemas.getColumnModel().getColumn(1));
+        jTableProblemas.removeColumn(jTableProblemas.getColumnModel().getColumn(0));
         jTableProblemas.setDefaultRenderer(Object.class, new MyCellRenderer());
         
         jTableProblemas.getColumnModel().getColumn(0).setPreferredWidth(40);
@@ -70,7 +72,19 @@ public class ViewProblema extends javax.swing.JInternalFrame {
         if (index > -1)
         {
             String idProblema = getIdProblemaFromTable(index);
-            new ViewNovoProblema(null, true, idProblema).setVisible(true);
+            int statusProblema = controllerProblema.getStatusProblema(idProblema);
+            
+            if (statusProblema == Constant.PROBLEMA_INATIVO)
+            {
+                showMessageDialog(null, "<html>Não é possível editar o problema, pois está <b>inativo</b>.</html>");
+            }
+            else if (statusProblema == Constant.PROBLEMA_FINALIZADO)
+            {
+                showMessageDialog(null, "<html>Não é possível editar o problema, pois foi <b>Finalizado</b>.</html>");
+            }
+            else
+                new ViewNovoProblema(null, true, idProblema).setVisible(true);
+            
         }
         else
             showMessageDialog(null, "Selecione uma linha na tabela.");
@@ -84,14 +98,23 @@ public class ViewProblema extends javax.swing.JInternalFrame {
         {
             try
             {
+                String buttonActivation = jButtonInativarProblema.getText();
                 String idProblema = this.getIdProblemaFromTable(index);
-
-                controllerProblema.inativarProblemaById(idProblema);
+                String idOrganizacao = KeepData.getData("Organizacao.id");
+                String message = "";
+                if (buttonActivation.equals("Inativar"))
+                {
+                    controllerProblema.inativarProblemaById(idProblema);
+                    message = "<html>Problema <b>Inativado</b> com sucesso.</html>";
+                }
+                else if (buttonActivation.equals("Ativar"))
+                {
+                    controllerProblema.ativarProblemaById(idProblema);
+                    message = "<html>Problema <b>Reativado</b> com sucesso.</html>";
+                }
                 
-                showMessageDialog(null, "Problema inativado com sucesso.");
-                
-                listProblemasInTable(new ControllerProblema().listProblemasByIdOrganizacao(KeepData.getData("Organizacao.id")));
-
+                showMessageDialog(null, message);
+                listProblemasInTable(new ControllerProblema().listProblemasByIdOrganizacao(idOrganizacao));
             }
             catch (Exception e)
             {
@@ -113,13 +136,19 @@ public class ViewProblema extends javax.swing.JInternalFrame {
         
         if (index > -1)
         {
-            String status = jTableProblemas.getModel().getValueAt(index, 0).toString();
+            int status = Integer.parseInt(jTableProblemas.getModel().getValueAt(index, 1).toString());
+            
+            if (status == Constant.PROBLEMA_INATIVO)
+                jButtonInativarProblema.setText("Ativar");
+            else if(status == Constant.PROBLEMA_ATIVO)
+                jButtonInativarProblema.setText("Inativar");
         }
     }
     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents()
+    {
 
         jTextField1 = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -140,39 +169,49 @@ public class ViewProblema extends javax.swing.JInternalFrame {
         jTextField1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
         jTableProblemas.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
+            new Object [][]
+            {
                 {null, null, null, null},
                 {null, null, null, null},
                 {null, null, null, null},
                 {null, null, null, null}
             },
-            new String [] {
+            new String []
+            {
                 "Código", "Nome do Problema", "Criado em", "Modificado em"
             }
         ));
-        jTableProblemas.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jTableProblemasMouseClicked(evt);
+        jTableProblemas.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseReleased(java.awt.event.MouseEvent evt)
+            {
+                jTableProblemasMouseReleased(evt);
             }
         });
         jScrollPane1.setViewportView(jTableProblemas);
 
-        jTextFieldPesquisarProblema.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jTextFieldPesquisarProblema.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 jTextFieldPesquisarProblemaActionPerformed(evt);
             }
         });
 
         jButtonEditarProblema.setText("Editar");
-        jButtonEditarProblema.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jButtonEditarProblema.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 jButtonEditarProblemaActionPerformed(evt);
             }
         });
 
         jButtonCadastrarProblema.setText("Novo");
-        jButtonCadastrarProblema.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jButtonCadastrarProblema.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 jButtonCadastrarProblemaActionPerformed(evt);
             }
         });
@@ -180,8 +219,10 @@ public class ViewProblema extends javax.swing.JInternalFrame {
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/image/spyglass.png"))); // NOI18N
 
         jButtonInativarProblema.setText("Inativar");
-        jButtonInativarProblema.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jButtonInativarProblema.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 jButtonInativarProblemaActionPerformed(evt);
             }
         });
@@ -258,9 +299,10 @@ public class ViewProblema extends javax.swing.JInternalFrame {
         inativarProblemaPressed();
     }//GEN-LAST:event_jButtonInativarProblemaActionPerformed
 
-    private void jTableProblemasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableProblemasMouseClicked
+    private void jTableProblemasMouseReleased(java.awt.event.MouseEvent evt)//GEN-FIRST:event_jTableProblemasMouseReleased
+    {//GEN-HEADEREND:event_jTableProblemasMouseReleased
         changeButtonAction();
-    }//GEN-LAST:event_jTableProblemasMouseClicked
+    }//GEN-LAST:event_jTableProblemasMouseReleased
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

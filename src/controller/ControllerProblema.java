@@ -20,6 +20,7 @@ import jpa.extension.JpaProblema;
 import jpa.extension.JpaTarefa;
 import model.Alternativa;
 import model.Criterio;
+import model.Decisao;
 import model.Historico;
 import model.Problema;
 import model.Tarefa;
@@ -157,22 +158,39 @@ public class ControllerProblema
     {
         try
         {
-            int idProblema = Integer.parseInt(idProblemaString);
-            
-            JpaProblema jpaProblema = facade.initializeJpaProblema();
-            
-            Problema problema = jpaProblema.findProblema(idProblema);
-            
-            problema.setStatus(Constant.PROBLEMA_INATIVO);
-            
-            jpaProblema.edit(problema);
-            
-            this.createHistoricoProblema(idProblema, "inativado");
+            this.chageProblemaStatus(idProblemaString, Constant.PROBLEMA_INATIVO, "inativado");
         }
         catch (Exception e)
         {
            throw new Exception(e.getMessage());
         }
+    }
+    
+    public void ativarProblemaById(String idProblemaString) throws Exception
+    {
+        try
+        {
+            this.chageProblemaStatus(idProblemaString, Constant.PROBLEMA_ATIVO, "reativado");
+        }
+        catch (Exception e)
+        {
+           throw new Exception(e.getMessage());
+        }
+    }
+    
+    private void chageProblemaStatus(String idProblemaString, int status, String textHistorico) throws Exception
+    {
+        int idProblema = Integer.parseInt(idProblemaString);
+            
+            JpaProblema jpaProblema = facade.initializeJpaProblema();
+            
+            Problema problema = jpaProblema.findProblema(idProblema);
+            
+            problema.setStatus(status);
+            
+            jpaProblema.edit(problema);
+            
+            this.createHistoricoProblema(idProblema, textHistorico);
     }
     
     private String getExceptionMessage(Exception e, String operacao)
@@ -198,6 +216,7 @@ public class ControllerProblema
             
             returnRequest.setData("Problema.id", String.valueOf(problema.getId()));
             returnRequest.setData("Problema.nome", problema.getNome());
+            returnRequest.setData("Problema.status", String.valueOf(problema.getStatus()));
             returnRequest.setData("Problema.created", Text.formatDateForTable(problema.getCreated()));
             returnRequest.setData("Problema.modified", Text.formatDateForTable(problema.getModified()));
             
@@ -221,6 +240,7 @@ public class ControllerProblema
             HashMap<String,String> data = new HashMap<>();
 
             data.put("Problema.id", problema.getId().toString());
+            data.put("Problema.status", String.valueOf(problema.getStatus()));
             data.put("Problema.nome", problema.getNome());
             data.put("Problema.proposito", problema.getProposito());
             data.put("Problema.planejamento", problema.getPlanejamento());
@@ -232,6 +252,25 @@ public class ControllerProblema
         {
             throw error;
         }
+    }
+    
+    public int getStatusProblema(String idProblema)
+    {
+        Request requestProblema = this.getProblemaById(idProblema);
+        
+        Decisao decisao = this.facade.initializeJpaDecisao().findDecisaoByProblema(Integer.parseInt(idProblema));
+        
+        boolean isDecisaoDefinitiva = false;
+        isDecisaoDefinitiva = decisao.getDefinitivo();
+        
+        int status = 0;
+        
+        if (isDecisaoDefinitiva)
+            status = Constant.PROBLEMA_FINALIZADO;
+        else
+            status = Integer.parseInt(requestProblema.getData("Problema.status"));
+        
+        return status;
     }
     
     public List<Request> listAllProblemas()

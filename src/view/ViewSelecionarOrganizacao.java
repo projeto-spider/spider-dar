@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
+import settings.Constant;
 import settings.KeepData;
 import util.Request;
 import util.swing.ComboItem;
@@ -62,15 +63,20 @@ public class ViewSelecionarOrganizacao extends javax.swing.JDialog {
                 ControllerProblema controllerProblema = new ControllerProblema();
                 
                 String idOrganizacao = ((ComboItem)jComboBoxOrganizacao.getSelectedItem()).getValue();
-               
+                int status = 0;
+                String statusProblema = "";
                 if (!idOrganizacao.isEmpty())
                 {
                     List<Request> requestList = controllerProblema.listProblemasByIdOrganizacao(idOrganizacao);
 
                     for (Request request : requestList)
                     {
+                        status = Integer.parseInt(request.getData("Problema.status"));
+                        statusProblema = (Constant.PROBLEMA_ATIVO == status) ? "": "(Inativo) ";
+                        
                         String idProblema = request.getData("Problema.id");
-                        String nomeProblema = request.getData("Problema.nome");
+                        String nomeProblema = statusProblema + request.getData("Problema.nome");
+                        
                         jComboBoxProblema.addItem(new ComboItem(idProblema, nomeProblema));
                     }
                 }
