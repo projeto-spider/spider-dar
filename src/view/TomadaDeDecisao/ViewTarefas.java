@@ -1,5 +1,6 @@
 package view.TomadaDeDecisao;
 
+import controller.ControllerProblema;
 import controller.ControllerTarefas;
 import java.awt.Color;
 import java.util.List;
@@ -22,6 +23,7 @@ public class ViewTarefas extends javax.swing.JInternalFrame {
     private Request request;
     private MyDefaultTableModel myDefaultTableModel;
     private final ControllerTarefas controllerTarefas = new ControllerTarefas();
+    private final ControllerProblema controllerProblema = new ControllerProblema();
 
     public ViewTarefas() {
         initComponents();
@@ -124,6 +126,12 @@ public class ViewTarefas extends javax.swing.JInternalFrame {
 
         boolean value = controllerTarefas.upDateStatusTarefa(idTarefa, status);
         jTableTarefas.setValueAt(value, jTableTarefas.getSelectedRow(), jTableTarefas.getSelectedColumn());
+    }
+    
+    private void getExceptionMessage(Exception e,String action)
+    {
+        JOptionPane.showMessageDialog(null, "<html>Não é possível " + action + ","
+                    + " pois o Problema vinculado está <b>" + e.getMessage() + "</b>.</html>");
     }
 
     @SuppressWarnings("unchecked")
@@ -263,20 +271,39 @@ public class ViewTarefas extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonNovoActionPerformed
-        new ViewTarefaNovo(null, true).setVisible(true);
+        try 
+        {
+            this.controllerProblema.isEditableProblem(KeepData.getData("Problema.id"));
+                
+            new ViewTarefaNovo(null, true).setVisible(true);
+        }
+        catch(Exception e)
+        {
+            getExceptionMessage(e, "criar uma nova tarefa");
+        }
+        
         reloadViewTarefas();
     }//GEN-LAST:event_jButtonNovoActionPerformed
 
     private void jButtonEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditarActionPerformed
-        if (!rowIsSelected()) {
+        if (!rowIsSelected()){
             JOptionPane.showMessageDialog(null, "Selecione uma linha na tabela.");
             return;
         }
+        try 
+        {
+            this.controllerProblema.isEditableProblem(KeepData.getData("Problema.id"));
+                
 
-        int idATarefa = Integer.parseInt(jTableTarefas.getModel()
-                .getValueAt(jTableTarefas.getSelectedRow(), 0).toString());
+            int idATarefa = Integer.parseInt(jTableTarefas.getModel()
+                    .getValueAt(jTableTarefas.getSelectedRow(), 0).toString());
 
-        new ViewTarefaNovo(null, true, idATarefa).setVisible(true);
+            new ViewTarefaNovo(null, true, idATarefa).setVisible(true);
+        }
+        catch(Exception e)
+        {
+            getExceptionMessage(e, "editar nenhuma tarefa");
+        }
         reloadViewTarefas();
     }//GEN-LAST:event_jButtonEditarActionPerformed
 
@@ -285,18 +312,38 @@ public class ViewTarefas extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(null, "Selecione uma linha na tabela.");
             return;
         }
-
-        removeTarefa();
+        
+        try 
+        {
+            this.controllerProblema.isEditableProblem(KeepData.getData("Problema.id"));
+            removeTarefa();
+                
+        }
+        catch(Exception e)
+        {
+            getExceptionMessage(e, "excluir nenhuma tarefa");
+        }
         reloadViewTarefas();
     }//GEN-LAST:event_jButtonExcluirActionPerformed
 
     private void jTableTarefasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableTarefasMouseClicked
+
         int column = jTableTarefas.columnAtPoint(evt.getPoint());
 
-        if (column == 1) {
-            save();
-            System.out.println("Pegou!!");
-        }
+            try 
+            {
+                if (column == 1)
+                {
+                    this.controllerProblema.isEditableProblem(KeepData.getData("Problema.id"));
+                    save();
+                    System.out.println("Pegou!!");
+                }
+            }   
+            catch(Exception e)
+            {
+                getExceptionMessage(e, "editar status da tarefa");
+                reloadViewTarefas();
+            }
     }//GEN-LAST:event_jTableTarefasMouseClicked
 
     private void jTextFieldPesquisaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldPesquisaActionPerformed

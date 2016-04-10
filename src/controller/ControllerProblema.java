@@ -277,16 +277,34 @@ public class ControllerProblema
         return status;
     }
     
-    private boolean isProblemaFinalizado(String idProblema)
+    public boolean isEditableProblem(String idProblema) throws Exception
     {
-        boolean isDecisaoDefinitiva = false;
+        try
+        {
+            if (isProblemaStatus(idProblema,Constant.PROBLEMA_FINALIZADO))
+                throw new Exception("Finalizado");
+            
+            if (isProblemaStatus(idProblema,Constant.PROBLEMA_INATIVO))
+                throw new Exception("Inativo");
+            
+            return true;
+        }
+        catch (Exception e)
+        {
+            throw e;
+        }
+    }
+    
+    private boolean isProblemaStatus(String idProblema, int status)
+    {
+        boolean isProblemaStatus = false;
         
-        Decisao decisao = this.facade.initializeJpaDecisao().findDecisaoByProblema(Integer.parseInt(idProblema));
+        Problema problema = this.facade.initializeJpaProblema().findProblema(Integer.parseInt(idProblema));
         
-        if (decisao != null)
-            isDecisaoDefinitiva = decisao.getDefinitivo();
+        if (problema.getStatus() == status)
+            isProblemaStatus = true;
         
-        return isDecisaoDefinitiva;
+        return isProblemaStatus;
     }
     
     public List<Request> listAllProblemas()

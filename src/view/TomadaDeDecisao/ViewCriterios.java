@@ -1,6 +1,7 @@
 package view.TomadaDeDecisao;
 
 import controller.ControllerCriterios;
+import controller.ControllerProblema;
 import java.awt.Color;
 import java.util.List;
 import javax.swing.ImageIcon;
@@ -20,6 +21,8 @@ public class ViewCriterios extends javax.swing.JInternalFrame {
     private Request request;
     private MyDefaultTableModel myDefaultTableModel;
     private final ControllerCriterios controllerCriterios = new ControllerCriterios();
+    private final ControllerProblema controllerProblema = new ControllerProblema();
+
 
     public ViewCriterios() {
         initComponents();
@@ -85,6 +88,12 @@ public class ViewCriterios extends javax.swing.JInternalFrame {
             }
 
         }
+    }
+    
+    private void getExceptionMessage(Exception e,String action)
+    {
+        JOptionPane.showMessageDialog(null, "<html>Não é possível " + action + ","
+                    + " pois o Problema vinculado está <b>" + e.getMessage() + "</b>.</html>");
     }
     
     @SuppressWarnings("unchecked")
@@ -195,7 +204,16 @@ public class ViewCriterios extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        new ViewCriteriosNovo(null, true).setVisible(true);
+        try 
+        {
+            this.controllerProblema.isEditableProblem(KeepData.getData("Problema.id"));
+            new ViewCriteriosNovo(null, true).setVisible(true);
+        }
+        catch(Exception e)
+        {
+            getExceptionMessage(e, "excluir nenhum critério");
+        }
+        
         reloadViewTarefas();
     }//GEN-LAST:event_jButton2ActionPerformed
 
@@ -205,10 +223,19 @@ public class ViewCriterios extends javax.swing.JInternalFrame {
             return;
         }
         
-        int idACriterio = Integer.parseInt(jTableCriterio.getModel()
-                .getValueAt(jTableCriterio.getSelectedRow(), 0).toString());
+        try 
+        {
+            this.controllerProblema.isEditableProblem(KeepData.getData("Problema.id"));
+            int idACriterio = Integer.parseInt(jTableCriterio.getModel()
+                    .getValueAt(jTableCriterio.getSelectedRow(), 0).toString());
+
+            new ViewCriteriosNovo(null, true, idACriterio).setVisible(true);
+        }
+        catch(Exception e)
+        {
+            getExceptionMessage(e, "editar nenhum critério");
+        }
         
-        new ViewCriteriosNovo(null, true, idACriterio).setVisible(true);
         reloadViewTarefas();
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -222,7 +249,16 @@ public class ViewCriterios extends javax.swing.JInternalFrame {
             return;
         }
         
-        removeCriterio();
+       try 
+        {
+            this.controllerProblema.isEditableProblem(KeepData.getData("Problema.id"));
+            removeCriterio();
+        }
+        catch(Exception e)
+        {
+            getExceptionMessage(e, "excluir nenhum critério");
+        }
+        
         reloadViewTarefas();
     }//GEN-LAST:event_jButton3ActionPerformed
 

@@ -1,10 +1,12 @@
 package view.TomadaDeDecisao;
 
 import controller.ControllerAlternativa;
+import controller.ControllerProblema;
 import java.awt.Color;
 import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import settings.KeepData;
 import util.Internal;
 import util.MyCellRenderer;
 import util.MyDefaultTableModel;
@@ -18,6 +20,7 @@ public class ViewAlternativas extends javax.swing.JInternalFrame {
 
     private MyDefaultTableModel myDefaultTableModel;
     private final ControllerAlternativa controllerAlternativa = new ControllerAlternativa();
+    private final ControllerProblema controllerProblema = new ControllerProblema();
 
     public ViewAlternativas() {
         initComponents();
@@ -83,6 +86,12 @@ public class ViewAlternativas extends javax.swing.JInternalFrame {
             }
 
         }
+    }
+    
+    private void getExceptionMessage(Exception e,String action)
+    {
+        JOptionPane.showMessageDialog(null, "<html>Não é possível " + action + ","
+                    + " pois o Problema vinculado está <b>" + e.getMessage() + "</b>.</html>");
     }
 
     @SuppressWarnings("unchecked")
@@ -205,7 +214,16 @@ public class ViewAlternativas extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        new ViewAlternativaNovo(null, true).setVisible(true);
+        try 
+        {
+            this.controllerProblema.isEditableProblem(KeepData.getData("Problema.id"));
+                
+            new ViewAlternativaNovo(null, true).setVisible(true);
+        }
+        catch(Exception e)
+        {
+            getExceptionMessage(e, "criar uma nova alternativa");
+        }
         listAlternativasInTable(controllerAlternativa.listAlternativasByProblema());
     }//GEN-LAST:event_jButton2ActionPerformed
 
@@ -214,10 +232,22 @@ public class ViewAlternativas extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(null, "Selecione uma linha na tabela.");
             return;
         }
-        int idAltenativa = Integer.parseInt(jTableAlternativas.getModel()
-                .getValueAt(jTableAlternativas.getSelectedRow(), 0).toString());
+        
+        try 
+        {
+            this.controllerProblema.isEditableProblem(KeepData.getData("Problema.id"));
+                
+            int idAltenativa = Integer.parseInt(jTableAlternativas.getModel()
+                    .getValueAt(jTableAlternativas.getSelectedRow(), 0).toString());
 
-        new ViewAlternativaNovo(null, true, idAltenativa).setVisible(true);
+            new ViewAlternativaNovo(null, true, idAltenativa).setVisible(true);
+        }
+        catch(Exception e)
+        {
+            getExceptionMessage(e, "editar esta alternativa");
+        }
+        
+        
         listAlternativasInTable(controllerAlternativa.listAlternativasByProblema());
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -226,8 +256,18 @@ public class ViewAlternativas extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(null, "Selecione uma linha na tabela.");
             return;
         }
+        
+        try 
+        {
+            this.controllerProblema.isEditableProblem(KeepData.getData("Problema.id"));
+                
+            removeAlternativa();
+        }
+        catch(Exception e)
+        {
+            getExceptionMessage(e, "excluir a alternativa");
+        }
 
-        removeAlternativa();
         listAlternativasInTable(controllerAlternativa.listAlternativasByProblema());
     }//GEN-LAST:event_jButton3ActionPerformed
 
