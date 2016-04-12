@@ -484,9 +484,9 @@ import util.Request;
                         t.setSpacingAfter(6);
                         doc.add(t);
                     
+                        request = controllerDecisao.findDecisao();
                         if (request.getData("Decisao.id")!=null) {
                     
-                            request = controllerDecisao.findDecisao();
                             String decisaoAvaliar = request.getData("Decisao.alternativa");
                             Paragraph p33 = new Paragraph();
                             p33.add(new Chunk("Decisão: " , fonte3));
