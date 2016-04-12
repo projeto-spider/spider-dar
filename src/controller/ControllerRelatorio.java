@@ -1,6 +1,5 @@
 package controller;
 
-import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Chunk;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
@@ -9,30 +8,22 @@ import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.ExceptionConverter;
 import com.itextpdf.text.Font;
-import com.itextpdf.text.Font.FontFamily;
-import com.itextpdf.text.Image;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
 import com.itextpdf.text.Rectangle;
-import com.itextpdf.text.TabSettings;
 import com.itextpdf.text.pdf.BaseFont;
-import com.itextpdf.text.pdf.ColumnText;
 import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfPageEventHelper;
 import com.itextpdf.text.pdf.PdfTemplate;
 import com.itextpdf.text.pdf.PdfWriter;
-import com.itextpdf.text.pdf.draw.DottedLineSeparator;
-import com.itextpdf.text.pdf.draw.LineSeparator;
-import static com.itextpdf.text.zugferd.checkers.basic.MeasurementUnitCode.MM;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import static javafx.scene.text.Font.font;
 import model.Acessar;
 import model.Historico;
 import settings.Constant;
@@ -214,24 +205,30 @@ import util.Request;
                     p8.setIndentationLeft(12);
                     doc.add(p8);
                     
-                    //for para listar todos os envolvidos no problema
+                    PdfPTable t2 = new PdfPTable(new float[]{0.40f, 0.50f, 0.10f});
+                    //table.setWidthPercentage(30);
+                    t2.getDefaultCell().setBorder(PdfPCell.NO_BORDER);
+                    PdfPCell header10 = new PdfPCell(new Paragraph("Nome:", fonte3));
+                    PdfPCell header20 = new PdfPCell(new Paragraph("Perfil:", fonte3));
+                    PdfPCell header30 = new PdfPCell(new Paragraph(" ", fonte3));
+                    header10.setBorder(PdfPCell.NO_BORDER);
+                    header20.setBorder(PdfPCell.NO_BORDER);
+                    header30.setBorder(PdfPCell.NO_BORDER);
+                    t2.addCell(header10);
+                    t2.addCell(header20);
+                    t2.addCell(header30);
                     List<Acessar> envolvidosList = controllerAcessar.findUsuariosPerfisByIdProblema(request);
-                    for (int i = 0; i < envolvidosList.size(); i++) { 
+                    for (int i = 0; i < envolvidosList.size(); i++) {
                         String nomeEnvolvidos = envolvidosList.get(i).getUsuario().getNome();
                         String perfilEnvolvidos = envolvidosList.get(i).getPerfil().getNome();
-                        Paragraph p0 = new Paragraph();
-                        p0.add(new Chunk("- Nome: ", fonte3));
-                        p0.add(new Chunk(nomeEnvolvidos, fonte4));
-                        p0.add(new Chunk("      Perfil: ", fonte3));
-                        p0.add(new Chunk(perfilEnvolvidos, fonte4));
-                        p0.setIndentationLeft(29);
-                        doc.add(new Paragraph(p0));
+                        t2.addCell(new Phrase(nomeEnvolvidos, fonte4));
+                        t2.addCell(new Phrase(perfilEnvolvidos, fonte4));  
+                        t2.addCell(new Phrase(" "));
                     }
-          
-//                    Paragraph p9 = new Paragraph(" ");
-//                    doc.add(p9);
-                    
-                    
+                    t2.setSpacingBefore(6);
+                    t2.setSpacingAfter(6);
+                    doc.add(t2);
+
                     //TAREFAS
                     
                         PdfPTable table1 = new PdfPTable(1);
@@ -371,8 +368,15 @@ import util.Request;
                             p21.add(new Chunk("Estimativa de Tempo: " , fonte3));
                             p21.add(new Chunk(tempoAlternativa, fonte4));
                             p21.setIndentationLeft(29);
-                            p21.setSpacingAfter(4);
                             doc.add(new Paragraph(p21));
+                            
+                            String metodosAlternativa = alternativasList.get(i).getData("Alternativa.metodos");
+                            Paragraph p22 = new Paragraph();
+                            p22.add(new Chunk("Métodos de Avaliação: " , fonte3));
+                            p22.add(new Chunk(metodosAlternativa, fonte4));
+                            p22.setIndentationLeft(29);
+                            p22.setSpacingAfter(4);
+                            doc.add(new Paragraph(p22));
 
 //                            Paragraph p22 = new Paragraph(" ");
 //                            doc.add(p22);
@@ -416,24 +420,31 @@ import util.Request;
                             p26.setIndentationLeft(29);
                             doc.add(new Paragraph(p26));
 
-                            //for para listar notas e valores
+                            PdfPTable t3 = new PdfPTable(new float[]{0.40f, 0.40f, 0.20f});
+                            //table.setWidthPercentage(30);
+                            t3.getDefaultCell().setBorder(PdfPCell.NO_BORDER);
+                            PdfPCell header40 = new PdfPCell(new Paragraph("Nota:", fonte3));
+                            PdfPCell header50 = new PdfPCell(new Paragraph("Valor:", fonte3));
+                            PdfPCell header60 = new PdfPCell(new Paragraph(" ", fonte3));
+                            header40.setBorder(PdfPCell.NO_BORDER);
+                            header50.setBorder(PdfPCell.NO_BORDER);
+                            header60.setBorder(PdfPCell.NO_BORDER);
+                            t3.addCell(header40);
+                            t3.addCell(header50);
+                            t3.addCell(header60);
+                            
                             int idCriterios = Integer.parseInt(criteriosList.get(i).getData("Criterio.id"));
                             List<Request> notasList = controllerCriterios.listNotasByCriterio(idCriterios);
                             for (int j = 0; j < notasList.size(); j++) {
-
                                 String notaCriterio = notasList.get(j).getData("Nota.nome");
                                 String valorCriterio = notasList.get(j).getData("Nota.valor");
-                                Paragraph p27 = new Paragraph();
-                                p27.add(new Chunk("- Nota: " , fonte3));
-                                p27.add(new Chunk(notaCriterio, fonte4));
-                                p27.add(new Chunk("      Valor: ", fonte3));
-                                p27.add(new Chunk(valorCriterio, fonte4));
-                                p27.setIndentationLeft(49);
-                                doc.add(new Paragraph(p27));
-                            }              
-
-//                            Paragraph p150 = new Paragraph(" ");
-//                            doc.add(p150);
+                                t3.addCell(new Phrase(notaCriterio, fonte4));
+                                t3.addCell(new Phrase(valorCriterio, fonte4));  
+                                t3.addCell(new Phrase(" "));
+                            }
+                            t3.setSpacingBefore(6);
+                            t3.setSpacingAfter(6);
+                            doc.add(t3);
                         }
                     
                     //AVALIAÇÃO
@@ -451,9 +462,9 @@ import util.Request;
 
                         PdfPTable t = new PdfPTable(new float[] { 0.68f, 0.16f, 0.16f });
                         table.setWidthPercentage(80);
-                        PdfPCell header = new PdfPCell(new Paragraph("Alternativa", fonte3));
-                        PdfPCell header2 = new PdfPCell(new Paragraph("Satisfação", fonte3));
-                        PdfPCell header3 = new PdfPCell(new Paragraph("Ranking", fonte3));
+                        PdfPCell header = new PdfPCell(new Phrase("Alternativa", fonte3));
+                        PdfPCell header2 = new PdfPCell(new Phrase("Satisfação", fonte3));
+                        PdfPCell header3 = new PdfPCell(new Phrase("Ranking", fonte3));
                         t.addCell(header);
                         t.addCell(header2);
                         t.addCell(header3);
@@ -465,9 +476,9 @@ import util.Request;
                             String nomeAlternativas = avaliacaoList.get(i).getData("Avaliacao.alternativa.nome");
                             String satisfacaoAvaliar = avaliacaoList.get(i).getData("Avaliacao.satisfacao");
                             String rankingAvaliar = avaliacaoList.get(i).getData("Avaliacao.posicao");
-                            t.addCell(nomeAlternativas);
-                            t.addCell(satisfacaoAvaliar);
-                            t.addCell(rankingAvaliar);  
+                            t.addCell(new Phrase(nomeAlternativas, fonte4));
+                            t.addCell(new Phrase(satisfacaoAvaliar, fonte4));
+                            t.addCell(new Phrase(rankingAvaliar, fonte4));  
                         }
                         t.setSpacingBefore(6);
                         t.setSpacingAfter(6);
