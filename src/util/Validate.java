@@ -14,6 +14,7 @@ public class Validate
         public static final int TEXTAREA = 2;
         public static final int HIDDEN = 3;
         public static final int LIST = 4;
+        public static final int NUMBER = 5;
     }
     
     public Validate(Request request)

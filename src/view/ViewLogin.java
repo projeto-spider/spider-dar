@@ -7,6 +7,7 @@ import javax.swing.JOptionPane;
 import settings.KeepData;
 import util.Criptografia;
 import util.Request;
+import view.install.ViewInstallConfigDB;
 
 /**
  *
@@ -64,7 +65,8 @@ public class ViewLogin extends javax.swing.JFrame {
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents()
+    {
 
         jPanel = new javax.swing.JPanel();
         Inicial = new javax.swing.JPanel();
@@ -119,22 +121,28 @@ public class ViewLogin extends javax.swing.JFrame {
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel3.setText("Senha:");
 
-        jPasswordFieldSenha.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jPasswordFieldSenha.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 jPasswordFieldSenhaActionPerformed(evt);
             }
         });
 
         jButtonEntrar.setText("Entrar");
-        jButtonEntrar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jButtonEntrar.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 jButtonEntrarActionPerformed(evt);
             }
         });
 
         jButton2.setText("Recuperar Senha");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jButton2.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 jButton2ActionPerformed(evt);
             }
         });
@@ -228,8 +236,10 @@ public class ViewLogin extends javax.swing.JFrame {
         jLabel10.setText("Confirmar Senha:");
 
         jButton3.setText("Alterar");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jButton3.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 jButton3ActionPerformed(evt);
             }
         });
@@ -336,8 +346,10 @@ public class ViewLogin extends javax.swing.JFrame {
         jLabel12.setText("E-mail para a Recuperação da senha:");
 
         jButton6.setText("Confirmar");
-        jButton6.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jButton6.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 jButton6ActionPerformed(evt);
             }
         });
@@ -346,8 +358,10 @@ public class ViewLogin extends javax.swing.JFrame {
         jLabel14.setText("Uma Nova Senha será enviada para o seu E-mail.");
 
         jButton1.setText("Cancelar");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jButton1.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 jButton1ActionPerformed(evt);
             }
         });
@@ -529,8 +543,10 @@ public class ViewLogin extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 new ViewLogin().setVisible(true);
+//                new ViewInstallConfigDB().setVisible(true);
             }
         });
     }
