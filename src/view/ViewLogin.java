@@ -1,13 +1,16 @@
 package view;
 
+import controller.ControllerInstallation;
 import controller.ControllerUsuario;
 import java.awt.CardLayout;
 import java.util.Arrays;
 import javax.swing.JOptionPane;
+import settings.Constant;
 import settings.KeepData;
 import util.Criptografia;
 import util.Request;
 import view.install.ViewInstallConfigDB;
+import view.install.ViewInstallSelectInstallation;
 
 /**
  *
@@ -545,8 +548,22 @@ public class ViewLogin extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new ViewLogin().setVisible(true);
-//                new ViewInstallConfigDB().setVisible(true);
+                ControllerInstallation controllerInstallation = new ControllerInstallation();
+                
+                if (controllerInstallation.isInitialInstall())
+                {
+                    controllerInstallation.goToStep(Constant.INSTALL_SELECT_INSTALLATION);
+//                    ViewInstallSelectInstallation viewInstallSelectInstallation = new ViewInstallSelectInstallation();
+//                    viewInstallSelectInstallation.setVisible(true);
+//                    viewInstallSelectInstallation.setLocationRelativeTo(null);
+                    
+//                    ViewInstallConfigDB viewInstallConfigDB = new ViewInstallConfigDB();  
+//                    viewInstallConfigDB.setVisible(true);
+//                    viewInstallConfigDB.setLocationRelativeTo(null);
+                }
+                else
+                    new ViewLogin().setVisible(true);
+                
             }
         });
     }

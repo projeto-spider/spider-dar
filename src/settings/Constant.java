@@ -40,4 +40,16 @@ public class Constant {
     public static final int PROBLEMA_ATIVO = 1;
     public static final int PROBLEMA_INATIVO = 9;
     public static final int PROBLEMA_FINALIZADO = 2;
+    
+    //Status de Instalação da Ferramenta
+    public static final int INSTALL_CLIENTE = 1;
+    public static final int INSTALL_SERVIDOR = 2;
+    
+    //Status botões da instalação
+    public static final int INSTALL_SELECT_INSTALLATION = 1;
+    public static final int INSTALL_CONFIGDB = 2;
+    public static final int INSTALL_CREATE_ADMIN = 3;
+    public static final int INSTALL_CONFIG_EMAIL = 4;
+    public static final int INSTALL_CANCEL = 8;
+    public static final int INSTALL_FINISH = 9;
 }

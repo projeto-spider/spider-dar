@@ -72,15 +72,14 @@ public class ViewProblema extends javax.swing.JInternalFrame {
                     break;
                 }
             }
-            
-            
+
             Object line[] = {request.getData("Problema.id"),
                                 status,
                                 iconProblema,
                                 nomeProblema,
                                 request.getData("Problema.created"),
                                 request.getData("Problema.modified")};
-            
+
             
             myDefaultTableModel.addRow(line);
         }
