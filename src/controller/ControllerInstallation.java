@@ -22,7 +22,7 @@ public class ControllerInstallation
     public boolean isInitialInstall()
     {
         checkConfigurationFile();
-        return true;
+        return false;
     }
     
     private boolean checkConfigurationFile()
