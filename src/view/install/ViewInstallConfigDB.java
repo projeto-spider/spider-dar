@@ -37,39 +37,31 @@ public class ViewInstallConfigDB extends javax.swing.JFrame
         controllerInstalation.goToStep(Constant.INSTALL_SELECT_INSTALLATION);
     }
     
+    public void checkCancelStep()
+    {
+        this.dispose();
+        controllerInstalation.goToStep(Constant.INSTALL_CANCEL);
+    }
+    
     public void checkDatabaseStatus()
     {
-        String urlIP = jTextFieldEnderecoIP.getText();
-        String portaIP = jTextFieldPortaIP.getText();
-        String nomeDB = jTextFieldNomeBD.getText();
+        Request request = getRequestConfigDBFields();
         
-//        String url = "jdbc:mysql://" + urlIP + ":" + portaIP + "/" + nomeDB;
-        
-        String usuarioDB = jTextFieldUsuarioBD.getText();
-        String passDB = jPasswordFieldSenhaBD.getText();
-        String passDBConfirmar = jPasswordFieldSenhaBDConfirmar.getText();
-        
-//        Request request = new Request();
-        
-//        request.setDataInput("Persistence.ip", new Input(1, "ip", "Nome ou IP do BD:", urlIP));
-//        request.setDataInput("Persistence.porta", new Input(2, "number", nomeDB, url));
-//        request.setDataInput("Persistence.url", new Input(1, "text", "Nome do Banco de Dados", url));
-//        request.setDataInput("Persistence.usuario", new Input(2, "Usuário do Banco de Dados", nomeDB, url));
-//        request.setDataInput("Persistence.password", new Input(3, url, nomeDB, url));
-//        request.setDataInput("Persistence.passwordConfirm", new Input(3, url, nomeDB, url));
-//        
 //        Validate validate = new Validate(request);
 //        
 //        if (validate.isValidData())
 //            return false;
         try
         {
+            String urlIP = request.getDataInput("Persistence.ip").getValor();
+            String portaIP = request.getDataInput("Persistence.porta").getValor();
+            String nomeDB = request.getDataInput("Persistence.nomeBanco").getValor();
+            String usuarioDB = request.getDataInput("Persistence.usuario").getValor();
+            String passDB = request.getDataInput("Persistence.password").getValor();
             
-            Map properties = new HashMap();
-
             String urlBD = "jdbc:mysql://" + urlIP + ":" + portaIP + "/" + nomeDB;
-//            userBD = user;
-//            passBD = pass;
+
+            Map properties = new HashMap();
 
             properties.put("javax.persistence.jdbc.driver", "com.mysql.jdbc.Driver");
             properties.put("javax.persistence.jdbc.url", urlBD);
@@ -92,6 +84,32 @@ public class ViewInstallConfigDB extends javax.swing.JFrame
 //            showMessageDialog(null, e.toString(),"Conexão com o Banco de Dados", ERROR_MESSAGE);
             showMessageDialog(null, "Ocorreu um Problema na conexão com Banco de Dados","Conexão com o Banco de Dados", ERROR_MESSAGE);
         }
+    }
+    
+    private Request getRequestConfigDBFields()
+    {
+        String urlIP = jTextFieldEnderecoIP.getText();
+        String portaIP = jTextFieldPortaIP.getText();
+        String nomeDB = jTextFieldNomeBD.getText();
+        
+//        String url = "jdbc:mysql://" + urlIP + ":" + portaIP + "/" + nomeDB;
+        
+        String usuarioDB = jTextFieldUsuarioBD.getText();
+        String passDB = jPasswordFieldSenhaBD.getText();
+        String passDBConfirmar = jPasswordFieldSenhaBDConfirmar.getPassword().toString();
+        
+        Request request = new Request();
+        
+        request.setHashMapValueToInput();
+        
+        request.setDataInput("Persistence.ip", new Input(1, "ip", "Nome ou IP do BD", urlIP));
+        request.setDataInput("Persistence.porta", new Input(2, "number", "Porta", portaIP));
+        request.setDataInput("Persistence.nomeBanco", new Input(3, "text", "Nome do Banco de Dados", nomeDB));
+        request.setDataInput("Persistence.usuario", new Input(4, "text", "Usuário do Banco de Dados", usuarioDB));
+        request.setDataInput("Persistence.password", new Input(5, "password", "Senha do Banco de Dados", passDB));
+        request.setDataInput("Persistence.passwordConfirm", new Input(5, "passwordConfirm", "Senha do Banco de Dados", passDBConfirmar));
+        
+        return request;
     }
     
     private void checkNextStep()
@@ -125,8 +143,8 @@ public class ViewInstallConfigDB extends javax.swing.JFrame
                 throw new Exception();
             
             
-            controllerInstalation.goToStep(Constant.INSTALL_CREATE_ADMIN);
             this.dispose();
+            controllerInstalation.goToStep(Constant.INSTALL_CONFIG_EMAIL);
         }
         catch(IOException ioe)
         {
@@ -232,6 +250,13 @@ public class ViewInstallConfigDB extends javax.swing.JFrame
         });
 
         jButtonCancelarInstall.setText("Cancelar");
+        jButtonCancelarInstall.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                jButtonCancelarInstallActionPerformed(evt);
+            }
+        });
 
         jButtonAnteriorConfigBD.setText("< Anterior");
         jButtonAnteriorConfigBD.addActionListener(new java.awt.event.ActionListener()
@@ -347,16 +372,16 @@ public class ViewInstallConfigDB extends javax.swing.JFrame
         checkPreviousStep();
     }//GEN-LAST:event_jButtonAnteriorConfigBDActionPerformed
 
+    private void jButtonCancelarInstallActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonCancelarInstallActionPerformed
+    {//GEN-HEADEREND:event_jButtonCancelarInstallActionPerformed
+        checkCancelStep();
+    }//GEN-LAST:event_jButtonCancelarInstallActionPerformed
+
     /**
      * @param args the command line arguments
      */
     public static void main(String args[])
     {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
         try
         {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels())
@@ -367,22 +392,11 @@ public class ViewInstallConfigDB extends javax.swing.JFrame
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex)
-        {
-            java.util.logging.Logger.getLogger(ViewInstallConfigDB.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex)
-        {
-            java.util.logging.Logger.getLogger(ViewInstallConfigDB.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex)
-        {
-            java.util.logging.Logger.getLogger(ViewInstallConfigDB.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex)
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex)
         {
             java.util.logging.Logger.getLogger(ViewInstallConfigDB.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
-
-        /* Create and display the form */
+        
         java.awt.EventQueue.invokeLater(new Runnable()
         {
             @Override

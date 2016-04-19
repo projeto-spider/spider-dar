@@ -40,8 +40,9 @@ public class ViewInstallSelectInstallation extends javax.swing.JFrame
     
     public void checkCancelStep()
     {
+        this.dispose();
         ControllerInstallation controllerInstallation = new ControllerInstallation();
-        controllerInstallation.goToStep(Constant.INSTALL_CREATE_ADMIN);
+        controllerInstallation.goToStep(Constant.INSTALL_CANCEL);
     }
 
     /**
@@ -67,7 +68,6 @@ public class ViewInstallSelectInstallation extends javax.swing.JFrame
         jRadioButtonServidor = new javax.swing.JRadioButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(450, 375));
 
         jPanel1.setBackground(new java.awt.Color(31, 109, 165));
 
@@ -115,10 +115,10 @@ public class ViewInstallSelectInstallation extends javax.swing.JFrame
         jLabel2.setText("<html><p style=\"line-height:2em\">Este assistente irá guiar você para a instalação e configuração da ferramenta SPIDER-DAR. Selecione o tipo de instalação da aplicação:</p></html>");
 
         buttonGroupInstallType.add(jRadioButtonCliente);
+        jRadioButtonCliente.setSelected(true);
         jRadioButtonCliente.setText("Cliente (SPIDER-DAR já instalada em outro Computador ou Servidor)");
 
         buttonGroupInstallType.add(jRadioButtonServidor);
-        jRadioButtonServidor.setSelected(true);
         jRadioButtonServidor.setText("Servidor (SPIDER-DAR para instalação no Servidor ou Aplicação única)");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -161,16 +161,16 @@ public class ViewInstallSelectInstallation extends javax.swing.JFrame
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jRadioButtonServidor)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jRadioButtonCliente)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 170, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jRadioButtonServidor)
+                .addGap(173, 173, 173)
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonCancelarSelectInstallation)
                     .addComponent(jButtonProximoSelectInstallation)
-                    .addComponent(jButtonAnteriorSelectInstallation))
+                    .addComponent(jButtonAnteriorSelectInstallation, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 

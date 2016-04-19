@@ -30,8 +30,8 @@ public class ViewInstallFinish extends javax.swing.JFrame
     
     private void checkPreviousStep()
     {
-        controllerInstallation.goToStep(Constant.INSTALL_CONFIG_EMAIL);
         this.dispose();
+        controllerInstallation.goToStep(Constant.INSTALL_CONFIG_EMAIL);
     }
 
     /**

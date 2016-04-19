@@ -1,11 +1,14 @@
 package controller;
 
-import javax.xml.bind.annotation.XmlElement;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import javax.swing.JOptionPane;
+import org.ini4j.Ini;
 import settings.Constant;
 import util.Request;
 import view.install.ViewInstallConfigAppEmail;
 import view.install.ViewInstallConfigDB;
-import view.install.ViewInstallCreateAdmin;
 import view.install.ViewInstallFinish;
 import view.install.ViewInstallSelectInstallation;
 
@@ -18,13 +21,35 @@ public class ControllerInstallation
     
     public boolean isInitialInstall()
     {
-        
+        checkConfigurationFile();
         return true;
     }
     
+    private boolean checkConfigurationFile()
+    {
+        boolean configurationStatus = false;
+        
+        try
+        {
+            String url = "/config/config.ini";
+
+            Ini ini = new Ini(getClass().getResource(url));
+            
+            String installationStatus = ini.get("install","status", String.class);
+            
+            if (installationStatus.equals("notInstalled"))
+                configurationStatus = true;
+        }
+        catch(IOException ioe)
+        {
+            JOptionPane.showMessageDialog(null, "lol");
+        }
+        
+        return configurationStatus;
+    } 
+    
     public boolean isApplicationDatabaseScriptReady()
     {
-        
         return false;
     }
     
@@ -44,13 +69,6 @@ public class ControllerInstallation
                 ViewInstallConfigDB viewInstallConfigDB = new ViewInstallConfigDB();
                 viewInstallConfigDB.setVisible(true);
                 viewInstallConfigDB.setLocationRelativeTo(null);
-                break;
-            }
-            case Constant.INSTALL_CREATE_ADMIN: 
-            {
-                ViewInstallCreateAdmin viewInstallCreateAdmin = new ViewInstallCreateAdmin();
-                viewInstallCreateAdmin.setVisible(true);
-                viewInstallCreateAdmin.setLocationRelativeTo(null);
                 break;
             }
             case Constant.INSTALL_CONFIG_EMAIL:

@@ -70,4 +70,11 @@
     nbproject/build-impl.xml file. 
 
     -->
+    <target name="-post-jar">
+        <echo>Criando Arquivos de Configuracao para construir diretorio...</echo>
+        <mkdir dir="${dist.jar.dir}/config"/>
+        <copy todir="${dist.jar.dir}/config">
+            <fileset dir="src/config" includes="**"/>
+        </copy>
+    </target>
 </project>
