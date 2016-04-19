@@ -82,11 +82,11 @@ public class ViewPrincipal extends javax.swing.JFrame {
         jLabelBemvindo.setText("Bem-Vindo, " + KeepData.getData("Usuario.nome"));
         jLabelOrganizacao.setText("<html>" + nomeOrganizacao + "</html>");
         jLabelProblema.setText("<html>" + nomeProblema + "</html>");
-        
+
         int id = Integer.parseInt(KeepData.getData("Usuario.id"));
         requestPerfil = new ControllerAcessar().findPerfilByUser(id);
         enabledPermitions();
-        enabledAdmin();
+//        enabledAdmin();
 
         changeViews(viewHome);
     }
@@ -94,7 +94,7 @@ public class ViewPrincipal extends javax.swing.JFrame {
     private void enabledAdmin() {
         if ("Administrador-spiderDAR".equals(requestPerfil.getData("Perfil.nome"))) {
             jMenuItemNovaOrganizacao.setEnabled(true);
-            jMenuItemOrganizacoes.setEnabled(true); 
+            jMenuItemOrganizacoes.setEnabled(true);
             jMenuItemOrgEProb.setEnabled(true);
             jMenuItemConfiguracoes.setEnabled(true);
             jMenuItemNovoUsuario.setEnabled(true);
@@ -104,7 +104,7 @@ public class ViewPrincipal extends javax.swing.JFrame {
             jMenuItemPermissoes.setEnabled(true);
         } else {
             jMenuItemNovaOrganizacao.setEnabled(false);
-            jMenuItemOrganizacoes.setEnabled(false); 
+            jMenuItemOrganizacoes.setEnabled(false);
             jMenuItemOrgEProb.setEnabled(false);
             jMenuItemConfiguracoes.setEnabled(false);
             jMenuItemNovoUsuario.setEnabled(false);
@@ -118,7 +118,7 @@ public class ViewPrincipal extends javax.swing.JFrame {
     private void enabledPermitions() {
         jMenuItemNovoProblema.setEnabled(false);
         jMenuItemProblemas.setEnabled(false);
-        jMenuItemOrganizacoes.setEnabled(false); 
+        jMenuItemOrganizacoes.setEnabled(false);
         jMenuItemNovoUsuario.setEnabled(false);
         jMenuItemUsuarios.setEnabled(false);
         jMenuItemPermissoes.setEnabled(false);
@@ -131,42 +131,55 @@ public class ViewPrincipal extends javax.swing.JFrame {
         jButtonHistorico.setEnabled(false);
         jButtonRelatorio.setEnabled(false);
 
-        List<Request> list = new ControllerPerfil().findFuncionalidadesInPerfil(requestPerfil.getData("Perfil.nome"));
+        if (requestPerfil.getData("Perfil.nome").equals("Administrador-spiderDAR")) {
+            jMenuItemNovaOrganizacao.setEnabled(true);
+            jMenuItemOrganizacoes.setEnabled(true);
+            jMenuItemOrgEProb.setEnabled(true);
+            jMenuItemConfiguracoes.setEnabled(true);
+            jMenuItemNovoUsuario.setEnabled(true);
+            jMenuItemUsuarios.setEnabled(true);
+            jMenuItemNovoProblema.setEnabled(true);
+            jMenuItemProblemas.setEnabled(true);
+            jMenuItemPermissoes.setEnabled(true);
+        } else {
+            List<Request> list = new ControllerPerfil().findFuncionalidadesInPerfil(requestPerfil.getData("Perfil.nome"));
 
-        for (Request funcao : list) {
-            switch (funcao.getData("Funcionalidade.nome")) {
-                case "Gerenciar - Problemas":
-                    jMenuItemNovoProblema.setEnabled(true);
-                    jMenuItemProblemas.setEnabled(true);
-                    break;
-                case "Gerenciar - Usuários":
-                    jMenuItemNovoUsuario.setEnabled(true);
-                    jMenuItemUsuarios.setEnabled(true);
-                    break;
-                case "Gerenciar - Permissões de Perfil":
-                    jMenuItemPermissoes.setEnabled(true);
-                    break;
-                case "Problema - Motivação e Objetivos":
-                    jButtonMotivacaoEObj.setEnabled(true);
-                    break;
-                case "Problema - Tarefas":
-                    jButtonCalendario.setEnabled(true);
-                    break;
-                case "Problema - Alternativas de Solução":
-                    jButtonAlternativas.setEnabled(true);
-                    break;
-                case "Problema - Critérios de Avaliação":
-                    jButtonCriterios.setEnabled(true);
-                    break;
-                case "Problema - Avaliação":
-                    jButtonAvaliacao.setEnabled(true);
-                    break;
-                case "Problema - Histórico":
-                    jButtonHistorico.setEnabled(true);
-                    break;
-                case "Problema - Relatório":
-                    jButtonRelatorio.setEnabled(true);
-                    break;
+            for (Request funcao : list) {
+                System.out.println(">>" + funcao.getData("Funcionalidade.nome"));
+                switch (funcao.getData("Funcionalidade.nome")) {
+                    case "Gerenciar - Problemas":
+                        jMenuItemNovoProblema.setEnabled(true);
+                        jMenuItemProblemas.setEnabled(true);
+                        break;
+                    case "Gerenciar - Usuários":
+                        jMenuItemNovoUsuario.setEnabled(true);
+                        jMenuItemUsuarios.setEnabled(true);
+                        break;
+                    case "Gerenciar - Permissões de Perfil":
+                        jMenuItemPermissoes.setEnabled(true);
+                        break;
+                    case "Problema - Motivação e Objetivos":
+                        jButtonMotivacaoEObj.setEnabled(true);
+                        break;
+                    case "Problema - Tarefas":
+                        jButtonCalendario.setEnabled(true);
+                        break;
+                    case "Problema - Alternativas de Solução":
+                        jButtonAlternativas.setEnabled(true);
+                        break;
+                    case "Problema - Critérios de Avaliação":
+                        jButtonCriterios.setEnabled(true);
+                        break;
+                    case "Problema - Avaliação":
+                        jButtonAvaliacao.setEnabled(true);
+                        break;
+                    case "Problema - Histórico":
+                        jButtonHistorico.setEnabled(true);
+                        break;
+                    case "Problema - Relatório":
+                        jButtonRelatorio.setEnabled(true);
+                        break;
+                }
             }
         }
     }
