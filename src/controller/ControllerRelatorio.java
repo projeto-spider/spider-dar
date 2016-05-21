@@ -423,7 +423,7 @@ import util.Request;
                             PdfPTable t3 = new PdfPTable(new float[]{0.40f, 0.40f, 0.20f});
                             //table.setWidthPercentage(30);
                             t3.getDefaultCell().setBorder(PdfPCell.NO_BORDER);
-                            PdfPCell header40 = new PdfPCell(new Paragraph("Nota:", fonte3));
+                            PdfPCell header40 = new PdfPCell(new Paragraph("Descrição:", fonte3));
                             PdfPCell header50 = new PdfPCell(new Paragraph("Valor:", fonte3));
                             PdfPCell header60 = new PdfPCell(new Paragraph(" ", fonte3));
                             header40.setBorder(PdfPCell.NO_BORDER);

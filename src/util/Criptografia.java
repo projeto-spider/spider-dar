@@ -23,7 +23,7 @@ public class Criptografia {
     public String encryptMessage(String mensagem) {
         
         try {
-            System.out.println("Mensagem limpa: " + mensagem);
+            //System.out.println("Mensagem limpa: " + mensagem);
             // "Message Digest" = algoritmos de apenas uma via (cript. mas Ã± descript.).
             // "SHA-256" Ã© o algoritmo de hash utilizado para a criptografia.
             MessageDigest algoritmo = MessageDigest.getInstance("SHA-256");
@@ -35,7 +35,7 @@ public class Criptografia {
             BigInteger bigInteger = new BigInteger(1, hash);
             // converte a mensagem hexadecimal em String.
             String mensagem_criptografadas = bigInteger.toString(16);
-            System.out.println("Senha Criptografada: " + mensagem_criptografadas);
+            //System.out.println("Senha Criptografada: " + mensagem_criptografadas);
             return mensagem_criptografadas;
         } catch (NoSuchAlgorithmException | UnsupportedEncodingException error) {
             return null;

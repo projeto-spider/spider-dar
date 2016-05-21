@@ -44,7 +44,7 @@ public class ViewCriteriosNovo extends javax.swing.JDialog {
     }
 
     private void initialiazeTable() {
-        String columns[] = {"Nota", "Valor"};
+        String columns[] = {"Descrição", "Valor"};
         myDefaultTableModel = new MyDefaultTableModel(columns, 0, false);
 
         jTableNotas.setModel(myDefaultTableModel);
@@ -241,6 +241,14 @@ public class ViewCriteriosNovo extends javax.swing.JDialog {
         });
 
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jTextFieldNota.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextFieldNotaActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jTextFieldNota, new org.netbeans.lib.awtextra.AbsoluteConstraints(11, 25, 237, -1));
 
         jTextFieldValor.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -252,10 +260,13 @@ public class ViewCriteriosNovo extends javax.swing.JDialog {
                 jTextFieldValorKeyTyped(evt);
             }
         });
+        jPanel1.add(jTextFieldValor, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, 237, -1));
 
-        jLabel5.setText("Nota:");
+        jLabel5.setText("Descrição:");
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(11, 10, -1, -1));
 
         jLabel6.setText("Valor:");
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(11, 51, -1, -1));
 
         jButtonCriarNota.setText("Criar ");
         jButtonCriarNota.addActionListener(new java.awt.event.ActionListener() {
@@ -263,6 +274,7 @@ public class ViewCriteriosNovo extends javax.swing.JDialog {
                 jButtonCriarNotaActionPerformed(evt);
             }
         });
+        jPanel1.add(jButtonCriarNota, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 100, 75, -1));
 
         jTableNotas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -270,10 +282,12 @@ public class ViewCriteriosNovo extends javax.swing.JDialog {
                 {null, null}
             },
             new String [] {
-                "Nota", "Valor"
+                "Descrição", "Valor"
             }
         ));
         jScrollPane3.setViewportView(jTableNotas);
+
+        jPanel1.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(11, 137, 237, 110));
 
         jButton1.setText("Remover");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -281,51 +295,7 @@ public class ViewCriteriosNovo extends javax.swing.JDialog {
                 jButton1ActionPerformed(evt);
             }
         });
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel5)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextFieldNota))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButtonCriarNota, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 237, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel6)
-                        .addGap(3, 3, 3)
-                        .addComponent(jTextFieldValor)))
-                .addContainerGap())
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(6, 6, 6)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(jTextFieldNota, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6)
-                    .addComponent(jTextFieldValor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButtonCriarNota)
-                    .addComponent(jButton1))
-                .addGap(16, 16, 16)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                .addContainerGap())
-        );
+        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 100, -1, -1));
 
         jTextField1.setEditable(false);
         jTextField1.setBackground(new java.awt.Color(255, 255, 255));
@@ -408,6 +378,8 @@ public class ViewCriteriosNovo extends javax.swing.JDialog {
 
     private void jButtonCriarNotaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCriarNotaActionPerformed
         putNotaInTable();
+        jTextFieldNota.setText(" ");
+        jTextFieldValor.setText(" ");
     }//GEN-LAST:event_jButtonCriarNotaActionPerformed
 
     private void jTextFieldPesoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldPesoKeyTyped
@@ -421,6 +393,10 @@ public class ViewCriteriosNovo extends javax.swing.JDialog {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         removeNotaInTable();
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jTextFieldNotaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldNotaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextFieldNotaActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;

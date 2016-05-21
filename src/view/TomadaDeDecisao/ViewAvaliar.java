@@ -68,7 +68,7 @@ public class ViewAvaliar extends javax.swing.JDialog {
                 Object[] line = {
                     request.getData("Criterio.id"),
                     request.getData("Criterio.nome"),
-                    "--Selecione uma nota--"};
+                    "--Selecione uma descrição--"};
                 myDefaultTableModel.addRow(line);
             }
 
@@ -80,7 +80,7 @@ public class ViewAvaliar extends javax.swing.JDialog {
             List<Request> listNotas = controllerCriterios.listNotasByCriterio(idCriterio);
 
             JComboBox comboBox = new JComboBox();
-            comboBox.addItem(new ComboItem("", "--Selecione uma nota--"));
+            comboBox.addItem(new ComboItem("", "--Selecione uma descrição--"));
             for (Request nota : listNotas) {
                 String nome = nota.getData("Nota.nome");
                 String valor = nota.getData("Nota.valor");
@@ -115,7 +115,7 @@ public class ViewAvaliar extends javax.swing.JDialog {
     private boolean validateCombobox() {
         boolean isOK = true;
         for (int i = 0; i < jTable1.getRowCount(); i++) {
-            if (jTable1.getValueAt(i, 1).toString().equals("--Selecione uma nota--")) {
+            if (jTable1.getValueAt(i, 1).toString().equals("--Selecione uma descrição--")) {
                 isOK = false;
                 break;
             }
@@ -126,7 +126,7 @@ public class ViewAvaliar extends javax.swing.JDialog {
 
     private void save() {
         if (!validateCombobox()) {
-            JOptionPane.showMessageDialog(null, "E necesário escolher uma nota para cada Critério.");
+            JOptionPane.showMessageDialog(null, "E necesário escolher uma descrição para cada Critério.");
             return;
         }
 
@@ -179,7 +179,7 @@ public class ViewAvaliar extends javax.swing.JDialog {
                 {null, null}
             },
             new String [] {
-                "Critérios", "Notas"
+                "Critérios", "Descrição"
             }
         ));
         jTable1.setGridColor(new java.awt.Color(255, 255, 255));
