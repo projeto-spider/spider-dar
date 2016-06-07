@@ -114,4 +114,8 @@ public class ControllerHistorico {
         }
     }
 
+    public Date getStartProblema(int id) {
+        return facade.initializeJpaProblema().findProblema(id).getCreated();
+    }
+
 }

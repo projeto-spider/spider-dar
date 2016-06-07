@@ -5,8 +5,8 @@ import java.awt.Color;
 import java.util.Date;
 import java.util.List;
 import javax.swing.ImageIcon;
-import javax.swing.JRadioButtonMenuItem;
 import settings.Constant;
+import settings.KeepData;
 import util.Internal;
 import util.MyCellRenderer;
 import util.MyDefaultTableModel;
@@ -25,6 +25,9 @@ public class ViewHistorico extends javax.swing.JInternalFrame {
         initComponents();
         jRadioButtonTodos.setSelected(true);
         Internal.retiraBorda(this);
+
+        Date date = controllerHistorico.getStartProblema(Integer.parseInt(KeepData.getData("Problema.id")));
+        dateFieldDe.setValue(date); 
     }
 
     public void reloadViewHistorico() {
@@ -58,7 +61,7 @@ public class ViewHistorico extends javax.swing.JInternalFrame {
             return Constant.FUC_AVALIACAO;
         } else if (jRadioButtonRelatorio.isSelected()) {
             return Constant.FUC_RELATORIO;
-        } else if (jRadioButtonProblema.isSelected()){
+        } else if (jRadioButtonProblema.isSelected()) {
             return Constant.FUC_PROBLEMA;
         } else {
             return -1;

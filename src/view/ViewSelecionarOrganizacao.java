@@ -119,6 +119,8 @@ public class ViewSelecionarOrganizacao extends javax.swing.JDialog {
                 KeepData.setData("Problema.id",requestProblema.getData("Problema.id"));
                 KeepData.setData("Problema.nome",requestProblema.getData("Problema.nome"));
                 
+            } else {
+                KeepData.setData("Problema.nome", " ");
             }
         }
     }

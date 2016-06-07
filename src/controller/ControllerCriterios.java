@@ -174,7 +174,7 @@ public class ControllerCriterios {
 
     private List<Request> getRequestListCriterios(List<Criterio> list, int idProblema) {
         try {
-            int total = sumTotal(idProblema);
+            double total = sumTotal(idProblema);
             DecimalFormat decimal = new DecimalFormat("0.0");
 
             List<Request> requestList = new ArrayList<>();
@@ -206,8 +206,9 @@ public class ControllerCriterios {
         return total;
     }
 
-    private double getPorcentagem(int peso, int total) {
-        double percent = (100 * peso / total);
+    private double getPorcentagem(int peso, double total) {
+        double percent = (double) (100 * peso / total);
+        System.out.println(">>" + percent);
         return percent;
     }
 
