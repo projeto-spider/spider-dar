@@ -118,6 +118,7 @@ public class ViewPrincipal extends javax.swing.JFrame {
     private void enabledPermitions() {
         jMenuItemNovoProblema.setEnabled(false);
         jMenuItemProblemas.setEnabled(false);
+        jMenuItemNovaOrganizacao.setEnabled(false);
         jMenuItemOrganizacoes.setEnabled(false);
         jMenuItemNovoUsuario.setEnabled(false);
         jMenuItemUsuarios.setEnabled(false);
