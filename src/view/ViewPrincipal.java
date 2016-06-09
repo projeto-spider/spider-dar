@@ -12,11 +12,13 @@ import controller.ControllerUsuario;
 import controller.ControllerRelatorio;
 import java.awt.Color;
 import java.beans.PropertyVetoException;
+import java.io.FileFilter;
 import java.io.IOException;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JInternalFrame;
 import settings.KeepData;
 import settings.Reminder;
@@ -787,6 +789,25 @@ public class ViewPrincipal extends javax.swing.JFrame {
         ControllerRelatorio relatorio = new ControllerRelatorio();
         try {
             relatorio.gerarRelatorio();
+            
+            JFileChooser jFileChooser = new JFileChooser();
+
+            //seta para selecionar apenas arquivos
+            jFileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+
+            //mostra janela para salvar
+            int acao = jFileChooser.showSaveDialog(null);
+
+            //executa acao conforme opcao selecionada
+            if (acao == JFileChooser.APPROVE_OPTION) {
+                //escolheu arquivo
+                System.out.println(jFileChooser.getSelectedFile().getAbsolutePath());
+            } else if (acao == JFileChooser.CANCEL_OPTION) {
+                //apertou botao cancelar
+            } else if (acao == JFileChooser.ERROR_OPTION) {
+                //outra opcao
+            }
+            
         } catch (IOException ex) {
         } catch (DocumentException ex) {
         }

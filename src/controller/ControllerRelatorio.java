@@ -459,30 +459,57 @@ import util.Request;
                         table4.addCell(cell4);
                         table4.setSpacingBefore(6);
                         doc.add(table4);
-
-                        PdfPTable t = new PdfPTable(new float[] { 0.68f, 0.16f, 0.16f });
-                        table.setWidthPercentage(80);
-                        PdfPCell header = new PdfPCell(new Phrase("Alternativa", fonte3));
-                        PdfPCell header2 = new PdfPCell(new Phrase("Satisfação", fonte3));
-                        PdfPCell header3 = new PdfPCell(new Phrase("Ranking", fonte3));
-                        t.addCell(header);
-                        t.addCell(header2);
-                        t.addCell(header3);
                         
                         //for para listar alternativas da avaliação
                         List<Request> avaliacaoList = controllerAvaliacao.getRequestListFromAlternativa(); 
                         for (int i = 0; i < avaliacaoList.size(); i++) {
 
                             String nomeAlternativas = avaliacaoList.get(i).getData("Avaliacao.alternativa.nome");
+                            Paragraph p35 = new Paragraph();
+                            p35.add(new Chunk("5." + (i+1) + ".Alternativa: " , fonte3));
+                            p35.add(new Chunk(nomeAlternativas, fonte4));
+                            p35.setIndentationLeft(12);
+                            doc.add(new Paragraph(p35));
+                                
                             String satisfacaoAvaliar = avaliacaoList.get(i).getData("Avaliacao.satisfacao");
+                            Paragraph p36 = new Paragraph();
+                            p36.add(new Chunk("Satisfação: " , fonte3));
+                            p36.add(new Chunk(satisfacaoAvaliar, fonte4));
+                            p36.setIndentationLeft(29);
+                            doc.add(new Paragraph(p36));
+                            
                             String rankingAvaliar = avaliacaoList.get(i).getData("Avaliacao.posicao");
-                            t.addCell(new Phrase(nomeAlternativas, fonte4));
-                            t.addCell(new Phrase(satisfacaoAvaliar, fonte4));
-                            t.addCell(new Phrase(rankingAvaliar, fonte4));  
+                            Paragraph p37 = new Paragraph();
+                            p37.add(new Chunk("Ranking: " , fonte3));
+                            p37.add(new Chunk(rankingAvaliar, fonte4));
+                            p37.setIndentationLeft(29);
+                            doc.add(new Paragraph(p37));
+                            
+                            PdfPTable t4 = new PdfPTable(new float[]{0.40f, 0.40f, 0.20f});
+                            t4.getDefaultCell().setBorder(PdfPCell.NO_BORDER);
+                            PdfPCell header70 = new PdfPCell(new Paragraph("Critério:", fonte3));
+                            PdfPCell header80 = new PdfPCell(new Paragraph("Descrição:", fonte3));
+                            PdfPCell header90 = new PdfPCell(new Paragraph(" ", fonte3));
+                            header70.setBorder(PdfPCell.NO_BORDER);
+                            header80.setBorder(PdfPCell.NO_BORDER);
+                            header90.setBorder(PdfPCell.NO_BORDER);
+                            t4.addCell(header70);
+                            t4.addCell(header80);
+                            t4.addCell(header90);
+                            
+                            int idCriterios = Integer.parseInt(criteriosList.get(i).getData("Criterio.id"));
+                            List<Request> notasList = controllerCriterios.listNotasByCriterio(idCriterios);
+                            for (int j = 0; j < notasList.size(); j++) {
+                                String notaCriterio = notasList.get(j).getData("Nota.nome");
+                                String valorCriterio = notasList.get(j).getData("Nota.valor");
+                                t4.addCell(new Phrase(notaCriterio, fonte4));
+                                t4.addCell(new Phrase(valorCriterio, fonte4));  
+                                t4.addCell(new Phrase(" "));
+                            }
+                            t4.setSpacingBefore(6);
+                            t4.setSpacingAfter(6);
+                            doc.add(t4);                            
                         }
-                        t.setSpacingBefore(6);
-                        t.setSpacingAfter(6);
-                        doc.add(t);
                     
                         request = controllerDecisao.findDecisao();
                         if (request.getData("Decisao.id")!=null) {
