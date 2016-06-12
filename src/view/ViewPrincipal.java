@@ -234,6 +234,7 @@ public class ViewPrincipal extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jLabelBemvindo = new javax.swing.JLabel();
         jButtonSelecionarOrganizacao = new javax.swing.JButton();
+        jButtonConta = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenuArquivo = new javax.swing.JMenu();
         jMenuItemNovaOrganizacao = new javax.swing.JMenuItem();
@@ -446,7 +447,7 @@ public class ViewPrincipal extends javax.swing.JFrame {
             }
         });
 
-        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/image/spiderDAR2.png"))); // NOI18N
+        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/image/spiderDAR4.png"))); // NOI18N
 
         jLabelBemvindo.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabelBemvindo.setForeground(new java.awt.Color(255, 255, 255));
@@ -469,6 +470,23 @@ public class ViewPrincipal extends javax.swing.JFrame {
             }
         });
 
+        jButtonConta.setBackground(new java.awt.Color(65, 65, 65));
+        jButtonConta.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
+        jButtonConta.setForeground(new java.awt.Color(255, 255, 255));
+        jButtonConta.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/image/Account.png"))); // NOI18N
+        jButtonConta.setToolTipText("Conta");
+        jButtonConta.setContentAreaFilled(false);
+        jButtonConta.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jButtonContaStateChanged(evt);
+            }
+        });
+        jButtonConta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonContaActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -484,15 +502,17 @@ public class ViewPrincipal extends javax.swing.JFrame {
                     .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButtonRelatorio, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(27, 27, 27)
+                        .addGap(39, 39, 39)
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jDesktopPane)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jButtonSelecionarOrganizacao, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 553, Short.MAX_VALUE)
-                        .addComponent(jLabelBemvindo, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addComponent(jButtonSelecionarOrganizacao, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(1, 1, 1)
+                        .addComponent(jButtonConta, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 533, Short.MAX_VALUE)
+                        .addComponent(jLabelBemvindo, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE))))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel2)
@@ -503,15 +523,16 @@ public class ViewPrincipal extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(4, 4, 4)
+                        .addGap(1, 1, 1)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jButtonSelecionarOrganizacao, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel4))
+                            .addComponent(jLabel4)
+                            .addComponent(jButtonConta, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(1, 1, 1))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jLabelBemvindo, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -827,6 +848,14 @@ public class ViewPrincipal extends javax.swing.JFrame {
         new ViewSelecionarOrganizacao(null, true, this).setVisible(true);
     }//GEN-LAST:event_jButtonSelecionarOrganizacaoActionPerformed
 
+    private void jButtonContaStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jButtonContaStateChanged
+        changeButtonColor(jButtonConta);
+    }//GEN-LAST:event_jButtonContaStateChanged
+
+    private void jButtonContaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonContaActionPerformed
+        new ViewConta(null, true).setVisible(true);
+    }//GEN-LAST:event_jButtonContaActionPerformed
+
     public void reload() {
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
@@ -913,6 +942,7 @@ public class ViewPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton jButtonAlternativas;
     private javax.swing.JButton jButtonAvaliacao;
     private javax.swing.JButton jButtonCalendario;
+    private javax.swing.JButton jButtonConta;
     private javax.swing.JButton jButtonCriterios;
     private javax.swing.JButton jButtonHistorico;
     private javax.swing.JButton jButtonMotivacaoEObj;
