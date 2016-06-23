@@ -808,30 +808,30 @@ public class ViewPrincipal extends javax.swing.JFrame {
 
     private void jButtonRelatorioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRelatorioActionPerformed
         ControllerRelatorio relatorio = new ControllerRelatorio();
-        try {
-            relatorio.gerarRelatorio();
-
-            JFileChooser jFileChooser = new JFileChooser();
-
-            //seta para selecionar apenas arquivos
-            jFileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-
-            //mostra janela para salvar
-            int acao = jFileChooser.showSaveDialog(null);
-
-            //executa acao conforme opcao selecionada
-            if (acao == JFileChooser.APPROVE_OPTION) {
-                //escolheu arquivo
-                System.out.println(jFileChooser.getSelectedFile().getAbsolutePath());
-            } else if (acao == JFileChooser.CANCEL_OPTION) {
-                //apertou botao cancelar
-            } else if (acao == JFileChooser.ERROR_OPTION) {
-                //outra opcao
-            }
-
-        } catch (IOException ex) {
-        } catch (DocumentException ex) {
-        }
+//        try {
+//            relatorio.gerarRelatorio();
+//
+//            JFileChooser jFileChooser = new JFileChooser();
+//
+//            //seta para selecionar apenas arquivos
+//            jFileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+//
+//            //mostra janela para salvar
+//            int acao = jFileChooser.showSaveDialog(null);
+//
+//            //executa acao conforme opcao selecionada
+//            if (acao == JFileChooser.APPROVE_OPTION) {
+//                //escolheu arquivo
+//                System.out.println(jFileChooser.getSelectedFile().getAbsolutePath());
+//            } else if (acao == JFileChooser.CANCEL_OPTION) {
+//                //apertou botao cancelar
+//            } else if (acao == JFileChooser.ERROR_OPTION) {
+//                //outra opcao
+//            }
+//
+//        } catch (IOException ex) {
+//        } catch (DocumentException ex) {
+//        }
 
         openPDF();
     }//GEN-LAST:event_jButtonRelatorioActionPerformed
