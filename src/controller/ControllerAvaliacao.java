@@ -123,7 +123,7 @@ public class ControllerAvaliacao {
             List<Alternativa> listAlternativas = facade.initializeAlternativa().findAlternativasByProblema(idProblema);
             List<Auxiliar> listAuxiliar = new ArrayList<>();
             Auxiliar aux;
-            DecimalFormat decimal = new DecimalFormat("0.0");
+            DecimalFormat decimal = new DecimalFormat("#0.0");
 
             for (Alternativa another : listAlternativas) {
 

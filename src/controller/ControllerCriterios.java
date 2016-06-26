@@ -175,7 +175,7 @@ public class ControllerCriterios {
     private List<Request> getRequestListCriterios(List<Criterio> list, int idProblema) {
         try {
             double total = sumTotal(idProblema);
-            DecimalFormat decimal = new DecimalFormat("0.0");
+            DecimalFormat decimal = new DecimalFormat("#0.0");
 
             List<Request> requestList = new ArrayList<>();
             for (Criterio another : list) {
