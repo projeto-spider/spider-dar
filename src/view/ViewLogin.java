@@ -5,6 +5,7 @@ import controller.ControllerUsuario;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.util.Arrays;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import settings.Constant;
@@ -27,6 +28,7 @@ public class ViewLogin extends javax.swing.JFrame {
         initComponents();
 
         cardInicial();
+        this.setIconImage(new ImageIcon(getClass().getResource("/resources/image/spiderGrey.png")).getImage());
         this.setLocationRelativeTo(null);
     }
 
