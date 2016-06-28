@@ -821,8 +821,8 @@ public class ViewPrincipal extends javax.swing.JFrame {
 
     private void jButtonRelatorioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRelatorioActionPerformed
         ControllerRelatorio relatorio = new ControllerRelatorio();
-//        try {
-//            relatorio.gerarRelatorio();
+        try {
+            relatorio.gerarRelatorio();
 //
 //            JFileChooser jFileChooser = new JFileChooser();
 //
@@ -842,9 +842,9 @@ public class ViewPrincipal extends javax.swing.JFrame {
 //                //outra opcao
 //            }
 //
-//        } catch (IOException ex) {
-//        } catch (DocumentException ex) {
-//        }
+        } catch (IOException ex) {
+       } catch (DocumentException ex) {
+       }
 
         openPDF();
     }//GEN-LAST:event_jButtonRelatorioActionPerformed
